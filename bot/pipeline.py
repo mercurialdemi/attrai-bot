@@ -68,12 +68,14 @@ def apply_cta_slide(post: dict, paths: list[Path], failed: list[int], jdir: Path
     (se c'è) oppure si aggiunge come ultima slide."""
     cta = post.get("cta") or {}
     key = (cta.get("manuale") if cta.get("tipo") == "manuale" else "segui") or "segui"
-    exact = cta_dir() / f"{key}.jpg"
+    # slide del manuale giusto; se non c'è, una vostra slide "segui la pagina";
+    # solo se non c'è nessuna vostra slide CTA resta quella della pagina di origine riscritta per noi
     rewritten = any(sl.get("_cta_riscritta") for sl in post.get("slides", []))
-    if not exact.exists() and rewritten:
-        # niente slide CTA caricata per questo manuale: resta la CTA della pagina di origine riscritta per noi
-        return paths, failed
     src = cta_file(key)
+    if src and src.stem != key:
+        key = src.stem
+    if not src and rewritten:
+        return paths, failed
     if not src or post.get("formato") == "singolo":
         if not src:
             post["_avviso"] = ((post.get("_avviso") or "") + "\nManca la vostra slide CTA finale: mandamela come "
