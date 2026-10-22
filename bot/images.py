@@ -424,13 +424,15 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
 
 
 _SEM: asyncio.Semaphore | None = None
+_SEM_LOOP = None
 
 
 def _sem() -> asyncio.Semaphore:
     """Limite unico per tutto il bot: anche con più post in parallelo non si satura la memoria del server."""
-    global _SEM
-    if _SEM is None:
-        _SEM = asyncio.Semaphore(config.MAX_PARALLEL_IMAGES)
+    global _SEM, _SEM_LOOP
+    loop = asyncio.get_running_loop()
+    if _SEM is None or _SEM_LOOP is not loop:
+        _SEM, _SEM_LOOP = asyncio.Semaphore(config.MAX_PARALLEL_IMAGES), loop
     return _SEM
 
 

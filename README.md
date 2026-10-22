@@ -59,7 +59,7 @@ Ogni mattina alle 8 il bot:
 
 Se i post sopra la media sono meno di 5, completa con i migliori sotto la media e te lo segnala ("sotto media"). Con `completa_sempre: false` invece prepara solo quelli sopra la media.
 
-`/report` lo lancia subito, `/altri` prepara i 5 successivi della classifica senza ripetere quelli già fatti, `/pagine` mostra le pagine monitorate.
+Per ora il report manda **solo i link** dei migliori post (non spende crediti): rimandi al bot quelli che ti piacciono e li prepara. `/report` lo lancia subito, `/altri` mostra i successivi della classifica, `/pagine` mostra le pagine monitorate. Per riceverli già tradotti: `prepara_post: true` nel file del brand.
 
 ## Cosa c'è dentro
 

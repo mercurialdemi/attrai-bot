@@ -24,6 +24,8 @@ report:
   post_per_pagina: 30    # post letti per pagina per calcolare la sua media
   punteggio_minimo: 1.0  # sopra questa soglia (1.0 = media della pagina) un post ha precedenza
   completa_sempre: true  # true = se i post sopra media sono pochi, completa con i migliori sotto media (segnalati)
+  prepara_post: false    # false = il report manda solo i link dei migliori post (non spende crediti);
+                         # true  = li manda già tradotti e pronti (quanti_post ogni mattina)
 
 # Studio automatico della pagina (stile, CTA, risultati dei post del bot): ogni settimana
 studio:

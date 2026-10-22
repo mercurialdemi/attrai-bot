@@ -62,7 +62,7 @@ class Bot:
     async def send_media_group(s,c,g): sent.append(("group",[x.filename for x in g])); return [type("M",(),{"message_id":len(sent)})()]
     async def send_document(s,c,d,filename,caption=None): sent.append(("doc",filename)); return type("M",(),{"message_id":len(sent)})()
     async def send_photo(s,c,d,caption=None): sent.append(("foto",caption[:40])); return type("M",(),{"message_id":len(sent)})()
-    async def send_message(s,c,t): sent.append(("msg",t[:60])); return type("M",(),{"message_id":len(sent)})()
+    async def send_message(s,c,t,**kw): sent.append(("msg",t[:60])); return type("M",(),{"message_id":len(sent)})()
 p1=Path(T)/"a.jpg"; i1.save(p1); p2=Path(T)/"b.jpg"; i2.save(p2)
 asyncio.run(pipeline.send_post(Bot(),1,7,post,[p1,p2],[2]))
 for x in sent: print("  ", x)
@@ -82,6 +82,12 @@ async def fs(bot,c,job_id,post,paths,failed,only_text=False,header="",numbers=No
     storage.save_job(0,0,"dummy","x",post,paths); sent.append(("POST",header.splitlines()[0]))
 pipeline.send_post=fs
 import yaml
+asyncio.run(report.run_report(Bot(),[1]))
+print("solo link:", [x[1] for x in sent])
+assert any("bNEW2" in str(x) or "Migliori post" in str(x) for x in sent), "report solo link vuoto"
+sent.clear()
+_ld=writer.load_brand
+writer.load_brand=lambda: {**_ld(), "report": {**_ld().get("report", {}), "prepara_post": True}}
 asyncio.run(report.run_report(Bot(),[1]))
 print([x for x in sent if x[0]=="POST"], "| sotto media marcati:", any("sotto media" in str(x) for x in sent))
 sent.clear(); asyncio.run(report.run_more(Bot(),[1])); print("altri:", [x[1] for x in sent])

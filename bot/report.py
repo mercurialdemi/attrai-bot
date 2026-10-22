@@ -189,7 +189,40 @@ def _settings(brand: dict) -> dict:
         "per_pagina": int(cfg.get("post_per_pagina", 30)),
         "min_score": float(cfg.get("punteggio_minimo", 1.0)),
         "completa": bool(cfg.get("completa_sempre", True)),
+        # False = il report manda solo i link dei migliori post (nessun credito speso per tradurli)
+        "prepara": bool(cfg.get("prepara_post", False)),
     }
+
+
+def _offset_file():
+    return config.DATA_DIR / "classifica_mostrati.txt"
+
+
+def _link_lines(items: list, start: int, min_score: float) -> list[str]:
+    out = []
+    for i, p in enumerate(items, start):
+        anteprima = " ".join((p.caption or "").split())[:70]
+        nums = f"❤️ {p.likes or 0} · 💬 {p.comments or 0}"
+        out.append(f"{i}. @{p.owner} · {p.score:.1f}x la sua media{'' if p.score >= min_score else ' (sotto media)'}"
+                   f" · {nums}\n{p.url}" + (f"\n“{anteprima}…”" if anteprima else ""))
+    return out
+
+
+async def _send_links(bot, chat_ids: list[int], header: str, lines: list[str], footer: str) -> None:
+    """Messaggi di soli link, spezzati sotto il limite di Telegram, senza anteprime."""
+    chunks, cur = [], header
+    for ln in lines:
+        if len(cur) + len(ln) + 2 > 3800:
+            chunks.append(cur)
+            cur = ""
+        cur += ("\n\n" if cur else "") + ln
+    chunks.append(cur + "\n\n" + footer)
+    for c in chat_ids:
+        for text in chunks:
+            try:
+                await bot.send_message(c, text, disable_web_page_preview=True)
+            except Exception as e:
+                log.warning("Invio a %s fallito: %s", c, e)
 
 
 def _pool(cands: list[instagram.SourcePost], st: dict) -> list[instagram.SourcePost]:
@@ -225,6 +258,22 @@ async def run_report(bot, chat_ids: list[int]) -> None:
                              + (" e anche la lettura con accesso non è riuscita: controlla che INSTAGRAM_COOKIES sia ancora valido."
                                 if config.INSTAGRAM_COOKIES else
                                 ": inserisci INSTAGRAM_COOKIES su Render (vedi la guida)."))
+        if not st["prepara"]:
+            # solo link: classifica lunga salvata, si mostrano i primi; /altri mostra i successivi
+            cands = rank_candidates(posts, st["ore"], st["candidati"] * 4)
+            storage.save_ranking([_to_dict(p) for p in cands])
+            if not cands:
+                await _broadcast(bot, chat_ids, f"Report: nessun post nuovo con immagini nelle ultime {st['ore']} ore.")
+                return
+            first = cands[:st["candidati"]]
+            _offset_file().write_text(str(len(first)))
+            await _send_links(
+                bot, chat_ids,
+                f"☀️ Migliori post delle ultime {st['ore']} ore (rendimento rispetto alla media di ogni pagina):",
+                _link_lines(first, 1, st["min_score"]),
+                "Mandami il link di quelli che ti piacciono e li preparo in italiano."
+                + (f"\nScrivi /altri per vederne altri {min(st['candidati'], len(cands) - len(first))}." if len(cands) > len(first) else ""))
+            return
         cands = rank_candidates(posts, st["ore"], st["candidati"])
         storage.save_ranking([_to_dict(p) for p in cands])
         pool = _pool(cands, st)
@@ -254,6 +303,21 @@ async def run_more(bot, chat_ids: list[int]) -> None:
         ranking = storage.last_ranking()
         if not ranking:
             await _broadcast(bot, chat_ids, "Non c'è ancora una classifica: lancia prima /report.")
+            return
+        if not st["prepara"]:
+            try:
+                shown = int(_offset_file().read_text())
+            except Exception:
+                shown = 0
+            nxt = [instagram.SourcePost(**d) for d in ranking[shown:shown + st["candidati"]]]
+            if not nxt:
+                await _broadcast(bot, chat_ids, "Non ci sono altri post nella classifica di oggi.")
+                return
+            _offset_file().write_text(str(shown + len(nxt)))
+            left = len(ranking) - shown - len(nxt)
+            await _send_links(bot, chat_ids, "Altri post dalla classifica:",
+                              _link_lines(nxt, shown + 1, st["min_score"]),
+                              "Mandami il link di quelli che ti piacciono." + ("\n/altri per i successivi." if left > 0 else ""))
             return
         done = storage.processed_urls([d["url"] for d in ranking])
         rest = [instagram.SourcePost(**d) for d in ranking if d["url"] not in done]
