@@ -126,7 +126,7 @@ def run_analysis(brand: dict, n_posts: int = 80) -> dict:
             return c["clic_ogni_1000"] * 10 if c["tipo"] == "manuale" else c["follow_ogni_1000"] * 10
         return c["rendimento"]
     cta_list.sort(key=cta_key, reverse=True)
-    cta_slides = _find_cta_slides([p for p, _ in top], brand)
+    cta_slides = _find_cta_slides([p for p, _ in sorted(scored, key=lambda x: -x[1])], brand)
     feedback = _bot_feedback([(p, e / med) for p, e in scored])
 
     esempi = []
@@ -185,7 +185,8 @@ def _find_cta_slides(top_posts, brand: dict) -> dict:
     """Prende l'ultima slide dei caroselli migliori, riconosce quali sono slide CTA e salva la migliore
     per ogni tipo (segui / manuale) come slide CTA da mettere in fondo ai caroselli.
     Non sovrascrive le slide CTA caricate a mano."""
-    cands = [p for p in top_posts if p.kind.lower() == "sidecar" and len(p.image_urls) >= 2][:10]
+    # si guardano molti caroselli, così si trova una slide CTA per ogni manuale (non solo "segui")
+    cands = [p for p in top_posts if p.kind.lower() == "sidecar" and len(p.image_urls) >= 2][:25]
     if not cands:
         return {}
     try:
@@ -196,8 +197,10 @@ def _find_cta_slides(top_posts, brand: dict) -> dict:
     content = []
     for i, data in enumerate(imgs, 1):
         content += [{"type": "text", "text": f"Slide {i}:"}, writer._image_block(data, 800)]
-    content.append({"type": "text", "text": "Manuali: " + ", ".join(m["id"] for m in brand.get("manuali", []))
-                    + ". Classifica ogni slide con lo strumento slide_cta."})
+    content.append({"type": "text", "text": "Manuali (id: nome): " + "; ".join(
+        f"{m['id']}: {m['nome']}" for m in brand.get("manuali", []))
+                    + ". Una slide che promuove il bundle con Potere Sociale va sotto potere-sociale. "
+                    "Classifica ogni slide con lo strumento slide_cta."})
     try:
         out = writer._tool_call("Riconosci le slide di call to action di una pagina Instagram.", content,
                                 CTA_SLIDE_TOOL, max_tokens=2000)
