@@ -146,7 +146,8 @@ def run_analysis(brand: dict, n_posts: int = 80) -> dict:
         "cta_peggiori": (cta_list[-6:] if stats and len(cta_list) > 12 else [c for c in cta_list if c["rendimento"] < 0.7][-6:]),
         "fonte_numeri": "statistiche Instagram" if stats else "like e commenti",
         "lezioni_cta": (out.get("lezioni_cta") or "").strip(),
-        "slide_cta": {k: v for k, v in cta_slides.items() if k != "_testi"},
+        "slide_cta": {k: v for k, v in cta_slides.items() if not k.startswith("_")},
+        "slide_cta_motivo": cta_slides.get("_motivo", ""),
         "testi_slide_cta": cta_slides.get("_testi", []),
         "feedback_bot": feedback,
         "post_analizzati": len(scored),
@@ -184,31 +185,50 @@ CTA_SLIDE_TOOL = {
 
 
 def _find_cta_slides(top_posts, brand: dict) -> dict:
-    """Prende l'ultima slide dei caroselli migliori, riconosce quali sono slide CTA e salva la migliore
-    per ogni tipo (segui / manuale) come slide CTA da mettere in fondo ai caroselli.
+    """Prende l'ultima slide dei caroselli migliori, riconosce quali sono slide CTA, ne legge il testo e salva
+    la migliore per ogni tipo (segui / manuale) come immagine di riserva.
     Non sovrascrive le slide CTA caricate a mano."""
-    # si guardano molti caroselli, così si trova una slide CTA per ogni manuale (non solo "segui")
-    cands = [p for p in top_posts if p.kind.lower() == "sidecar" and len(p.image_urls) >= 2][:30]
+    sidecars = [p for p in top_posts if p.kind.lower() == "sidecar"]
+    cands = [p for p in sidecars if len(p.image_urls) >= 2][:30]
     if not cands:
-        return {}
-    try:
-        imgs = instagram.download_images([p.image_urls[-1] for p in cands])
-    except Exception as e:
-        log.warning("Slide CTA non scaricate: %s", e)
-        return {}
-    content = []
-    for i, data in enumerate(imgs, 1):
-        content += [{"type": "text", "text": f"Slide {i}:"}, writer._image_block(data, 800)]
-    content.append({"type": "text", "text": "Manuali (id: nome): " + "; ".join(
-        f"{m['id']}: {m['nome']}" for m in brand.get("manuali", []))
-                    + ". Una slide che promuove il bundle con Potere Sociale va sotto potere-sociale. "
-                    "Classifica ogni slide con lo strumento slide_cta."})
-    try:
-        out = writer._tool_call("Riconosci le slide di call to action di una pagina Instagram.", content,
-                                CTA_SLIDE_TOOL, max_tokens=2000)
-    except Exception as e:
-        log.warning("Classificazione slide CTA fallita: %s", e)
-        return {}
+        return {"_motivo": f"nei dati letti da Instagram non ci sono caroselli con le slide separate "
+                           f"({len(sidecars)} caroselli, nessuno con più di un'immagine)"}
+    pairs = []                                   # (post, immagine dell'ultima slide), solo quelle scaricate
+    for p in cands:
+        try:
+            pairs.append((p, instagram.download_images([p.image_urls[-1]])[0]))
+        except Exception as e:
+            log.warning("Ultima slide non scaricata %s: %s", p.url, e)
+    if not pairs:
+        return {"_motivo": "non sono riuscito a scaricare le ultime slide dei caroselli"}
+    manuali = "; ".join(f"{m['id']}: {m['nome']}" for m in brand.get("manuali", []))
+    classified = []                              # (indice in pairs, risultato)
+    errors = 0
+    for start in range(0, len(pairs), 10):       # a gruppi di 10: risposte corte, niente tagli
+        chunk = pairs[start:start + 10]
+        content = []
+        for k, (_, data) in enumerate(chunk, 1):
+            content += [{"type": "text", "text": f"Slide {k}:"}, writer._image_block(data, 800)]
+        content.append({"type": "text", "text": "Manuali (id: nome): " + manuali
+                        + ". Una slide che promuove il bundle con Potere Sociale va sotto potere-sociale. "
+                        "Classifica ogni slide con lo strumento slide_cta e trascrivi il testo delle slide CTA."})
+        try:
+            out = writer._tool_call("Riconosci le slide di call to action di una pagina Instagram.", content,
+                                    CTA_SLIDE_TOOL, max_tokens=6000)
+        except Exception as e:
+            log.warning("Classificazione slide CTA fallita: %s", e)
+            errors += 1
+            continue
+        for sl in out.get("slide", []):
+            n = sl.get("numero")
+            if isinstance(n, int) and 1 <= n <= len(chunk):
+                classified.append((start + n - 1, sl))
+    imgs = [d for _, d in pairs]
+    cands = [p for p, _ in pairs]
+    out = {"slide": [{**sl, "numero": idx + 1} for idx, sl in classified]}
+    if not out["slide"]:
+        return {"_motivo": ("la lettura delle slide non è riuscita" if errors else
+                            f"tra le ultime slide di {len(pairs)} caroselli nessuna è una CTA")}
     cta_dir = config.DATA_DIR / "cta"
     cta_dir.mkdir(parents=True, exist_ok=True)
     found = {}

@@ -104,7 +104,8 @@ async def cmd_analizza(update: Update, context: ContextTypes.DEFAULT_TYPE):
         try:
             style = await asyncio.to_thread(analysis.run_analysis, writer.load_brand())
             cta_txt = "\n".join(f"• {c['rendimento']}x · {c['testo'][:140]}" for c in style.get("cta_migliori", [])[:5])
-            slides_txt = ", ".join(style.get("slide_cta", {}).keys()) or "nessuna trovata"
+            slides_txt = ", ".join(style.get("slide_cta", {}).keys()) or (
+                "nessuna trovata" + (f" ({style['slide_cta_motivo']})" if style.get("slide_cta_motivo") else ""))
             await status.edit_text(
                 f"Studio fatto su {style['post_analizzati']} post. Da ora scrivo le descrizioni con questa guida "
                 f"e {len(style['esempi'])} esempi tuoi:\n\n{style['guida']}"[:2500]
