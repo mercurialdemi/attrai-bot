@@ -33,9 +33,10 @@ _SLIDE_ITEM = {
         "numero": {"type": "integer"},
         "testo_originale": {"type": "string", "description": "Il testo che leggi sulla slide originale (vuoto se non ce n'è)."},
         "testo": {"type": "string", "description": "Il testo italiano che va sulla slide, con gli stessi a capo dell'originale. Vuoto se la slide non ha testo."},
-        "watermark_originale": {"type": "string", "description": "Handle, nome o logo della pagina di origine visibile sulla slide e dove si trova (es. '@pagina in basso a destra'). Vuoto se assente."},
+        "watermark_originale": {"type": "string", "description": "Handle, nome o logo di una pagina DIVERSA dalla nostra visibile sulla slide e dove si trova (es. '@pagina in basso a destra'). Vuoto se assente o se è il nostro."},
+        "da_modificare": {"type": "boolean", "description": "true solo se la slide va cambiata: testo non in italiano, oppure CTA/handle/watermark di un'altra pagina. false se è già in italiano e non ha riferimenti ad altre pagine: in quel caso la slide resta identica all'originale."},
     },
-    "required": ["numero", "testo_originale", "testo", "watermark_originale"],
+    "required": ["numero", "testo_originale", "testo", "watermark_originale", "da_modificare"],
 }
 
 _CTA = {
@@ -239,7 +240,8 @@ Ricevi le slide di un post di una pagina collaboratrice che ci ha autorizzato a 
 - Unica eccezione alla fedeltà: se una slide contiene una CTA o un riferimento alla pagina di origine
   (segui @..., link in bio, nome della pagina), sostituiscilo con il nostro equivalente per {brand['nome']}.
 - Niente asterischi, niente trattini lunghi.
-- Segnala in watermark_originale handle, nome o logo della pagina di origine e dove si trova. Vuoto se non c'è.
+- Segnala in watermark_originale handle, nome o logo di un'altra pagina e dove si trova. Se è il nostro (@{brand['handle']}, {brand['nome']}) o non c'è, lascialo vuoto.
+- da_modificare = false per le slide già in italiano e senza riferimenti ad altre pagine (comprese le slide con la nostra CTA o il nostro profilo): restano identiche all'originale e testo = testo_originale.
 
 Regole fisse date da Gabriele (valgono anche qui se riguardano le slide):
 {_rules_block(rules)}
@@ -255,10 +257,18 @@ def translate_slides(caption: str, owner: str, images: list[bytes], brand: dict,
         f"Pagina di origine: @{owner}. Numero di slide: {len(images)}.\n"
         f"Descrizione originale, solo per capire il contesto:\n<<<\n{(caption or '(vuota)')[:2000]}\n>>>"
     )})
-    out = _tool_call(_slides_system(brand, rules), content, SLIDES_TOOL)
+    out = _tool_call(_slides_system(brand, rules), content, SLIDES_TOOL, max_tokens=16000)
     out["slides"] = out.get("slides", [])[:len(images)]
+    ours = {brand["handle"].lower(), brand["nome"].lower().replace(" ", "")}
+    own_post = (owner or "").lower() in ours
     for s in out["slides"]:
         s["testo"] = clean_text(s.get("testo", ""))
+        wm = (s.get("watermark_originale") or "").lower().replace(" ", "").replace("@", "")
+        if own_post or any(o in wm for o in ours):
+            s["watermark_originale"] = ""      # il nostro marchio non va mai sostituito
+        if own_post:
+            s["da_modificare"] = False         # post della nostra pagina: le slide restano com'erano
+        s.setdefault("da_modificare", True)
     return out
 
 
@@ -335,14 +345,23 @@ def create_post(caption: str, owner: str, images: list[bytes], brand: dict,
 
 # ---------------------------------------------------------------- 3. controllo slide
 
-def check_slide(image_jpeg: bytes, expected_text: str, old_watermark: str) -> tuple[bool, str]:
-    """Controlla una slide generata. Restituisce (ok, problemi)."""
+def check_slide(image_jpeg: bytes, expected_text: str, old_watermark: str,
+                original_jpeg: bytes | None = None) -> tuple[bool, str]:
+    """Controlla una slide generata (confrontandola con l'originale). Restituisce (ok, problemi)."""
     attese = (f'Testo atteso sulla slide, esattamente:\n"""\n{expected_text}\n"""' if expected_text.strip()
               else "Sulla slide non deve esserci nessun testo, a parte eventualmente il nostro logo AttraiSeduci.")
-    content = [
+    content = []
+    if original_jpeg:
+        content += [{"type": "text", "text": "Slide ORIGINALE:"}, _image_block(original_jpeg, 1024)]
+    content += [
+        {"type": "text", "text": "Slide NUOVA da controllare:"},
         _image_block(image_jpeg, 1024),
         {"type": "text", "text": (
             f"{attese}\n\nVecchio watermark da eliminare: {old_watermark or 'nessuno'}.\n"
+            + ("Confronta con l'originale: illustrazioni, sfondo e posizione dei blocchi di testo devono essere gli stessi. "
+               "Se il testo ora copre un'illustrazione o un elemento che nell'originale era libero, oppure manca o è "
+               "deformato un elemento grafico, metti testo_corretto=false e descrivilo in problemi.\n" if original_jpeg else "")
+            +
             "Il logo circolare con la scritta AttraiSeduci, se presente, è corretto e non è un residuo.\n"
             "Controlla la slide con lo strumento esito_controllo. Ignora differenze di a capo e di maiuscole."
         )},
@@ -350,9 +369,9 @@ def check_slide(image_jpeg: bytes, expected_text: str, old_watermark: str) -> tu
     try:
         out = _tool_call("Sei un correttore di bozze pignolo per slide Instagram in italiano.", content,
                          CHECK_TOOL, model=config.CHECK_MODEL, max_tokens=500)
-    except Exception as e:  # se il controllo stesso fallisce non blocchiamo il lavoro
+    except Exception as e:  # se il controllo non riesce, la slide NON si considera verificata
         log.warning("Controllo slide non riuscito: %s", e)
-        return True, ""
+        return False, f"controllo non riuscito ({str(e)[:120]})"
     ok = bool(out.get("testo_corretto")) and not out.get("residui")
     return ok, out.get("problemi", "")
 

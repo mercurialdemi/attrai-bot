@@ -19,7 +19,9 @@ log = logging.getLogger("attraibot")
 
 HELP = (
     "Mandami il link di un post dei nostri collaboratori e te lo restituisco pronto per AttraiSeduci: "
-    "slide in italiano con il nostro logo, descrizione e CTA.\n\n"
+    "slide in italiano con il nostro logo, descrizione e CTA.\n"
+    "Se Instagram blocca il link, mandami direttamente le slide come album (meglio come File), "
+    "con la descrizione originale nella didascalia.\n\n"
     "Per modificare un post, rispondi ai suoi messaggi (o scrivi subito dopo) con quello che vuoi cambiare, "
     "per esempio: \"slide 2 più corta\", \"cambia l'hook\", \"metti CTA al manuale Potere Sociale\", "
     "\"rifai la grafica della slide 4\".\n\n"
@@ -194,6 +196,9 @@ async def process_revision(update: Update, context: ContextTypes.DEFAULT_TYPE, j
                                           storage.list_rules(), storage.recent_style())
             new["slides"] = new["slides"][:len(originals)]
             changed = _changed_slides(old, new)
+            for n in changed:                       # una slide che Gabriele vuole cambiare va rifatta anche se era già italiana
+                if 1 <= n <= len(new["slides"]):
+                    new["slides"][n - 1]["da_modificare"] = True
 
         paths = job["slide_paths"]
         new_failed: list[int] = []
@@ -212,11 +217,84 @@ async def process_revision(update: Update, context: ContextTypes.DEFAULT_TYPE, j
             nums = sorted(changed)
             await pipeline.send_post(context.bot, chat_id, job["id"], new, [paths[i - 1] for i in nums],
                                      failed, numbers=nums)
+            m = await pipeline.send_canva(context.bot, chat_id, job["id"], new, paths, failed)
+            if m:
+                storage.link_message(chat_id, m.message_id, job["id"])
         else:
             await pipeline.send_post(context.bot, chat_id, job["id"], new, paths, failed, only_text=True)
     except Exception:
         log.exception("Errore nella modifica del post %s", job["id"])
         await status.edit_text("Non sono riuscito ad applicare la modifica. Riprova riformulandola.")
+
+
+# ---------------------------------------------------------------- slide inviate direttamente (album)
+
+_albums: dict[str, dict] = {}
+ALBUM_WAIT = 6  # secondi di attesa dopo l'ultima immagine: gli album inviati di seguito diventano un solo post
+
+
+async def on_media(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not await _authorized(update):
+        return
+    msg = update.effective_message
+    if msg.photo:
+        file_id = msg.photo[-1].file_id
+    elif msg.document and (msg.document.mime_type or "").startswith("image/"):
+        file_id = msg.document.file_id
+    else:
+        return
+    key = str(msg.chat_id)   # tutte le immagini inviate di seguito nella chat (anche più album) = un post
+    album = _albums.setdefault(key, {"items": [], "caption": "", "first": msg, "task": None})
+    album["items"].append((msg.message_id, file_id, bool(msg.photo)))
+    if msg.caption:
+        album["caption"] = msg.caption
+    if album["task"]:
+        album["task"].cancel()
+
+    async def later():
+        try:
+            await asyncio.sleep(ALBUM_WAIT)
+        except asyncio.CancelledError:
+            return
+        data = _albums.pop(key, None)
+        if data:
+            await process_album(update, context, data)
+
+    album["task"] = context.application.create_task(later())
+
+
+async def process_album(update: Update, context: ContextTypes.DEFAULT_TYPE, album: dict):
+    first = album["first"]
+    chat_id = first.chat_id
+    items = sorted(album["items"])
+    status = await first.reply_text(f"Ricevute {len(items)} slide, le preparo…")
+    try:
+        originals = []
+        for _, file_id, _is_photo in items:
+            f = await context.bot.get_file(file_id)
+            originals.append(bytes(await f.download_as_bytearray()))
+        if any(is_photo for *_, is_photo in items):
+            await first.reply_text("Consiglio: la prossima volta inviale come File (graffetta → File), "
+                                   "così Telegram non le comprime e le slide restano in alta qualità.")
+        caption = album["caption"].strip()
+        url = instagram.find_post_url(caption) if caption else None
+        if url:
+            caption = caption.replace(url, "").strip()
+        if len(originals) > 20:
+            await first.reply_text(f"Hai mandato {len(originals)} immagini: Instagram accetta al massimo 20 slide "
+                                   "per carosello, preparo le prime 20.")
+            originals = originals[:20]
+        src = instagram.SourcePost(url=url or f"telegram/{first.message_id}",
+                                   owner="inviato", caption=caption, kind="Sidecar" if len(items) > 1 else "Image")
+        brand = writer.load_brand()
+        post, paths, failed = await pipeline.build_post(src, brand, str(first.message_id),
+                                                        on_status=status.edit_text, originals=originals)
+        job_id = storage.save_job(chat_id, update.effective_user.id, src.url, src.owner, post, paths)
+        await status.delete()
+        await pipeline.send_post(context.bot, chat_id, job_id, post, paths, failed)
+    except Exception:
+        log.exception("Errore elaborando le slide inviate")
+        await status.edit_text("Qualcosa è andato storto mentre preparavo le slide. Riprova; se succede ancora, controlla i log su Render.")
 
 
 async def on_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -286,6 +364,7 @@ def main():
     app.add_handler(CommandHandler("altri", cmd_altri))
     app.add_handler(CommandHandler("analizza", cmd_analizza))
     app.add_handler(CommandHandler("stile", cmd_stile))
+    app.add_handler(MessageHandler(filters.PHOTO | filters.Document.IMAGE, on_media))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_text))
     _schedule_report(app)
     log.info("Bot avviato.")

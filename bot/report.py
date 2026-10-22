@@ -216,6 +216,14 @@ async def run_report(bot, chat_ids: list[int]) -> None:
             await _broadcast(bot, chat_ids, "Report: non sono riuscito a leggere le pagine. Riprova con /report.")
             return
 
+        letti = {p.owner for p in posts}
+        mancanti = [h for h in handles if h not in letti]
+        if mancanti:
+            await _broadcast(bot, chat_ids, "Non riesco a leggere: " + ", ".join(f"@{h}" for h in mancanti)
+                             + ". Di solito è perché la pagina ha un limite d'età"
+                             + (" e anche la lettura con accesso non è riuscita: controlla che INSTAGRAM_COOKIES sia ancora valido."
+                                if config.INSTAGRAM_COOKIES else
+                                ": inserisci INSTAGRAM_COOKIES su Render (vedi la guida)."))
         cands = rank_candidates(posts, st["ore"], st["candidati"])
         storage.save_ranking([_to_dict(p) for p in cands])
         pool = _pool(cands, st)

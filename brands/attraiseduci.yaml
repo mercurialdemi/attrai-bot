@@ -102,7 +102,7 @@ watermark:
   testo: AttraiSeduci
   posizione: basso-destra      # basso-destra | basso-sinistra | basso-centro | alto-destra | alto-sinistra
   larghezza_logo: 0.075         # diametro del logo rispetto alla larghezza della slide
-  colore_testo: "#FFFFFF"
+  colore_testo: auto          # auto = bianco su sfondi scuri, nero su sfondi chiari
 
 # Usato solo in modalità "overlay" (testo scritto dal codice invece che da Gemini).
 testo_overlay:

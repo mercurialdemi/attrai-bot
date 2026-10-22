@@ -8,7 +8,7 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
-from . import config, writer
+from . import config, textslide, writer
 
 log = logging.getLogger(__name__)
 
@@ -204,7 +204,16 @@ def add_brand_mark(img: Image.Image, brand: dict) -> Image.Image:
     ImageDraw.Draw(shadow).text((tx + 2, ty + 2), text, font=font, fill=(0, 0, 0, 170))
     shadow = shadow.filter(ImageFilter.GaussianBlur(3))
     layer = Image.alpha_composite(shadow, layer)
-    ImageDraw.Draw(layer).text((tx, ty), text, font=font, fill=_hex(wm.get("colore_testo", "#FFFFFF")))
+    colore = str(wm.get("colore_testo", "auto"))
+    if colore.lower() == "auto":   # testo bianco su sfondi scuri, nero su sfondi chiari
+        zona = img.convert("L").crop((max(0, tx - 10), y, min(W, tx + text_w + 10), min(H, y + d)))
+        lum = sum(zona.getdata()) / max(1, zona.width * zona.height)
+        colore = "#111111" if lum > 150 else "#FFFFFF"
+        if lum > 150:
+            layer = Image.new("RGBA", img.size, (0, 0, 0, 0))   # niente ombra scura su sfondo chiaro
+            if logo:
+                layer.alpha_composite(logo, (x, y))
+    ImageDraw.Draw(layer).text((tx, ty), text, font=font, fill=_hex(colore))
     return Image.alpha_composite(img.convert("RGBA"), layer).convert("RGB")
 
 
@@ -228,7 +237,22 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
     in quel caso NON va consegnata come pronta."""
     original = Image.open(io.BytesIO(original_bytes)).convert("RGB")
     size = output_size(original)
+    if not slide.get("da_modificare", True) and not (slide.get("watermark_originale") or "").strip():
+        # già in italiano e senza marchi di altre pagine: si consegna l'originale, nessun ritocco
+        return original, True, ""
     testo = (slide.get("testo") or "").strip()
+    if config.SLIDE_TEXT_MODE != "gemini-sempre":
+        lay = textslide.analyze(original, slide.get("testo_originale", ""))
+        if lay:
+            placements: list = []
+            img = textslide.render(original, lay, testo, placements)
+            slide["_canva"] = {"tipo": "testo", "righe": placements}
+            slide["_sfondo"] = textslide.background(original, lay)
+            img = add_brand_mark(img, brand) if needs_logo(slide, brand) else img
+            if slide.get("_sfondo") is not None and needs_logo(slide, brand):
+                slide["_sfondo"] = add_brand_mark(slide["_sfondo"], brand)
+            return img, True, ""
+    original_jpeg = _jpeg(original)
     feedback, problems = "", ""
     best: Image.Image | None = None
     for attempt in range(max(1, config.SLIDE_ATTEMPTS)):
@@ -245,7 +269,7 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
         if mode == "overlay":
             img = draw_text_overlay(img, testo, brand)
         if config.SLIDE_CHECK:
-            ok, problems = writer.check_slide(_jpeg(img), testo, slide.get("watermark_originale", ""))
+            ok, problems = writer.check_slide(_jpeg(img), testo, slide.get("watermark_originale", ""), original_jpeg)
             if not ok:
                 log.info("Slide %s scartata al controllo (tentativo %s): %s", slide.get("numero"), attempt + 1, problems)
                 feedback, best = problems, img
@@ -257,12 +281,23 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
     return img, False, problems or "non verificata"
 
 
+_SEM: asyncio.Semaphore | None = None
+
+
+def _sem() -> asyncio.Semaphore:
+    """Limite unico per tutto il bot: anche con più post in parallelo non si satura la memoria del server."""
+    global _SEM
+    if _SEM is None:
+        _SEM = asyncio.Semaphore(config.MAX_PARALLEL_IMAGES)
+    return _SEM
+
+
 async def render_all(post: dict, originals: list[bytes], brand: dict, job_dir: Path,
                      only: set[int] | None = None,
                      existing: list[Path] | None = None) -> tuple[list[Path], list[int]]:
     """Genera le slide (solo quelle in `only`, se indicato). Restituisce percorsi e slide non riuscite."""
     job_dir.mkdir(parents=True, exist_ok=True)
-    sem = asyncio.Semaphore(config.MAX_PARALLEL_IMAGES)
+    sem = _sem()
     slides = post["slides"]
     paths: list[Path] = [job_dir / f"slide_{i + 1:02d}.jpg" for i in range(len(slides))]
     failed: list[int] = []
@@ -279,7 +314,16 @@ async def render_all(post: dict, originals: list[bytes], brand: dict, job_dir: P
             failed.append(i + 1)
             slides[i]["_problema"] = problems
         p = job_dir / f"slide_{i + 1:02d}_v{version}.jpg"
-        await asyncio.to_thread(img.save, p, "JPEG", quality=95, subsampling=0)
+        sfondo = slides[i].pop("_sfondo", None)
+        if sfondo is not None:
+            bp = job_dir / f"sfondo_{i + 1:02d}_v{version}.jpg"
+            await asyncio.to_thread(sfondo.save, bp, "JPEG", quality=95)
+            slides[i]["_canva"]["sfondo"] = str(bp)
+        if ok and not slides[i].get("da_modificare", True) and not (slides[i].get("watermark_originale") or "").strip():
+            p = job_dir / f"slide_{i + 1:02d}_v{version}.jpg"
+            p.write_bytes(src)                     # copia esatta dell'originale, nessuna perdita di qualità
+        else:
+            await asyncio.to_thread(img.save, p, "JPEG", quality=95, subsampling=0)
         paths[i] = p
 
     await asyncio.gather(*(one(i) for i in range(len(slides))))

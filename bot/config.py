@@ -33,6 +33,10 @@ REPORT_CHAT_IDS = {
 CLAUDE_MODEL = _env("CLAUDE_MODEL", "claude-sonnet-5-5")
 GEMINI_IMAGE_MODEL = _env("GEMINI_IMAGE_MODEL", "gemini-2.5-flash-image")
 APIFY_ACTOR = _env("APIFY_ACTOR", "apify/instagram-scraper")
+# Per i post con limite d'età: cookie di un account Instagram secondario ("sessionid=...; csrftoken=...")
+# e l'attore Apify che li accetta. Si usano solo quando la lettura normale viene bloccata.
+INSTAGRAM_COOKIES = _env("INSTAGRAM_COOKIES")
+APIFY_LOGIN_ACTOR = _env("APIFY_LOGIN_ACTOR", "fmchisti/instagram-posts-scraper")
 # Modello economico che controlla ogni slide prodotta da Gemini (testo giusto, niente residui)
 CHECK_MODEL = _env("CHECK_MODEL", "claude-haiku-5-5")
 SLIDE_CHECK = _env("SLIDE_CHECK", "on").lower() not in ("off", "0", "no", "false")

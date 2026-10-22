@@ -62,7 +62,7 @@ def _parse_item(url: str, it: dict) -> SourcePost:
     images: list[str] = []
     for child in it.get("childPosts") or []:
         if (child.get("type") or "").lower() != "video":
-            images.append(child.get("displayUrl") or "")
+            images.append(child.get("displayUrl") or child.get("imageUrl") or child.get("url") or "")
     if not images:
         images = list(it.get("images") or [])
     if not images and it.get("displayUrl"):
@@ -79,6 +79,24 @@ def _parse_item(url: str, it: dict) -> SourcePost:
     )
 
 
+def _run_login_actor(targets: list[str], limit: int = 30, newer_than: str | None = None) -> list[dict]:
+    """Legge con l'accesso di un account (cookie): serve per pagine e post con limite d'età."""
+    client = ApifyClient(config.APIFY_TOKEN)
+    run_input = {
+        "username": targets,
+        "resultsLimit": limit,
+        "dataDetailLevel": "detailedData",
+        "latestCommentsLimit": 0,
+        "cookies": config.INSTAGRAM_COOKIES,
+    }
+    if newer_than:
+        run_input["onlyPostsNewerThan"] = newer_than
+    run = client.actor(config.APIFY_LOGIN_ACTOR).call(run_input=run_input, timeout_secs=900)
+    if not run:
+        raise InstagramError("Apify non ha risposto (lettura con accesso).")
+    return list(client.dataset(run["defaultDatasetId"]).iterate_items())
+
+
 def fetch_post(url: str) -> SourcePost:
     """Scarica i dati di un singolo post (testo, autore, URL delle slide)."""
     client = ApifyClient(config.APIFY_TOKEN)
@@ -93,9 +111,26 @@ def fetch_post(url: str) -> SourcePost:
     )
     if not run:
         raise InstagramError("Apify non ha risposto. Riprova tra un minuto.")
-    items = list(client.dataset(run["defaultDatasetId"]).iterate_items())
-    items = [i for i in items if not i.get("error")]
+    all_items = list(client.dataset(run["defaultDatasetId"]).iterate_items())
+    items = [i for i in all_items if not i.get("error")]
+    if not items and config.INSTAGRAM_COOKIES:
+        log.info("Lettura normale bloccata, riprovo con l'accesso: %s", url)
+        try:
+            all_items = _run_login_actor([url], 1)
+            items = [i for i in all_items if not i.get("error") and (i.get("ownerUsername") or i.get("caption") is not None)]
+        except Exception as e:
+            log.warning("Lettura con accesso fallita: %s", e)
     if not items:
+        errs = [i for i in all_items if i.get("error")]
+        if any(e.get("error") == "restricted_page" for e in errs):
+            raise InstagramError(
+                "Instagram non mi fa leggere questo post: la pagina ha un limite d'età e i contenuti si vedono solo "
+                "dopo il login." + ("" if config.INSTAGRAM_COOKIES else
+                " Per leggerli inserisci su Render la variabile INSTAGRAM_COOKIES (vedi la guida).")
+                + "\n\nIntanto puoi mandarmi direttamente le slide come album (meglio come File), "
+                "con la descrizione originale nella didascalia.")
+        if errs:
+            raise InstagramError(f"Instagram ha rifiutato la lettura del post ({errs[0].get('errorDescription') or errs[0].get('error')}).")
         raise InstagramError("Non riesco a leggere il post: è pubblico e il link è giusto?")
     post = _parse_item(url, items[0])
     if not post.owner:
@@ -145,4 +180,17 @@ def fetch_profiles(handles: list[str], per_page: int = 30) -> list[SourcePost]:
         if not url:
             continue
         out.append(_parse_item(url, it))
+    missing = [h for h in handles if h not in {p.owner for p in out}]
+    if missing and config.INSTAGRAM_COOKIES:
+        log.info("Pagine non lette, riprovo con l'accesso: %s", missing)
+        try:
+            for it in _run_login_actor([f"https://www.instagram.com/{h}/" for h in missing], per_page):
+                if it.get("error"):
+                    continue
+                url = find_post_url(it.get("url") or "") or (
+                    f"https://www.instagram.com/p/{it['shortCode']}/" if it.get("shortCode") else None)
+                if url:
+                    out.append(_parse_item(url, it))
+        except Exception as e:
+            log.warning("Lettura con accesso fallita: %s", e)
     return out
