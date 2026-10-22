@@ -110,7 +110,8 @@ async def cmd_analizza(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 f"e {len(style['esempi'])} esempi tuoi:\n\n{style['guida']}"[:2500]
                 + f"\n\nCTA che rendono di più:\n{cta_txt or '(nessuna)'}"
                 + f"\n\n{style.get('lezioni_cta', '')}"[:800]
-                + f"\n\nSlide CTA prese dai tuoi caroselli: {slides_txt}.")
+                + f"\n\nSlide CTA prese dai tuoi caroselli: {slides_txt}. Testi CTA letti dalle slide: "
+                  f"{len(style.get('testi_slide_cta') or [])} (li vedi con /stile).")
         except instagram.InstagramError as e:
             await status.edit_text(str(e))
         except Exception:
@@ -130,6 +131,12 @@ async def cmd_stile(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.effective_message.reply_text(
         f"Guida di stile del {style.get('creato', '')[:10]} ({style.get('post_analizzati')} post, "
         f"{len(style.get('esempi', []))} esempi):\n\n{style.get('guida', '')}"[:4000])
+    testi = style.get("testi_slide_cta") or []
+    righe = "\n\n".join(f"{i}. [{t['tipo']}{' ' + t['manuale'] if t.get('manuale') else ''}]\n{t['testo']}"
+                         for i, t in enumerate(testi, 1))
+    await update.effective_message.reply_text(
+        (f"Testi delle tue slide CTA che uso a fine post ({len(testi)}):\n\n{righe}" if testi else
+         "Non ho ancora letto i testi delle tue slide CTA: lancia /analizza.")[:4000])
 
 
 async def cmd_statistiche(update: Update, context: ContextTypes.DEFAULT_TYPE):
