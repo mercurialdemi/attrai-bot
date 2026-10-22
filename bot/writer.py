@@ -368,7 +368,7 @@ def check_slide(image_jpeg: bytes, expected_text: str, old_watermark: str,
     ]
     try:
         out = _tool_call("Sei un correttore di bozze pignolo per slide Instagram in italiano.", content,
-                         CHECK_TOOL, model=config.CHECK_MODEL, max_tokens=500)
+                         CHECK_TOOL, model=config.CHECK_MODEL, max_tokens=2000)
     except Exception as e:  # se il controllo non riesce, la slide NON si considera verificata
         log.warning("Controllo slide non riuscito: %s", e)
         return False, f"controllo non riuscito ({str(e)[:120]})"
