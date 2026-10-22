@@ -427,6 +427,17 @@ _SEM: asyncio.Semaphore | None = None
 _SEM_LOOP = None
 
 
+def _free_memory() -> None:
+    """Restituisce al sistema la memoria delle immagini già lavorate (il server ha solo 512 MB)."""
+    import ctypes
+    import gc
+    gc.collect()
+    try:
+        ctypes.CDLL("libc.so.6").malloc_trim(0)
+    except Exception:
+        pass
+
+
 def _sem() -> asyncio.Semaphore:
     """Limite unico per tutto il bot: anche con più post in parallelo non si satura la memoria del server."""
     global _SEM, _SEM_LOOP
@@ -460,6 +471,7 @@ async def render_all(post: dict, originals: list[bytes], brand: dict, job_dir: P
         slides[i]["_metti_logo"] = (i == 0 and wm_post)
         async with sem:
             img, ok, problems = await asyncio.to_thread(render_slide, src, slides[i], brand, config.SLIDE_TEXT_MODE)
+            _free_memory()
         if not ok:
             failed.append(i + 1)
             slides[i]["_problema"] = problems

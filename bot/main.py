@@ -481,7 +481,36 @@ def _schedule_diagnostics(app: Application):
     log.info("Studio della pagina programmato ogni settimana alle %s", at)
 
 
+def _low_memory_restart():
+    """Python su Linux tende a tenere la memoria già usata per le immagini: con MALLOC_ARENA_MAX=2
+    la restituisce e il server (512 MB) non si riempie. Va impostato prima dell'avvio, quindi si riparte una volta."""
+    import os
+    import sys
+    if os.environ.get("MALLOC_ARENA_MAX") is None:
+        os.environ["MALLOC_ARENA_MAX"] = "2"
+        os.execv(sys.executable, [sys.executable, "-m", "bot.main"])
+
+
+def _cleanup_old_jobs(days: int = 10) -> int:
+    """Cancella dal disco le cartelle dei post più vecchie di `days` giorni (il disco è da 1 GB)."""
+    import shutil
+    import time
+    root = config.DATA_DIR / "jobs"
+    if not root.exists():
+        return 0
+    limit, n = time.time() - days * 86400, 0
+    for d in root.iterdir():
+        try:
+            if d.is_dir() and d.stat().st_mtime < limit:
+                shutil.rmtree(d, ignore_errors=True)
+                n += 1
+        except OSError:
+            pass
+    return n
+
+
 def main():
+    _low_memory_restart()
     missing = config.missing_keys()
     if missing:
         raise SystemExit(f"Mancano queste variabili d'ambiente: {', '.join(missing)}")
@@ -505,12 +534,18 @@ def main():
         for w in storage.pop_unfinished():
             try:
                 await context.bot.send_message(
-                    w["chat_id"], f"Il bot è stato aggiornato mentre lavorava e il lavoro si è interrotto: "
+                    w["chat_id"], f"Il bot si è riavviato (aggiornamento o memoria del server piena) mentre lavorava: "
                                   f"rimandami {w['descrizione']}.")
             except Exception:
                 log.warning("Avviso di riavvio non inviato a %s", w["chat_id"])
 
     app.job_queue.run_once(notify_restart, when=5, name="avviso_riavvio")
+
+    async def cleanup(context: ContextTypes.DEFAULT_TYPE):
+        n = await asyncio.to_thread(_cleanup_old_jobs)
+        if n:
+            log.info("Pulizia disco: cancellate %s cartelle di post vecchi", n)
+    app.job_queue.run_repeating(cleanup, interval=86400, first=60, name="pulizia_disco")
     _schedule_report(app)
     _schedule_analysis(app)
     _schedule_diagnostics(app)
