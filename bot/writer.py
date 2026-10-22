@@ -130,7 +130,7 @@ CHECK_TOOL = {
         "properties": {
             "testo_corretto": {"type": "boolean", "description": "Il testo sulla slide corrisponde a quello atteso, senza errori di battitura, lettere sbagliate o parole mancanti. True se non era atteso testo e non ce n'è."},
             "residui": {"type": "boolean", "description": "True se restano testo originale non tradotto, il vecchio watermark o il vecchio handle."},
-            "problemi": {"type": "string", "description": "Cosa c'è di sbagliato, in una frase, in inglese, da passare al generatore di immagini. Vuoto se tutto ok."},
+            "problemi": {"type": "string", "description": "Cosa c'è di sbagliato, in una o due frasi brevi in italiano semplice. Vuoto se tutto ok."},
         },
         "required": ["testo_corretto", "residui", "problemi"],
     },

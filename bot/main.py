@@ -172,6 +172,7 @@ async def process_link(update: Update, context: ContextTypes.DEFAULT_TYPE, url: 
     msg = update.effective_message
     chat_id = update.effective_chat.id
     status = await msg.reply_text("Leggo il post…")
+    work = storage.start_work(chat_id, url)
     try:
         brand = writer.load_brand()
         src = await asyncio.to_thread(instagram.fetch_post, url)
@@ -189,6 +190,8 @@ async def process_link(update: Update, context: ContextTypes.DEFAULT_TYPE, url: 
     except Exception:
         log.exception("Errore elaborando %s", url)
         await status.edit_text("Qualcosa è andato storto mentre preparavo il post. Riprova; se succede ancora, controlla i log su Render.")
+    finally:
+        storage.end_work(work)
 
 
 # ---------------------------------------------------------------- modifiche
@@ -324,6 +327,7 @@ async def process_album(update: Update, context: ContextTypes.DEFAULT_TYPE, albu
     chat_id = first.chat_id
     items = sorted(album["items"])
     status = await first.reply_text(f"Ricevute {len(items)} slide, le preparo…")
+    work = storage.start_work(chat_id, f"le {len(items)} slide che mi hai mandato")
     try:
         originals = []
         for _, file_id, _is_photo in items:
@@ -352,6 +356,8 @@ async def process_album(update: Update, context: ContextTypes.DEFAULT_TYPE, albu
     except Exception:
         log.exception("Errore elaborando le slide inviate")
         await status.edit_text("Qualcosa è andato storto mentre preparavo le slide. Riprova; se succede ancora, controlla i log su Render.")
+    finally:
+        storage.end_work(work)
 
 
 async def on_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -495,6 +501,16 @@ def main():
     app.add_handler(CommandHandler("stile", cmd_stile))
     app.add_handler(MessageHandler(filters.PHOTO | filters.Document.IMAGE, on_media))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_text))
+    async def notify_restart(context: ContextTypes.DEFAULT_TYPE):
+        for w in storage.pop_unfinished():
+            try:
+                await context.bot.send_message(
+                    w["chat_id"], f"Il bot è stato aggiornato mentre lavorava e il lavoro si è interrotto: "
+                                  f"rimandami {w['descrizione']}.")
+            except Exception:
+                log.warning("Avviso di riavvio non inviato a %s", w["chat_id"])
+
+    app.job_queue.run_once(notify_restart, when=5, name="avviso_riavvio")
     _schedule_report(app)
     _schedule_analysis(app)
     _schedule_diagnostics(app)

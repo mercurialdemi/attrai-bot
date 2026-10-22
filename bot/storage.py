@@ -42,6 +42,9 @@ def _db() -> sqlite3.Connection:
             CREATE TABLE IF NOT EXISTS rankings (
                 id INTEGER PRIMARY KEY AUTOINCREMENT, created_at TEXT, data TEXT
             );
+            CREATE TABLE IF NOT EXISTS in_corso (
+                id INTEGER PRIMARY KEY AUTOINCREMENT, chat_id INTEGER, descrizione TEXT, creato TEXT
+            );
             CREATE TABLE IF NOT EXISTS diag (
                 id INTEGER PRIMARY KEY AUTOINCREMENT, tipo TEXT, job_id INTEGER, dati TEXT, creato TEXT
             );
@@ -243,3 +246,27 @@ def list_diag(since_iso: str) -> list[dict]:
     with _lock:
         rows = _db().execute("SELECT tipo, job_id, dati, creato FROM diag WHERE creato >= ? ORDER BY id", (since_iso,)).fetchall()
     return [{"tipo": r["tipo"], "job_id": r["job_id"], "dati": json.loads(r["dati"]), "creato": r["creato"]} for r in rows]
+
+
+# ---------------------------------------------------------------- lavori in corso (per avvisare dopo un riavvio)
+
+def start_work(chat_id: int, descrizione: str) -> int:
+    with _lock:
+        cur = _db().execute("INSERT INTO in_corso (chat_id, descrizione, creato) VALUES (?,?,?)",
+                            (chat_id, descrizione, _now()))
+        _db().commit()
+        return cur.lastrowid
+
+
+def end_work(work_id: int) -> None:
+    with _lock:
+        _db().execute("DELETE FROM in_corso WHERE id=?", (work_id,))
+        _db().commit()
+
+
+def pop_unfinished() -> list[dict]:
+    with _lock:
+        rows = _db().execute("SELECT chat_id, descrizione FROM in_corso").fetchall()
+        _db().execute("DELETE FROM in_corso")
+        _db().commit()
+    return [{"chat_id": r["chat_id"], "descrizione": r["descrizione"]} for r in rows]
