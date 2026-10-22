@@ -165,20 +165,47 @@ def clean_text(s: str) -> str:
     return s.strip()
 
 
+def _strict_schema(schema):
+    """Per gli strumenti 'strict' ogni oggetto deve dichiarare additionalProperties: false."""
+    if isinstance(schema, dict):
+        out = {k: _strict_schema(v) for k, v in schema.items()}
+        if out.get("type") == "object":
+            out.setdefault("additionalProperties", False)
+        return out
+    if isinstance(schema, list):
+        return [_strict_schema(x) for x in schema]
+    return schema
+
+
 def _tool_call(system: str, content: list, tool: dict, model: str | None = None, max_tokens: int = 8000) -> dict:
-    resp = client().messages.create(
-        model=model or config.CLAUDE_MODEL,
-        max_tokens=max_tokens,
-        system=system,
-        tools=[tool],
-        tool_choice={"type": "tool", "name": tool["name"]},
-        messages=[{"role": "user", "content": content}],
-    )
-    if resp.stop_reason == "max_tokens":
-        raise RuntimeError("Risposta di Claude troncata: post troppo lungo.")
-    for block in resp.content:
-        if block.type == "tool_use":
-            return dict(block.input)
+    """Chiede a Claude di rispondere usando lo strumento indicato.
+    I modelli 5.5 non accettano tool_choice forzato: si usa 'auto' con lo strumento 'strict'
+    e l'istruzione esplicita di usarlo. Se il modello risponde a parole, si riprova una volta."""
+    instruction = {"type": "text", "text": f"Rispondi esclusivamente chiamando lo strumento {tool['name']}."}
+    strict_tool = {**tool, "input_schema": _strict_schema(tool["input_schema"]), "strict": True}
+    use_strict = True
+    for attempt in range(3):
+        try:
+            resp = client().messages.create(
+                model=model or config.CLAUDE_MODEL,
+                max_tokens=max_tokens,
+                system=system,
+                tools=[strict_tool if use_strict else tool],
+                tool_choice={"type": "auto"},
+                messages=[{"role": "user", "content": list(content) + [instruction]}],
+            )
+        except anthropic.BadRequestError as e:
+            if use_strict:   # schema non accettato in modalità strict: riprova con lo strumento normale
+                log.warning("Strumento strict non accettato, riprovo senza: %s", e)
+                use_strict = False
+                continue
+            raise
+        if resp.stop_reason == "max_tokens":
+            raise RuntimeError("Risposta di Claude troncata: post troppo lungo.")
+        for block in resp.content:
+            if block.type == "tool_use":
+                return dict(block.input)
+        log.warning("Claude ha risposto senza usare %s (tentativo %s)", tool["name"], attempt + 1)
     raise RuntimeError("Claude non ha restituito il risultato.")
 
 

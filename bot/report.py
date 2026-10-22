@@ -123,12 +123,8 @@ def _select_sync(cands: list[instagram.SourcePost], brand: dict, quanti: int,
         "toccato, adattabilità al nostro tono, varietà tra i post scelti (niente due post sullo stesso tema)."
     )
     try:
-        resp = writer.client().messages.create(
-            model=config.CLAUDE_MODEL, max_tokens=2000, system=system,
-            tools=[SELECT_TOOL], tool_choice={"type": "tool", "name": "seleziona_post"},
-            messages=[{"role": "user", "content": f"Candidati:\n\n{elenco}"}],
-        )
-        raw = next((b.input.get("scelti", []) for b in resp.content if b.type == "tool_use"), [])
+        raw = writer._tool_call(system, [{"type": "text", "text": f"Candidati:\n\n{elenco}"}],
+                                SELECT_TOOL, max_tokens=2000).get("scelti", [])
     except Exception as e:
         log.warning("Selezione con Claude fallita, uso solo il punteggio: %s", e)
         raw = []
