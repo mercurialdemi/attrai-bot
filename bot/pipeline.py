@@ -63,9 +63,65 @@ def cta_file(key: str) -> Path | None:
     return None
 
 
+def styled_cta_slide(post: dict, jdir: Path) -> tuple[Path, dict] | None:
+    """Slide CTA con lo stesso stile grafico del post: si prende una slide di solo testo del carosello
+    (stesso sfondo, font, colori, impaginazione) e ci si scrive il testo della nostra CTA."""
+    from PIL import Image
+    from . import textslide
+    text = (post.get("_testo_cta_finale") or "").strip()
+    if not text:
+        return None
+    slides = post.get("slides", [])
+    cands = [i for i, sl in enumerate(slides)
+             if sl.get("_via") == "testo-su-sfondo-uniforme" and not sl.get("e_cta") and i != 0]
+    if not cands:
+        return None
+    i = cands[-1]
+    op = jdir / "originali" / f"{i + 1:02d}.jpg"
+    if not op.exists():
+        return None
+    original = Image.open(op).convert("RGB")
+    lay = textslide.analyze(original, slides[i].get("testo_originale", ""),
+                            has_mark=bool((slides[i].get("watermark_originale") or "").strip()))
+    if not lay:
+        return None
+    placements: list = []
+    img = textslide.render(original, lay, text, placements)
+    out = jdir / "cta_stile_post.jpg"
+    img.save(out, "JPEG", quality=95, subsampling=0)
+    bg = jdir / "sfondo_cta_stile_post.jpg"
+    textslide.background(original, lay).save(bg, "JPEG", quality=95)
+    info = {"numero": 0, "testo": text, "testo_originale": "", "watermark_originale": "", "e_cta": True,
+            "da_modificare": False, "_via": "cta-stile-post",
+            "_canva": {"tipo": "testo", "righe": placements, "sfondo": str(bg)}}
+    return out, info
+
+
 def apply_cta_slide(post: dict, paths: list[Path], failed: list[int], jdir: Path):
     """In fondo al carosello va sempre la nostra slide CTA: sostituisce la CTA della pagina di origine
-    (se c'è) oppure si aggiunge come ultima slide."""
+    (se c'è) oppure si aggiunge come ultima slide. Prima scelta: CTA scritta nello stesso stile del post."""
+    if post.get("formato") != "singolo" and paths:
+        try:
+            styled = styled_cta_slide(post, jdir)
+        except Exception:
+            import logging
+            logging.getLogger(__name__).exception("Slide CTA nello stile del post non creata")
+            styled = None
+        if styled:
+            target, info = styled
+            slides = post["slides"]
+            cta_idx = [i for i, sl in enumerate(slides) if sl.get("e_cta")]
+            if cta_idx and cta_idx[-1] >= len(slides) - 2:
+                i = cta_idx[-1]
+                info["numero"] = i + 1
+                slides[i] = info
+                paths = paths[:i] + [target] + paths[i + 1:]
+                failed = [n for n in failed if n != i + 1]
+            else:
+                info["numero"] = len(slides) + 1
+                slides.append(info)
+                paths = paths + [target]
+            return paths, failed
     cta = post.get("cta") or {}
     key = (cta.get("manuale") if cta.get("tipo") == "manuale" else "segui") or "segui"
     # slide del manuale giusto; se non c'è, una vostra slide "segui la pagina";

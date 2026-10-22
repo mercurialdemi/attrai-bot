@@ -106,6 +106,13 @@ CAPTION_TOOL = {
             "tipo_hook": {"type": "string", "enum": HOOK_TYPES},
             "autori_citati": {"type": "array", "items": {"type": "string"}},
             "cta": _CTA,
+            "testo_slide_finale": {
+                "type": "string",
+                "description": "Testo della NOSTRA slide finale di CTA, che verrà scritta con lo stesso stile grafico delle altre "
+                               "slide del post. Coerente con la CTA scelta (segui la pagina o il manuale giusto col suo nome). "
+                               "Primo paragrafo = titoletto breve; poi 2-4 righe corte, separate da a capo. Riprendi la voce delle "
+                               "nostre CTA migliori. Massimo 260 caratteri. Niente @ se la CTA è al manuale: si chiude con 'link in bio'.",
+            },
             "slide_cta": {
                 "type": "array",
                 "description": "Solo se nel post ci sono slide CTA della pagina di origine (indicate nel messaggio): "
@@ -121,7 +128,7 @@ CAPTION_TOOL = {
                 },
             },
         },
-        "required": ["descrizione", "tipo_hook", "autori_citati", "cta", "slide_cta"],
+        "required": ["descrizione", "tipo_hook", "autori_citati", "cta", "testo_slide_finale", "slide_cta"],
     },
 }
 
@@ -132,14 +139,14 @@ POST_TOOL = {
         "type": "object",
         "properties": {
             **SLIDES_TOOL["input_schema"]["properties"],
-            **{k: v for k, v in CAPTION_TOOL["input_schema"]["properties"].items() if k != "slide_cta"},
+            **{k: v for k, v in CAPTION_TOOL["input_schema"]["properties"].items() if k not in ("slide_cta", "testo_slide_finale")},
             "slide_da_rifare": {
                 "type": "array", "items": {"type": "integer"},
                 "description": "Numeri delle slide da rigenerare anche se il testo non cambia (es. richiesta grafica). Altrimenti lista vuota.",
             },
         },
         "required": SLIDES_TOOL["input_schema"]["required"]
-                    + [k for k in CAPTION_TOOL["input_schema"]["required"] if k != "slide_cta"] + ["slide_da_rifare"],
+                    + [k for k in CAPTION_TOOL["input_schema"]["required"] if k not in ("slide_cta", "testo_slide_finale")] + ["slide_da_rifare"],
     },
 }
 
@@ -475,6 +482,15 @@ POSIZIONAMENTO
 TONO
 {chr(10).join('- ' + t for t in brand.get('tono', []))}
 
+SOSTANZA (la descrizione deve insegnare, non intrattenere)
+- Pragmatica: spiega il MECCANISMO psicologico dietro il contenuto del post (perché succede, cosa scatta nella
+  testa di lei o di lui) e dai indicazioni concrete: cosa fare, cosa smettere di fare, cosa dire, con un esempio reale.
+- Autorevole: parla da chi conosce la materia da anni. Affermazioni nette e motivate, niente "forse", niente
+  frasi motivazionali vuote ("credi in te stesso", "sii la versione migliore di te").
+- Didattica: struttura chiara. Hook che apre il problema, spiegazione del meccanismo, 2-4 punti pratici
+  (ognuno una frase d'azione + il perché), chiusura che fissa il concetto, poi la CTA.
+- Ogni frase deve aggiungere informazione. Se una frase si può togliere senza perdere niente, toglila.
+
 FLUIDITÀ (la descrizione deve sembrare scritta di getto da un italiano, non tradotta)
 - Frasi brevi e parlate, ritmo da messaggio vocale: una idea per frase, molti a capo.
 - Vietati i calchi dall'inglese e le formule da traduzione: "il fatto è che", "questo significa che",
@@ -566,6 +582,7 @@ def create_post(caption: str, owner: str, images: list[bytes], brand: dict,
     slides_out = translate_slides(caption, owner, images, brand, rules)
     cap = write_caption(slides_out, caption, brand, rules, recent)
     apply_cta_texts(slides_out, cap.pop("slide_cta", None) or [])
+    slides_out["_testo_cta_finale"] = clean_text(cap.pop("testo_slide_finale", "") or "")
     post = _finalize({**slides_out, **cap})
     post["slide_da_rifare"] = []
     return post

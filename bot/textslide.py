@@ -41,6 +41,8 @@ class Layout:
     line_ratio: float = 1.32
     blank_ratio: float = 0.8
     right: int = 0        # bordo destro del testo originale (per capire se il blocco era centrato nella slide)
+    head_color: tuple | None = None   # colore del primo paragrafo (titoletto) se diverso dal resto
+    head_weight: str = ""
 
 
 def _font(weight: str, size: int) -> ImageFont.FreeTypeFont:
@@ -167,18 +169,54 @@ def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False) -
     line_ratio = float(np.clip(pitch / max(size, 1), 1.1, 1.8))
     big = [g - pitch for g in gaps if g > pitch * 1.4]
     blank_ratio = float(np.clip((np.median(big) / max(size, 1)) if big else 0.8, 0.4, 1.6))
+    # titoletto colorato: il primo paragrafo ha un colore diverso dal resto (es. "3. Titolo" in rosso)
+    head_color, head_weight = None, ""
+    def _line_color(l):
+        reg = a[l[0]:l[1] + 1, l[2]:l[3] + 1]
+        m = np.abs(reg - bg).max(axis=2) > 120
+        return np.median(reg[m], axis=0) if m.sum() > 10 else None
+    para_end = len(text_lines)
+    for k in range(1, len(text_lines)):
+        if text_lines[k][0] - text_lines[k - 1][0] > pitch * 1.4:
+            para_end = k
+            break
+    if 0 < para_end < len(text_lines):
+        hc = [c for c in (_line_color(l) for l in text_lines[:para_end]) if c is not None]
+        bc = [c for c in (_line_color(l) for l in text_lines[para_end:]) if c is not None]
+        if hc and bc:
+            h, b_ = np.median(hc, axis=0), np.median(bc, axis=0)
+            if np.abs(h - b_).max() > 60:
+                head_color = tuple(int(c) for c in h)
+                color = tuple(int(c) for c in b_)
+                hr = []
+                for l in text_lines[:para_end]:
+                    mid = (l[0] + l[1]) // 2
+                    hr += [e - s0 + 1 for s0, e in _runs(ink[mid, l[2]:l[3] + 1], min_gap=0)]
+                st = (np.median(hr) / max(size, 1)) if hr else 0.1
+                head_weight = "bold" if st > 0.125 else ("semibold" if st > 0.105 else "regular")
+                br = []
+                for l in text_lines[para_end:]:
+                    mid = (l[0] + l[1]) // 2
+                    for yy in range(max(l[0], mid - 3), min(l[1], mid + 3) + 1):
+                        br += [e - s0 + 1 for s0, e in _runs(ink[yy, l[2]:l[3] + 1], min_gap=0)]
+                if br:                          # peso del testo normale, senza il titoletto
+                    sb = np.median(br) / max(size, 1)
+                    weight = "bold" if sb > 0.125 else ("semibold" if sb > 0.105 else "regular")
     block_center = (top + bottom) / 2
     if align == "center":
         width = int(min(W * 0.9, (np.max(rights) - np.min(lefts)) * 1.1))
     else:
         width = int(W - left - max(left * 0.6, W * 0.05))
     # maschera da cancellare: tutto ciò che non è sfondo (testo, watermark, avatar), un po' allargata
-    erase = dist > 25
+    # soglia di cancellazione in base al rumore dello sfondo: su un nero pulito si tolgono anche gli aloni grigi
+    noise = float(np.percentile(np.abs(border - bg).max(axis=1), 95))
+    erase = dist > max(10.0, noise * 2 + 4)
     erase = _dilate(erase, max(2, size // 10))
     return Layout(bg=tuple(int(c) for c in bg), color=color, weight=weight, align=align, left=left,
                   top=int(top), bottom=int(bottom), width=width, size=max(14, size),
                   centered_v=abs(block_center - H / 2) < H * 0.08, mask=erase,
-                  line_ratio=line_ratio, blank_ratio=blank_ratio, right=int(np.max(rights)))
+                  line_ratio=line_ratio, blank_ratio=blank_ratio, right=int(np.max(rights)),
+                  head_color=head_color, head_weight=head_weight)
 
 
 def _dilate(m: np.ndarray, r: int) -> np.ndarray:
@@ -199,6 +237,14 @@ def _clean(img: Image.Image, lay: Layout) -> Image.Image:
             keep = ~row_m
             col = np.median(a[y][keep], axis=0) if keep.sum() > 10 else np.array(lay.bg)
             a[y][row_m] = col.astype(np.uint8)
+    # aloni grigi rimasti attorno al testo cancellato (compressione JPEG): nella fascia del testo
+    # tutto ciò che è vicino al colore di sfondo diventa sfondo pieno
+    H = a.shape[0]
+    y0, y1 = max(0, lay.top - lay.size), min(H, lay.bottom + lay.size)
+    band = a[y0:y1].astype(np.int16)
+    near = np.abs(band - np.array(lay.bg)).max(axis=2) < 70
+    band[near] = np.array(lay.bg)
+    a[y0:y1] = band.astype(np.uint8)
     return Image.fromarray(a)
 
 
@@ -299,18 +345,24 @@ def render(img: Image.Image, lay: Layout, text: str, placements: list | None = N
         # testo allineato a sinistra ma blocco centrato nella slide: si ricentra il blocco italiano
         block_w = max((draw.textlength(ln, font=font) for ln in lines if ln), default=0)
         left = int((W - block_w) / 2)
+    in_head = bool(lay.head_color)
     for ln in lines:
         if not ln:
             y += blank_h
+            in_head = False                     # il titoletto colorato è solo il primo paragrafo
             continue
+        f, col, wt = font, lay.color, lay.weight
+        if in_head:
+            col, wt = lay.head_color, (lay.head_weight or lay.weight)
+            f = _font(wt, size)
         if lay.align == "center":
-            x = (W - draw.textlength(ln, font=font)) / 2
+            x = (W - draw.textlength(ln, font=f)) / 2
         else:
             x = left
-        draw.text((x, y), ln, font=font, fill=lay.color)
+        draw.text((x, y), ln, font=f, fill=col)
         if placements is not None:
             placements.append({"testo": ln, "x": float(x), "y": float(y), "size": size,
-                               "weight": lay.weight, "color": lay.color})
+                               "weight": wt, "color": col})
         y += line_h
     return out
 
