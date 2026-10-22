@@ -1,0 +1,113 @@
+# Profilo della pagina di destinazione.
+# Tutto quello che scrivi qui il bot lo usa a ogni post: modificalo liberamente.
+
+nome: AttraiSeduci
+handle: attraiseduci
+
+# ---------------------------------------------------------------
+# PAGINE FONTE (per il flusso 1)
+# Il bot accetta link da qualsiasi pagina pubblica, quindi questa
+# lista non serve più come filtro. La teniamo per compatibilità e
+# per eventuali usi futuri.
+# ---------------------------------------------------------------
+pagine_verificate:
+  - attraiseduci
+
+posizionamento: >
+  Psicologia maschile, attrazione, seduzione e dinamiche di coppia per uomini.
+  Voce di riferimento italiana nella nicchia.
+
+tono:
+  - Maschile, crudo, diretto, machiavellico. Mai romantico.
+  - Sul comportamento femminile tagliente quando il contenuto lo richiede, mai addolcito, sempre ancorato ad autori e studi reali e pertinenti.
+  - "Italiano fluido e naturale, come lo scriverebbe un italiano: mai una traduzione parola per parola."
+
+regole_formato:
+  - Descrizione massimo 2200 caratteri.
+  - Niente grassetto, niente asterischi, niente trattini lunghi.
+  - Testo delle slide breve e leggibile su telefono, con la stessa divisione in frasi e lo stesso peso dell'originale.
+
+hook:
+  regola: >
+    L'apertura della descrizione non parte di default dalla citazione di un autore o studio.
+    Ruota tra: frase secca (autore citato dopo), confessione in prima persona, verità brutale,
+    aneddoto di terzi, domanda retorica. Due descrizioni consecutive non aprono mai con la stessa struttura.
+  struttura: >
+    Varia apertura, sviluppo e chiusura rispetto ai post precedenti.
+    Non ripetere gli autori citati di recente: pesca da un insieme ampio e vario.
+
+cta:
+  regola: |
+    Post a immagine singola -> CTA segui la pagina.
+    Post didattico, di valore, o che apre un problema specifico / un dolore forte (anche caroselli a dialogo) -> CTA ad acquistare il manuale giusto.
+    Post da volume / virale con poco valore reale -> CTA segui la pagina.
+    La CTA del post originale va sempre tolta e sostituita con quella di AttraiSeduci (anche dentro le slide).
+  stile: |
+    Scritta da copywriter professionista, mai come descrizione del manuale.
+    Tocca il dolore, crea urgenza, mostra uno spiraglio di speranza, distrugge le false credenze.
+    Il contenuto non parte mai dal manuale: si parte dal dolore, il manuale arriva solo alla fine.
+  dove_si_compra: "link in bio"
+
+manuali:
+  - id: attraiseduci
+    nome: AttraiSeduci
+    dolori: >
+      Per l'uomo che non sa creare attrazione o la perde per strada. Cerca tecniche e copioni e viene
+      percepito come bisognoso: frame da elemosina, fame di approvazione, paura del rifiuto.
+      Non sa approcciare né entrare in un gruppo, ha conversazioni piatte che non creano tensione,
+      si blocca nel passaggio dalla conversazione al contatto fisico, al bacio e alla prima volta.
+      Il giorno dopo scrive troppo e cerca rassicurazioni; quando è troppo preso perde valore ai suoi occhi.
+      Copre anche distacco e scarsità, il no contact dopo una rottura e il rispetto perso dentro la coppia.
+  - id: potere-sociale
+    nome: Potere Sociale
+    dolori: >
+      Per l'uomo competente ma invisibile. Lo interrompono, le sue idee vengono ignorate e prese sul serio
+      solo se le dice un altro, al lavoro gli parlano sopra, nei gruppi è "quello tranquillo".
+      Vede gente mediocre rispettata più di lui e non capisce perché. Non sa dire di no, si fa mettere
+      i piedi in testa, non guida le situazioni. Copre frame, postura e occupazione dello spazio,
+      calma come potere, reputazione, riprova sociale e uso dell'ambiguità.
+  - id: friendzone
+    nome: "Perché le donne ti mettono nella friendzone (e come uscirne)"
+    dolori: >
+      Per l'uomo che per lei è importante ma non desiderato: lo cerca, si confida, gli racconta degli altri,
+      e non prova nessuna attrazione. È diventato il suo confidente con disponibilità eccessiva,
+      idealizzazione, rinuncia alle proprie priorità e paura di perderla, e ha scambiato fiducia e affetto
+      per segnali di interesse. Non capisce perché gentilezza, favori e presenza costante non bastano,
+      e perché lei sceglie un altro. Copre la differenza tra essere apprezzato ed essere desiderato,
+      dipendenza emotiva, iniziativa, dinamiche di potere e come smettere di aspettare di essere scelto.
+      Tesi: non ci sei finito perché hai fatto troppo poco per lei, ma perché hai rinunciato alla tua indipendenza.
+      Non promette che lei si innamorerà: la CTA non deve promettere risultati garantiti con lei.
+
+# ---------------------------------------------------------------
+# PAGINE MONITORATE PER IL REPORT MATTUTINO
+# Il bot analizza i post recenti di queste pagine, seleziona i
+# migliori 5 in linea con nicchia/tono/posizionamento e li prepara
+# già pronti (slide + descrizione + CTA). Puoi mettere anche le
+# vostre pagine e i competitor.
+# ---------------------------------------------------------------
+pagine_monitorate:
+  - attraiseduci
+  # - competitor1
+  # - competitor2
+  # - competitor3
+
+report:
+  ora: "08:00"               # ora italiana
+  fuso: "Europe/Rome"
+  quanti_post: 5
+  candidati: 15
+  finestra_ore: 48           # analizza post delle ultime 24h
+  chat_id: 0                 # IL TUO ID TELEGRAM (lo ottieni con /id)
+
+# Il nostro marchio che sostituisce il watermark della pagina di origine.
+watermark:
+  testo: AttraiSeduci
+  posizione: basso-destra      # basso-destra | basso-sinistra | basso-centro | alto-destra | alto-sinistra
+  larghezza_logo: 0.075         # diametro del logo rispetto alla larghezza della slide
+  colore_testo: "#FFFFFF"
+
+# Usato solo in modalità "overlay" (testo scritto dal codice invece che da Gemini).
+testo_overlay:
+  colore: "#FFFFFF"
+  contorno: "#000000"
+  posizione: centro            # centro | alto | basso

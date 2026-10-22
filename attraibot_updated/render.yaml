@@ -1,0 +1,14 @@
+# Configurazione per Render (render.com): un servizio "worker" sempre acceso con un disco per i dati.
+services:
+  - type: worker
+    name: attraibot
+    runtime: python
+    plan: starter
+    region: frankfurt
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m bot.main
+    disk:
+      name: dati
+      mountPath: /data
+      sizeGB: 1
+    envVars:
