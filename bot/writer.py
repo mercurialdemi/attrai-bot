@@ -40,7 +40,7 @@ _SLIDE_ITEM = {
             "items": {
                 "type": "object",
                 "properties": {
-                    "testo": {"type": "string", "description": "Il testo italiano di questo blocco, con gli a capo. Le parole che nell'originale hanno un colore diverso (evidenziate) vanno tra [[ ]], es. 'TRE [[FIGLI MILIONARI.]]'."},
+                    "testo": {"type": "string", "description": "Il testo italiano di questo blocco, con gli a capo. Le parole che nell'originale hanno un colore diverso (evidenziate) vanno tra [[ ]], es. 'TRE [[FIGLI MILIONARI.]]'. Le parole in grassetto in mezzo a testo normale vanno tra {{ }}, es. 'non è {{debolezza}}'. Metti i segni sulle parole italiane che corrispondono a quelle evidenziate nell'originale."},
                     "x": {"type": "integer", "description": "Bordo sinistro del testo ORIGINALE, in millesimi della larghezza (0-1000)."},
                     "y": {"type": "integer", "description": "Bordo superiore del testo originale, in millesimi dell'altezza (0-1000)."},
                     "w": {"type": "integer", "description": "Larghezza del riquadro del testo originale, in millesimi della larghezza."},
@@ -201,6 +201,11 @@ def _image_block(data: bytes, max_side: int = 1280) -> dict:
                                         "data": base64.b64encode(buf.getvalue()).decode()}}
 
 
+def plain(t: str) -> str:
+    """Testo senza i segni di colore [[ ]] e grassetto {{ }}."""
+    return t.replace("[[", "").replace("]]", "").replace("{{", "").replace("}}", "")
+
+
 def clean_text(s: str) -> str:
     s = s.replace("**", "").replace("*", "")
     s = re.sub(r"\s*[—–]\s*", ", ", s)
@@ -286,7 +291,11 @@ Ricevi le slide di un post di una pagina collaboratrice che ci ha autorizzato a 
   riscritto esattamente lì sopra l'immagine ripulita, quindi le misure devono essere accurate.
   Non includere nei blocchi il watermark o l'handle della pagina. Ogni slide con testo da tradurre deve
   avere i suoi blocchi: un blocco per ogni gruppo di righe separato da uno spazio vuoto.
-  colore_evidenziato solo se alcune parole hanno davvero un colore diverso dal resto (e vanno tra [[ ]]); altrimenti vuoto.
+  PAROLE EVIDENZIATE: guarda con attenzione ogni slide. Se alcune parole hanno un colore diverso dal resto
+  (es. rosse in un testo bianco) mettile tra [[ ]] e scrivi il loro colore in colore_evidenziato; se alcune
+  parole sono in grassetto in mezzo a testo normale mettile tra {{ }}. Nella traduzione evidenzia le parole
+  italiane che hanno lo stesso ruolo. Non perdere mai un'evidenziazione dell'originale.
+  colore_evidenziato vuoto solo se non ci sono parole di un altro colore.
 - Segnala in watermark_originale handle, nome o logo di un'altra pagina e dove si trova. Se è il nostro (@{brand['handle']}, {brand['nome']}) o non c'è, lascialo vuoto.
 - da_modificare = false per le slide già in italiano e senza riferimenti ad altre pagine (comprese le slide con la nostra CTA o il nostro profilo): restano identiche all'originale e testo = testo_originale.
 
@@ -313,7 +322,7 @@ def translate_slides(caption: str, owner: str, images: list[bytes], brand: dict,
     ours = {brand["handle"].lower(), brand["nome"].lower().replace(" ", "")}
     own_post = (owner or "").lower() in ours
     for s in out["slides"]:
-        s["testo"] = clean_text(s.get("testo", "")).replace("[[", "").replace("]]", "")
+        s["testo"] = plain(clean_text(s.get("testo", "")))
         for b in s.get("blocchi") or []:
             b["testo"] = clean_text(b.get("testo", ""))
         wm = (s.get("watermark_originale") or "").lower().replace(" ", "").replace("@", "")
@@ -338,7 +347,7 @@ POLISH_TOOL = {
                     "properties": {
                         "numero": {"type": "integer"},
                         "blocchi": {"type": "array", "items": {"type": "string"},
-                                    "description": "Il testo di ogni blocco, nello stesso ordine e numero, con gli stessi [[ ]]."},
+                                    "description": "Il testo di ogni blocco, nello stesso ordine e numero, con gli stessi [[ ]] e {{ }}."},
                     },
                     "required": ["numero", "blocchi"],
                 },
@@ -375,7 +384,7 @@ def polish_slides(out: dict) -> dict:
               "'in termini di', 'questo significa che'). Parole inglesi solo se un italiano le usa davvero così.\n"
               "VINCOLI\n"
               "- Stesse idee, stesso ordine, nessuna idea aggiunta o tolta.\n"
-              "- Mantieni maiuscole, a capo, virgolette e i [[ ]] delle parole evidenziate. Lunghezza simile "
+              "- Mantieni maiuscole, a capo, virgolette, i [[ ]] (parole colorate) e i {{ }} (parole in grassetto). Lunghezza simile "
               "(massimo +10% caratteri), perché il testo deve stare nello stesso spazio.\n"
               "- Se una frase suona già scritta da un italiano, lasciala com'è."
               + (f"\nVOCE DELLA PAGINA (dai post migliori):\n{guida[:2500]}" if guida else ""))
@@ -392,7 +401,7 @@ def polish_slides(out: dict) -> dict:
             for b, t in zip(blocks, new):
                 if t and t.strip():
                     b["testo"] = clean_text(t)
-            sl["testo"] = "\n\n".join(b["testo"].replace("[[", "").replace("]]", "") for b in blocks)
+            sl["testo"] = "\n\n".join(plain(b["testo"]) for b in blocks)
     return out
 
 
@@ -507,7 +516,7 @@ def _cta_slides_request(slides_out: dict) -> str:
             "origine o di un suo prodotto. Riscrivi ogni blocco come la NOSTRA CTA, coerente con la CTA scelta "
             "(segui la pagina oppure il manuale giusto, chiamato col suo nome esatto), con lunghezza simile "
             "(massimo +15% caratteri) e stesso ruolo del blocco (titolo, testo, chiusura). Mai nomi, prodotti o "
-            "promesse della pagina di origine. Usa [[parola]] per le parole evidenziate se nel blocco originale "
+            "promesse della pagina di origine. Usa [[parola]] per le parole colorate e {{parola}} per quelle in grassetto se nel blocco originale "
             "c'erano.\n" + "\n".join(parts))
 
 def write_caption(slides_out: dict, caption: str, brand: dict, rules: list[dict], recent: dict) -> dict:
@@ -542,7 +551,7 @@ def apply_cta_texts(slides_out: dict, new: list[dict]) -> None:
             continue
         for b, t in zip(bl, texts):
             b["testo"] = t
-        s["testo"] = "\n\n".join(t.replace("[[", "").replace("]]", "") for t in texts)
+        s["testo"] = "\n\n".join(plain(t) for t in texts)
         s["_cta_riscritta"] = True
 
 

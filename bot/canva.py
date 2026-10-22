@@ -45,13 +45,15 @@ def build(post: dict, paths: list[Path], out_path: Path, failed: list[int] | Non
                 tf.auto_size = MSO_AUTO_SIZE.NONE
                 tf.paragraphs[0].alignment = PP_ALIGN.LEFT
                 runs = r.get("runs") or [[r["testo"], r["color"]]]
-                for k, (word, col) in enumerate(runs):
+                for k, item in enumerate(runs):
+                    word, col = item[0], item[1]
+                    strong = bool(item[2]) if len(item) > 2 else False
                     run = tf.paragraphs[0].add_run()
                     run.text = word + (" " if k < len(runs) - 1 else "")
                     f = run.font
                     f.name = FONT_NAMES.get(r["weight"], "Inter")
                     f.size = Pt(size * 0.75)          # pixel -> punti
-                    f.bold = r["weight"] == "bold"
+                    f.bold = r["weight"] == "bold" or strong
                     f.color.rgb = RGBColor(*list(col)[:3])
         else:
             s.shapes.add_picture(str(p), 0, 0, Emu(W * PX), Emu(H * PX))

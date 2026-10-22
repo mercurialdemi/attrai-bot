@@ -62,7 +62,7 @@ BRAND_FILE = Path(_env("BRAND_FILE", str(ROOT / "brands" / "attraiseduci.yaml"))
 LOGO_PATH = Path(_env("LOGO_PATH", str(ROOT / "assets" / "logo.png")))
 FONT_PATH = Path(_env("FONT_PATH", str(ROOT / "assets" / "font.ttf")))
 
-MAX_PARALLEL_IMAGES = int(_env("MAX_PARALLEL_IMAGES", "4"))
+MAX_PARALLEL_IMAGES = int(_env("MAX_PARALLEL_IMAGES", "2"))
 SLIDE_SIZE = (1080, 1350)  # formato verticale 4:5 di Instagram
 
 

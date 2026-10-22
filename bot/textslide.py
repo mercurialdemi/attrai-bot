@@ -333,23 +333,27 @@ def refine_box(original: Image.Image, cleaned: Image.Image, box: tuple[int, int,
     return new, color
 
 
-def _tokens(text: str) -> list[list[list[tuple[str, bool]]]]:
-    """Testo -> paragrafi -> righe -> parole (parola, evidenziata). Le parole tra [[ ]] sono evidenziate."""
+def _tokens(text: str) -> list[list[list[tuple[str, int]]]]:
+    """Testo -> paragrafi -> righe -> parole (parola, stile). Stile: 1 = colore evidenziato ([[ ]]),
+    2 = grassetto ({{ }}), 3 = entrambi."""
     paras = []
     for para in text.split("\n\n"):
         rows = []
         for row in para.split("\n"):
-            words, hl = [], False
+            words, hl, bd = [], False, False
             for w in row.split():
-                start_hl = w.startswith("[[")
-                end_hl = w.endswith("]]")
-                clean = w.replace("[[", "").replace("]]", "")
-                if start_hl:
+                if w.startswith("[["):
                     hl = True
+                if w.startswith("{{") or w.startswith("[[{{") or w.startswith("{{[["):
+                    bd = True
+                end_hl, end_bd = "]]" in w, "}}" in w
+                clean = w.replace("[[", "").replace("]]", "").replace("{{", "").replace("}}", "")
                 if clean:
-                    words.append((clean, hl))
+                    words.append((clean, int(hl) | (2 if bd else 0)))
                 if end_hl:
                     hl = False
+                if end_bd:
+                    bd = False
             if words:
                 rows.append(words)
         if rows:
@@ -357,19 +361,28 @@ def _tokens(text: str) -> list[list[list[tuple[str, bool]]]]:
     return paras
 
 
-def _line_w(draw, words, font) -> float:
-    return draw.textlength(" ".join(w for w, _ in words), font=font)
+def _bold_weight(weight: str) -> str:
+    return "bold" if weight in ("regular", "semibold") else weight
 
 
-def _layout(draw, paras, font, max_w):
+def _wfont(font, bfont, flag):
+    return bfont if (flag & 2 and bfont is not None) else font
+
+
+def _line_w(draw, words, font, bfont=None) -> float:
+    space = draw.textlength(" ", font=font)
+    return sum(draw.textlength(w, font=_wfont(font, bfont, f)) for w, f in words) + space * max(0, len(words) - 1)
+
+
+def _layout(draw, paras, font, max_w, bfont=None):
     """Come _wrap ma con le parole evidenziate. Restituisce righe di parole; None = riga vuota tra paragrafi."""
     out = []
     for k, rows in enumerate(paras):
         for r in rows:                       # gli a capo voluti restano; si spezza solo la riga troppo lunga
-            if _line_w(draw, r, font) <= max_w:
+            if _line_w(draw, r, font, bfont) <= max_w:
                 out.append(r)
                 continue
-            out += _balanced(r, lambda ws: _line_w(draw, ws, font), max_w)
+            out += _balanced(r, lambda ws: _line_w(draw, ws, font, bfont), max_w)
         if k < len(paras) - 1:
             out.append(None)
     return out
@@ -379,17 +392,19 @@ def local_background(img: Image.Image, box: tuple[int, int, int, int], exclude: 
     """Se attorno al riquadro del testo lo sfondo è di un colore uniforme (es. fascia nera sotto una foto)
     restituisce quel colore: il testo si può cancellare con precisione senza Gemini.
     `exclude` = altri riquadri di testo vicini, da non considerare sfondo."""
-    a = np.asarray(img.convert("RGB")).astype(np.int16)
-    H, W, _ = a.shape
+    W, H = img.size
     x0, y0, x1, y1 = box
     p = max(6, int(min(W, H) * 0.015))
     X0, Y0, X1, Y1 = max(0, x0 - p), max(0, y0 - p), min(W, x1 + p), min(H, y1 + p)
-    keep = np.zeros((H, W), dtype=bool)
-    keep[Y0:Y1, X0:X1] = True
-    keep[max(0, y0):max(0, y1), max(0, x0):max(0, x1)] = False      # solo la cornice attorno al testo
+    if X1 <= X0 or Y1 <= Y0:
+        return None
+    # si lavora solo sul ritaglio attorno al riquadro (poca memoria anche con tante slide in parallelo)
+    a = np.asarray(img.convert("RGB").crop((X0, Y0, X1, Y1))).astype(np.int16)
+    keep = np.ones(a.shape[:2], dtype=bool)
+    keep[max(0, y0 - Y0):max(0, y1 - Y0), max(0, x0 - X0):max(0, x1 - X0)] = False   # solo la cornice
     for ex in exclude or []:
         ex0, ey0, ex1, ey1 = ex
-        keep[max(0, ey0 - p):min(H, ey1 + p), max(0, ex0 - p):min(W, ex1 + p)] = False
+        keep[max(0, ey0 - p - Y0):max(0, ey1 + p - Y0), max(0, ex0 - p - X0):max(0, ex1 + p - X0)] = False
     ring = a[keep]
     if len(ring) < 50:
         return None
@@ -434,19 +449,26 @@ def expand_to_ink(img: Image.Image, box: tuple[int, int, int, int], bg: tuple,
     """Le misure di Claude a volte tagliano una riga o la fine di una parola (es. "about." sotto il blocco):
     si allarga il riquadro finché appena fuori dai bordi non resta più nessuna lettera dello stesso testo.
     Si allarga solo verso zone di sfondo uniforme (mai dentro una foto)."""
-    a = np.asarray(img.convert("RGB")).astype(np.int16)
-    H, W, _ = a.shape
+    W, H = img.size
+    bx0, by0, bx1, by1 = box
+    # ritaglio della zona in cui il riquadro può allargarsi (coordinate locali: meno memoria)
+    cx0, cy0 = max(0, bx0 - int(W * 0.55)), max(0, by0 - int(H * 0.24))
+    cx1, cy1 = min(W, bx1 + int(W * 0.55)), min(H, by1 + int(H * 0.24))
+    a = np.asarray(img.convert("RGB").crop((cx0, cy0, cx1, cy1))).astype(np.int16)
     diff = np.abs(a - np.array(bg)).max(axis=2)
+    del a
     ink = diff > 40
     flat = diff < 20
     for ex in exclude or []:
-        ex0, ey0, ex1, ey1 = ex
+        ex0, ey0, ex1, ey1 = ex[0] - cx0, ex[1] - cy0, ex[2] - cx0, ex[3] - cy0
         ink[max(0, ey0):max(0, ey1), max(0, ex0):max(0, ex1)] = False
         flat[max(0, ey0):max(0, ey1), max(0, ex0):max(0, ex1)] = True
-    x0, y0, x1, y1 = box
-    sx, sy = max(8, int(W * 0.03)), max(8, int(H * 0.03))
-    lim_x, lim_y = int(W * 0.25), int(H * 0.12)
-    ox0, oy0, ox1, oy1 = box
+    H, W = ink.shape
+    x0, y0, x1, y1 = bx0 - cx0, by0 - cy0, bx1 - cx0, by1 - cy0
+    W_full = img.size[0]
+    sx, sy = max(8, int(W_full * 0.03)), max(8, int(img.size[1] * 0.03))
+    lim_x, lim_y = int(W_full * 0.5), int(img.size[1] * 0.2)
+    ox0, oy0, ox1, oy1 = x0, y0, x1, y1
     for _ in range(30):
         changed = False
         strips = {
@@ -471,7 +493,7 @@ def expand_to_ink(img: Image.Image, box: tuple[int, int, int, int], bg: tuple,
                 x1, changed = xa + int(xs.max()) + 1, True
         if not changed:
             break
-    return (x0, y0, x1, y1)
+    return (x0 + cx0, y0 + cy0, x1 + cx0, y1 + cy0)
 
 
 def flatten_ghosts(img: Image.Image, blocks: list[dict]) -> Image.Image:
@@ -558,20 +580,21 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
             size = min(size, int(pitch / ratio * 1.02))
         while size >= 14:
             font = _font(weight, size)
-            lines = _layout(draw, paras, font, int(bw * 1.03))
+            bfont = _font(_bold_weight(weight), size)
+            lines = _layout(draw, paras, font, int(bw * 1.03), bfont)
             lh = int(size * ratio)
             total = sum(int(size * 0.6) if ln is None else lh for ln in lines)
             ink_h = total - lh + size * 0.95          # altezza reale delle lettere (l'ultima riga senza interlinea)
-            widest = max((_line_w(draw, ln, font) for ln in lines if ln), default=0)
+            widest = max((_line_w(draw, ln, font, bfont) for ln in lines if ln), default=0)
             if ink_h <= bh * 1.12 and widest <= bw * 1.05:
-                best = (font, lines, lh, total)
+                best = (font, bfont, lines, lh, total)
                 break
             size -= 1 if size < 40 else 2
         if not best:
-            font = _font(weight, 14)
-            lines = _layout(draw, paras, font, bw)
-            best = (font, lines, int(14 * ratio), len(lines) * int(14 * ratio))
-        font, lines, lh, total = best
+            font, bfont = _font(weight, 14), _font(_bold_weight(weight), 14)
+            lines = _layout(draw, paras, font, bw, bfont)
+            best = (font, bfont, lines, int(14 * ratio), len(lines) * int(14 * ratio))
+        font, bfont, lines, lh, total = best
         # dove cadono davvero le lettere rispetto al punto di scrittura (cambia da un font all'altro)
         first = next((ln for ln in lines if ln), None)
         last = next((ln for ln in reversed(lines) if ln), None)
@@ -589,19 +612,20 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
             if ln is None:
                 y += int(font.size * 0.6)
                 continue
-            tw = _line_w(draw, ln, font)
+            tw = _line_w(draw, ln, font, bfont)
             al = bl.get("allineamento", "left")
             x = box[0] if al == "left" else (box[2] - tw if al == "right" else box[0] + (bw - tw) / 2)
             runs = []
-            for w, hl in ln:
-                c = hl_color if hl else color
-                draw.text((x, y), w, font=font, fill=c)
-                runs.append((w, c))
-                x += draw.textlength(w, font=font) + space
+            for w, fl in ln:
+                c = hl_color if fl & 1 else color
+                f = _wfont(font, bfont, fl)
+                draw.text((x, y), w, font=f, fill=c)
+                runs.append((w, c, bool(fl & 2)))
+                x += draw.textlength(w, font=f) + space
             if placements is not None:
                 x_start = box[0] if al == "left" else (box[2] - tw if al == "right" else box[0] + (bw - tw) / 2)
                 placements.append({"testo": " ".join(w for w, _ in ln), "x": float(x_start), "y": float(y),
                                    "size": font.size, "weight": weight, "color": color,
-                                   "runs": [[w, list(c)] for w, c in runs]})
+                                   "runs": [[w, list(c), b] for w, c, b in runs]})
             y += lh
     return out

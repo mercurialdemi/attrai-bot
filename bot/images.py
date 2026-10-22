@@ -53,7 +53,38 @@ def _fit(img: Image.Image, size: tuple[int, int]) -> Image.Image:
 
 
 def output_size(original: Image.Image) -> tuple[int, int]:
-    return OUT_WIDTH, round(OUT_WIDTH * original.height / original.width)
+    """Stessa risoluzione dell'originale: nessun ridimensionamento, nessuna perdita di qualità."""
+    return original.size
+
+
+def _wm_bands(slide: dict, W: int, H: int) -> list[tuple[int, int, int, int]]:
+    pos = (slide.get("watermark_originale") or "").lower()
+    if not pos.strip():
+        return []
+    bands = []
+    if any(k in pos for k in ("basso", "bottom", "sotto")) or not any(k in pos for k in ("alto", "top", "sopra", "centro", "metà", "mezzo")):
+        bands.append((0, int(H * 0.84), W, H))
+    if any(k in pos for k in ("alto", "top", "sopra")):
+        bands.append((0, 0, W, int(H * 0.14)))
+    if any(k in pos for k in ("centro", "metà", "mezzo")):
+        bands.append((0, int(H * 0.35), W, int(H * 0.65)))
+    return bands
+
+
+def _composite(original: Image.Image, edited: Image.Image, boxes: list[tuple[int, int, int, int]],
+               pad: float = 0.02) -> Image.Image:
+    """Dell'immagine rifatta da Gemini si prendono SOLO le zone del testo (e del watermark):
+    tutto il resto resta il pixel originale, identico e alla stessa qualità."""
+    from PIL import ImageFilter
+    W, H = original.size
+    edited = edited if edited.size == original.size else _fit(edited, original.size)
+    mask = Image.new("L", (W, H), 0)
+    d = ImageDraw.Draw(mask)
+    px, py = int(W * pad), int(H * pad)
+    for x0, y0, x1, y1 in boxes:
+        d.rectangle((max(0, x0 - px), max(0, y0 - py), min(W, x1 + px), min(H, y1 + py)), fill=255)
+    mask = mask.filter(ImageFilter.GaussianBlur(max(2, W // 200)))
+    return Image.composite(edited, original, mask)
 
 
 # ---------------------------------------------------------------- Gemini
@@ -246,7 +277,7 @@ def _remove_watermark(clean: Image.Image, orig_fit: Image.Image, slide: dict):
     try:
         edited = _gemini_edit(clean, _prompt({**slide, "testo": ""}, "gemini"))
         if edited is not None:
-            return _fit(edited, clean.size)
+            return _composite(clean, edited, _wm_bands(slide, W, H) or [(0, int(H * 0.84), W, H)], pad=0.0)
     except Exception as e:
         log.warning("Rimozione watermark con Gemini fallita: %s", e)
     return clean
@@ -270,7 +301,7 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
         return original, True, ""
     testo = (slide.get("testo") or "").strip()
     # serve il percorso a blocchi solo per titoli con font stretti o parole evidenziate davvero ([[ ]])
-    special = any(b.get("carattere") in ("titolo", "stretto") or "[[" in (b.get("testo") or "")
+    special = any(b.get("carattere") in ("titolo", "stretto") or "[[" in (b.get("testo") or "") or "{{" in (b.get("testo") or "")
                   for b in (slide.get("blocchi") or []))
     if config.SLIDE_TEXT_MODE != "gemini-sempre" and not special:
         lay = textslide.analyze(original, slide.get("testo_originale", ""))
@@ -328,6 +359,9 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
         img = _fit(edited, size)
         blocks = [b for b in (slide.get("blocchi") or []) if (b.get("testo") or "").strip()]
         if mode == "codice" and blocks:
+            W_, H_ = size
+            img = _composite(orig_fit, img, [textslide.block_box(b, W_, H_) for b in blocks]
+                             + _wm_bands(slide, W_, H_), pad=0.035)
             # Gemini ha solo ripulito: il testo di Claude lo scrive il codice negli stessi riquadri
             clean = textslide.flatten_ghosts(img, blocks)
             placements: list = []
