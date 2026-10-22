@@ -1,0 +1,347 @@
+"""Claude: traduce le slide, scrive descrizione e CTA, controlla le slide generate, applica le modifiche.
+
+Tre lavori separati, ognuno con le sue istruzioni:
+1. translate_slides  -> traduzione delle slide (fedele o adattata, da profilo brand)
+2. write_caption     -> descrizione e CTA nel tono di AttraiSeduci, con la guida di stile ricavata da /analizza
+3. check_slide       -> controllo automatico di ogni slide prodotta da Gemini
+"""
+from __future__ import annotations
+
+import base64
+import io
+import json
+import logging
+import random
+import re
+
+import anthropic
+import yaml
+from PIL import Image
+
+from . import config
+
+log = logging.getLogger(__name__)
+
+_client: anthropic.Anthropic | None = None
+
+HOOK_TYPES = ["frase secca", "confessione in prima persona", "verità brutale",
+              "aneddoto di terzi", "domanda retorica"]
+
+_SLIDE_ITEM = {
+    "type": "object",
+    "properties": {
+        "numero": {"type": "integer"},
+        "testo_originale": {"type": "string", "description": "Il testo che leggi sulla slide originale (vuoto se non ce n'è)."},
+        "testo": {"type": "string", "description": "Il testo italiano che va sulla slide, con gli stessi a capo dell'originale. Vuoto se la slide non ha testo."},
+        "watermark_originale": {"type": "string", "description": "Handle, nome o logo della pagina di origine visibile sulla slide e dove si trova (es. '@pagina in basso a destra'). Vuoto se assente."},
+    },
+    "required": ["numero", "testo_originale", "testo", "watermark_originale"],
+}
+
+_CTA = {
+    "type": "object",
+    "properties": {
+        "tipo": {"type": "string", "enum": ["segui", "manuale"]},
+        "manuale": {"type": "string", "description": "id del manuale se tipo=manuale, altrimenti vuoto."},
+        "frase": {"type": "string", "description": "La CTA esatta usata in fondo alla descrizione."},
+        "motivo": {"type": "string", "description": "Perché questa CTA per questo post, in una frase."},
+    },
+    "required": ["tipo", "manuale", "frase", "motivo"],
+}
+
+SLIDES_TOOL = {
+    "name": "slide_tradotte",
+    "description": "Restituisce la trascrizione e la traduzione italiana di ogni slide.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "senso": {"type": "string", "description": "1-2 frasi: di cosa parla il post e perché funziona."},
+            "formato": {"type": "string", "enum": ["carosello", "singolo"]},
+            "natura": {"type": "string", "enum": ["didattico", "virale"],
+                       "description": "didattico = valore reale, problema specifico o dolore forte; virale = volume, poco valore reale."},
+            "slides": {"type": "array", "items": _SLIDE_ITEM},
+        },
+        "required": ["senso", "formato", "natura", "slides"],
+    },
+}
+
+CAPTION_TOOL = {
+    "name": "descrizione_pronta",
+    "description": "Restituisce descrizione Instagram e CTA.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "descrizione": {"type": "string", "description": "Descrizione Instagram in italiano, max 2200 caratteri, che termina con la CTA."},
+            "tipo_hook": {"type": "string", "enum": HOOK_TYPES},
+            "autori_citati": {"type": "array", "items": {"type": "string"}},
+            "cta": _CTA,
+        },
+        "required": ["descrizione", "tipo_hook", "autori_citati", "cta"],
+    },
+}
+
+POST_TOOL = {
+    "name": "post_pronto",
+    "description": "Restituisce il post completo dopo la modifica.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            **SLIDES_TOOL["input_schema"]["properties"],
+            **CAPTION_TOOL["input_schema"]["properties"],
+            "slide_da_rifare": {
+                "type": "array", "items": {"type": "integer"},
+                "description": "Numeri delle slide da rigenerare anche se il testo non cambia (es. richiesta grafica). Altrimenti lista vuota.",
+            },
+        },
+        "required": SLIDES_TOOL["input_schema"]["required"] + CAPTION_TOOL["input_schema"]["required"] + ["slide_da_rifare"],
+    },
+}
+
+CHECK_TOOL = {
+    "name": "esito_controllo",
+    "description": "Esito del controllo di una slide generata.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "testo_corretto": {"type": "boolean", "description": "Il testo sulla slide corrisponde a quello atteso, senza errori di battitura, lettere sbagliate o parole mancanti. True se non era atteso testo e non ce n'è."},
+            "residui": {"type": "boolean", "description": "True se restano testo originale non tradotto, il vecchio watermark o il vecchio handle."},
+            "problemi": {"type": "string", "description": "Cosa c'è di sbagliato, in una frase, in inglese, da passare al generatore di immagini. Vuoto se tutto ok."},
+        },
+        "required": ["testo_corretto", "residui", "problemi"],
+    },
+}
+
+TRADUZIONE = {
+    "fedele": (
+        "Traduzione FEDELE: il post è già stato scelto e va riprodotto così com'è. Stesse affermazioni, stesso ordine, "
+        "stesso registro e stessa forza dell'originale. Non aggiungere, non togliere, non cambiare tono e non riscrivere "
+        "le idee. Usa però un italiano naturale, come lo scriverebbe un italiano, senza calchi dall'inglese. "
+        "Modi di dire ed esempi culturali vanno resi con l'equivalente italiano che ha lo stesso effetto."
+    ),
+    "adattata": (
+        "Traduzione ADATTATA: stesso significato e stessa forza, ma riscritta nel tono di AttraiSeduci "
+        "(maschile, crudo, diretto, mai romantico), mai parola per parola."
+    ),
+}
+
+
+# ---------------------------------------------------------------- base
+
+def client() -> anthropic.Anthropic:
+    global _client
+    if _client is None:
+        _client = anthropic.Anthropic(api_key=config.ANTHROPIC_API_KEY)
+    return _client
+
+
+def load_brand() -> dict:
+    with open(config.BRAND_FILE, encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+
+def load_style() -> dict:
+    """Guida di stile ed esempi ricavati da /analizza (vuoto finché non la lanci)."""
+    p = config.DATA_DIR / "stile.json"
+    if not p.exists():
+        return {}
+    try:
+        return json.loads(p.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
+def _image_block(data: bytes, max_side: int = 1280) -> dict:
+    img = Image.open(io.BytesIO(data)).convert("RGB")
+    img.thumbnail((max_side, max_side))
+    buf = io.BytesIO()
+    img.save(buf, format="JPEG", quality=88)
+    return {"type": "image", "source": {"type": "base64", "media_type": "image/jpeg",
+                                        "data": base64.b64encode(buf.getvalue()).decode()}}
+
+
+def clean_text(s: str) -> str:
+    s = s.replace("**", "").replace("*", "")
+    s = re.sub(r"\s*[—–]\s*", ", ", s)
+    return s.strip()
+
+
+def _tool_call(system: str, content: list, tool: dict, model: str | None = None, max_tokens: int = 8000) -> dict:
+    resp = client().messages.create(
+        model=model or config.CLAUDE_MODEL,
+        max_tokens=max_tokens,
+        system=system,
+        tools=[tool],
+        tool_choice={"type": "tool", "name": tool["name"]},
+        messages=[{"role": "user", "content": content}],
+    )
+    if resp.stop_reason == "max_tokens":
+        raise RuntimeError("Risposta di Claude troncata: post troppo lungo.")
+    for block in resp.content:
+        if block.type == "tool_use":
+            return dict(block.input)
+    raise RuntimeError("Claude non ha restituito il risultato.")
+
+
+def _finalize(post: dict) -> dict:
+    post["descrizione"] = clean_text(post.get("descrizione", ""))
+    if len(post["descrizione"]) > 2200:
+        cut = post["descrizione"][:2200]
+        post["descrizione"] = cut[: max(cut.rfind("\n"), cut.rfind(". ") + 1, 1800)].strip()
+        post["_avviso"] = "Descrizione tagliata a 2200 caratteri: controlla il finale."
+    for s in post.get("slides", []):
+        s["testo"] = clean_text(s.get("testo", ""))
+    post.setdefault("slide_da_rifare", [])
+    return post
+
+
+def _rules_block(rules: list[dict]) -> str:
+    return "\n".join(f"- {r['text']}" for r in rules) or "- (nessuna)"
+
+
+# ---------------------------------------------------------------- 1. slide
+
+def _slides_system(brand: dict, rules: list[dict]) -> str:
+    modo = (brand.get("traduzione_slide") or "fedele").lower()
+    return f"""Sei il traduttore delle slide per la pagina Instagram italiana {brand['nome']} (@{brand['handle']}).
+Ricevi le slide di un post di una pagina collaboratrice che ci ha autorizzato a ripubblicare i suoi contenuti.
+
+- Leggi con attenzione tutto il testo di ogni slide e trascrivilo in testo_originale.
+- {TRADUZIONE.get(modo, TRADUZIONE['fedele'])}
+- Lunghezza simile all'originale e stessi a capo, così il testo entra nello stesso spazio grafico.
+- Stesso numero di slide e stesso ordine.
+- Unica eccezione alla fedeltà: se una slide contiene una CTA o un riferimento alla pagina di origine
+  (segui @..., link in bio, nome della pagina), sostituiscilo con il nostro equivalente per {brand['nome']}.
+- Niente asterischi, niente trattini lunghi.
+- Segnala in watermark_originale handle, nome o logo della pagina di origine e dove si trova. Vuoto se non c'è.
+
+Regole fisse date da Gabriele (valgono anche qui se riguardano le slide):
+{_rules_block(rules)}
+"""
+
+
+def translate_slides(caption: str, owner: str, images: list[bytes], brand: dict, rules: list[dict]) -> dict:
+    content: list = []
+    for i, data in enumerate(images, 1):
+        content.append({"type": "text", "text": f"Slide {i}:"})
+        content.append(_image_block(data))
+    content.append({"type": "text", "text": (
+        f"Pagina di origine: @{owner}. Numero di slide: {len(images)}.\n"
+        f"Descrizione originale, solo per capire il contesto:\n<<<\n{(caption or '(vuota)')[:2000]}\n>>>"
+    )})
+    out = _tool_call(_slides_system(brand, rules), content, SLIDES_TOOL)
+    out["slides"] = out.get("slides", [])[:len(images)]
+    for s in out["slides"]:
+        s["testo"] = clean_text(s.get("testo", ""))
+    return out
+
+
+# ---------------------------------------------------------------- 2. descrizione e CTA
+
+def _caption_system(brand: dict, rules: list[dict], recent: dict) -> str:
+    manuali = "\n".join(
+        f"- id: {m['id']} | {m['nome']} | dolori che risolve: {' '.join(str(m.get('dolori', '')).split())}"
+        for m in brand.get("manuali", [])
+    )
+    ultimi_hook = ", ".join(recent.get("hook", [])[:3]) or "nessuno"
+    ultimi_autori = ", ".join(recent.get("autori", [])[:15]) or "nessuno"
+    style = load_style()
+    guida = style.get("guida", "").strip()
+    esempi = style.get("esempi") or []
+    esempi_txt = ""
+    if esempi:
+        scelti = random.sample(esempi, min(3, len(esempi)))
+        esempi_txt = ("\nESEMPI DI DESCRIZIONI CHE HANNO FUNZIONATO SULLA NOSTRA PAGINA "
+                      "(imita la voce, non copiare frasi né struttura):\n"
+                      + "\n\n".join(f"<<<\n{e}\n>>>" for e in scelti) + "\n")
+    return f"""Sei il copywriter senior della pagina Instagram italiana {brand['nome']} (@{brand['handle']}).
+Ricevi le slide già tradotte di un post e scrivi la descrizione Instagram con la CTA.
+
+POSIZIONAMENTO
+{brand.get('posizionamento', '').strip()}
+
+TONO
+{chr(10).join('- ' + t for t in brand.get('tono', []))}
+
+FORMATO
+{chr(10).join('- ' + t for t in brand.get('regole_formato', []))}
+{('GUIDA DI STILE RICAVATA DAI NOSTRI POST MIGLIORI' + chr(10) + guida + chr(10)) if guida else ''}{esempi_txt}
+HOOK E STRUTTURA
+{brand['hook']['regola'].strip()}
+{brand['hook']['struttura'].strip()}
+Ultimi tipi di hook usati (dal più recente): {ultimi_hook}. Non usare lo stesso del più recente.
+Autori citati di recente, da non ripetere: {ultimi_autori}.
+Cita solo autori e studi reali che conosci con certezza; se non sei sicuro, non citare.
+
+CTA
+{brand['cta']['regola'].strip()}
+{brand['cta']['stile'].strip()}
+Dove si compra: {brand['cta'].get('dove_si_compra', 'link in bio')}.
+Manuali disponibili:
+{manuali}
+
+REGOLE FISSE DATE DA GABRIELE (hanno la precedenza su tutto il resto)
+{_rules_block(rules)}
+"""
+
+
+def write_caption(slides_out: dict, caption: str, brand: dict, rules: list[dict], recent: dict) -> dict:
+    testo_slide = "\n\n".join(f"Slide {s['numero']}:\n{s['testo']}" for s in slides_out["slides"] if s.get("testo"))
+    content = [{"type": "text", "text": (
+        f"Formato: {slides_out.get('formato')} | Natura: {slides_out.get('natura')}\n"
+        f"Di cosa parla: {slides_out.get('senso')}\n\n"
+        f"Testo delle slide in italiano:\n{testo_slide or '(nessun testo)'}\n\n"
+        f"Descrizione originale, solo come contesto, da NON tradurre:\n<<<\n{(caption or '(vuota)')[:2000]}\n>>>\n\n"
+        "Scrivi la nostra descrizione con lo strumento descrizione_pronta, seguendo le nostre regole, "
+        "e sostituisci la CTA originale con la nostra."
+    )}]
+    return _tool_call(_caption_system(brand, rules, recent), content, CAPTION_TOOL, max_tokens=4000)
+
+
+def create_post(caption: str, owner: str, images: list[bytes], brand: dict,
+                rules: list[dict], recent: dict) -> dict:
+    slides_out = translate_slides(caption, owner, images, brand, rules)
+    cap = write_caption(slides_out, caption, brand, rules, recent)
+    post = _finalize({**slides_out, **cap})
+    post["slide_da_rifare"] = []
+    return post
+
+
+# ---------------------------------------------------------------- 3. controllo slide
+
+def check_slide(image_jpeg: bytes, expected_text: str, old_watermark: str) -> tuple[bool, str]:
+    """Controlla una slide generata. Restituisce (ok, problemi)."""
+    attese = (f'Testo atteso sulla slide, esattamente:\n"""\n{expected_text}\n"""' if expected_text.strip()
+              else "Sulla slide non deve esserci nessun testo, a parte eventualmente il nostro logo AttraiSeduci.")
+    content = [
+        _image_block(image_jpeg, 1024),
+        {"type": "text", "text": (
+            f"{attese}\n\nVecchio watermark da eliminare: {old_watermark or 'nessuno'}.\n"
+            "Il logo circolare con la scritta AttraiSeduci, se presente, è corretto e non è un residuo.\n"
+            "Controlla la slide con lo strumento esito_controllo. Ignora differenze di a capo e di maiuscole."
+        )},
+    ]
+    try:
+        out = _tool_call("Sei un correttore di bozze pignolo per slide Instagram in italiano.", content,
+                         CHECK_TOOL, model=config.CHECK_MODEL, max_tokens=500)
+    except Exception as e:  # se il controllo stesso fallisce non blocchiamo il lavoro
+        log.warning("Controllo slide non riuscito: %s", e)
+        return True, ""
+    ok = bool(out.get("testo_corretto")) and not out.get("residui")
+    return ok, out.get("problemi", "")
+
+
+# ---------------------------------------------------------------- modifiche
+
+def revise_post(post: dict, instruction: str, brand: dict, rules: list[dict], recent: dict) -> dict:
+    current = {k: v for k, v in post.items() if not k.startswith("_")}
+    system = (_caption_system(brand, rules, recent)
+              + "\nTRADUZIONE DELLE SLIDE\n" + TRADUZIONE.get((brand.get("traduzione_slide") or "fedele").lower(), TRADUZIONE["fedele"]))
+    content = [{"type": "text", "text": (
+        "Questo è il post attuale in JSON:\n"
+        f"{json.dumps(current, ensure_ascii=False, indent=1)}\n\n"
+        f"Richiesta di modifica di Gabriele:\n<<<\n{instruction}\n>>>\n\n"
+        "Applica SOLO la modifica richiesta e restituisci il post completo con lo strumento post_pronto. "
+        "Lascia identico tutto quello che la richiesta non tocca (stesse slide, stessi testi). "
+        "Se la richiesta riguarda la grafica di slide specifiche senza cambiare il testo, mettile in slide_da_rifare."
+    )}]
+    return _finalize(_tool_call(system, content, POST_TOOL))

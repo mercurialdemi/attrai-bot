@@ -1,0 +1,2 @@
+font.ttf = DejaVu Sans Bold (licenza libera). Puoi sostituirlo con il font del brand, stesso nome.
+logo.png = metti qui il logo AttraiSeduci (quadrato, verrà ritagliato a cerchio).

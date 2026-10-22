@@ -1,0 +1,296 @@
+"""Bot Telegram AttraiSeduci: link di un post dei collaboratori -> post italiano pronto, più report mattutino."""
+from __future__ import annotations
+
+import asyncio
+import logging
+import re
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
+from telegram import Update
+from telegram.constants import ChatAction
+from telegram.ext import (Application, CommandHandler, ContextTypes, MessageHandler, filters)
+
+from . import analysis, config, images, instagram, pipeline, report, storage, writer
+
+logging.basicConfig(format="%(asctime)s %(levelname)s %(name)s: %(message)s", level=logging.INFO)
+logging.getLogger("httpx").setLevel(logging.WARNING)
+log = logging.getLogger("attraibot")
+
+HELP = (
+    "Mandami il link di un post dei nostri collaboratori e te lo restituisco pronto per AttraiSeduci: "
+    "slide in italiano con il nostro logo, descrizione e CTA.\n\n"
+    "Per modificare un post, rispondi ai suoi messaggi (o scrivi subito dopo) con quello che vuoi cambiare, "
+    "per esempio: \"slide 2 più corta\", \"cambia l'hook\", \"metti CTA al manuale Potere Sociale\", "
+    "\"rifai la grafica della slide 4\".\n\n"
+    "Per dare una regola fissa scrivi: regola: ...\n"
+    "/regole per vederle, /togli N per toglierne una\n"
+    "/report per lanciare subito il report, /altri per i post successivi della classifica\n"
+    "/pagine per le pagine monitorate\n"
+    "/analizza per studiare i post di AttraiSeduci e scrivere descrizioni come le tue migliori, /stile per vedere la guida\n"
+    "/id per il tuo ID Telegram"
+)
+
+
+# ---------------------------------------------------------------- accesso
+
+async def _authorized(update: Update) -> bool:
+    user = update.effective_user
+    if user and user.id in config.ALLOWED_USER_IDS:
+        return True
+    if update.effective_message:
+        await update.effective_message.reply_text(
+            f"Questo bot è privato. Il tuo ID Telegram è {user.id if user else '?'}: "
+            "aggiungilo alla variabile ALLOWED_USER_IDS su Render per avere accesso."
+        )
+    return False
+
+
+# ---------------------------------------------------------------- comandi
+
+async def cmd_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if await _authorized(update):
+        await update.effective_message.reply_text(HELP)
+
+
+async def cmd_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.effective_message.reply_text(f"Il tuo ID Telegram è {update.effective_user.id}")
+
+
+async def cmd_regole(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not await _authorized(update):
+        return
+    rules = storage.list_rules()
+    if not rules:
+        await update.effective_message.reply_text("Nessuna regola fissa. Aggiungila scrivendo: regola: ...")
+        return
+    await update.effective_message.reply_text("\n".join(f"{r['id']}. {r['text']}" for r in rules))
+
+
+async def cmd_togli(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not await _authorized(update):
+        return
+    if not context.args or not context.args[0].isdigit():
+        await update.effective_message.reply_text("Scrivi il numero della regola, es. /togli 3")
+        return
+    ok = storage.remove_rule(int(context.args[0]))
+    await update.effective_message.reply_text("Regola tolta." if ok else "Non trovo quella regola.")
+
+
+async def cmd_pagine(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not await _authorized(update):
+        return
+    brand = writer.load_brand()
+    pages = [h for h in brand.get("pagine_monitorate") or [] if h]
+    cfg = brand.get("report") or {}
+    text = ("Pagine monitorate dal report:\n" + "\n".join(f"@{h}" for h in pages)) if pages else \
+        "Nessuna pagina monitorata: aggiungile in pagine_monitorate nel profilo del brand."
+    text += (f"\n\nReport ogni giorno alle {cfg.get('ora', '08:00')}, ultime {cfg.get('finestra_ore', 48)} ore, "
+             f"{cfg.get('candidati', 15)} candidati, {cfg.get('quanti_post', 5)} post pronti.")
+    await update.effective_message.reply_text(text)
+
+
+async def cmd_analizza(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not await _authorized(update):
+        return
+    msg = update.effective_message
+    status = await msg.reply_text("Studio i post di AttraiSeduci: leggo gli ultimi 80 e confronto i migliori con i peggiori…")
+
+    async def go():
+        try:
+            style = await asyncio.to_thread(analysis.run_analysis, writer.load_brand())
+            await status.edit_text(
+                f"Studio fatto su {style['post_analizzati']} post. Da ora scrivo le descrizioni con questa guida "
+                f"e {len(style['esempi'])} esempi tuoi:\n\n{style['guida']}"[:4000])
+        except instagram.InstagramError as e:
+            await status.edit_text(str(e))
+        except Exception:
+            log.exception("Analisi fallita")
+            await status.edit_text("Lo studio della pagina non è riuscito. Riprova tra qualche minuto.")
+
+    context.application.create_task(go())
+
+
+async def cmd_stile(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not await _authorized(update):
+        return
+    style = writer.load_style()
+    if not style:
+        await update.effective_message.reply_text("Non ho ancora studiato la pagina: lancia /analizza.")
+        return
+    await update.effective_message.reply_text(
+        f"Guida di stile del {style.get('creato', '')[:10]} ({style.get('post_analizzati')} post, "
+        f"{len(style.get('esempi', []))} esempi):\n\n{style.get('guida', '')}"[:4000])
+
+
+async def cmd_altri(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not await _authorized(update):
+        return
+    context.application.create_task(report.run_more(context.bot, [update.effective_chat.id]))
+
+
+async def cmd_report(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not await _authorized(update):
+        return
+    context.application.create_task(report.run_report(context.bot, [update.effective_chat.id]))
+
+
+# ---------------------------------------------------------------- link manuale
+
+async def process_link(update: Update, context: ContextTypes.DEFAULT_TYPE, url: str):
+    msg = update.effective_message
+    chat_id = update.effective_chat.id
+    status = await msg.reply_text("Leggo il post…")
+    try:
+        brand = writer.load_brand()
+        src = await asyncio.to_thread(instagram.fetch_post, url)
+        if src.is_video:
+            await status.edit_text("Per ora gestisco post con immagini e caroselli, i reel arriveranno più avanti.")
+            return
+        await context.bot.send_chat_action(chat_id, ChatAction.TYPING)
+        post, paths, failed = await pipeline.build_post(src, brand, str(msg.message_id), on_status=status.edit_text)
+        job_id = storage.save_job(chat_id, update.effective_user.id, url, src.owner, post, paths)
+        await status.delete()
+        await pipeline.send_post(context.bot, chat_id, job_id, post, paths, failed)
+    except instagram.InstagramError as e:
+        await status.edit_text(str(e))
+    except Exception:
+        log.exception("Errore elaborando %s", url)
+        await status.edit_text("Qualcosa è andato storto mentre preparavo il post. Riprova; se succede ancora, controlla i log su Render.")
+
+
+# ---------------------------------------------------------------- modifiche
+
+RETRY_RE = re.compile(r"^\s*(riprova|rifai le slide (fallite|mancanti))\s*[.!]?\s*$", re.IGNORECASE)
+
+def _changed_slides(old: dict, new: dict) -> set[int]:
+    changed = set(new.get("slide_da_rifare") or [])
+    olds = old.get("slides", [])
+    for i, s in enumerate(new.get("slides", [])):
+        if i >= len(olds) or (s.get("testo") or "").strip() != (olds[i].get("testo") or "").strip():
+            changed.add(i + 1)
+    return changed
+
+
+async def process_revision(update: Update, context: ContextTypes.DEFAULT_TYPE, job: dict, instruction: str):
+    msg = update.effective_message
+    chat_id = update.effective_chat.id
+    status = await msg.reply_text("Applico la modifica…")
+    try:
+        brand = writer.load_brand()
+        old = job["post"]
+        old_failed = set(old.get("_fallite") or [])
+        jdir = job["slide_paths"][0].parent
+        originals = [p.read_bytes() for p in sorted((jdir / "originali").glob("*.jpg"))]
+
+        if RETRY_RE.match(instruction):
+            if not old_failed:
+                await status.edit_text("Questo post non ha slide da rifare. Per cambiare qualcosa scrivimi cosa.")
+                return
+            new = dict(old)
+            changed = set(old_failed)
+        else:
+            new = await asyncio.to_thread(writer.revise_post, old, instruction, brand,
+                                          storage.list_rules(), storage.recent_style())
+            new["slides"] = new["slides"][:len(originals)]
+            changed = _changed_slides(old, new)
+
+        paths = job["slide_paths"]
+        new_failed: list[int] = []
+        if changed:
+            await status.edit_text(f"Rifaccio le slide {', '.join(map(str, sorted(changed)))}…")
+            paths, new_failed = await images.render_all(new, originals, brand, jdir, only=changed,
+                                                        existing=job["slide_paths"])
+        failed = sorted((old_failed - changed) | set(new_failed))
+        new["slide_da_rifare"] = []
+        new["_fallite"] = failed
+        if old.get("_avviso") and not new.get("_avviso"):
+            new.pop("_avviso", None)
+        storage.update_job(job["id"], new, paths)
+        await status.delete()
+        if changed:
+            nums = sorted(changed)
+            await pipeline.send_post(context.bot, chat_id, job["id"], new, [paths[i - 1] for i in nums],
+                                     failed, numbers=nums)
+        else:
+            await pipeline.send_post(context.bot, chat_id, job["id"], new, paths, failed, only_text=True)
+    except Exception:
+        log.exception("Errore nella modifica del post %s", job["id"])
+        await status.edit_text("Non sono riuscito ad applicare la modifica. Riprova riformulandola.")
+
+
+async def on_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not await _authorized(update):
+        return
+    msg = update.effective_message
+    text = (msg.text or msg.caption or "").strip()
+
+    m = re.match(r"^\s*regola\s*:\s*(.+)$", text, re.IGNORECASE | re.DOTALL)
+    if m:
+        rid = storage.add_rule(m.group(1).strip(), update.effective_user.id)
+        await msg.reply_text(f"Regola {rid} salvata: la applico da ora a ogni post.")
+        return
+
+    urls = list(dict.fromkeys(u for u in (instagram.find_post_url(part) for part in text.split()) if u))
+    if urls:
+        for u in urls:
+            context.application.create_task(process_link(update, context, u))
+        return
+
+    job = None
+    if msg.reply_to_message:
+        jid = storage.job_for_message(update.effective_chat.id, msg.reply_to_message.message_id)
+        job = storage.get_job(jid) if jid else None
+    job = job or storage.last_job(update.effective_chat.id)
+    if job:
+        await process_revision(update, context, job, text)
+    else:
+        await msg.reply_text(HELP)
+
+
+# ---------------------------------------------------------------- avvio
+
+def _schedule_report(app: Application):
+    cfg = (writer.load_brand().get("report") or {})
+    if not cfg.get("ora"):
+        log.info("Report mattutino disattivato (report.ora vuoto).")
+        return
+    chat_ids = sorted(config.REPORT_CHAT_IDS or config.ALLOWED_USER_IDS)
+    if not chat_ids:
+        log.warning("Nessun destinatario per il report: imposta ALLOWED_USER_IDS.")
+        return
+    tz = ZoneInfo(cfg.get("fuso", "Europe/Rome"))
+    at = datetime.strptime(str(cfg["ora"]), "%H:%M").time().replace(tzinfo=tz)
+
+    async def job(context: ContextTypes.DEFAULT_TYPE):
+        await report.run_report(context.bot, chat_ids)
+
+    app.job_queue.run_daily(job, time=at, name="report_mattutino")
+    log.info("Report programmato ogni giorno alle %s (%s) per %s", cfg["ora"], tz, chat_ids)
+
+
+def main():
+    missing = config.missing_keys()
+    if missing:
+        raise SystemExit(f"Mancano queste variabili d'ambiente: {', '.join(missing)}")
+    if not config.ALLOWED_USER_IDS:
+        log.warning("ALLOWED_USER_IDS è vuoto: il bot risponderà a tutti solo con il loro ID.")
+    storage._db()
+    app = Application.builder().token(config.TELEGRAM_BOT_TOKEN).concurrent_updates(True).build()
+    app.add_handler(CommandHandler(["start", "aiuto", "help"], cmd_start))
+    app.add_handler(CommandHandler("id", cmd_id))
+    app.add_handler(CommandHandler("regole", cmd_regole))
+    app.add_handler(CommandHandler("togli", cmd_togli))
+    app.add_handler(CommandHandler("pagine", cmd_pagine))
+    app.add_handler(CommandHandler("report", cmd_report))
+    app.add_handler(CommandHandler("altri", cmd_altri))
+    app.add_handler(CommandHandler("analizza", cmd_analizza))
+    app.add_handler(CommandHandler("stile", cmd_stile))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_text))
+    _schedule_report(app)
+    log.info("Bot avviato.")
+    app.run_polling(allowed_updates=Update.ALL_TYPES)
+
+
+if __name__ == "__main__":
+    main()
