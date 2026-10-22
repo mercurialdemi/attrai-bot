@@ -146,7 +146,8 @@ def run_analysis(brand: dict, n_posts: int = 80) -> dict:
         "cta_peggiori": (cta_list[-6:] if stats and len(cta_list) > 12 else [c for c in cta_list if c["rendimento"] < 0.7][-6:]),
         "fonte_numeri": "statistiche Instagram" if stats else "like e commenti",
         "lezioni_cta": (out.get("lezioni_cta") or "").strip(),
-        "slide_cta": cta_slides,
+        "slide_cta": {k: v for k, v in cta_slides.items() if k != "_testi"},
+        "testi_slide_cta": cta_slides.get("_testi", []),
         "feedback_bot": feedback,
         "post_analizzati": len(scored),
         "creato": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -171,8 +172,9 @@ CTA_SLIDE_TOOL = {
                         "tipo": {"type": "string", "enum": ["segui", "manuale", "nessuna"],
                                  "description": "segui = invita a seguire la pagina; manuale = invita a comprare un manuale; nessuna = non è una slide CTA."},
                         "manuale": {"type": "string", "description": "id del manuale se tipo=manuale, altrimenti vuoto."},
+                        "testo": {"type": "string", "description": "Il testo scritto sulla slide, parola per parola, con gli a capo. Vuoto se tipo=nessuna."},
                     },
-                    "required": ["numero", "tipo", "manuale"],
+                    "required": ["numero", "tipo", "manuale", "testo"],
                 },
             },
         },
@@ -210,6 +212,12 @@ def _find_cta_slides(top_posts, brand: dict) -> dict:
     cta_dir = config.DATA_DIR / "cta"
     cta_dir.mkdir(parents=True, exist_ok=True)
     found = {}
+    texts = []
+    for s in out.get("slide", []):
+        t = writer.clean_text(s.get("testo") or "")
+        if s.get("tipo") in ("segui", "manuale") and t and t not in {x["testo"] for x in texts}:
+            texts.append({"tipo": s["tipo"], "manuale": s.get("manuale") or "", "testo": t})
+    found["_testi"] = texts
     for s in out.get("slide", []):            # i caroselli sono già in ordine di rendimento: la prima trovata è la migliore
         n, tipo = s.get("numero"), s.get("tipo")
         if not isinstance(n, int) or not (1 <= n <= len(imgs)) or tipo == "nessuna":

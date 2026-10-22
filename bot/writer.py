@@ -108,10 +108,11 @@ CAPTION_TOOL = {
             "cta": _CTA,
             "testo_slide_finale": {
                 "type": "string",
-                "description": "Testo della NOSTRA slide finale di CTA, che verrà scritta con lo stesso stile grafico delle altre "
-                               "slide del post. Coerente con la CTA scelta (segui la pagina o il manuale giusto col suo nome). "
-                               "Primo paragrafo = titoletto breve; poi 2-4 righe corte, separate da a capo. Riprendi la voce delle "
-                               "nostre CTA migliori. Massimo 260 caratteri. Niente @ se la CTA è al manuale: si chiude con 'link in bio'.",
+                "description": "Testo della NOSTRA slide finale di CTA (c'è in OGNI post), che verrà scritta con lo stesso stile "
+                               "grafico delle altre slide. Va SCELTO tra i TESTI DELLE NOSTRE SLIDE CTA, copiato com'è: quello "
+                               "dello stesso tipo della CTA scelta (per un manuale, quello di quel manuale). Se per quel manuale "
+                               "non c'è, prendi una delle nostre CTA migliori per quel manuale e accorciala. Solo se non c'è "
+                               "niente di adatto scrivila tu nella stessa voce. Massimo 300 caratteri, righe corte con a capo.",
             },
             "slide_cta": {
                 "type": "array",
@@ -436,7 +437,7 @@ def _cta_memory(style: dict) -> str:
     """CTA che hanno reso di più sulla nostra pagina (da /analizza): circa metà delle volte se ne riusa
     una adattata al post, l'altra metà se ne scrive una nuova costruita sulle stesse leve."""
     best = style.get("cta_migliori") or []
-    if not best:
+    if not best and not style.get("testi_slide_cta"):
         return ""
     def info(c):
         extra = (f", {c['clic_ogni_1000']} clic sul link e {c['follow_ogni_1000']} follow ogni 1000 persone raggiunte"
@@ -450,7 +451,10 @@ def _cta_memory(style: dict) -> str:
     else:
         mode = ("In questo post scrivi una CTA NUOVA, costruita sulle stesse leve delle CTA migliori qui sotto, "
                 "senza copiarle.")
-    return (f"\nCTA CHE HANNO RESO DI PIÙ SULLA NOSTRA PAGINA:\n{lines}\n"
+    slide_txt = "\n".join(f"- ({t['tipo']}{' ' + t['manuale'] if t.get('manuale') else ''}) {' / '.join(t['testo'].splitlines())}"
+                          for t in (style.get("testi_slide_cta") or [])[:15])
+    return ((f"\nTESTI DELLE NOSTRE SLIDE CTA (dai nostri caroselli):\n{slide_txt}\n" if slide_txt else "")
+            + f"\nCTA CHE HANNO RESO DI PIÙ SULLA NOSTRA PAGINA:\n{lines}\n"
             + (f"Lezioni dallo studio: {style.get('lezioni_cta')}\n" if style.get("lezioni_cta") else "")
             + (f"CTA da NON imitare (post che hanno reso poco):\n{worst}\n" if worst else "")
             + mode)

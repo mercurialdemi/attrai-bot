@@ -72,11 +72,11 @@ def styled_cta_slide(post: dict, jdir: Path) -> tuple[Path, dict] | None:
     if not text:
         return None
     slides = post.get("slides", [])
-    cands = [i for i, sl in enumerate(slides)
-             if sl.get("_via") == "testo-su-sfondo-uniforme" and not sl.get("e_cta") and i != 0]
-    if not cands:
-        return None
-    i = cands[-1]
+    plain = [i for i, sl in enumerate(slides) if sl.get("_via") == "testo-su-sfondo-uniforme" and not sl.get("e_cta")]
+    plain = [i for i in plain if i != 0] or plain
+    if not plain:
+        return _cta_on_photo(post, text, jdir)
+    i = plain[-1]
     op = jdir / "originali" / f"{i + 1:02d}.jpg"
     if not op.exists():
         return None
@@ -97,10 +97,48 @@ def styled_cta_slide(post: dict, jdir: Path) -> tuple[Path, dict] | None:
     return out, info
 
 
+def _cta_on_photo(post: dict, text: str, jdir: Path) -> tuple[Path, dict] | None:
+    """Post fatto solo di foto/illustrazioni: la CTA va sullo sfondo ripulito di una slide del post,
+    scurito per leggerla bene, con lo stesso font e gli stessi colori dei testi del post."""
+    from PIL import Image
+    from . import textslide
+    slides = post.get("slides", [])
+    cands = [i for i, sl in enumerate(slides)
+             if (sl.get("_canva") or {}).get("sfondo") and Path(sl["_canva"]["sfondo"]).exists()
+             and sl.get("blocchi") and not sl.get("e_cta")]
+    cands = [i for i in cands if i != 0] or cands
+    if not cands:
+        return None
+    i = cands[-1]
+    ref = next((b for b in slides[i]["blocchi"] if (b.get("testo") or "").strip()), {})
+    bg = Image.open(slides[i]["_canva"]["sfondo"]).convert("RGB")
+    shade = Image.new("RGB", bg.size, (0, 0, 0))
+    bg = Image.blend(bg, shade, 0.6)
+    paras = [p for p in text.split("\n\n") if p.strip()]
+    hl = (ref.get("colore_evidenziato") or "").strip()
+    if hl and len(paras) > 1:
+        paras[0] = "[[" + paras[0].replace("\n", " ") + "]]"
+    block = {"testo": "\n\n".join(paras), "x": 90, "y": 280, "w": 820, "h": 440,
+             "colore": ref.get("colore") or "#FFFFFF", "colore_evidenziato": hl,
+             "allineamento": "center", "carattere": ref.get("carattere") or "normale",
+             "peso": ref.get("peso") or "semibold", "maiuscolo": bool(ref.get("maiuscolo"))}
+    W, H = bg.size
+    placements: list = []
+    img = textslide.render_blocks(bg, bg, [block], placements, boxes=[(textslide.block_box(block, W, H), None)])
+    out = jdir / "cta_stile_post.jpg"
+    img.save(out, "JPEG", quality=95, subsampling=0)
+    bgp = jdir / "sfondo_cta_stile_post.jpg"
+    bg.save(bgp, "JPEG", quality=95)
+    info = {"numero": 0, "testo": text, "testo_originale": "", "watermark_originale": "", "e_cta": True,
+            "da_modificare": False, "_via": "cta-stile-post-foto",
+            "_canva": {"tipo": "testo", "righe": placements, "sfondo": str(bgp)}}
+    return out, info
+
+
 def apply_cta_slide(post: dict, paths: list[Path], failed: list[int], jdir: Path):
     """In fondo al carosello va sempre la nostra slide CTA: sostituisce la CTA della pagina di origine
     (se c'è) oppure si aggiunge come ultima slide. Prima scelta: CTA scritta nello stesso stile del post."""
-    if post.get("formato") != "singolo" and paths:
+    if paths:
         try:
             styled = styled_cta_slide(post, jdir)
         except Exception:
@@ -132,7 +170,7 @@ def apply_cta_slide(post: dict, paths: list[Path], failed: list[int], jdir: Path
         key = src.stem
     if not src and rewritten:
         return paths, failed
-    if not src or post.get("formato") == "singolo":
+    if not src:
         if not src:
             post["_avviso"] = ((post.get("_avviso") or "") + "\nManca la vostra slide CTA finale: mandamela come "
                                "immagine con didascalia \"cta segui\" (o \"cta friendzone\", ecc.).").strip()
