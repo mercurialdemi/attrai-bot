@@ -7,7 +7,7 @@ Il bot ti restituisce:
 - la descrizione già scritta con il tono di AttraiSeduci (max 2200 caratteri, niente asterischi o trattini lunghi);
 - la CTA scelta secondo le vostre regole (segui la pagina oppure manuale giusto), con il motivo della scelta.
 
-Poi puoi chiedere modifiche a parole ("slide 2 più corta", "cambia l'hook", "CTA al manuale Potere Sociale", "rifai la grafica della slide 4"): il bot rifà solo quello che cambia.
+Poi puoi chiedere modifiche a parole ("slide 2 più corta", "cambia l'hook", "CTA al bundle con Potere Sociale", "rifai la grafica della slide 4"): il bot rifà solo quello che cambia.
 
 Con `regola: ...` dai una regola fissa che il bot applica da quel momento a ogni post. `/regole` le elenca, `/togli 3` toglie la numero 3.
 

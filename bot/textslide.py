@@ -331,12 +331,12 @@ def _layout(draw, paras, font, max_w):
     """Come _wrap ma con le parole evidenziate. Restituisce righe di parole; None = riga vuota tra paragrafi."""
     out = []
     for k, rows in enumerate(paras):
-        if all(_line_w(draw, r, font) <= max_w for r in rows):
-            out += rows
-        else:
-            flat = [w for r in rows for w in r]
+        for r in rows:                       # gli a capo voluti restano; si spezza solo la riga troppo lunga
+            if _line_w(draw, r, font) <= max_w:
+                out.append(r)
+                continue
             line = []
-            for w in flat:
+            for w in r:
                 if not line or _line_w(draw, line + [w], font) <= max_w:
                     line.append(w)
                 else:
@@ -403,6 +403,51 @@ def erase_local(img: Image.Image, box: tuple[int, int, int, int], bg: tuple,
     return Image.fromarray(a), tight, pitch
 
 
+def expand_to_ink(img: Image.Image, box: tuple[int, int, int, int], bg: tuple,
+                  exclude: list | None = None) -> tuple[int, int, int, int]:
+    """Le misure di Claude a volte tagliano una riga o la fine di una parola (es. "about." sotto il blocco):
+    si allarga il riquadro finché appena fuori dai bordi non resta più nessuna lettera dello stesso testo.
+    Si allarga solo verso zone di sfondo uniforme (mai dentro una foto)."""
+    a = np.asarray(img.convert("RGB")).astype(np.int16)
+    H, W, _ = a.shape
+    diff = np.abs(a - np.array(bg)).max(axis=2)
+    ink = diff > 40
+    flat = diff < 20
+    for ex in exclude or []:
+        ex0, ey0, ex1, ey1 = ex
+        ink[max(0, ey0):max(0, ey1), max(0, ex0):max(0, ex1)] = False
+        flat[max(0, ey0):max(0, ey1), max(0, ex0):max(0, ex1)] = True
+    x0, y0, x1, y1 = box
+    sx, sy = max(8, int(W * 0.03)), max(8, int(H * 0.03))
+    lim_x, lim_y = int(W * 0.25), int(H * 0.12)
+    ox0, oy0, ox1, oy1 = box
+    for _ in range(30):
+        changed = False
+        strips = {
+            "top": (max(0, y0 - sy), y0, x0, x1), "bottom": (y1, min(H, y1 + sy), x0, x1),
+            "left": (y0, y1, max(0, x0 - sx), x0), "right": (y0, y1, x1, min(W, x1 + sx)),
+        }
+        for side, (ya, yb, xa, xb) in strips.items():
+            if yb <= ya or xb <= xa:
+                continue
+            m = ink[ya:yb, xa:xb]
+            if m.sum() < 6 or m.mean() > 0.45 or (m | flat[ya:yb, xa:xb]).mean() < 0.9:
+                # niente lettere, oppure è una foto/grafica (non sfondo uniforme): non si allarga
+                continue
+            ys, xs = np.where(m)
+            if side == "top" and oy0 - y0 < lim_y:
+                y0, changed = ya + int(ys.min()), True
+            elif side == "bottom" and y1 - oy1 < lim_y:
+                y1, changed = ya + int(ys.max()) + 1, True
+            elif side == "left" and ox0 - x0 < lim_x:
+                x0, changed = xa + int(xs.min()), True
+            elif side == "right" and x1 - ox1 < lim_x:
+                x1, changed = xa + int(xs.max()) + 1, True
+        if not changed:
+            break
+    return (x0, y0, x1, y1)
+
+
 def block_box(bl: dict, W: int, H: int) -> tuple[int, int, int, int]:
     return (int(bl["x"] / 1000 * W), int(bl["y"] / 1000 * H),
             int((bl["x"] + bl["w"]) / 1000 * W), int((bl["y"] + bl["h"]) / 1000 * H))
@@ -427,7 +472,8 @@ def try_local_clean(original: Image.Image, blocks: list[dict]):
                 break
         if not found:
             return None
-        all_boxes[i] = found[0]
+        others_now = [b for j, b in enumerate(all_boxes) if j != i]
+        all_boxes[i] = expand_to_ink(img, found[0], found[1], others_now)
         bgs.append(found[1])
     boxes = []
     for i, (box, bg) in enumerate(zip(all_boxes, bgs)):
@@ -480,7 +526,18 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
             lines = _layout(draw, paras, font, bw)
             best = (font, lines, int(14 * ratio), len(lines) * int(14 * ratio))
         font, lines, lh, total = best
-        y = box[1] + (bh - (total - lh + font.size * 0.95)) / 2 - font.size * 0.05
+        # dove cadono davvero le lettere rispetto al punto di scrittura (cambia da un font all'altro)
+        first = next((ln for ln in lines if ln), None)
+        last = next((ln for ln in reversed(lines) if ln), None)
+        top_off = font.getbbox(" ".join(w for w, _ in first))[1] if first else 0
+        bot_off = font.getbbox(" ".join(w for w, _ in last))[3] if last else font.size
+        real_h = (total - lh) + bot_off - top_off
+        y = box[1] + (bh - real_h) / 2 - top_off
+        margin = int(H * 0.05)
+        if y + (total - lh) + bot_off > H - margin:            # mai attaccato al bordo in basso
+            y = H - margin - (total - lh) - bot_off
+        if y + top_off < margin:
+            y = margin - top_off
         space = draw.textlength(" ", font=font)
         for ln in lines:
             if ln is None:

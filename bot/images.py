@@ -298,8 +298,16 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
             slide["_canva"] = {"tipo": "testo", "righe": placements}
             slide["_via"] = "blocchi-pulizia-codice"
             slide["_sfondo"] = add_brand_mark(clean, brand) if needs_logo(slide, brand) else clean
-            img = add_brand_mark(img, brand) if needs_logo(slide, brand) else img
-            return img, True, ""
+            ok, problems = (True, "")
+            if config.SLIDE_CHECK:
+                ok, problems = writer.check_slide(_jpeg(img), testo, slide.get("watermark_originale", ""),
+                                                  original_jpeg)
+            if ok:
+                img = add_brand_mark(img, brand) if needs_logo(slide, brand) else img
+                return img, True, ""
+            log.info("Slide %s pulita col codice ma scartata al controllo: %s", slide.get("numero"), problems)
+            slide.pop("_canva", None)
+            slide.pop("_sfondo", None)
     feedback, problems = "", ""
     best: Image.Image | None = None
     slide["_via"] = "gemini-pulizia+blocchi" if (mode == "codice" and blocks0) else f"gemini-{mode}"

@@ -56,7 +56,7 @@ def cta_dir() -> Path:
 
 
 def cta_file(key: str) -> Path | None:
-    for k in (key, "segui"):
+    for k in dict.fromkeys((key, "segui")):
         p = cta_dir() / f"{k}.jpg"
         if k and p.exists():
             return p
@@ -67,8 +67,13 @@ def apply_cta_slide(post: dict, paths: list[Path], failed: list[int], jdir: Path
     """In fondo al carosello va sempre la nostra slide CTA: sostituisce la CTA della pagina di origine
     (se c'è) oppure si aggiunge come ultima slide."""
     cta = post.get("cta") or {}
-    key = cta.get("manuale") if cta.get("tipo") == "manuale" else "segui"
-    src = cta_file(key or "segui")
+    key = (cta.get("manuale") if cta.get("tipo") == "manuale" else "segui") or "segui"
+    exact = cta_dir() / f"{key}.jpg"
+    rewritten = any(sl.get("_cta_riscritta") for sl in post.get("slides", []))
+    if not exact.exists() and rewritten:
+        # niente slide CTA caricata per questo manuale: resta la CTA della pagina di origine riscritta per noi
+        return paths, failed
+    src = cta_file(key)
     if not src or post.get("formato") == "singolo":
         if not src:
             post["_avviso"] = ((post.get("_avviso") or "") + "\nManca la vostra slide CTA finale: mandamela come "

@@ -100,8 +100,22 @@ CAPTION_TOOL = {
             "tipo_hook": {"type": "string", "enum": HOOK_TYPES},
             "autori_citati": {"type": "array", "items": {"type": "string"}},
             "cta": _CTA,
+            "slide_cta": {
+                "type": "array",
+                "description": "Solo se nel post ci sono slide CTA della pagina di origine (indicate nel messaggio): "
+                               "per ognuna i nuovi testi dei blocchi, nello stesso ordine e con lunghezza simile. "
+                               "Altrimenti lista vuota.",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "numero": {"type": "integer"},
+                        "blocchi": {"type": "array", "items": {"type": "string"}},
+                    },
+                    "required": ["numero", "blocchi"],
+                },
+            },
         },
-        "required": ["descrizione", "tipo_hook", "autori_citati", "cta"],
+        "required": ["descrizione", "tipo_hook", "autori_citati", "cta", "slide_cta"],
     },
 }
 
@@ -112,13 +126,14 @@ POST_TOOL = {
         "type": "object",
         "properties": {
             **SLIDES_TOOL["input_schema"]["properties"],
-            **CAPTION_TOOL["input_schema"]["properties"],
+            **{k: v for k, v in CAPTION_TOOL["input_schema"]["properties"].items() if k != "slide_cta"},
             "slide_da_rifare": {
                 "type": "array", "items": {"type": "integer"},
                 "description": "Numeri delle slide da rigenerare anche se il testo non cambia (es. richiesta grafica). Altrimenti lista vuota.",
             },
         },
-        "required": SLIDES_TOOL["input_schema"]["required"] + CAPTION_TOOL["input_schema"]["required"] + ["slide_da_rifare"],
+        "required": SLIDES_TOOL["input_schema"]["required"]
+                    + [k for k in CAPTION_TOOL["input_schema"]["required"] if k != "slide_cta"] + ["slide_da_rifare"],
     },
 }
 
@@ -129,7 +144,7 @@ CHECK_TOOL = {
         "type": "object",
         "properties": {
             "testo_corretto": {"type": "boolean", "description": "Il testo sulla slide corrisponde a quello atteso, senza errori di battitura, lettere sbagliate o parole mancanti. True se non era atteso testo e non ce n'è."},
-            "residui": {"type": "boolean", "description": "True se restano testo originale non tradotto, il vecchio watermark o il vecchio handle."},
+            "residui": {"type": "boolean", "description": "True se restano testo originale non tradotto, il vecchio watermark o il vecchio handle, oppure pezzi di lettere, parole sovrapposte o scritte che si accavallano."},
             "problemi": {"type": "string", "description": "Cosa c'è di sbagliato, in una o due frasi brevi in italiano semplice. Vuoto se tutto ok."},
         },
         "required": ["testo_corretto", "residui", "problemi"],
@@ -404,6 +419,7 @@ def _cta_memory(style: dict) -> str:
 def _caption_system(brand: dict, rules: list[dict], recent: dict) -> str:
     manuali = "\n".join(
         f"- id: {m['id']} | {m['nome']} | dolori che risolve: {' '.join(str(m.get('dolori', '')).split())}"
+        + (f" | COME SI VENDE: {' '.join(str(m['vendita']).split())}" if m.get("vendita") else "")
         for m in brand.get("manuali", [])
     )
     ultimi_hook = ", ".join(recent.get("hook", [])[:3]) or "nessuno"
@@ -458,6 +474,24 @@ REGOLE FISSE DATE DA GABRIELE (hanno la precedenza su tutto il resto)
 """
 
 
+
+def _cta_slides_request(slides_out: dict) -> str:
+    cta = [s for s in slides_out.get("slides", []) if s.get("e_cta") and s.get("da_modificare", True)
+           and any((b.get("testo") or "").strip() for b in (s.get("blocchi") or []))]
+    if not cta:
+        return "\nNel post non ci sono slide CTA della pagina di origine: slide_cta = []."
+    parts = []
+    for s in cta:
+        bl = [b for b in s["blocchi"] if (b.get("testo") or "").strip()]
+        parts.append(f"Slide {s['numero']}:\n" + "\n".join(
+            f"  blocco {i}: ({len(b['testo'])} caratteri) {b['testo']}" for i, b in enumerate(bl, 1)))
+    return ("\n\nSLIDE CTA DELLA PAGINA DI ORIGINE DA RISCRIVERE (in slide_cta): sono la pubblicità della pagina di "
+            "origine o di un suo prodotto. Riscrivi ogni blocco come la NOSTRA CTA, coerente con la CTA scelta "
+            "(segui la pagina oppure il manuale giusto, chiamato col suo nome esatto), con lunghezza simile "
+            "(massimo +15% caratteri) e stesso ruolo del blocco (titolo, testo, chiusura). Mai nomi, prodotti o "
+            "promesse della pagina di origine. Usa [[parola]] per le parole evidenziate se nel blocco originale "
+            "c'erano.\n" + "\n".join(parts))
+
 def write_caption(slides_out: dict, caption: str, brand: dict, rules: list[dict], recent: dict) -> dict:
     testo_slide = "\n\n".join(f"Slide {s['numero']}:\n{s['testo']}" for s in slides_out["slides"] if s.get("testo"))
     content = [{"type": "text", "text": (
@@ -467,6 +501,7 @@ def write_caption(slides_out: dict, caption: str, brand: dict, rules: list[dict]
         f"Descrizione originale, solo come contesto, da NON tradurre:\n<<<\n{(caption or '(vuota)')[:2000]}\n>>>\n\n"
         "Scrivi la nostra descrizione con lo strumento descrizione_pronta, seguendo le nostre regole, "
         "e sostituisci la CTA originale con la nostra."
+        + _cta_slides_request(slides_out)
     )}]
     system = _caption_system(brand, rules, recent)
     try:
@@ -476,10 +511,28 @@ def write_caption(slides_out: dict, caption: str, brand: dict, rules: list[dict]
         return _tool_call(system, content, CAPTION_TOOL, max_tokens=6000)
 
 
+def apply_cta_texts(slides_out: dict, new: list[dict]) -> None:
+    """Mette nelle slide CTA della pagina di origine i testi della nostra CTA."""
+    by_num = {s.get("numero"): s for s in slides_out.get("slides", [])}
+    for item in new:
+        s = by_num.get(item.get("numero"))
+        if not s:
+            continue
+        bl = [b for b in (s.get("blocchi") or []) if (b.get("testo") or "").strip()]
+        texts = [clean_text(t) for t in item.get("blocchi") or []]
+        if len(texts) != len(bl):
+            continue
+        for b, t in zip(bl, texts):
+            b["testo"] = t
+        s["testo"] = "\n\n".join(t.replace("[[", "").replace("]]", "") for t in texts)
+        s["_cta_riscritta"] = True
+
+
 def create_post(caption: str, owner: str, images: list[bytes], brand: dict,
                 rules: list[dict], recent: dict) -> dict:
     slides_out = translate_slides(caption, owner, images, brand, rules)
     cap = write_caption(slides_out, caption, brand, rules, recent)
+    apply_cta_texts(slides_out, cap.pop("slide_cta", None) or [])
     post = _finalize({**slides_out, **cap})
     post["slide_da_rifare"] = []
     return post
@@ -504,6 +557,8 @@ def check_slide(image_jpeg: bytes, expected_text: str, old_watermark: str,
                "Se il testo ora copre un'illustrazione o un elemento che nell'originale era libero, oppure manca o è "
                "deformato un elemento grafico, metti testo_corretto=false e descrivilo in problemi.\n" if original_jpeg else "")
             +
+            "Guarda con attenzione ogni riga: parole scritte una sopra l'altra, pezzi di lettere rimasti (es. 'ıl.', "
+            "'about.'), testo che esce dalla slide o tocca il bordo sono errori gravi.\n"
             "Il logo circolare con la scritta AttraiSeduci, se presente, è corretto e non è un residuo.\n"
             "Controlla la slide con lo strumento esito_controllo. Ignora differenze di a capo e di maiuscole."
         )},
