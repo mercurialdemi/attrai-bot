@@ -343,7 +343,8 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
     special = any(b.get("carattere") in ("titolo", "stretto") or "[[" in (b.get("testo") or "") or "{{" in (b.get("testo") or "")
                   for b in (slide.get("blocchi") or []))
     if config.SLIDE_TEXT_MODE != "gemini-sempre" and not special:
-        lay = textslide.analyze(original, slide.get("testo_originale", ""))
+        lay = textslide.analyze(original, slide.get("testo_originale", ""),
+                                has_mark=bool((slide.get("watermark_originale") or "").strip()))
         if lay:
             placements: list = []
             img = textslide.render(original, lay, testo, placements)

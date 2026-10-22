@@ -85,7 +85,7 @@ def _size_from_text(text_lines, original_text: str, weight: str) -> int | None:
     return int(np.median(est)) if est else None
 
 
-def analyze(img: Image.Image, original_text: str = "") -> Layout | None:
+def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False) -> Layout | None:
     """Restituisce il layout se la slide è testo su sfondo uniforme, altrimenti None."""
     a = np.asarray(img.convert("RGB")).astype(np.int16)
     H, W, _ = a.shape
@@ -112,9 +112,24 @@ def analyze(img: Image.Image, original_text: str = "") -> Layout | None:
     med_h = float(np.median(heights))
     # un blocco molto più alto di una riga di testo, fuori dalle fasce alta e bassa dei marchi, è un'illustrazione:
     # quella slide la lascia a Gemini per non cancellarla
+    header_rows = []
     for (y0, y1, x0, x1), h in zip(lines, heights):
         if h > 2.6 * med_h and y0 > H * 0.22 and y1 < H * 0.86:
+            # con un marchio di un'altra pagina, un elemento piccolo è il suo avatar (stile tweet): si cancella
+            if has_mark and h < H * 0.14:
+                header_rows.append((y0, y1))
+                continue
             return None
+    if header_rows:
+        # le righe accanto all'avatar (nome e @handle della pagina) non sono testo da tradurre
+        hy0 = min(r[0] for r in header_rows)
+        hy1 = max(r[1] for r in header_rows)
+        keep = [not (l[1] >= hy0 - 4 and l[0] <= hy1 + 4) for l in lines]
+        lines = [l for l, k in zip(lines, keep) if k]
+        heights = np.array([l[1] - l[0] + 1 for l in lines])
+        if not lines:
+            return None
+        med_h = float(np.median(heights))
     # righe di testo vere: altezza simile alla mediana, non nella fascia in basso dove stanno i marchi
     text_lines = [l for l, h in zip(lines, heights)
                   if 0.45 * med_h <= h <= 1.9 * med_h and l[0] < H * 0.9]
