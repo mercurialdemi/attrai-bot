@@ -111,8 +111,7 @@ CAPTION_TOOL = {
                 "description": "Testo della NOSTRA slide finale di CTA (c'è in OGNI post), che verrà scritta con lo stesso stile "
                                "grafico delle altre slide. Va SCELTO tra i TESTI DELLE NOSTRE SLIDE CTA, copiato com'è: quello "
                                "dello stesso tipo della CTA scelta (per un manuale, quello di quel manuale). Se per quel manuale "
-                               "non c'è, prendi una delle nostre CTA migliori per quel manuale e accorciala. Solo se non c'è "
-                               "niente di adatto scrivila tu nella stessa voce. Massimo 300 caratteri, righe corte con a capo.",
+                               "non c'è nessuna slide, scegli uno dei testi 'segui'. Mai testi presi dalle descrizioni.",
             },
             "slide_cta": {
                 "type": "array",
@@ -581,12 +580,30 @@ def apply_cta_texts(slides_out: dict, new: list[dict]) -> None:
         s["_cta_riscritta"] = True
 
 
+def pick_cta_slide_text(proposed: str, cta: dict) -> str:
+    """Il testo della slide CTA finale viene SOLO dalle nostre slide CTA (lette da /analizza):
+    quella del manuale scelto, altrimenti una 'segui la pagina'. Se Claude ne ha copiata una, resta quella."""
+    texts = load_style().get("testi_slide_cta") or []
+    if not texts:
+        return proposed                     # nessuna slide letta ancora: si usa la proposta di Claude
+    norm = lambda t: " ".join(t.lower().split())
+    if any(norm(t["testo"]) == norm(proposed) for t in texts):
+        return proposed
+    if cta.get("tipo") == "manuale":
+        same = [t for t in texts if t["tipo"] == "manuale" and t.get("manuale") == cta.get("manuale")]
+        if same:
+            return random.choice(same)["testo"]
+    follow = [t for t in texts if t["tipo"] == "segui"]
+    return random.choice(follow)["testo"] if follow else proposed
+
+
 def create_post(caption: str, owner: str, images: list[bytes], brand: dict,
                 rules: list[dict], recent: dict) -> dict:
     slides_out = translate_slides(caption, owner, images, brand, rules)
     cap = write_caption(slides_out, caption, brand, rules, recent)
     apply_cta_texts(slides_out, cap.pop("slide_cta", None) or [])
-    slides_out["_testo_cta_finale"] = clean_text(cap.pop("testo_slide_finale", "") or "")
+    slides_out["_testo_cta_finale"] = pick_cta_slide_text(clean_text(cap.pop("testo_slide_finale", "") or ""),
+                                                          cap.get("cta") or {})
     post = _finalize({**slides_out, **cap})
     post["slide_da_rifare"] = []
     return post

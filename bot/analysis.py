@@ -188,7 +188,7 @@ def _find_cta_slides(top_posts, brand: dict) -> dict:
     per ogni tipo (segui / manuale) come slide CTA da mettere in fondo ai caroselli.
     Non sovrascrive le slide CTA caricate a mano."""
     # si guardano molti caroselli, così si trova una slide CTA per ogni manuale (non solo "segui")
-    cands = [p for p in top_posts if p.kind.lower() == "sidecar" and len(p.image_urls) >= 2][:25]
+    cands = [p for p in top_posts if p.kind.lower() == "sidecar" and len(p.image_urls) >= 2][:30]
     if not cands:
         return {}
     try:
