@@ -46,7 +46,7 @@ Ogni lunedì alle 7:30 il bot rifà da solo lo studio della pagina e ti manda un
 - riconosce tra i vostri post pubblicati quelli preparati da lui e misura quanto hanno reso per tipo di hook e di CTA;
 - da lì in avanti preferisce hook e CTA che rendono di più, continuando a variare.
 
-Oggi il rendimento si misura su like e commenti. Con le API di Instagram (account Business o Creator collegato a una pagina Facebook) potrà usare copertura, salvataggi, condivisioni e clic sul link.
+Senza collegamento il rendimento si misura su like e commenti. Con `INSTAGRAM_TOKEN` su Render (vedi sotto) il bot usa le statistiche vere di ogni post: copertura, salvataggi, condivisioni, nuovi follower e clic sul link in bio. Le CTA ai manuali si ordinano per clic sul link ogni 1000 persone raggiunte, quelle "segui" per nuovi follower. `/statistiche` mostra i numeri degli ultimi post. La chiave dura 60 giorni e il bot la rinnova da solo ogni settimana.
 
 ## Report delle 8
 

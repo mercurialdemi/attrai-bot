@@ -11,7 +11,7 @@ from telegram import Update
 from telegram.constants import ChatAction
 from telegram.ext import (Application, CommandHandler, ContextTypes, MessageHandler, filters)
 
-from . import analysis, config, images, instagram, pipeline, report, storage, writer
+from . import analysis, config, images, instagram, instagram_api, pipeline, report, storage, writer
 
 logging.basicConfig(format="%(asctime)s %(levelname)s %(name)s: %(message)s", level=logging.INFO)
 logging.getLogger("httpx").setLevel(logging.WARNING)
@@ -28,7 +28,7 @@ HELP = (
     "Per dare una regola fissa scrivi: regola: ...\n"
     "/regole per vederle, /togli N per toglierne una\n"
     "/report per lanciare subito il report, /altri per i post successivi della classifica\n"
-    "/pagine per le pagine monitorate\n"
+    "/pagine per le pagine monitorate, /statistiche per i numeri veri degli ultimi post\n"
     "/analizza per studiare i post di AttraiSeduci e scrivere descrizioni come le tue migliori, /stile per vedere la guida\n"
     "Slide CTA finale: mandami l'immagine con didascalia \"cta segui\" (o \"cta friendzone\", \"cta potere-sociale\"...)\n"
     "/id per il tuo ID Telegram"
@@ -129,6 +129,28 @@ async def cmd_stile(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.effective_message.reply_text(
         f"Guida di stile del {style.get('creato', '')[:10]} ({style.get('post_analizzati')} post, "
         f"{len(style.get('esempi', []))} esempi):\n\n{style.get('guida', '')}"[:4000])
+
+
+async def cmd_statistiche(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not await _authorized(update):
+        return
+    if not instagram_api.enabled():
+        await update.effective_message.reply_text("Le statistiche di Instagram non sono collegate: manca INSTAGRAM_TOKEN su Render.")
+        return
+    msg = await update.effective_message.reply_text("Leggo le statistiche degli ultimi post…")
+    try:
+        acc = await asyncio.to_thread(instagram_api.account)
+        media = await asyncio.to_thread(instagram_api.recent_media, 8)
+        righe = [f"@{acc.get('username')} · {acc.get('followers_count')} follower\n"]
+        for m in media:
+            st = await asyncio.to_thread(instagram_api.media_insights, m["id"])
+            cap = " ".join((m.get("caption") or "").split())[:50]
+            righe.append(f"{m['timestamp'][:10]} · {cap}…\n  copertura {st.get('reach', '-')} · salvati {st.get('saved', '-')} · "
+                         f"condivisi {st.get('shares', '-')} · follow {st.get('follows', '-')} · clic link {st.get('clic_link', '-')}")
+        await msg.edit_text("\n".join(righe)[:4000])
+    except Exception as e:
+        log.exception("Statistiche Instagram")
+        await msg.edit_text(f"Non riesco a leggere le statistiche: {str(e)[:300]}")
 
 
 async def cmd_altri(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -412,6 +434,13 @@ def _schedule_analysis(app: Application):
             await context.bot.send_message(c, "\n".join(righe))
 
     app.job_queue.run_daily(job, time=at, days=(int(cfg.get("giorno", 1)),), name="studio_settimanale")
+
+    async def refresh(context: ContextTypes.DEFAULT_TYPE):   # la chiave Instagram dura 60 giorni: la rinnoviamo ogni settimana
+        if instagram_api.enabled():
+            ok = await asyncio.to_thread(instagram_api.refresh_token)
+            log.info("Rinnovo chiave Instagram: %s", "ok" if ok else "non riuscito")
+
+    app.job_queue.run_daily(refresh, time=at, days=(3,), name="rinnovo_token_instagram")
     log.info("Studio della pagina programmato ogni settimana alle %s", at)
 
 
@@ -430,6 +459,7 @@ def main():
     app.add_handler(CommandHandler("pagine", cmd_pagine))
     app.add_handler(CommandHandler("report", cmd_report))
     app.add_handler(CommandHandler("altri", cmd_altri))
+    app.add_handler(CommandHandler("statistiche", cmd_statistiche))
     app.add_handler(CommandHandler("analizza", cmd_analizza))
     app.add_handler(CommandHandler("stile", cmd_stile))
     app.add_handler(MessageHandler(filters.PHOTO | filters.Document.IMAGE, on_media))

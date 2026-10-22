@@ -316,8 +316,11 @@ def _cta_memory(style: dict) -> str:
     best = style.get("cta_migliori") or []
     if not best:
         return ""
-    lines = "\n".join(f"- ({c['rendimento']}x la media, {c['tipo']}{' ' + c['manuale'] if c.get('manuale') else ''}) {c['testo']}"
-                       for c in best[:8])
+    def info(c):
+        extra = (f", {c['clic_ogni_1000']} clic sul link e {c['follow_ogni_1000']} follow ogni 1000 persone raggiunte"
+                 if "clic_ogni_1000" in c else "")
+        return f"- ({c['rendimento']}x la media{extra}, {c['tipo']}{' ' + c['manuale'] if c.get('manuale') else ''}) {c['testo']}"
+    lines = "\n".join(info(c) for c in best[:8])
     worst = "\n".join(f"- {c['testo']}" for c in (style.get("cta_peggiori") or [])[:4])
     if random.random() < 0.5:
         mode = ("In questo post RIUSA una delle CTA migliori qui sotto (quella più adatta al tema e al tipo di CTA "

@@ -15,7 +15,7 @@ import logging
 import statistics
 from datetime import datetime, timezone
 
-from . import config, instagram, writer
+from . import config, instagram, instagram_api, writer
 
 log = logging.getLogger(__name__)
 
@@ -62,7 +62,17 @@ def _engagement(p: instagram.SourcePost) -> float | None:
 def run_analysis(brand: dict, n_posts: int = 80) -> dict:
     handle = brand["handle"].lower().lstrip("@")
     posts = instagram.fetch_profiles([handle], n_posts)
-    scored = [(p, _engagement(p)) for p in posts]
+    stats: dict = {}
+    if instagram_api.enabled():
+        try:
+            stats = instagram_api.stats_by_shortcode(n_posts)
+        except Exception as e:
+            log.warning("Statistiche Instagram non lette, uso like e commenti: %s", e)
+    def value(p):
+        st = stats.get(instagram_api.shortcode(p.url))
+        sc = instagram_api.score(st) if st else None
+        return sc if sc is not None else _engagement(p)
+    scored = [(p, value(p)) for p in posts]
     scored = [(p, e) for p, e in scored if e is not None and len((p.caption or "").strip()) >= 120]
     if len(scored) < 12:
         raise instagram.InstagramError(
@@ -101,9 +111,21 @@ def run_analysis(brand: dict, n_posts: int = 80) -> dict:
         items = groups.get(c.get("gruppo"), [])
         n = c.get("numero")
         if isinstance(n, int) and 1 <= n <= len(items) and (c.get("testo") or "").strip():
-            cta_list.append({"testo": writer.clean_text(c["testo"]), "tipo": c.get("tipo"),
-                             "manuale": c.get("manuale") or "", "rendimento": round(items[n - 1][1] / med, 2)})
-    cta_list.sort(key=lambda c: c["rendimento"], reverse=True)
+            st = stats.get(instagram_api.shortcode(items[n - 1][0].url)) or {}
+            entry = {"testo": writer.clean_text(c["testo"]), "tipo": c.get("tipo"),
+                     "manuale": c.get("manuale") or "", "rendimento": round(items[n - 1][1] / med, 2)}
+            if st.get("reach"):
+                entry["clic_link"] = st.get("clic_link", 0)
+                entry["clic_ogni_1000"] = round(1000 * (st.get("clic_link") or 0) / st["reach"], 2)
+                entry["follow_ogni_1000"] = round(1000 * (st.get("follows") or 0) / st["reach"], 2)
+            cta_list.append(entry)
+    # con le statistiche vere le CTA si ordinano per quello che devono ottenere:
+    # clic sul link per le CTA ai manuali, nuovi follower per quelle "segui"
+    def cta_key(c):
+        if "clic_ogni_1000" in c:
+            return c["clic_ogni_1000"] * 10 if c["tipo"] == "manuale" else c["follow_ogni_1000"] * 10
+        return c["rendimento"]
+    cta_list.sort(key=cta_key, reverse=True)
     cta_slides = _find_cta_slides([p for p, _ in top], brand)
     feedback = _bot_feedback([(p, e / med) for p, e in scored])
 
@@ -120,8 +142,9 @@ def run_analysis(brand: dict, n_posts: int = 80) -> dict:
     style = {
         "guida": guida,
         "esempi": list(dict.fromkeys(esempi)),
-        "cta_migliori": [c for c in cta_list if c["rendimento"] >= 1.0][:12],
-        "cta_peggiori": [c for c in cta_list if c["rendimento"] < 0.7][-6:],
+        "cta_migliori": (cta_list[:12] if stats else [c for c in cta_list if c["rendimento"] >= 1.0][:12]),
+        "cta_peggiori": (cta_list[-6:] if stats and len(cta_list) > 12 else [c for c in cta_list if c["rendimento"] < 0.7][-6:]),
+        "fonte_numeri": "statistiche Instagram" if stats else "like e commenti",
         "lezioni_cta": (out.get("lezioni_cta") or "").strip(),
         "slide_cta": cta_slides,
         "feedback_bot": feedback,
