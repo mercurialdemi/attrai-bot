@@ -211,3 +211,17 @@ def last_ranking() -> list[dict]:
     with _lock:
         row = _db().execute("SELECT data FROM rankings ORDER BY id DESC LIMIT 1").fetchone()
     return json.loads(row["data"]) if row else []
+
+
+def all_jobs_light(limit: int = 500) -> list[dict]:
+    """Post preparati dal bot (descrizione, hook, CTA, natura) per confrontarli con quelli pubblicati."""
+    with _lock:
+        rows = _db().execute("SELECT id, post_json, created_at FROM jobs ORDER BY id DESC LIMIT ?", (limit,)).fetchall()
+    out = []
+    for r in rows:
+        p = json.loads(r["post_json"])
+        cta = p.get("cta") or {}
+        out.append({"id": r["id"], "descrizione": p.get("descrizione", ""), "tipo_hook": p.get("tipo_hook"),
+                    "natura": p.get("natura"), "formato": p.get("formato"),
+                    "cta_tipo": cta.get("tipo"), "manuale": cta.get("manuale") or "", "creato": r["created_at"]})
+    return out

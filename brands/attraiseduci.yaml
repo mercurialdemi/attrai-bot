@@ -25,6 +25,12 @@ report:
   punteggio_minimo: 1.0  # sopra questa soglia (1.0 = media della pagina) un post ha precedenza
   completa_sempre: true  # true = se i post sopra media sono pochi, completa con i migliori sotto media (segnalati)
 
+# Studio automatico della pagina (stile, CTA, risultati dei post del bot): ogni settimana
+studio:
+  attivo: true
+  giorno: 1              # 0 = domenica, 1 = lunedì, ... 6 = sabato
+  ora: "07:30"
+
 # Come tradurre il testo delle slide:
 #   fedele   = stesso contenuto, ordine e tono dell'originale, in italiano naturale (consigliato per i post già scelti)
 #   adattata = riscritto nel tono di AttraiSeduci

@@ -379,6 +379,42 @@ def _schedule_report(app: Application):
     log.info("Report programmato ogni giorno alle %s (%s) per %s", cfg["ora"], tz, chat_ids)
 
 
+def _schedule_analysis(app: Application):
+    """Ogni lunedì rifà lo studio della pagina: guida di stile, CTA migliori, risultati dei post del bot."""
+    cfg = (writer.load_brand().get("studio") or {})
+    if cfg.get("attivo", True) is False:
+        return
+    chat_ids = sorted(config.REPORT_CHAT_IDS or config.ALLOWED_USER_IDS)
+    tz = ZoneInfo((writer.load_brand().get("report") or {}).get("fuso", "Europe/Rome"))
+    at = datetime.strptime(str(cfg.get("ora", "07:30")), "%H:%M").time().replace(tzinfo=tz)
+
+    async def job(context: ContextTypes.DEFAULT_TYPE):
+        try:
+            style = await asyncio.to_thread(analysis.run_analysis, writer.load_brand())
+        except Exception as e:
+            log.exception("Studio settimanale fallito")
+            for c in chat_ids:
+                await context.bot.send_message(c, f"Studio settimanale non riuscito: {str(e)[:300]}")
+            return
+        fb = style.get("feedback_bot") or {}
+        righe = [f"Studio settimanale aggiornato su {style['post_analizzati']} post."]
+        if fb.get("pubblicati_dal_bot"):
+            righe.append(f"Post preparati dal bot e pubblicati: {fb['pubblicati_dal_bot']}, "
+                         f"rendimento medio {fb.get('rendimento_medio')}x la media della pagina.")
+            for nome, chiave in (("Hook", "per_hook"), ("CTA", "per_cta")):
+                d = fb.get(chiave) or {}
+                if d:
+                    righe.append(nome + ": " + "; ".join(f"{k} {v['rendimento']}x" for k, v in list(d.items())[:5]))
+        top = style.get("cta_migliori") or []
+        if top:
+            righe.append("CTA migliore: " + top[0]["testo"][:200])
+        for c in chat_ids:
+            await context.bot.send_message(c, "\n".join(righe))
+
+    app.job_queue.run_daily(job, time=at, days=(int(cfg.get("giorno", 1)),), name="studio_settimanale")
+    log.info("Studio della pagina programmato ogni settimana alle %s", at)
+
+
 def main():
     missing = config.missing_keys()
     if missing:
@@ -399,6 +435,7 @@ def main():
     app.add_handler(MessageHandler(filters.PHOTO | filters.Document.IMAGE, on_media))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_text))
     _schedule_report(app)
+    _schedule_analysis(app)
     log.info("Bot avviato.")
     app.run_polling(allowed_updates=Update.ALL_TYPES)
 

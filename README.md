@@ -39,6 +39,15 @@ Con ogni post arriva un file .pptx: in Canva → Crea → Importa file. Nelle sl
 
 Legge gli ultimi 80 post di AttraiSeduci, confronta le descrizioni dei migliori con quelle dei peggiori e ricava una guida di stile concreta (aperture, struttura, ritmo, dolori che rendono, come chiudete, cosa evitare). Sceglie anche 6-8 tue descrizioni come esempi, estrae le CTA di ogni post e le ordina per rendimento: metà delle volte il bot riusa (adattata) una delle CTA migliori, l'altra metà ne scrive una nuova sulle stesse leve. Il rendimento si misura su like e commenti rispetto alla media: i clic sul link arriveranno con le API di Instagram. Da quel momento ogni descrizione viene scritta seguendo la guida, con 3 esempi diversi ogni volta. `/stile` mostra la guida attuale. Conviene rilanciarlo una volta al mese.
 
+## Miglioramento continuo
+
+Ogni lunedì alle 7:30 il bot rifà da solo lo studio della pagina e ti manda un riepilogo:
+- aggiorna guida di stile, esempi e classifica delle CTA;
+- riconosce tra i vostri post pubblicati quelli preparati da lui e misura quanto hanno reso per tipo di hook e di CTA;
+- da lì in avanti preferisce hook e CTA che rendono di più, continuando a variare.
+
+Oggi il rendimento si misura su like e commenti. Con le API di Instagram (account Business o Creator collegato a una pagina Facebook) potrà usare copertura, salvataggi, condivisioni e clic sul link.
+
 ## Report delle 8
 
 Ogni mattina alle 8 il bot:

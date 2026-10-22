@@ -298,6 +298,18 @@ def translate_slides(caption: str, owner: str, images: list[bytes], brand: dict,
 
 # ---------------------------------------------------------------- 2. descrizione e CTA
 
+def _feedback_memory(style: dict) -> str:
+    fb = style.get("feedback_bot") or {}
+    if not fb.get("pubblicati_dal_bot") or fb["pubblicati_dal_bot"] < 3:
+        return ""
+    def fmt(d):
+        return "; ".join(f"{k} {v['rendimento']}x ({v['post']} post)" for k, v in d.items())
+    return ("\nRISULTATI DEI POST PREPARATI DA TE E GIÀ PUBBLICATI (rendimento rispetto alla media della pagina):\n"
+            f"- per tipo di hook: {fmt(fb.get('per_hook', {}))}\n"
+            f"- per CTA: {fmt(fb.get('per_cta', {}))}\n"
+            "Preferisci gli hook e le CTA che rendono di più, ma continua a variare: non usare due volte di fila la stessa struttura.\n")
+
+
 def _cta_memory(style: dict) -> str:
     """CTA che hanno reso di più sulla nostra pagina (da /analizza): circa metà delle volte se ne riusa
     una adattata al post, l'altra metà se ne scrive una nuova costruita sulle stesse leve."""
@@ -366,6 +378,7 @@ CTA
 {brand['cta']['regola'].strip()}
 {brand['cta']['stile'].strip()}
 {_cta_memory(style)}
+{_feedback_memory(style)}
 Dove si compra: {brand['cta'].get('dove_si_compra', 'link in bio')}.
 Manuali disponibili:
 {manuali}

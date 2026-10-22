@@ -9,6 +9,7 @@ Tutto viene salvato in data/stile.json e usato da writer.write_caption a ogni de
 """
 from __future__ import annotations
 
+import difflib
 import json
 import logging
 import statistics
@@ -104,6 +105,7 @@ def run_analysis(brand: dict, n_posts: int = 80) -> dict:
                              "manuale": c.get("manuale") or "", "rendimento": round(items[n - 1][1] / med, 2)})
     cta_list.sort(key=lambda c: c["rendimento"], reverse=True)
     cta_slides = _find_cta_slides([p for p, _ in top], brand)
+    feedback = _bot_feedback([(p, e / med) for p, e in scored])
 
     esempi = []
     for n in out.get("esempi", []):
@@ -122,6 +124,7 @@ def run_analysis(brand: dict, n_posts: int = 80) -> dict:
         "cta_peggiori": [c for c in cta_list if c["rendimento"] < 0.7][-6:],
         "lezioni_cta": (out.get("lezioni_cta") or "").strip(),
         "slide_cta": cta_slides,
+        "feedback_bot": feedback,
         "post_analizzati": len(scored),
         "creato": datetime.now(timezone.utc).isoformat(timespec="seconds"),
     }
@@ -194,3 +197,48 @@ def _find_cta_slides(top_posts, brand: dict) -> dict:
             target.write_bytes(imgs[n - 1])
         found[key] = cands[n - 1].url
     return found
+
+
+def _norm(t: str) -> str:
+    return " ".join((t or "").lower().split())[:400]
+
+
+def _bot_feedback(published: list) -> dict:
+    """Riconosce tra i post pubblicati quelli preparati dal bot (descrizione molto simile) e calcola
+    quanto rendono per tipo di hook, natura del post e CTA. Così il bot sa cosa ripetere e cosa evitare."""
+    from . import storage
+    jobs = storage.all_jobs_light()
+    if not jobs:
+        return {}
+    matched = []
+    for post, ratio in published:
+        cap = _norm(post.caption)
+        if len(cap) < 60:
+            continue
+        best, best_r = None, 0.0
+        for j in jobs:
+            r = difflib.SequenceMatcher(None, cap[:250], _norm(j["descrizione"])[:250]).quick_ratio()
+            if r > best_r:
+                best, best_r = j, r
+        if best and best_r >= 0.72 and difflib.SequenceMatcher(None, cap[:250], _norm(best["descrizione"])[:250]).ratio() >= 0.6:
+            matched.append((best, ratio))
+    if not matched:
+        return {"pubblicati_dal_bot": 0}
+
+    def group(key):
+        agg = {}
+        for j, r in matched:
+            k = j.get(key) or "?"
+            if key == "cta_tipo" and k == "manuale":
+                k = f"manuale {j.get('manuale') or '?'}"
+            agg.setdefault(k, []).append(r)
+        return {k: {"post": len(v), "rendimento": round(statistics.median(v), 2)}
+                for k, v in sorted(agg.items(), key=lambda kv: -statistics.median(kv[1]))}
+
+    return {
+        "pubblicati_dal_bot": len(matched),
+        "rendimento_medio": round(statistics.median(r for _, r in matched), 2),
+        "per_hook": group("tipo_hook"),
+        "per_natura": group("natura"),
+        "per_cta": group("cta_tipo"),
+    }
