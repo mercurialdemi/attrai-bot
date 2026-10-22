@@ -42,6 +42,9 @@ def _db() -> sqlite3.Connection:
             CREATE TABLE IF NOT EXISTS rankings (
                 id INTEGER PRIMARY KEY AUTOINCREMENT, created_at TEXT, data TEXT
             );
+            CREATE TABLE IF NOT EXISTS diag (
+                id INTEGER PRIMARY KEY AUTOINCREMENT, tipo TEXT, job_id INTEGER, dati TEXT, creato TEXT
+            );
             CREATE TABLE IF NOT EXISTS messages (
                 chat_id INTEGER, message_id INTEGER, job_id INTEGER,
                 PRIMARY KEY (chat_id, message_id)
@@ -225,3 +228,18 @@ def all_jobs_light(limit: int = 500) -> list[dict]:
                     "natura": p.get("natura"), "formato": p.get("formato"),
                     "cta_tipo": cta.get("tipo"), "manuale": cta.get("manuale") or "", "creato": r["created_at"]})
     return out
+
+
+# ---------------------------------------------------------------- diagnostica
+
+def save_diag(tipo: str, job_id: int | None, dati: dict) -> None:
+    with _lock:
+        _db().execute("INSERT INTO diag (tipo, job_id, dati, creato) VALUES (?,?,?,?)",
+                      (tipo, job_id, json.dumps(dati, ensure_ascii=False), _now()))
+        _db().commit()
+
+
+def list_diag(since_iso: str) -> list[dict]:
+    with _lock:
+        rows = _db().execute("SELECT tipo, job_id, dati, creato FROM diag WHERE creato >= ? ORDER BY id", (since_iso,)).fetchall()
+    return [{"tipo": r["tipo"], "job_id": r["job_id"], "dati": json.loads(r["dati"]), "creato": r["creato"]} for r in rows]

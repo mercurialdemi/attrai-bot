@@ -166,6 +166,7 @@ async def _produce(bot, chat_ids: list[int], brand: dict, chosen: list[instagram
             try:
                 post, paths, failed = await pipeline.build_post(src, brand, f"{label}{i}")
                 job_id = storage.save_job(0, 0, src.url, src.owner, post, paths)
+                pipeline.after_save(job_id, src.url, post, paths, failed)
                 sotto = "" if src.score >= min_score else " (sotto media, scelto per completare)"
                 header = (f"{label.capitalize()} {i}/{len(chosen)} · da @{src.owner} · {src.score:.1f}x la media{sotto}\n"
                           f"Perché: {src.motivo}")

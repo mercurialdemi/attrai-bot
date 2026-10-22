@@ -11,7 +11,7 @@ from telegram import Update
 from telegram.constants import ChatAction
 from telegram.ext import (Application, CommandHandler, ContextTypes, MessageHandler, filters)
 
-from . import analysis, config, images, instagram, instagram_api, pipeline, report, storage, writer
+from . import analysis, config, diagnostica, images, instagram, instagram_api, pipeline, report, storage, writer
 
 logging.basicConfig(format="%(asctime)s %(levelname)s %(name)s: %(message)s", level=logging.INFO)
 logging.getLogger("httpx").setLevel(logging.WARNING)
@@ -26,6 +26,7 @@ HELP = (
     "per esempio: \"slide 2 più corta\", \"cambia l'hook\", \"metti CTA al manuale Potere Sociale\", "
     "\"rifai la grafica della slide 4\".\n\n"
     "Per dare una regola fissa scrivi: regola: ...\n"
+    "Se un post ha un difetto scrivi: segnala: ... (rispondendo al post): stanotte lo correggo nel codice.\n"
     "/regole per vederle, /togli N per toglierne una\n"
     "/report per lanciare subito il report, /altri per i post successivi della classifica\n"
     "/pagine per le pagine monitorate, /statistiche per i numeri veri degli ultimi post\n"
@@ -180,6 +181,7 @@ async def process_link(update: Update, context: ContextTypes.DEFAULT_TYPE, url: 
         await context.bot.send_chat_action(chat_id, ChatAction.TYPING)
         post, paths, failed = await pipeline.build_post(src, brand, str(msg.message_id), on_status=status.edit_text)
         job_id = storage.save_job(chat_id, update.effective_user.id, url, src.owner, post, paths)
+        pipeline.after_save(job_id, src.url, post, paths, failed)
         await status.delete()
         await pipeline.send_post(context.bot, chat_id, job_id, post, paths, failed)
     except instagram.InstagramError as e:
@@ -344,6 +346,7 @@ async def process_album(update: Update, context: ContextTypes.DEFAULT_TYPE, albu
         post, paths, failed = await pipeline.build_post(src, brand, str(first.message_id),
                                                         on_status=status.edit_text, originals=originals)
         job_id = storage.save_job(chat_id, update.effective_user.id, src.url, src.owner, post, paths)
+        pipeline.after_save(job_id, src.url, post, paths, failed)
         await status.delete()
         await pipeline.send_post(context.bot, chat_id, job_id, post, paths, failed)
     except Exception:
@@ -356,6 +359,19 @@ async def on_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
     msg = update.effective_message
     text = (msg.text or msg.caption or "").strip()
+
+    sm = re.match(r"^\s*(segnala|problema)\s*:?\s*(.+)$", text, re.IGNORECASE | re.DOTALL)
+    if sm:
+        jid = None
+        if msg.reply_to_message:
+            jid = storage.job_for_message(update.effective_chat.id, msg.reply_to_message.message_id)
+        if not jid:
+            last = storage.last_job(update.effective_chat.id)
+            jid = last["id"] if last else None
+        diagnostica.record_report(jid, sm.group(2).strip(), update.effective_user.id)
+        await msg.reply_text("Segnalazione salvata" + (f" sul post {jid}" if jid else "")
+                             + ": stanotte la guardo insieme alle immagini e correggo il bot. Domattina ti arriva il riepilogo.")
+        return
 
     m = re.match(r"^\s*regola\s*:\s*(.+)$", text, re.IGNORECASE | re.DOTALL)
     if m:
@@ -441,6 +457,21 @@ def _schedule_analysis(app: Application):
             log.info("Rinnovo chiave Instagram: %s", "ok" if ok else "non riuscito")
 
     app.job_queue.run_daily(refresh, time=at, days=(3,), name="rinnovo_token_instagram")
+
+
+def _schedule_diagnostics(app: Application):
+    """Ogni notte alle 2:30 carica su GitHub il rapporto con slide fallite e segnalazioni."""
+    tz = ZoneInfo((writer.load_brand().get("report") or {}).get("fuso", "Europe/Rome"))
+    at = datetime.strptime("02:30", "%H:%M").time().replace(tzinfo=tz)
+
+    async def job(context: ContextTypes.DEFAULT_TYPE):
+        try:
+            res = await asyncio.to_thread(diagnostica.upload_daily)
+            log.info(res)
+        except Exception:
+            log.exception("Rapporto notturno non caricato")
+
+    app.job_queue.run_daily(job, time=at, name="rapporto_notturno")
     log.info("Studio della pagina programmato ogni settimana alle %s", at)
 
 
@@ -466,6 +497,7 @@ def main():
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_text))
     _schedule_report(app)
     _schedule_analysis(app)
+    _schedule_diagnostics(app)
     log.info("Bot avviato.")
     app.run_polling(allowed_updates=Update.ALL_TYPES)
 

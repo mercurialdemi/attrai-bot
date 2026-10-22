@@ -7,7 +7,7 @@ from pathlib import Path
 
 from telegram import InputMediaDocument, Message
 
-from . import canva, config, images, instagram, storage, writer
+from . import canva, config, diagnostica, images, instagram, storage, writer
 
 
 def job_dir(src_url: str, suffix: str) -> Path:
@@ -40,6 +40,15 @@ async def build_post(src: instagram.SourcePost, brand: dict, suffix: str,
     paths, failed = apply_cta_slide(post, paths, failed, jdir)
     post["_fallite"] = failed
     return post, paths, failed
+
+
+def after_save(job_id: int, source_url: str, post: dict, paths: list[Path], failed: list[int]) -> None:
+    """Registra il post per il rapporto notturno (non blocca mai il lavoro)."""
+    try:
+        diagnostica.record_post(job_id, source_url, post, paths, failed)
+    except Exception:
+        import logging
+        logging.getLogger(__name__).exception("Diagnostica non registrata")
 
 
 def cta_dir() -> Path:

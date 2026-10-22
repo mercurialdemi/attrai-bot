@@ -266,6 +266,7 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
     size = output_size(original)
     if not slide.get("da_modificare", True) and not (slide.get("watermark_originale") or "").strip():
         # già in italiano e senza marchi di altre pagine: si consegna l'originale, nessun ritocco
+        slide["_via"] = "originale"
         return original, True, ""
     testo = (slide.get("testo") or "").strip()
     special = any(b.get("carattere") in ("titolo", "stretto") or (b.get("colore_evidenziato") or "").strip()
@@ -276,6 +277,7 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
             placements: list = []
             img = textslide.render(original, lay, testo, placements)
             slide["_canva"] = {"tipo": "testo", "righe": placements}
+            slide["_via"] = "testo-su-sfondo-uniforme"
             slide["_sfondo"] = textslide.background(original, lay)
             img = add_brand_mark(img, brand) if needs_logo(slide, brand) else img
             if slide.get("_sfondo") is not None and needs_logo(slide, brand):
@@ -294,12 +296,15 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
             placements: list = []
             img = textslide.render_blocks(clean, orig_fit, blocks0, placements, boxes=boxes)
             slide["_canva"] = {"tipo": "testo", "righe": placements}
+            slide["_via"] = "blocchi-pulizia-codice"
             slide["_sfondo"] = add_brand_mark(clean, brand) if needs_logo(slide, brand) else clean
             img = add_brand_mark(img, brand) if needs_logo(slide, brand) else img
             return img, True, ""
     feedback, problems = "", ""
     best: Image.Image | None = None
+    slide["_via"] = "gemini-pulizia+blocchi" if (mode == "codice" and blocks0) else f"gemini-{mode}"
     for attempt in range(max(1, config.SLIDE_ATTEMPTS)):
+        slide["_tentativi"] = attempt + 1
         try:
             has_blocks = any((b.get("testo") or "").strip() for b in (slide.get("blocchi") or []))
             gmode = "overlay" if (mode == "codice" and has_blocks) else ("gemini" if mode == "codice" else mode)
