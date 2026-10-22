@@ -203,8 +203,38 @@ def _circle_logo(diameter: int) -> Image.Image | None:
     return logo
 
 
-def add_brand_mark(img: Image.Image, brand: dict) -> Image.Image:
-    """Logo circolare + nome della pagina, al posto del watermark originale."""
+def _free_spot(img: Image.Image, w: int, h: int, margin: int, preferred: str,
+               avoid: list[tuple[int, int, int, int]]) -> tuple[int, int]:
+    """Sceglie l'angolo dove il logo non copre scritte: niente sovrapposizione con le zone di testo
+    e zona il più possibile 'calma' (senza lettere o dettagli)."""
+    import numpy as np
+    W, H = img.size
+    spots = {
+        "basso-destra": (W - margin - w, H - margin - h), "basso-sinistra": (margin, H - margin - h),
+        "alto-destra": (W - margin - w, margin), "alto-sinistra": (margin, margin),
+        "basso-centro": ((W - w) // 2, H - margin - h), "alto-centro": ((W - w) // 2, margin),
+    }
+    order = [preferred] + [k for k in spots if k != preferred]
+    g = np.asarray(img.convert("L")).astype(np.int16)
+    best, best_score = spots.get(preferred, spots["basso-destra"]), None
+    for k in order:
+        x, y = spots.get(k, spots["basso-destra"])
+        r = (x - 12, y - 12, x + w + 12, y + h + 12)
+        if any(not (r[2] < b[0] or r[0] > b[2] or r[3] < b[1] or r[1] > b[3]) for b in avoid):
+            continue
+        z = g[max(0, r[1]):min(H, r[3]), max(0, r[0]):min(W, r[2])]
+        if z.size == 0:
+            continue
+        busy = float(np.abs(np.diff(z, axis=1)).mean() + np.abs(np.diff(z, axis=0)).mean())
+        if busy < 6:                       # zona calma: va bene, nell'ordine di preferenza
+            return x, y
+        if best_score is None or busy < best_score:
+            best, best_score = (x, y), busy
+    return best
+
+
+def add_brand_mark(img: Image.Image, brand: dict, avoid: list | None = None) -> Image.Image:
+    """Logo circolare + nome della pagina, in un angolo libero da scritte."""
     wm = brand.get("watermark", {})
     W, H = img.size
     d = max(36, int(W * float(wm.get("larghezza_logo", 0.075))))
@@ -219,9 +249,7 @@ def add_brand_mark(img: Image.Image, brand: dict) -> Image.Image:
     total_w = (d + gap if logo else 0) + text_w
 
     pos = wm.get("posizione", "basso-destra")
-    x = {"basso-sinistra": margin, "alto-sinistra": margin,
-         "basso-centro": (W - total_w) // 2}.get(pos, W - margin - total_w)
-    y = margin if pos.startswith("alto") else H - margin - d
+    x, y = _free_spot(img, total_w, d, margin, pos, avoid or [])
 
     if logo:
         layer.alpha_composite(logo, (x, y))
@@ -284,10 +312,19 @@ def _remove_watermark(clean: Image.Image, orig_fit: Image.Image, slide: dict):
 
 
 def needs_logo(slide: dict, brand: dict) -> bool:
-    wm = brand.get("watermark", {})
-    if not wm.get("solo_se_presente", True):
-        return True
-    return bool((slide.get("watermark_originale") or "").strip())
+    """Il nostro logo va solo sulla prima slide (deciso per tutto il post in render_all)."""
+    return bool(slide.get("_metti_logo"))
+
+
+def _avoid_boxes(slide: dict, W: int, H: int) -> list[tuple[int, int, int, int]]:
+    """Zone con testo, dove il logo non deve andare."""
+    from . import textslide as ts
+    boxes = [ts.block_box(b, W, H) for b in (slide.get("blocchi") or []) if (b.get("testo") or "").strip()]
+    for r in (slide.get("_canva") or {}).get("righe", []):
+        size = r.get("size", 30)
+        boxes.append((int(r["x"]), int(r["y"]), int(r["x"] + size * 0.62 * len(r.get("testo", ""))),
+                      int(r["y"] + size * 1.3)))
+    return boxes
 
 
 def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> tuple[Image.Image, bool, str]:
@@ -298,6 +335,8 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
     if not slide.get("da_modificare", True) and not (slide.get("watermark_originale") or "").strip():
         # già in italiano e senza marchi di altre pagine: si consegna l'originale, nessun ritocco
         slide["_via"] = "originale"
+        if needs_logo(slide, brand):
+            return add_brand_mark(original, brand, _avoid_boxes(slide, *original.size)), True, ""
         return original, True, ""
     testo = (slide.get("testo") or "").strip()
     # serve il percorso a blocchi solo per titoli con font stretti o parole evidenziate davvero ([[ ]])
@@ -311,9 +350,9 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
             slide["_canva"] = {"tipo": "testo", "righe": placements}
             slide["_via"] = "testo-su-sfondo-uniforme"
             slide["_sfondo"] = textslide.background(original, lay)
-            img = add_brand_mark(img, brand) if needs_logo(slide, brand) else img
+            img = add_brand_mark(img, brand, _avoid_boxes(slide, *img.size)) if needs_logo(slide, brand) else img
             if slide.get("_sfondo") is not None and needs_logo(slide, brand):
-                slide["_sfondo"] = add_brand_mark(slide["_sfondo"], brand)
+                slide["_sfondo"] = add_brand_mark(slide["_sfondo"], brand, _avoid_boxes(slide, *slide["_sfondo"].size))
             return img, True, ""
     original_jpeg = _jpeg(original)
     orig_fit = _fit(original, size)
@@ -329,13 +368,13 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
             img = textslide.render_blocks(clean, orig_fit, blocks0, placements, boxes=boxes)
             slide["_canva"] = {"tipo": "testo", "righe": placements}
             slide["_via"] = "blocchi-pulizia-codice"
-            slide["_sfondo"] = add_brand_mark(clean, brand) if needs_logo(slide, brand) else clean
+            slide["_sfondo"] = add_brand_mark(clean, brand, _avoid_boxes(slide, *clean.size)) if needs_logo(slide, brand) else clean
             ok, problems = (True, "")
             if config.SLIDE_CHECK:
                 ok, problems = writer.check_slide(_jpeg(img), testo, slide.get("watermark_originale", ""),
                                                   original_jpeg)
             if ok:
-                img = add_brand_mark(img, brand) if needs_logo(slide, brand) else img
+                img = add_brand_mark(img, brand, _avoid_boxes(slide, *img.size)) if needs_logo(slide, brand) else img
                 return img, True, ""
             log.info("Slide %s pulita col codice ma scartata al controllo: %s", slide.get("numero"), problems)
             slide.pop("_canva", None)
@@ -367,7 +406,7 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
             placements: list = []
             img = textslide.render_blocks(clean, orig_fit, blocks, placements)
             slide["_canva"] = {"tipo": "testo", "righe": placements}
-            slide["_sfondo"] = add_brand_mark(clean, brand) if needs_logo(slide, brand) else clean
+            slide["_sfondo"] = add_brand_mark(clean, brand, _avoid_boxes(slide, *clean.size)) if needs_logo(slide, brand) else clean
         elif mode == "overlay":
             img = draw_text_overlay(img, testo, brand)
         if config.SLIDE_CHECK:
@@ -376,7 +415,7 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
                 log.info("Slide %s scartata al controllo (tentativo %s): %s", slide.get("numero"), attempt + 1, problems)
                 feedback, best = problems, img
                 continue
-        img = add_brand_mark(img, brand) if needs_logo(slide, brand) else img
+        img = add_brand_mark(img, brand, _avoid_boxes(slide, *img.size)) if needs_logo(slide, brand) else img
         return img, True, ""
     # Nessun tentativo valido: restituiamo l'ultima prova (o l'originale) solo per riferimento, segnata come fallita.
     img = best or _fit(original, size)
@@ -404,12 +443,18 @@ async def render_all(post: dict, originals: list[bytes], brand: dict, job_dir: P
     paths: list[Path] = [job_dir / f"slide_{i + 1:02d}.jpg" for i in range(len(slides))]
     failed: list[int] = []
     version = len(list(job_dir.glob("*.jpg")))
+    # il nostro logo: solo sulla prima slide, e solo se il post è di un'altra pagina (aveva il suo watermark)
+    wm_post = any((sl.get("watermark_originale") or "").strip() for sl in slides
+                  if not sl.get("_cta_riscritta") and "CTA AttraiSeduci" not in (sl.get("testo") or ""))
+    if not brand.get("watermark", {}).get("solo_se_presente", True):
+        wm_post = True
 
     async def one(i: int):
         if only is not None and (i + 1) not in only and existing and i < len(existing) and existing[i].exists():
             paths[i] = existing[i]
             return
         src = originals[min(i, len(originals) - 1)]
+        slides[i]["_metti_logo"] = (i == 0 and wm_post)
         async with sem:
             img, ok, problems = await asyncio.to_thread(render_slide, src, slides[i], brand, config.SLIDE_TEXT_MODE)
         if not ok:
@@ -421,7 +466,8 @@ async def render_all(post: dict, originals: list[bytes], brand: dict, job_dir: P
             bp = job_dir / f"sfondo_{i + 1:02d}_v{version}.jpg"
             await asyncio.to_thread(sfondo.save, bp, "JPEG", quality=95)
             slides[i]["_canva"]["sfondo"] = str(bp)
-        if ok and not slides[i].get("da_modificare", True) and not (slides[i].get("watermark_originale") or "").strip():
+        if (ok and not slides[i].get("da_modificare", True) and not (slides[i].get("watermark_originale") or "").strip()
+                and not slides[i].get("_metti_logo")):
             p = job_dir / f"slide_{i + 1:02d}_v{version}.jpg"
             p.write_bytes(src)                     # copia esatta dell'originale, nessuna perdita di qualità
         else:

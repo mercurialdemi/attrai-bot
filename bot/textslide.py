@@ -40,6 +40,7 @@ class Layout:
     mask: np.ndarray      # pixel da cancellare (testo + marchi)
     line_ratio: float = 1.32
     blank_ratio: float = 0.8
+    right: int = 0        # bordo destro del testo originale (per capire se il blocco era centrato nella slide)
 
 
 def _font(weight: str, size: int) -> ImageFont.FreeTypeFont:
@@ -162,7 +163,7 @@ def analyze(img: Image.Image, original_text: str = "") -> Layout | None:
     return Layout(bg=tuple(int(c) for c in bg), color=color, weight=weight, align=align, left=left,
                   top=int(top), bottom=int(bottom), width=width, size=max(14, size),
                   centered_v=abs(block_center - H / 2) < H * 0.08, mask=erase,
-                  line_ratio=line_ratio, blank_ratio=blank_ratio)
+                  line_ratio=line_ratio, blank_ratio=blank_ratio, right=int(np.max(rights)))
 
 
 def _dilate(m: np.ndarray, r: int) -> np.ndarray:
@@ -278,6 +279,11 @@ def render(img: Image.Image, lay: Layout, text: str, placements: list | None = N
         y = int((H - total) / 2)
     else:
         y = max(int(H * 0.06), min(lay.top - int(size * 0.2), int(H - total - H * 0.08)))
+    left = lay.left
+    if lay.align != "center" and lay.right and abs((lay.left + lay.right) / 2 - W / 2) < W * 0.045:
+        # testo allineato a sinistra ma blocco centrato nella slide: si ricentra il blocco italiano
+        block_w = max((draw.textlength(ln, font=font) for ln in lines if ln), default=0)
+        left = int((W - block_w) / 2)
     for ln in lines:
         if not ln:
             y += blank_h
@@ -285,7 +291,7 @@ def render(img: Image.Image, lay: Layout, text: str, placements: list | None = N
         if lay.align == "center":
             x = (W - draw.textlength(ln, font=font)) / 2
         else:
-            x = lay.left
+            x = left
         draw.text((x, y), ln, font=font, fill=lay.color)
         if placements is not None:
             placements.append({"testo": ln, "x": float(x), "y": float(y), "size": size,
@@ -608,13 +614,18 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
         if y + top_off < margin:
             y = margin - top_off
         space = draw.textlength(" ", font=font)
+        al = bl.get("allineamento", "left")
+        x_left = box[0]
+        if al == "left" and abs((box[0] + box[2]) / 2 - W / 2) < W * 0.045:
+            # blocco centrato nella slide: resta centrato anche se le righe italiane hanno lunghezza diversa
+            widest = max((_line_w(draw, ln, font, bfont) for ln in lines if ln), default=0)
+            x_left = int((W - widest) / 2)
         for ln in lines:
             if ln is None:
                 y += int(font.size * 0.6)
                 continue
             tw = _line_w(draw, ln, font, bfont)
-            al = bl.get("allineamento", "left")
-            x = box[0] if al == "left" else (box[2] - tw if al == "right" else box[0] + (bw - tw) / 2)
+            x = x_left if al == "left" else (box[2] - tw if al == "right" else box[0] + (bw - tw) / 2)
             runs = []
             for w, fl in ln:
                 c = hl_color if fl & 1 else color
@@ -623,7 +634,7 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
                 runs.append((w, c, bool(fl & 2)))
                 x += draw.textlength(w, font=f) + space
             if placements is not None:
-                x_start = box[0] if al == "left" else (box[2] - tw if al == "right" else box[0] + (bw - tw) / 2)
+                x_start = x_left if al == "left" else (box[2] - tw if al == "right" else box[0] + (bw - tw) / 2)
                 placements.append({"testo": " ".join(w for w, _ in ln), "x": float(x_start), "y": float(y),
                                    "size": font.size, "weight": weight, "color": color,
                                    "runs": [[w, list(c), b] for w, c, b in runs]})
