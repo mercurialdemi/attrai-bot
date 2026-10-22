@@ -30,6 +30,7 @@ HELP = (
     "/report per lanciare subito il report, /altri per i post successivi della classifica\n"
     "/pagine per le pagine monitorate\n"
     "/analizza per studiare i post di AttraiSeduci e scrivere descrizioni come le tue migliori, /stile per vedere la guida\n"
+    "Slide CTA finale: mandami l'immagine con didascalia \"cta segui\" (o \"cta friendzone\", \"cta potere-sociale\"...)\n"
     "/id per il tuo ID Telegram"
 )
 
@@ -101,9 +102,14 @@ async def cmd_analizza(update: Update, context: ContextTypes.DEFAULT_TYPE):
     async def go():
         try:
             style = await asyncio.to_thread(analysis.run_analysis, writer.load_brand())
+            cta_txt = "\n".join(f"• {c['rendimento']}x · {c['testo'][:140]}" for c in style.get("cta_migliori", [])[:5])
+            slides_txt = ", ".join(style.get("slide_cta", {}).keys()) or "nessuna trovata"
             await status.edit_text(
                 f"Studio fatto su {style['post_analizzati']} post. Da ora scrivo le descrizioni con questa guida "
-                f"e {len(style['esempi'])} esempi tuoi:\n\n{style['guida']}"[:4000])
+                f"e {len(style['esempi'])} esempi tuoi:\n\n{style['guida']}"[:2500]
+                + f"\n\nCTA che rendono di più:\n{cta_txt or '(nessuna)'}"
+                + f"\n\n{style.get('lezioni_cta', '')}"[:800]
+                + f"\n\nSlide CTA prese dai tuoi caroselli: {slides_txt}.")
         except instagram.InstagramError as e:
             await status.edit_text(str(e))
         except Exception:
@@ -184,6 +190,10 @@ async def process_revision(update: Update, context: ContextTypes.DEFAULT_TYPE, j
         old_failed = set(old.get("_fallite") or [])
         jdir = job["slide_paths"][0].parent
         originals = [p.read_bytes() for p in sorted((jdir / "originali").glob("*.jpg"))]
+        n_orig = len(originals)
+        # slide aggiunte dopo l'originale (es. la nostra CTA finale): restano com'erano
+        extra_slides = old["slides"][n_orig:]
+        extra_paths = job["slide_paths"][n_orig:]
 
         if RETRY_RE.match(instruction):
             if not old_failed:
@@ -195,7 +205,8 @@ async def process_revision(update: Update, context: ContextTypes.DEFAULT_TYPE, j
             new = await asyncio.to_thread(writer.revise_post, old, instruction, brand,
                                           storage.list_rules(), storage.recent_style())
             new["slides"] = new["slides"][:len(originals)]
-            changed = _changed_slides(old, new)
+            changed = {n for n in _changed_slides(old, new)
+                       if n <= n_orig and "(slide CTA" not in (new["slides"][n - 1].get("testo") or "")}
             for n in changed:                       # una slide che Gabriele vuole cambiare va rifatta anche se era già italiana
                 if 1 <= n <= len(new["slides"]):
                     new["slides"][n - 1]["da_modificare"] = True
@@ -204,8 +215,11 @@ async def process_revision(update: Update, context: ContextTypes.DEFAULT_TYPE, j
         new_failed: list[int] = []
         if changed:
             await status.edit_text(f"Rifaccio le slide {', '.join(map(str, sorted(changed)))}…")
+            new["slides"] = new["slides"][:n_orig]
             paths, new_failed = await images.render_all(new, originals, brand, jdir, only=changed,
-                                                        existing=job["slide_paths"])
+                                                        existing=job["slide_paths"][:n_orig])
+            paths = paths + extra_paths
+        new["slides"] = new["slides"][:n_orig] + extra_slides
         failed = sorted((old_failed - changed) | set(new_failed))
         new["slide_da_rifare"] = []
         new["_fallite"] = failed
@@ -242,6 +256,24 @@ async def on_media(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif msg.document and (msg.document.mime_type or "").startswith("image/"):
         file_id = msg.document.file_id
     else:
+        return
+    cm = re.match(r"^\s*cta\s*:?\s*([\w-]+)\s*$", msg.caption or "", re.IGNORECASE)
+    if cm:   # slide CTA di AttraiSeduci da mettere in fondo ai caroselli
+        brand = writer.load_brand()
+        ids = {"segui"} | {m["id"] for m in brand.get("manuali", [])}
+        k = cm.group(1).lower()
+        if k not in ids:
+            await msg.reply_text(f"Non conosco \"{k}\". Usa uno di questi: {', '.join(sorted(ids))}.")
+            return
+        f = await context.bot.get_file(file_id)
+        pipeline.cta_dir().mkdir(parents=True, exist_ok=True)
+        data = bytes(await f.download_as_bytearray())
+        from PIL import Image as _I
+        import io as _io
+        _I.open(_io.BytesIO(data)).convert("RGB").save(pipeline.cta_dir() / f"{k}.jpg", "JPEG", quality=95)
+        (pipeline.cta_dir() / f"{k}.manuale").write_text("caricata a mano")
+        await msg.reply_text(f"Slide CTA \"{k}\" salvata: la metto in fondo ai caroselli con CTA {k}."
+                             + (" Se manca quella di un manuale, uso questa." if k == "segui" else ""))
         return
     key = str(msg.chat_id)   # tutte le immagini inviate di seguito nella chat (anche più album) = un post
     album = _albums.setdefault(key, {"items": [], "caption": "", "first": msg, "task": None})

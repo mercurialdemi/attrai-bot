@@ -31,6 +31,8 @@ REPORT_CHAT_IDS = {
 
 # --- Modelli (cambiabili senza toccare il codice) ---
 CLAUDE_MODEL = _env("CLAUDE_MODEL", "claude-sonnet-5-5")
+# La descrizione è il testo che vende: la scrive il modello più forte nella scrittura (una chiamata per post)
+CAPTION_MODEL = _env("CAPTION_MODEL", "claude-opus-5-5")
 GEMINI_IMAGE_MODEL = _env("GEMINI_IMAGE_MODEL", "gemini-2.5-flash-image")
 APIFY_ACTOR = _env("APIFY_ACTOR", "apify/instagram-scraper")
 # Per i post con limite d'età: cookie di un account Instagram secondario ("sessionid=...; csrftoken=...")
@@ -42,9 +44,10 @@ CHECK_MODEL = _env("CHECK_MODEL", "claude-haiku-5-5")
 SLIDE_CHECK = _env("SLIDE_CHECK", "on").lower() not in ("off", "0", "no", "false")
 SLIDE_ATTEMPTS = int(_env("SLIDE_ATTEMPTS", "3"))   # tentativi Gemini per slide prima di segnalarla
 
+# "codice"  = (consigliato) Gemini cancella solo il testo, il testo italiano di Claude lo scrive il codice.
 # "gemini"  = Gemini riscrive il testo in italiano direttamente sulla slide originale (stesso stile).
 # "overlay" = Gemini pulisce la slide da testi e watermark, il testo italiano lo scrive il codice.
-SLIDE_TEXT_MODE = _env("SLIDE_TEXT_MODE", "gemini").lower()
+SLIDE_TEXT_MODE = _env("SLIDE_TEXT_MODE", "codice").lower()
 
 # --- File e cartelle ---
 DATA_DIR = Path(_env("DATA_DIR", str(ROOT / "data")))

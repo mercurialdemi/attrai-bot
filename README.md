@@ -21,9 +21,23 @@ Il bot accetta i link che gli mandate senza controlli: sta a voi mandare solo po
 - **Controllo automatico:** ogni slide prodotta da Gemini viene riletta da Claude. Se il testo ha errori o restano parti in inglese o il vecchio watermark, Gemini riprova con l'indicazione di cosa correggere, fino a 3 volte.
 - **Post incompleti:** se una slide non passa il controllo dopo tutti i tentativi, non viene inviata e il post arriva marcato "POST INCOMPLETO, non pubblicarlo". Scrivi `riprova` per rifare solo quelle slide.
 
+## Testo delle slide
+
+Il testo delle slide lo scrive sempre Claude e lo disegna il codice, mai Gemini:
+- slide di solo testo su sfondo uniforme: il codice cancella il testo originale e riscrive l'italiano nello stesso punto, stessa dimensione, colore e allineamento (font Inter);
+- slide con illustrazioni: Gemini cancella solo il testo, poi il codice scrive l'italiano nei riquadri del testo originale indicati da Claude.
+
+## Slide CTA finale
+
+In fondo a ogni carosello va la vostra slide CTA (segui la pagina o il manuale scelto), al posto della CTA della pagina di origine. Le slide CTA le prende /analizza dai vostri caroselli migliori; puoi anche caricarle a mano mandando al bot l'immagine con didascalia `cta segui` (o `cta friendzone`, `cta potere-sociale`...). Quelle caricate a mano hanno la precedenza.
+
+## File per Canva
+
+Con ogni post arriva un file .pptx: in Canva → Crea → Importa file. Nelle slide di testo le scritte sono modificabili.
+
 ## Studio della pagina: /analizza
 
-Legge gli ultimi 80 post di AttraiSeduci, confronta le descrizioni dei migliori con quelle dei peggiori e ricava una guida di stile concreta (aperture, struttura, ritmo, dolori che rendono, come chiudete, cosa evitare). Sceglie anche 6-8 tue descrizioni come esempi. Da quel momento ogni descrizione viene scritta seguendo la guida, con 3 esempi diversi ogni volta. `/stile` mostra la guida attuale. Conviene rilanciarlo una volta al mese.
+Legge gli ultimi 80 post di AttraiSeduci, confronta le descrizioni dei migliori con quelle dei peggiori e ricava una guida di stile concreta (aperture, struttura, ritmo, dolori che rendono, come chiudete, cosa evitare). Sceglie anche 6-8 tue descrizioni come esempi, estrae le CTA di ogni post e le ordina per rendimento: metà delle volte il bot riusa (adattata) una delle CTA migliori, l'altra metà ne scrive una nuova sulle stesse leve. Il rendimento si misura su like e commenti rispetto alla media: i clic sul link arriveranno con le API di Instagram. Da quel momento ogni descrizione viene scritta seguendo la guida, con 3 esempi diversi ogni volta. `/stile` mostra la guida attuale. Conviene rilanciarlo una volta al mese.
 
 ## Report delle 8
 

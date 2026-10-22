@@ -34,9 +34,29 @@ _SLIDE_ITEM = {
         "testo_originale": {"type": "string", "description": "Il testo che leggi sulla slide originale (vuoto se non ce n'è)."},
         "testo": {"type": "string", "description": "Il testo italiano che va sulla slide, con gli stessi a capo dell'originale. Vuoto se la slide non ha testo."},
         "watermark_originale": {"type": "string", "description": "Handle, nome o logo di una pagina DIVERSA dalla nostra visibile sulla slide e dove si trova (es. '@pagina in basso a destra'). Vuoto se assente o se è il nostro."},
+        "blocchi": {
+            "type": "array",
+            "description": "Ogni blocco di testo separato della slide (titolo, paragrafo, didascalia), in ordine di lettura. Vuoto se la slide non ha testo.",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "testo": {"type": "string", "description": "Il testo italiano di questo blocco, con gli a capo."},
+                    "x": {"type": "integer", "description": "Bordo sinistro del testo ORIGINALE, in millesimi della larghezza (0-1000)."},
+                    "y": {"type": "integer", "description": "Bordo superiore del testo originale, in millesimi dell'altezza (0-1000)."},
+                    "w": {"type": "integer", "description": "Larghezza del riquadro del testo originale, in millesimi della larghezza."},
+                    "h": {"type": "integer", "description": "Altezza del riquadro del testo originale, in millesimi dell'altezza."},
+                    "colore": {"type": "string", "description": "Colore del testo, es. #FFFFFF."},
+                    "allineamento": {"type": "string", "enum": ["left", "center", "right"]},
+                    "peso": {"type": "string", "enum": ["regular", "semibold", "bold"]},
+                    "maiuscolo": {"type": "boolean", "description": "true se l'originale è tutto in maiuscolo."},
+                },
+                "required": ["testo", "x", "y", "w", "h", "colore", "allineamento", "peso", "maiuscolo"],
+            },
+        },
+        "e_cta": {"type": "boolean", "description": "true se la slide è una call to action (segui la pagina, salva, condividi, link in bio, acquista), di qualsiasi pagina."},
         "da_modificare": {"type": "boolean", "description": "true solo se la slide va cambiata: testo non in italiano, oppure CTA/handle/watermark di un'altra pagina. false se è già in italiano e non ha riferimenti ad altre pagine: in quel caso la slide resta identica all'originale."},
     },
-    "required": ["numero", "testo_originale", "testo", "watermark_originale", "da_modificare"],
+    "required": ["numero", "testo_originale", "testo", "watermark_originale", "blocchi", "e_cta", "da_modificare"],
 }
 
 _CTA = {
@@ -240,6 +260,10 @@ Ricevi le slide di un post di una pagina collaboratrice che ci ha autorizzato a 
 - Unica eccezione alla fedeltà: se una slide contiene una CTA o un riferimento alla pagina di origine
   (segui @..., link in bio, nome della pagina), sostituiscilo con il nostro equivalente per {brand['nome']}.
 - Niente asterischi, niente trattini lunghi.
+- In blocchi descrivi ogni blocco di testo separato: testo italiano e riquadro che occupa il testo ORIGINALE
+  (in millesimi, stretto attorno alle lettere), colore, allineamento, spessore, maiuscolo. Il testo verrà
+  riscritto esattamente lì sopra l'immagine ripulita, quindi le misure devono essere accurate.
+  Non includere nei blocchi il watermark o l'handle della pagina.
 - Segnala in watermark_originale handle, nome o logo di un'altra pagina e dove si trova. Se è il nostro (@{brand['handle']}, {brand['nome']}) o non c'è, lascialo vuoto.
 - da_modificare = false per le slide già in italiano e senza riferimenti ad altre pagine (comprese le slide con la nostra CTA o il nostro profilo): restano identiche all'originale e testo = testo_originale.
 
@@ -274,6 +298,27 @@ def translate_slides(caption: str, owner: str, images: list[bytes], brand: dict,
 
 # ---------------------------------------------------------------- 2. descrizione e CTA
 
+def _cta_memory(style: dict) -> str:
+    """CTA che hanno reso di più sulla nostra pagina (da /analizza): circa metà delle volte se ne riusa
+    una adattata al post, l'altra metà se ne scrive una nuova costruita sulle stesse leve."""
+    best = style.get("cta_migliori") or []
+    if not best:
+        return ""
+    lines = "\n".join(f"- ({c['rendimento']}x la media, {c['tipo']}{' ' + c['manuale'] if c.get('manuale') else ''}) {c['testo']}"
+                       for c in best[:8])
+    worst = "\n".join(f"- {c['testo']}" for c in (style.get("cta_peggiori") or [])[:4])
+    if random.random() < 0.5:
+        mode = ("In questo post RIUSA una delle CTA migliori qui sotto (quella più adatta al tema e al tipo di CTA "
+                "richiesto), adattandola al dolore del post: stessa struttura e stessa leva, parole aggiornate.")
+    else:
+        mode = ("In questo post scrivi una CTA NUOVA, costruita sulle stesse leve delle CTA migliori qui sotto, "
+                "senza copiarle.")
+    return (f"\nCTA CHE HANNO RESO DI PIÙ SULLA NOSTRA PAGINA:\n{lines}\n"
+            + (f"Lezioni dallo studio: {style.get('lezioni_cta')}\n" if style.get("lezioni_cta") else "")
+            + (f"CTA da NON imitare (post che hanno reso poco):\n{worst}\n" if worst else "")
+            + mode)
+
+
 def _caption_system(brand: dict, rules: list[dict], recent: dict) -> str:
     manuali = "\n".join(
         f"- id: {m['id']} | {m['nome']} | dolori che risolve: {' '.join(str(m.get('dolori', '')).split())}"
@@ -299,6 +344,14 @@ POSIZIONAMENTO
 TONO
 {chr(10).join('- ' + t for t in brand.get('tono', []))}
 
+FLUIDITÀ (la descrizione deve sembrare scritta di getto da un italiano, non tradotta)
+- Frasi brevi e parlate, ritmo da messaggio vocale: una idea per frase, molti a capo.
+- Vietati i calchi dall'inglese e le formule da traduzione: "il fatto è che", "questo significa che",
+  "è importante notare", "alla fine della giornata", "fare la differenza", "in termini di", "nel momento in cui".
+- Niente elenchi di concetti astratti in fila: meglio un esempio concreto, una scena, una frase che punge.
+- Usa il tu diretto, il presente, parole semplici. Se una frase suona da libro, riscrivila come la diresti a voce.
+- Prima di consegnare rileggi tutto come se lo leggessi ad alta voce e sistema ogni punto che inciampa.
+
 FORMATO
 {chr(10).join('- ' + t for t in brand.get('regole_formato', []))}
 {('GUIDA DI STILE RICAVATA DAI NOSTRI POST MIGLIORI' + chr(10) + guida + chr(10)) if guida else ''}{esempi_txt}
@@ -312,6 +365,7 @@ Cita solo autori e studi reali che conosci con certezza; se non sei sicuro, non 
 CTA
 {brand['cta']['regola'].strip()}
 {brand['cta']['stile'].strip()}
+{_cta_memory(style)}
 Dove si compra: {brand['cta'].get('dove_si_compra', 'link in bio')}.
 Manuali disponibili:
 {manuali}
@@ -331,7 +385,12 @@ def write_caption(slides_out: dict, caption: str, brand: dict, rules: list[dict]
         "Scrivi la nostra descrizione con lo strumento descrizione_pronta, seguendo le nostre regole, "
         "e sostituisci la CTA originale con la nostra."
     )}]
-    return _tool_call(_caption_system(brand, rules, recent), content, CAPTION_TOOL, max_tokens=4000)
+    system = _caption_system(brand, rules, recent)
+    try:
+        return _tool_call(system, content, CAPTION_TOOL, model=config.CAPTION_MODEL, max_tokens=6000)
+    except (anthropic.NotFoundError, anthropic.PermissionDeniedError) as e:
+        log.warning("Modello %s non disponibile, uso %s: %s", config.CAPTION_MODEL, config.CLAUDE_MODEL, e)
+        return _tool_call(system, content, CAPTION_TOOL, max_tokens=6000)
 
 
 def create_post(caption: str, owner: str, images: list[bytes], brand: dict,

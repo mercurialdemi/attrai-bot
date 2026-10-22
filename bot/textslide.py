@@ -254,3 +254,93 @@ def render(img: Image.Image, lay: Layout, text: str, placements: list | None = N
                                "weight": lay.weight, "color": lay.color})
         y += line_h
     return out
+
+
+# ---------------------------------------------------------------- slide con grafica: testo scritto sui blocchi
+
+def _hex(c: str) -> tuple:
+    c = (c or "#FFFFFF").lstrip("#")
+    try:
+        return tuple(int(c[i:i + 2], 16) for i in (0, 2, 4))
+    except ValueError:
+        return (255, 255, 255)
+
+
+def refine_box(original: Image.Image, cleaned: Image.Image, box: tuple[int, int, int, int]):
+    """Stringe il riquadro indicato da Claude attorno ai pixel che Gemini ha davvero cancellato
+    (dove originale e immagine pulita differiscono), e ricava il colore reale del testo."""
+    W, H = original.size
+    x0, y0, x1, y1 = box
+    pad_x, pad_y = int(W * 0.04), int(H * 0.03)
+    X0, Y0, X1, Y1 = max(0, x0 - pad_x), max(0, y0 - pad_y), min(W, x1 + pad_x), min(H, y1 + pad_y)
+    a = np.asarray(original.crop((X0, Y0, X1, Y1)).convert("RGB")).astype(np.int16)
+    b = np.asarray(cleaned.crop((X0, Y0, X1, Y1)).convert("RGB")).astype(np.int16)
+    diff = np.abs(a - b).max(axis=2) > 90
+    if diff.sum() < 30:
+        return box, None
+    ys, xs = np.where(diff)
+    ry0, ry1 = np.percentile(ys, [1, 99]).astype(int)
+    rx0, rx1 = np.percentile(xs, [1, 99]).astype(int)
+    color = tuple(int(c) for c in np.median(a[diff], axis=0))
+    new = (X0 + rx0, Y0 + ry0, X0 + rx1, Y0 + ry1)
+    # accetta la correzione solo se è coerente con il riquadro di Claude (stessa zona, dimensioni simili):
+    # se Gemini ha spostato o cambiato altri elementi, la differenza non è solo il testo e si tiene il riquadro di Claude
+    area_new = (new[2] - new[0]) * (new[3] - new[1])
+    area_old = max(1, (x1 - x0) * (y1 - y0))
+    cx_shift = abs((new[0] + new[2]) - (x0 + x1)) / 2
+    cy_shift = abs((new[1] + new[3]) - (y0 + y1)) / 2
+    if (new[2] - new[0] < (x1 - x0) * 0.35 or new[3] - new[1] < (y1 - y0) * 0.3
+            or area_new > area_old * 2.2 or cx_shift > W * 0.12 or cy_shift > H * 0.08):
+        return box, (color if diff.mean() < 0.5 else None)
+    return new, color
+
+
+def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict],
+                  placements: list | None = None) -> Image.Image:
+    """Scrive i blocchi di testo italiano sull'immagine ripulita, nei riquadri del testo originale."""
+    out = cleaned.copy()
+    W, H = out.size
+    draw = ImageDraw.Draw(out)
+    for bl in blocks:
+        text = (bl.get("testo") or "").strip()
+        if not text:
+            continue
+        if bl.get("maiuscolo"):
+            text = text.upper()
+        box = (int(bl["x"] / 1000 * W), int(bl["y"] / 1000 * H),
+               int((bl["x"] + bl["w"]) / 1000 * W), int((bl["y"] + bl["h"]) / 1000 * H))
+        box, color = refine_box(original, cleaned, box)
+        color = color or _hex(bl.get("colore"))
+        bw, bh = max(40, box[2] - box[0]), max(20, box[3] - box[1])
+        weight = bl.get("peso") or "regular"
+        # il corpo più grande che fa stare il testo nel riquadro (con un po' di tolleranza in altezza)
+        size, best = max(14, int(bh)), None
+        while size >= 14:
+            font = _font(weight, size)
+            lines = _wrap(draw, text, font, int(bw * 1.04))
+            lh = int(size * 1.25)
+            total = sum(int(size * 0.7) if not ln else lh for ln in lines)
+            widest = max((draw.textlength(ln, font=font) for ln in lines if ln), default=0)
+            if total <= bh * 1.12 and widest <= bw * 1.06:
+                best = (font, lines, lh, total)
+                break
+            size -= 1 if size < 40 else 2
+        if not best:
+            font = _font(weight, 14)
+            lines = _wrap(draw, text, font, bw)
+            best = (font, lines, int(14 * 1.25), len(lines) * int(14 * 1.25))
+        font, lines, lh, total = best
+        y = box[1] + (bh - total) / 2
+        for ln in lines:
+            if not ln:
+                y += int(size * 0.7)
+                continue
+            tw = draw.textlength(ln, font=font)
+            al = bl.get("allineamento", "left")
+            x = box[0] if al == "left" else (box[2] - tw if al == "right" else box[0] + (bw - tw) / 2)
+            draw.text((x, y), ln, font=font, fill=color)
+            if placements is not None:
+                placements.append({"testo": ln, "x": float(x), "y": float(y), "size": font.size,
+                                   "weight": weight, "color": color})
+            y += lh
+    return out

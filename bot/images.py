@@ -253,11 +253,14 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
                 slide["_sfondo"] = add_brand_mark(slide["_sfondo"], brand)
             return img, True, ""
     original_jpeg = _jpeg(original)
+    orig_fit = _fit(original, size)
     feedback, problems = "", ""
     best: Image.Image | None = None
     for attempt in range(max(1, config.SLIDE_ATTEMPTS)):
         try:
-            edited = _gemini_edit(original, _prompt(slide, mode, feedback))
+            has_blocks = any((b.get("testo") or "").strip() for b in (slide.get("blocchi") or []))
+            gmode = "overlay" if (mode == "codice" and has_blocks) else ("gemini" if mode == "codice" else mode)
+            edited = _gemini_edit(original, _prompt(slide, gmode, feedback))
         except Exception as e:  # rete, quota, filtri di sicurezza
             log.warning("Gemini tentativo %s fallito: %s", attempt + 1, e)
             problems = "Gemini non ha risposto"
@@ -266,7 +269,15 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
             problems = "Gemini non ha prodotto l'immagine"
             continue
         img = _fit(edited, size)
-        if mode == "overlay":
+        blocks = [b for b in (slide.get("blocchi") or []) if (b.get("testo") or "").strip()]
+        if mode == "codice" and blocks:
+            # Gemini ha solo ripulito: il testo di Claude lo scrive il codice negli stessi riquadri
+            clean = img
+            placements: list = []
+            img = textslide.render_blocks(clean, orig_fit, blocks, placements)
+            slide["_canva"] = {"tipo": "testo", "righe": placements}
+            slide["_sfondo"] = add_brand_mark(clean, brand) if needs_logo(slide, brand) else clean
+        elif mode == "overlay":
             img = draw_text_overlay(img, testo, brand)
         if config.SLIDE_CHECK:
             ok, problems = writer.check_slide(_jpeg(img), testo, slide.get("watermark_originale", ""), original_jpeg)

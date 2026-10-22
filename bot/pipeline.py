@@ -37,8 +37,49 @@ async def build_post(src: instagram.SourcePost, brand: dict, suffix: str,
     da_fare = sum(1 for x in post["slides"] if x.get("da_modificare", True) or x.get("watermark_originale"))
     await status(f"Preparo le slide: {da_fare} da rifare in italiano, {len(post['slides']) - da_fare} già a posto…")
     paths, failed = await images.render_all(post, originals, brand, jdir)
+    paths, failed = apply_cta_slide(post, paths, failed, jdir)
     post["_fallite"] = failed
     return post, paths, failed
+
+
+def cta_dir() -> Path:
+    return config.DATA_DIR / "cta"
+
+
+def cta_file(key: str) -> Path | None:
+    for k in (key, "segui"):
+        p = cta_dir() / f"{k}.jpg"
+        if k and p.exists():
+            return p
+    return None
+
+
+def apply_cta_slide(post: dict, paths: list[Path], failed: list[int], jdir: Path):
+    """In fondo al carosello va sempre la nostra slide CTA: sostituisce la CTA della pagina di origine
+    (se c'è) oppure si aggiunge come ultima slide."""
+    cta = post.get("cta") or {}
+    key = cta.get("manuale") if cta.get("tipo") == "manuale" else "segui"
+    src = cta_file(key or "segui")
+    if not src or post.get("formato") == "singolo":
+        if not src:
+            post["_avviso"] = ((post.get("_avviso") or "") + "\nManca la vostra slide CTA finale: mandamela come "
+                               "immagine con didascalia \"cta segui\" (o \"cta friendzone\", ecc.).").strip()
+        return paths, failed
+    slides = post["slides"]
+    target = paths[0].parent / f"cta_{key}.jpg"
+    target.write_bytes(src.read_bytes())
+    cta_idx = [i for i, sl in enumerate(slides) if sl.get("e_cta")]
+    if cta_idx and cta_idx[-1] >= len(slides) - 2:          # la CTA originale è in fondo: la sostituiamo
+        i = cta_idx[-1]
+        paths = paths[:i] + [target] + paths[i + 1:]
+        slides[i] = {**slides[i], "_canva": {"tipo": "immagine"}, "testo": "(slide CTA AttraiSeduci)"}
+        failed = [n for n in failed if n != i + 1]
+    else:
+        paths = paths + [target]
+        slides.append({"numero": len(slides) + 1, "testo": "(slide CTA AttraiSeduci)", "testo_originale": "",
+                       "watermark_originale": "", "e_cta": True, "da_modificare": False,
+                       "_canva": {"tipo": "immagine"}})
+    return paths, failed
 
 
 def summary(post: dict, failed: list[int], header: str = "") -> str:
@@ -90,6 +131,14 @@ async def send_post(bot, chat_id: int, job_id: int, post: dict, paths: list[Path
             sent.append(m)
     sent.append(await bot.send_message(chat_id, post["descrizione"]))
     sent.append(await bot.send_message(chat_id, summary(post, failed, header)))
+    if failed and paths:
+        orig_dir = paths[0].parent / "originali"
+        for n in failed:
+            op = orig_dir / f"{n:02d}.jpg"
+            if op.exists():
+                pr = post["slides"][n - 1].get("_problema", "") if n <= len(post["slides"]) else ""
+                sent.append(await bot.send_photo(chat_id, op.read_bytes(),
+                                                 caption=f"Questa è la slide {n} originale, non riuscita. {pr}"[:1000]))
     for m in sent:
         storage.link_message(chat_id, m.message_id, job_id)
 
