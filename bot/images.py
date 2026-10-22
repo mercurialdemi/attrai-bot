@@ -225,6 +225,33 @@ def _jpeg(img: Image.Image) -> bytes:
     return buf.getvalue()
 
 
+def _remove_watermark(clean: Image.Image, orig_fit: Image.Image, slide: dict):
+    """Watermark della pagina di origine: lo cancella col codice se sta su sfondo uniforme nella fascia bassa
+    o alta (dove di solito si trova), altrimenti lo lascia a Gemini con un'unica modifica mirata."""
+    W, H = clean.size
+    pos = (slide.get("watermark_originale") or "").lower()
+    bands = []
+    if any(k in pos for k in ("basso", "bottom", "sotto")) or not any(k in pos for k in ("alto", "top", "sopra")):
+        bands.append((8, int(H * 0.86), W - 8, H - 8))
+    if any(k in pos for k in ("alto", "top", "sopra")):
+        bands.append((8, 8, W - 8, int(H * 0.12)))
+    done = False
+    for band in bands:
+        bg = textslide.local_background(clean, band)
+        if bg is not None:
+            clean, _, _ = textslide.erase_local(clean, band, bg)
+            done = True
+    if done:
+        return clean
+    try:
+        edited = _gemini_edit(clean, _prompt({**slide, "testo": ""}, "gemini"))
+        if edited is not None:
+            return _fit(edited, clean.size)
+    except Exception as e:
+        log.warning("Rimozione watermark con Gemini fallita: %s", e)
+    return clean
+
+
 def needs_logo(slide: dict, brand: dict) -> bool:
     wm = brand.get("watermark", {})
     if not wm.get("solo_se_presente", True):
@@ -241,7 +268,9 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
         # già in italiano e senza marchi di altre pagine: si consegna l'originale, nessun ritocco
         return original, True, ""
     testo = (slide.get("testo") or "").strip()
-    if config.SLIDE_TEXT_MODE != "gemini-sempre":
+    special = any(b.get("carattere") in ("titolo", "stretto") or (b.get("colore_evidenziato") or "").strip()
+                  for b in (slide.get("blocchi") or []))
+    if config.SLIDE_TEXT_MODE != "gemini-sempre" and not special:
         lay = textslide.analyze(original, slide.get("testo_originale", ""))
         if lay:
             placements: list = []
@@ -254,6 +283,20 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
             return img, True, ""
     original_jpeg = _jpeg(original)
     orig_fit = _fit(original, size)
+    blocks0 = [b for b in (slide.get("blocchi") or []) if (b.get("testo") or "").strip()]
+    if mode == "codice" and blocks0:
+        local = textslide.try_local_clean(orig_fit, blocks0)
+        if local:
+            # il testo sta su fasce/zone di colore uniforme: cancellazione precisa col codice, niente Gemini
+            clean, boxes = local
+            if (slide.get("watermark_originale") or "").strip():
+                clean = _remove_watermark(clean, orig_fit, slide) or clean
+            placements: list = []
+            img = textslide.render_blocks(clean, orig_fit, blocks0, placements, boxes=boxes)
+            slide["_canva"] = {"tipo": "testo", "righe": placements}
+            slide["_sfondo"] = add_brand_mark(clean, brand) if needs_logo(slide, brand) else clean
+            img = add_brand_mark(img, brand) if needs_logo(slide, brand) else img
+            return img, True, ""
     feedback, problems = "", ""
     best: Image.Image | None = None
     for attempt in range(max(1, config.SLIDE_ATTEMPTS)):

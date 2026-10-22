@@ -20,6 +20,8 @@ FONTS = {
     "regular": config.ROOT / "assets" / "testo_regular.otf",
     "semibold": config.ROOT / "assets" / "testo_semibold.otf",
     "bold": config.ROOT / "assets" / "testo_bold.otf",
+    "titolo": config.ROOT / "assets" / "titolo_anton.ttf",          # titoli stretti e pesanti (stile Anton/Bebas)
+    "stretto": config.ROOT / "assets" / "titolo_oswald_bold.ttf",   # stretto ma meno pesante (stile Oswald)
 }
 
 
@@ -42,6 +44,8 @@ class Layout:
 
 def _font(weight: str, size: int) -> ImageFont.FreeTypeFont:
     p = FONTS.get(weight) or FONTS["regular"]
+    if not p.exists():
+        p = FONTS["bold"] if weight in ("titolo", "stretto") else FONTS["regular"]
     if p.exists():
         return ImageFont.truetype(str(p), size)
     return ImageFont.truetype(str(config.FONT_PATH), size) if config.FONT_PATH.exists() else ImageFont.load_default(size=size)
@@ -295,52 +299,206 @@ def refine_box(original: Image.Image, cleaned: Image.Image, box: tuple[int, int,
     return new, color
 
 
+def _tokens(text: str) -> list[list[list[tuple[str, bool]]]]:
+    """Testo -> paragrafi -> righe -> parole (parola, evidenziata). Le parole tra [[ ]] sono evidenziate."""
+    paras = []
+    for para in text.split("\n\n"):
+        rows = []
+        for row in para.split("\n"):
+            words, hl = [], False
+            for w in row.split():
+                start_hl = w.startswith("[[")
+                end_hl = w.endswith("]]")
+                clean = w.replace("[[", "").replace("]]", "")
+                if start_hl:
+                    hl = True
+                if clean:
+                    words.append((clean, hl))
+                if end_hl:
+                    hl = False
+            if words:
+                rows.append(words)
+        if rows:
+            paras.append(rows)
+    return paras
+
+
+def _line_w(draw, words, font) -> float:
+    return draw.textlength(" ".join(w for w, _ in words), font=font)
+
+
+def _layout(draw, paras, font, max_w):
+    """Come _wrap ma con le parole evidenziate. Restituisce righe di parole; None = riga vuota tra paragrafi."""
+    out = []
+    for k, rows in enumerate(paras):
+        if all(_line_w(draw, r, font) <= max_w for r in rows):
+            out += rows
+        else:
+            flat = [w for r in rows for w in r]
+            line = []
+            for w in flat:
+                if not line or _line_w(draw, line + [w], font) <= max_w:
+                    line.append(w)
+                else:
+                    out.append(line)
+                    line = [w]
+            if line:
+                out.append(line)
+        if k < len(paras) - 1:
+            out.append(None)
+    return out
+
+
+def local_background(img: Image.Image, box: tuple[int, int, int, int], exclude: list | None = None):
+    """Se attorno al riquadro del testo lo sfondo è di un colore uniforme (es. fascia nera sotto una foto)
+    restituisce quel colore: il testo si può cancellare con precisione senza Gemini.
+    `exclude` = altri riquadri di testo vicini, da non considerare sfondo."""
+    a = np.asarray(img.convert("RGB")).astype(np.int16)
+    H, W, _ = a.shape
+    x0, y0, x1, y1 = box
+    p = max(6, int(min(W, H) * 0.015))
+    X0, Y0, X1, Y1 = max(0, x0 - p), max(0, y0 - p), min(W, x1 + p), min(H, y1 + p)
+    keep = np.zeros((H, W), dtype=bool)
+    keep[Y0:Y1, X0:X1] = True
+    keep[max(0, y0):max(0, y1), max(0, x0):max(0, x1)] = False      # solo la cornice attorno al testo
+    for ex in exclude or []:
+        ex0, ey0, ex1, ey1 = ex
+        keep[max(0, ey0 - p):min(H, ey1 + p), max(0, ex0 - p):min(W, ex1 + p)] = False
+    ring = a[keep]
+    if len(ring) < 50:
+        return None
+    bg = np.median(ring, axis=0)
+    if (np.abs(ring - bg).max(axis=1) < 30).mean() < 0.88:
+        return None
+    return tuple(int(c) for c in bg)
+
+
+def erase_local(img: Image.Image, box: tuple[int, int, int, int], bg: tuple,
+                exclude: list | None = None) -> tuple[Image.Image, tuple, float | None]:
+    """Cancella il testo dentro il riquadro (su sfondo uniforme). Restituisce l'immagine, il riquadro preciso
+    del testo e la distanza tra le righe dell'originale (per non scrivere più grande dell'originale)."""
+    a = np.asarray(img.convert("RGB")).copy()
+    H, W, _ = a.shape
+    x0, y0, x1, y1 = box
+    p = max(6, int(min(W, H) * 0.015))
+    X0, Y0, X1, Y1 = max(0, x0 - p), max(0, y0 - p), min(W, x1 + p), min(H, y1 + p)
+    sub = a[Y0:Y1, X0:X1].astype(np.int16)
+    ink = np.abs(sub - np.array(bg)).max(axis=2) > 40
+    own = ink.copy()
+    for ex in exclude or []:                       # i pixel degli altri blocchi non contano per questo riquadro
+        ex0, ey0, ex1, ey1 = ex
+        own[max(0, ey0 - Y0):max(0, ey1 - Y0), max(0, ex0 - X0):max(0, ex1 - X0)] = False
+    pitch = None
+    if own.any():
+        ys, xs = np.where(own)
+        tight = (X0 + int(xs.min()), Y0 + int(ys.min()), X0 + int(xs.max()), Y0 + int(ys.max()))
+        rows = _runs(own.sum(axis=1) >= 2, min_gap=2)
+        if len(rows) >= 2:
+            pitch = float(np.median(np.diff([r[0] for r in rows])))
+    else:
+        tight = box
+    m = _dilate(own, 3)
+    sub[m] = np.array(bg)
+    a[Y0:Y1, X0:X1] = sub.astype(np.uint8)
+    return Image.fromarray(a), tight, pitch
+
+
+def block_box(bl: dict, W: int, H: int) -> tuple[int, int, int, int]:
+    return (int(bl["x"] / 1000 * W), int(bl["y"] / 1000 * H),
+            int((bl["x"] + bl["w"]) / 1000 * W), int((bl["y"] + bl["h"]) / 1000 * H))
+
+
+def try_local_clean(original: Image.Image, blocks: list[dict]):
+    """Pulisce col codice tutti i blocchi se ognuno sta su uno sfondo uniforme. Altrimenti None (serve Gemini)."""
+    img, W, H = original, *original.size
+    all_boxes = [block_box(bl, W, H) for bl in blocks]
+    bgs = []
+    for i in range(len(all_boxes)):
+        others = [b for j, b in enumerate(all_boxes) if j != i]
+        found = None
+        # le misure di Claude sono approssimative: si allarga il riquadro a piccoli passi finché attorno c'è solo sfondo
+        for grow in (0, 0.01, 0.02, 0.035, 0.05):
+            x0, y0, x1, y1 = all_boxes[i]
+            gx, gy = int(W * grow), int(H * grow)
+            cand = (max(0, x0 - gx), max(0, y0 - gy), min(W, x1 + gx), min(H, y1 + gy))
+            bg = local_background(img, cand, others)
+            if bg is not None:
+                found = (cand, bg)
+                break
+        if not found:
+            return None
+        all_boxes[i] = found[0]
+        bgs.append(found[1])
+    boxes = []
+    for i, (box, bg) in enumerate(zip(all_boxes, bgs)):
+        img, tight, pitch = erase_local(img, box, bg, [b for j, b in enumerate(all_boxes) if j != i])
+        boxes.append((tight, pitch))
+    return img, boxes
+
+
 def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict],
-                  placements: list | None = None) -> Image.Image:
-    """Scrive i blocchi di testo italiano sull'immagine ripulita, nei riquadri del testo originale."""
+                  placements: list | None = None, boxes: list | None = None) -> Image.Image:
+    """Scrive i blocchi di testo italiano sull'immagine ripulita, nei riquadri del testo originale.
+    `boxes` = riquadri già precisi (pulizia col codice); altrimenti si affinano confrontando con l'originale."""
     out = cleaned.copy()
     W, H = out.size
     draw = ImageDraw.Draw(out)
-    for bl in blocks:
+    for idx, bl in enumerate(blocks):
         text = (bl.get("testo") or "").strip()
         if not text:
             continue
         if bl.get("maiuscolo"):
             text = text.upper()
-        box = (int(bl["x"] / 1000 * W), int(bl["y"] / 1000 * H),
-               int((bl["x"] + bl["w"]) / 1000 * W), int((bl["y"] + bl["h"]) / 1000 * H))
-        box, color = refine_box(original, cleaned, box)
-        color = color or _hex(bl.get("colore"))
+        pitch = None
+        if boxes:
+            (box, pitch), color = boxes[idx], None
+        else:
+            box, color = refine_box(original, cleaned, block_box(bl, W, H))
+        color = _hex(bl.get("colore")) if (boxes or not color) else color
+        hl_color = _hex(bl.get("colore_evidenziato")) if bl.get("colore_evidenziato") else color
         bw, bh = max(40, box[2] - box[0]), max(20, box[3] - box[1])
-        weight = bl.get("peso") or "regular"
-        # il corpo più grande che fa stare il testo nel riquadro (con un po' di tolleranza in altezza)
+        car = bl.get("carattere") or "normale"
+        weight = car if car in ("titolo", "stretto") else (bl.get("peso") or "regular")
+        paras = _tokens(text)
+        ratio = 1.15 if car in ("titolo", "stretto") else 1.25   # spazio per gli accenti sulle maiuscole
         size, best = max(14, int(bh)), None
+        if pitch:                                   # mai più grande dell'originale
+            size = min(size, int(pitch / ratio * 1.02))
         while size >= 14:
             font = _font(weight, size)
-            lines = _wrap(draw, text, font, int(bw * 1.04))
-            lh = int(size * 1.25)
-            total = sum(int(size * 0.7) if not ln else lh for ln in lines)
-            widest = max((draw.textlength(ln, font=font) for ln in lines if ln), default=0)
-            if total <= bh * 1.12 and widest <= bw * 1.06:
+            lines = _layout(draw, paras, font, int(bw * 1.03))
+            lh = int(size * ratio)
+            total = sum(int(size * 0.6) if ln is None else lh for ln in lines)
+            ink_h = total - lh + size * 0.95          # altezza reale delle lettere (l'ultima riga senza interlinea)
+            widest = max((_line_w(draw, ln, font) for ln in lines if ln), default=0)
+            if ink_h <= bh * 1.12 and widest <= bw * 1.05:
                 best = (font, lines, lh, total)
                 break
             size -= 1 if size < 40 else 2
         if not best:
             font = _font(weight, 14)
-            lines = _wrap(draw, text, font, bw)
-            best = (font, lines, int(14 * 1.25), len(lines) * int(14 * 1.25))
+            lines = _layout(draw, paras, font, bw)
+            best = (font, lines, int(14 * ratio), len(lines) * int(14 * ratio))
         font, lines, lh, total = best
-        y = box[1] + (bh - total) / 2
+        y = box[1] + (bh - (total - lh + font.size * 0.95)) / 2 - font.size * 0.05
+        space = draw.textlength(" ", font=font)
         for ln in lines:
-            if not ln:
-                y += int(size * 0.7)
+            if ln is None:
+                y += int(font.size * 0.6)
                 continue
-            tw = draw.textlength(ln, font=font)
+            tw = _line_w(draw, ln, font)
             al = bl.get("allineamento", "left")
             x = box[0] if al == "left" else (box[2] - tw if al == "right" else box[0] + (bw - tw) / 2)
-            draw.text((x, y), ln, font=font, fill=color)
+            runs = []
+            for w, hl in ln:
+                c = hl_color if hl else color
+                draw.text((x, y), w, font=font, fill=c)
+                runs.append((w, c))
+                x += draw.textlength(w, font=font) + space
             if placements is not None:
-                placements.append({"testo": ln, "x": float(x), "y": float(y), "size": font.size,
-                                   "weight": weight, "color": color})
+                x_start = box[0] if al == "left" else (box[2] - tw if al == "right" else box[0] + (bw - tw) / 2)
+                placements.append({"testo": " ".join(w for w, _ in ln), "x": float(x_start), "y": float(y),
+                                   "size": font.size, "weight": weight, "color": color,
+                                   "runs": [[w, list(c)] for w, c in runs]})
             y += lh
     return out

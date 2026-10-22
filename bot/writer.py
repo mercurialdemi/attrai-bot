@@ -40,7 +40,7 @@ _SLIDE_ITEM = {
             "items": {
                 "type": "object",
                 "properties": {
-                    "testo": {"type": "string", "description": "Il testo italiano di questo blocco, con gli a capo."},
+                    "testo": {"type": "string", "description": "Il testo italiano di questo blocco, con gli a capo. Le parole che nell'originale hanno un colore diverso (evidenziate) vanno tra [[ ]], es. 'TRE [[FIGLI MILIONARI.]]'."},
                     "x": {"type": "integer", "description": "Bordo sinistro del testo ORIGINALE, in millesimi della larghezza (0-1000)."},
                     "y": {"type": "integer", "description": "Bordo superiore del testo originale, in millesimi dell'altezza (0-1000)."},
                     "w": {"type": "integer", "description": "Larghezza del riquadro del testo originale, in millesimi della larghezza."},
@@ -49,8 +49,11 @@ _SLIDE_ITEM = {
                     "allineamento": {"type": "string", "enum": ["left", "center", "right"]},
                     "peso": {"type": "string", "enum": ["regular", "semibold", "bold"]},
                     "maiuscolo": {"type": "boolean", "description": "true se l'originale è tutto in maiuscolo."},
+                    "carattere": {"type": "string", "enum": ["normale", "titolo", "stretto"],
+                                  "description": "titolo = carattere stretto e molto pesante (tipo Anton, Bebas, Impact); stretto = condensato ma meno pesante (tipo Oswald); normale = tutti gli altri."},
+                    "colore_evidenziato": {"type": "string", "description": "Colore delle parole evidenziate (es. #E5484D). Vuoto se non ce ne sono."},
                 },
-                "required": ["testo", "x", "y", "w", "h", "colore", "allineamento", "peso", "maiuscolo"],
+                "required": ["testo", "x", "y", "w", "h", "colore", "allineamento", "peso", "maiuscolo", "carattere", "colore_evidenziato"],
             },
         },
         "e_cta": {"type": "boolean", "description": "true se la slide è una call to action (segui la pagina, salva, condividi, link in bio, acquista), di qualsiasi pagina."},
@@ -76,13 +79,14 @@ SLIDES_TOOL = {
     "input_schema": {
         "type": "object",
         "properties": {
+            "concetto": {"type": "string", "description": "PRIMA di tradurre: il messaggio di tutto il carosello in 3-5 frasi, come lo spiegheresti a voce a un amico italiano, e il registro (provocatorio, ironico, motivazionale...)."},
             "senso": {"type": "string", "description": "1-2 frasi: di cosa parla il post e perché funziona."},
             "formato": {"type": "string", "enum": ["carosello", "singolo"]},
             "natura": {"type": "string", "enum": ["didattico", "virale"],
                        "description": "didattico = valore reale, problema specifico o dolore forte; virale = volume, poco valore reale."},
             "slides": {"type": "array", "items": _SLIDE_ITEM},
         },
-        "required": ["senso", "formato", "natura", "slides"],
+        "required": ["concetto", "senso", "formato", "natura", "slides"],
     },
 }
 
@@ -134,13 +138,15 @@ CHECK_TOOL = {
 
 TRADUZIONE = {
     "fedele": (
-        "Traduzione FEDELE: il post è già stato scelto e va riprodotto così com'è. Stesse affermazioni, stesso ordine, "
-        "stesso registro e stessa forza dell'originale. Non aggiungere, non togliere, non cambiare tono e non riscrivere "
-        "le idee. Usa però un italiano naturale, come lo scriverebbe un italiano, senza calchi dall'inglese. "
-        "Modi di dire ed esempi culturali vanno resi con l'equivalente italiano che ha lo stesso effetto."
+        "Fedele al SIGNIFICATO, non alle parole. Prima capisci il concetto di tutto il carosello (campo concetto), "
+        "poi riscrivi ogni slide come la scriverebbe da zero un copywriter italiano che vuole dire esattamente "
+        "la stessa cosa: stesse idee, stesso ordine, stessa forza, nessuna idea aggiunta o tolta. "
+        "Cambia liberamente la costruzione delle frasi, i verbi, gli esempi culturali e i modi di dire perché "
+        "suonino naturali in italiano. Vietati i calchi: 'cosa hai intenzione di fare al riguardo' diventa "
+        "'e tu cosa fai per risolverlo?'; 'la risposta si riduceva a una sola cosa' diventa 'il segreto? Una cosa sola.'"
     ),
     "adattata": (
-        "Traduzione ADATTATA: stesso significato e stessa forza, ma riscritta nel tono di AttraiSeduci "
+        "ADATTATA: stesso significato e stessa forza, ma riscritta nel tono di AttraiSeduci "
         "(maschile, crudo, diretto, mai romantico), mai parola per parola."
     ),
 }
@@ -281,18 +287,79 @@ def translate_slides(caption: str, owner: str, images: list[bytes], brand: dict,
         f"Pagina di origine: @{owner}. Numero di slide: {len(images)}.\n"
         f"Descrizione originale, solo per capire il contesto:\n<<<\n{(caption or '(vuota)')[:2000]}\n>>>"
     )})
-    out = _tool_call(_slides_system(brand, rules), content, SLIDES_TOOL, max_tokens=16000)
+    out = _tool_call(_slides_system(brand, rules), content, SLIDES_TOOL, model=config.CAPTION_MODEL, max_tokens=16000)
+    try:
+        out = polish_slides(out)
+    except Exception as e:
+        log.warning("Rilettura delle slide non riuscita, tengo la prima versione: %s", e)
     out["slides"] = out.get("slides", [])[:len(images)]
     ours = {brand["handle"].lower(), brand["nome"].lower().replace(" ", "")}
     own_post = (owner or "").lower() in ours
     for s in out["slides"]:
-        s["testo"] = clean_text(s.get("testo", ""))
+        s["testo"] = clean_text(s.get("testo", "")).replace("[[", "").replace("]]", "")
+        for b in s.get("blocchi") or []:
+            b["testo"] = clean_text(b.get("testo", ""))
         wm = (s.get("watermark_originale") or "").lower().replace(" ", "").replace("@", "")
         if own_post or any(o in wm for o in ours):
             s["watermark_originale"] = ""      # il nostro marchio non va mai sostituito
         if own_post:
             s["da_modificare"] = False         # post della nostra pagina: le slide restano com'erano
         s.setdefault("da_modificare", True)
+    return out
+
+
+POLISH_TOOL = {
+    "name": "slide_rilette",
+    "description": "Testi delle slide riletti da un madrelingua.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "slides": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "numero": {"type": "integer"},
+                        "blocchi": {"type": "array", "items": {"type": "string"},
+                                    "description": "Il testo di ogni blocco, nello stesso ordine e numero, con gli stessi [[ ]]."},
+                    },
+                    "required": ["numero", "blocchi"],
+                },
+            },
+        },
+        "required": ["slides"],
+    },
+}
+
+
+def polish_slides(out: dict) -> dict:
+    """Seconda passata solo testo: un madrelingua rilegge tutte le slide di fila e sistema ciò che suona tradotto."""
+    items = []
+    for sl in out.get("slides", []):
+        bl = [b.get("testo", "") for b in (sl.get("blocchi") or [])]
+        if sl.get("da_modificare", True) and bl:
+            items.append({"numero": sl["numero"], "originale": sl.get("testo_originale", ""), "blocchi": bl})
+    if not items:
+        return out
+    system = ("Sei un copywriter italiano madrelingua. Rileggi le slide di un carosello Instagram tradotto dall'inglese "
+              "e riscrivi ogni frase che suona tradotta, rigida o innaturale, come la direbbe un italiano. "
+              "Non cambiare il significato, non aggiungere idee, non togliere passaggi. Mantieni maiuscole, a capo, "
+              "virgolette, i [[ ]] delle parole evidenziate e una lunghezza simile (il testo deve stare nello stesso spazio). "
+              "Se una frase va già bene, lasciala identica.")
+    content = [{"type": "text", "text": (
+        f"Concetto del carosello: {out.get('concetto', '')}\n\n"
+        f"Slide (JSON):\n{json.dumps(items, ensure_ascii=False, indent=1)}\n\n"
+        "Restituisci tutte le slide ricevute con lo strumento slide_rilette.")}]
+    res = _tool_call(system, content, POLISH_TOOL, model=config.CAPTION_MODEL, max_tokens=12000)
+    by_num = {s["numero"]: s.get("blocchi") or [] for s in res.get("slides", []) if isinstance(s.get("numero"), int)}
+    for sl in out.get("slides", []):
+        new = by_num.get(sl.get("numero"))
+        blocks = sl.get("blocchi") or []
+        if new and len(new) == len(blocks):
+            for b, t in zip(blocks, new):
+                if t and t.strip():
+                    b["testo"] = clean_text(t)
+            sl["testo"] = "\n\n".join(b["testo"].replace("[[", "").replace("]]", "") for b in blocks)
     return out
 
 
