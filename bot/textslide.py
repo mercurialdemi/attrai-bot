@@ -429,6 +429,20 @@ def local_background(img: Image.Image, box: tuple[int, int, int, int], exclude: 
     ring = a[keep]
     if len(ring) < 50:
         return None
+    # i quattro lati della cornice devono avere lo stesso colore: una sfumatura (foto che sfuma nel nero)
+    # non è uno sfondo uniforme, riempirla con un colore solo lascerebbe un rettangolo visibile
+    # i lati della cornice devono esserci (almeno 3) e avere lo stesso colore: una sfumatura (foto che sfuma
+    # nel nero) non è uno sfondo uniforme, riempirla con un colore solo lascerebbe un rettangolo visibile
+    ty, by_ = max(0, y0 - Y0), max(0, y1 - Y0)
+    lx, rx = max(0, x0 - X0), max(0, x1 - X0)
+    strips = [keep[:ty], keep[by_:], keep[:, :lx], keep[:, rx:]]
+    datas = [a[:ty], a[by_:], a[:, :lx], a[:, rx:]]
+    sides = [np.median(d[k_], axis=0) for k_, d in zip(strips, datas) if k_.sum() >= 20]
+    if len(sides) < 3:
+        return None
+    sides_a = np.array(sides)
+    if (sides_a.max(axis=0) - sides_a.min(axis=0)).max() > 22:
+        return None
     bg = np.median(ring, axis=0)
     if (np.abs(ring - bg).max(axis=1) < 30).mean() < 0.88:
         return None
@@ -535,6 +549,58 @@ def flatten_ghosts(img: Image.Image, blocks: list[dict]) -> Image.Image:
         sub[near] = np.array(bg)
         a[exp[1]:exp[3], exp[0]:exp[2]] = sub.astype(np.uint8)
     return Image.fromarray(a)
+
+
+def inpaint_boxes(img: Image.Image, boxes: list[tuple[int, int, int, int]], pad: float = 0.012) -> Image.Image:
+    """Cancella col codice le scritte dentro i riquadri anche su foto o sfumature (senza Gemini):
+    trova i pixel delle lettere confrontando con lo sfondo 'sfocato' e ricostruisce lo sfondo attorno."""
+    import cv2
+    a = cv2.cvtColor(np.asarray(img.convert("RGB")), cv2.COLOR_RGB2BGR)
+    H, W = a.shape[:2]
+    mask = np.zeros((H, W), np.uint8)
+    for x0, y0, x1, y1 in boxes:
+        px, py = int(W * pad), int(H * pad)
+        X0, Y0, X1, Y1 = max(0, x0 - px), max(0, y0 - py), min(W, x1 + px), min(H, y1 + py)
+        if X1 - X0 < 4 or Y1 - Y0 < 4:
+            continue
+        sub = a[Y0:Y1, X0:X1]
+        k = int(min(Y1 - Y0, X1 - X0, 151) // 2 * 2 + 1)
+        k = max(15, min(k, 101))
+        bg = cv2.medianBlur(sub, k)
+        diff = np.abs(sub.astype(np.int16) - bg.astype(np.int16)).max(axis=2)
+        # righe su fondo quasi uniforme (fasce scure, sfumature): lo sfondo è la mediana della riga,
+        # così si prendono per intero anche le lettere grandi dei titoli
+        s16 = sub.astype(np.int16)
+        q = (sub // 32).astype(np.int32)
+        codes = q[..., 0] * 64 + q[..., 1] * 8 + q[..., 2]
+        # colore dominante del bordo del riquadro: di solito è lo sfondo dietro le lettere
+        border = np.concatenate([codes[0], codes[-1], codes[:, 0], codes[:, -1]])
+        bcode = int(np.bincount(border, minlength=512).argmax())
+        for yy in range(sub.shape[0]):
+            cnt = np.bincount(codes[yy], minlength=512)
+            top = int(cnt.argmax())
+            if cnt[bcode] >= 0.12 * sub.shape[1]:
+                top = bcode                    # le lettere possono occupare quasi tutta la riga: vale lo sfondo del bordo
+            elif cnt[top] < 0.3 * sub.shape[1]:
+                continue                       # riga di foto/dettagli: resta il metodo sfocato
+            sel = codes[yy] == top
+            ref = np.median(s16[yy][sel], axis=0)  # colore dominante della riga (lo sfondo dietro le lettere)
+            rd = np.abs(s16[yy] - ref).max(axis=1)
+            diff[yy] = np.maximum(diff[yy], rd)
+        m = (diff > 38).astype(np.uint8) * 255
+        m = cv2.dilate(m, np.ones((5, 5), np.uint8), iterations=2)
+        mask[Y0:Y1, X0:X1] = np.maximum(mask[Y0:Y1, X0:X1], m)
+    if not mask.any():
+        return img.convert("RGB")
+    out = cv2.inpaint(a, mask, 6, cv2.INPAINT_TELEA)
+    return Image.fromarray(cv2.cvtColor(out, cv2.COLOR_BGR2RGB))
+
+
+def wm_box(slide: dict, W: int, H: int):
+    r = slide.get("watermark_riquadro") or {}
+    if not r or not r.get("w") or not r.get("h"):
+        return None
+    return block_box(r, W, H)
 
 
 def block_box(bl: dict, W: int, H: int) -> tuple[int, int, int, int]:

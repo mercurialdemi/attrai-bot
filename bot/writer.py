@@ -34,6 +34,12 @@ _SLIDE_ITEM = {
         "testo_originale": {"type": "string", "description": "Il testo che leggi sulla slide originale (vuoto se non ce n'è)."},
         "testo": {"type": "string", "description": "Il testo italiano che va sulla slide, con gli stessi a capo dell'originale. Vuoto se la slide non ha testo."},
         "watermark_originale": {"type": "string", "description": "Handle, nome o logo di una pagina DIVERSA dalla nostra visibile sulla slide e dove si trova (es. '@pagina in basso a destra'). Vuoto se assente o se è il nostro."},
+        "watermark_riquadro": {
+            "type": "object",
+            "description": "Riquadro stretto attorno al watermark/handle/logo della pagina di origine, in millesimi della slide. Tutti 0 se non c'è.",
+            "properties": {"x": {"type": "integer"}, "y": {"type": "integer"}, "w": {"type": "integer"}, "h": {"type": "integer"}},
+            "required": ["x", "y", "w", "h"],
+        },
         "blocchi": {
             "type": "array",
             "description": "Ogni blocco di testo separato della slide (titolo, paragrafo, didascalia), in ordine di lettura. Vuoto se la slide non ha testo.",
@@ -59,7 +65,7 @@ _SLIDE_ITEM = {
         "e_cta": {"type": "boolean", "description": "true se la slide è una call to action (segui la pagina, salva, condividi, link in bio, acquista), di qualsiasi pagina."},
         "da_modificare": {"type": "boolean", "description": "true solo se la slide va cambiata: testo non in italiano, oppure CTA/handle/watermark di un'altra pagina. false se è già in italiano e non ha riferimenti ad altre pagine: in quel caso la slide resta identica all'originale."},
     },
-    "required": ["numero", "testo_originale", "testo", "watermark_originale", "blocchi", "e_cta", "da_modificare"],
+    "required": ["numero", "testo_originale", "testo", "watermark_originale", "watermark_riquadro", "blocchi", "e_cta", "da_modificare"],
 }
 
 _CTA = {

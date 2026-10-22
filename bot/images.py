@@ -302,6 +302,12 @@ def _remove_watermark(clean: Image.Image, orig_fit: Image.Image, slide: dict):
             done = True
     if done:
         return clean
+    wb = textslide.wm_box(slide, W, H)
+    if wb:
+        try:
+            return textslide.inpaint_boxes(clean, [wb])
+        except Exception as e:
+            log.warning("Watermark non ricostruito col codice: %s", e)
     try:
         edited = _gemini_edit(clean, _prompt({**slide, "testo": ""}, "gemini"))
         if edited is not None:
@@ -380,6 +386,31 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
             log.info("Slide %s pulita col codice ma scartata al controllo: %s", slide.get("numero"), problems)
             slide.pop("_canva", None)
             slide.pop("_sfondo", None)
+        # testo su foto o sfumature: le lettere si cancellano col codice ricostruendo lo sfondo attorno
+        # (l'immagine resta quella originale, niente Gemini: niente rifiuti e nessuna perdita di qualità)
+        try:
+            W_, H_ = orig_fit.size
+            areas = [textslide.block_box(b, W_, H_) for b in blocks0]
+            wb = textslide.wm_box(slide, W_, H_)
+            if wb:
+                areas.append(wb)
+            clean = textslide.inpaint_boxes(orig_fit, areas)
+            placements = []
+            img = textslide.render_blocks(clean, orig_fit, blocks0, placements)
+            ok, problems = (True, "")
+            if config.SLIDE_CHECK:
+                ok, problems = writer.check_slide(_jpeg(img), testo, slide.get("watermark_originale", ""),
+                                                  original_jpeg)
+            if ok:
+                slide["_canva"] = {"tipo": "testo", "righe": placements}
+                slide["_via"] = "blocchi-ricostruzione-codice"
+                slide["_sfondo"] = (add_brand_mark(clean, brand, _avoid_boxes(slide, *clean.size))
+                                    if needs_logo(slide, brand) else clean)
+                img = add_brand_mark(img, brand, _avoid_boxes(slide, *img.size)) if needs_logo(slide, brand) else img
+                return img, True, ""
+            log.info("Slide %s ricostruita col codice ma scartata al controllo: %s", slide.get("numero"), problems)
+        except Exception as e:
+            log.warning("Ricostruzione col codice non riuscita: %s", e)
     feedback, problems = "", ""
     best: Image.Image | None = None
     slide["_via"] = "gemini-pulizia+blocchi" if (mode == "codice" and blocks0) else f"gemini-{mode}"
