@@ -186,7 +186,41 @@ def _clean(img: Image.Image, lay: Layout) -> Image.Image:
     return Image.fromarray(a)
 
 
+def _greedy(words, width_of, max_w):
+    lines, line = [], []
+    for w in words:
+        if not line or width_of(line + [w]) <= max_w:
+            line.append(w)
+        else:
+            lines.append(line)
+            line = [w]
+    if line:
+        lines.append(line)
+    return lines
+
+
+def _balanced(words, width_of, max_w):
+    """Stesso numero di righe del ritorno a capo normale, ma lunghe uguali: niente parola sola nell'ultima riga."""
+    lines = _greedy(words, width_of, max_w)
+    if len(lines) < 2:
+        return lines
+    lo, hi = max(width_of([w]) for w in words), max_w
+    best = lines
+    while hi - lo > 2:
+        mid = (lo + hi) / 2
+        cand = _greedy(words, width_of, mid)
+        if len(cand) <= len(lines):
+            best, hi = cand, mid
+        else:
+            lo = mid
+    return best
+
+
 def _flow(draw, words: list[str], font, max_w: int) -> list[str]:
+    return [" ".join(l) for l in _balanced(words, lambda ws: draw.textlength(" ".join(ws), font=font), max_w)]
+
+
+def _flow_old(draw, words: list[str], font, max_w: int) -> list[str]:
     lines, line = [], ""
     for w in words:
         test = f"{line} {w}".strip()
@@ -335,15 +369,7 @@ def _layout(draw, paras, font, max_w):
             if _line_w(draw, r, font) <= max_w:
                 out.append(r)
                 continue
-            line = []
-            for w in r:
-                if not line or _line_w(draw, line + [w], font) <= max_w:
-                    line.append(w)
-                else:
-                    out.append(line)
-                    line = [w]
-            if line:
-                out.append(line)
+            out += _balanced(r, lambda ws: _line_w(draw, ws, font), max_w)
         if k < len(paras) - 1:
             out.append(None)
     return out
@@ -383,7 +409,7 @@ def erase_local(img: Image.Image, box: tuple[int, int, int, int], bg: tuple,
     p = max(6, int(min(W, H) * 0.015))
     X0, Y0, X1, Y1 = max(0, x0 - p), max(0, y0 - p), min(W, x1 + p), min(H, y1 + p)
     sub = a[Y0:Y1, X0:X1].astype(np.int16)
-    ink = np.abs(sub - np.array(bg)).max(axis=2) > 40
+    ink = np.abs(sub - np.array(bg)).max(axis=2) > 22     # anche scritte grigie o sbiadite
     own = ink.copy()
     for ex in exclude or []:                       # i pixel degli altri blocchi non contano per questo riquadro
         ex0, ey0, ex1, ey1 = ex
@@ -446,6 +472,26 @@ def expand_to_ink(img: Image.Image, box: tuple[int, int, int, int], bg: tuple,
         if not changed:
             break
     return (x0, y0, x1, y1)
+
+
+def flatten_ghosts(img: Image.Image, blocks: list[dict]) -> Image.Image:
+    """Dopo la pulizia di Gemini a volte restano ombre grigie del testo vecchio. Dove il testo sta su
+    sfondo uniforme, la zona del blocco si ridipinge col colore pieno dello sfondo."""
+    W, H = img.size
+    a = np.asarray(img.convert("RGB")).copy()
+    boxes = [block_box(bl, W, H) for bl in blocks]
+    for box in boxes:
+        x0, y0, x1, y1 = box
+        gx, gy = int(W * 0.03), int(H * 0.02)
+        exp = (max(0, x0 - gx), max(0, y0 - gy), min(W, x1 + gx), min(H, y1 + gy))
+        bg = local_background(Image.fromarray(a), exp)
+        if bg is None:
+            continue
+        sub = a[exp[1]:exp[3], exp[0]:exp[2]].astype(np.int16)
+        near = np.abs(sub - np.array(bg)).max(axis=2) < 110      # ombre e residui, non elementi grafici forti
+        sub[near] = np.array(bg)
+        a[exp[1]:exp[3], exp[0]:exp[2]] = sub.astype(np.uint8)
+    return Image.fromarray(a)
 
 
 def block_box(bl: dict, W: int, H: int) -> tuple[int, int, int, int]:

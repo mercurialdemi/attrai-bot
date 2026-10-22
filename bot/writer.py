@@ -284,7 +284,9 @@ Ricevi le slide di un post di una pagina collaboratrice che ci ha autorizzato a 
 - In blocchi descrivi ogni blocco di testo separato: testo italiano e riquadro che occupa il testo ORIGINALE
   (in millesimi, stretto attorno alle lettere), colore, allineamento, spessore, maiuscolo. Il testo verrà
   riscritto esattamente lì sopra l'immagine ripulita, quindi le misure devono essere accurate.
-  Non includere nei blocchi il watermark o l'handle della pagina.
+  Non includere nei blocchi il watermark o l'handle della pagina. Ogni slide con testo da tradurre deve
+  avere i suoi blocchi: un blocco per ogni gruppo di righe separato da uno spazio vuoto.
+  colore_evidenziato solo se alcune parole hanno davvero un colore diverso dal resto (e vanno tra [[ ]]); altrimenti vuoto.
 - Segnala in watermark_originale handle, nome o logo di un'altra pagina e dove si trova. Se è il nostro (@{brand['handle']}, {brand['nome']}) o non c'è, lascialo vuoto.
 - da_modificare = false per le slide già in italiano e senza riferimenti ad altre pagine (comprese le slide con la nostra CTA o il nostro profilo): restano identiche all'originale e testo = testo_originale.
 
@@ -356,11 +358,27 @@ def polish_slides(out: dict) -> dict:
             items.append({"numero": sl["numero"], "originale": sl.get("testo_originale", ""), "blocchi": bl})
     if not items:
         return out
-    system = ("Sei un copywriter italiano madrelingua. Rileggi le slide di un carosello Instagram tradotto dall'inglese "
-              "e riscrivi ogni frase che suona tradotta, rigida o innaturale, come la direbbe un italiano. "
-              "Non cambiare il significato, non aggiungere idee, non togliere passaggi. Mantieni maiuscole, a capo, "
-              "virgolette, i [[ ]] delle parole evidenziate e una lunghezza simile (il testo deve stare nello stesso spazio). "
-              "Se una frase va già bene, lasciala identica.")
+    guida = (load_style().get("guida") or "").strip()
+    system = ("Sei il copywriter italiano che scrive i caroselli di AttraiSeduci (pagina di psicologia maschile, "
+              "tono maschile, crudo, diretto, adulto). Ricevi un carosello tradotto dall'inglese: il tuo lavoro è "
+              "farlo sembrare SCRITTO in italiano, non tradotto. Il lettore non deve mai percepire l'inglese sotto.\n"
+              "COME LAVORI\n"
+              "- Leggi tutte le slide di fila come un unico discorso: ogni slide deve agganciarsi alla precedente.\n"
+              "- Per ogni frase chiediti: un italiano la direbbe così a voce? Se no, riscrivila da zero con la stessa idea.\n"
+              "- Frasi corte e piene. Verbi concreti. Niente giri di parole, niente costruzioni passive.\n"
+              "- Le chiuse ad effetto devono suonare come una sentenza italiana, non come uno slogan tradotto "
+              "('Un gioco spietato.' -> 'E vince sempre lei.'; 'Ignorarlo ti costa caro' -> 'Ignoralo e la paghi').\n"
+              "- Ordine delle parole italiano: 'Quasi tutte le donne moderne fanno troppo rumore per capirne il motivo' "
+              "-> 'Oggi quasi nessuna lo capisce: è troppo impegnata ad alzare la voce.'\n"
+              "- Vietato lo slang giovanile o da strada: 'fra', 'frate', 'bro', 'zio', 'raga', 'tipo' come intercalare.\n"
+              "- Vietati calchi e formule da traduzione ('il fatto è che', 'alla fine della giornata', 'fare la differenza', "
+              "'in termini di', 'questo significa che'). Parole inglesi solo se un italiano le usa davvero così.\n"
+              "VINCOLI\n"
+              "- Stesse idee, stesso ordine, nessuna idea aggiunta o tolta.\n"
+              "- Mantieni maiuscole, a capo, virgolette e i [[ ]] delle parole evidenziate. Lunghezza simile "
+              "(massimo +10% caratteri), perché il testo deve stare nello stesso spazio.\n"
+              "- Se una frase suona già scritta da un italiano, lasciala com'è."
+              + (f"\nVOCE DELLA PAGINA (dai post migliori):\n{guida[:2500]}" if guida else ""))
     content = [{"type": "text", "text": (
         f"Concetto del carosello: {out.get('concetto', '')}\n\n"
         f"Slide (JSON):\n{json.dumps(items, ensure_ascii=False, indent=1)}\n\n"

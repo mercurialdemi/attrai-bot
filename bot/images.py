@@ -269,7 +269,8 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
         slide["_via"] = "originale"
         return original, True, ""
     testo = (slide.get("testo") or "").strip()
-    special = any(b.get("carattere") in ("titolo", "stretto") or (b.get("colore_evidenziato") or "").strip()
+    # serve il percorso a blocchi solo per titoli con font stretti o parole evidenziate davvero ([[ ]])
+    special = any(b.get("carattere") in ("titolo", "stretto") or "[[" in (b.get("testo") or "")
                   for b in (slide.get("blocchi") or []))
     if config.SLIDE_TEXT_MODE != "gemini-sempre" and not special:
         lay = textslide.analyze(original, slide.get("testo_originale", ""))
@@ -328,7 +329,7 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
         blocks = [b for b in (slide.get("blocchi") or []) if (b.get("testo") or "").strip()]
         if mode == "codice" and blocks:
             # Gemini ha solo ripulito: il testo di Claude lo scrive il codice negli stessi riquadri
-            clean = img
+            clean = textslide.flatten_ghosts(img, blocks)
             placements: list = []
             img = textslide.render_blocks(clean, orig_fit, blocks, placements)
             slide["_canva"] = {"tipo": "testo", "righe": placements}
