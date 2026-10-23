@@ -49,7 +49,7 @@ APIFY_LOGIN_ACTOR = _env("APIFY_LOGIN_ACTOR", "fmchisti/instagram-posts-scraper"
 # Modello economico che controlla ogni slide prodotta da Gemini (testo giusto, niente residui)
 CHECK_MODEL = _env("CHECK_MODEL", "claude-haiku-5-5")
 SLIDE_CHECK = _env("SLIDE_CHECK", "on").lower() not in ("off", "0", "no", "false")
-SLIDE_ATTEMPTS = int(_env("SLIDE_ATTEMPTS", "3"))   # tentativi Gemini per slide prima di segnalarla
+SLIDE_ATTEMPTS = int(_env("SLIDE_ATTEMPTS", "2"))   # tentativi Gemini per slide prima di segnalarla
 
 # "codice"  = (consigliato) Gemini cancella solo il testo, il testo italiano di Claude lo scrive il codice.
 # "gemini"  = Gemini riscrive il testo in italiano direttamente sulla slide originale (stesso stile).
@@ -62,7 +62,7 @@ BRAND_FILE = Path(_env("BRAND_FILE", str(ROOT / "brands" / "attraiseduci.yaml"))
 LOGO_PATH = Path(_env("LOGO_PATH", str(ROOT / "assets" / "logo.png")))
 FONT_PATH = Path(_env("FONT_PATH", str(ROOT / "assets" / "font.ttf")))
 
-MAX_PARALLEL_IMAGES = int(_env("MAX_PARALLEL_IMAGES", "1"))
+MAX_PARALLEL_IMAGES = int(_env("MAX_PARALLEL_IMAGES", "2"))
 SLIDE_SIZE = (1080, 1350)  # formato verticale 4:5 di Instagram
 
 
