@@ -635,18 +635,20 @@ def quote_titles(text: str, brand: dict | None = None) -> str:
 
 
 def pick_cta_slide_text(proposed: str, cta: dict) -> str:
-    """Il testo della slide CTA finale: Claude adatta al post una delle nostre slide CTA (lette da /analizza).
-    Se manca o è troppo lunga, si usa una delle nostre così com'è (manuale scelto, altrimenti 'segui')."""
+    """Il testo della slide CTA finale è COPIATO IDENTICO da una delle nostre slide CTA (lette da /analizza,
+    in ordine di rendimento): una delle migliori del manuale scelto, altrimenti una 'segui la pagina'.
+    Solo se /analizza non ha ancora trovato nessuna nostra slide CTA si usa il testo proposto da Claude."""
     texts = load_style().get("testi_slide_cta") or []
-    if not texts or (proposed and len(proposed) <= 400):
-        return proposed                     # la CTA adattata da Claude partendo dalle nostre slide
-    norm = lambda t: " ".join(t.lower().split())
+    if not texts:
+        return proposed
     if cta.get("tipo") == "manuale":
         same = [t for t in texts if t["tipo"] == "manuale" and t.get("manuale") == cta.get("manuale")]
         if same:
-            return random.choice(same)["testo"]
+            return random.choice(same[:3])["testo"]          # tra le 3 migliori, per non ripetersi sempre
     follow = [t for t in texts if t["tipo"] == "segui"]
-    return random.choice(follow)["testo"] if follow else proposed
+    if follow:
+        return random.choice(follow[:3])["testo"]
+    return proposed
 
 
 def create_post(caption: str, owner: str, images: list[bytes], brand: dict,

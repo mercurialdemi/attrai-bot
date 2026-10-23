@@ -158,7 +158,7 @@ def apply_cta_slide(post: dict, paths: list[Path], failed: list[int], jdir: Path
     if paths:
         styled = None
         plain_post = any(sl.get("_via") == "testo-su-sfondo-uniforme" for sl in post.get("slides", []))
-        if not plain_post and (post.get("cta") or {}).get("tipo") == "manuale":
+        if not plain_post:
             # post disegnato o fotografico con CTA a un manuale: scena illustrata con le copertine vere
             try:
                 from . import cta_illustrata

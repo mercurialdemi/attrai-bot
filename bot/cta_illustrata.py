@@ -44,6 +44,15 @@ PROMPT = (
 )
 
 
+PROMPT_SEGUI = (
+    "Create a NEW vertical 4:5 image in EXACTLY the same style, colors and rendering as the reference image "
+    "(same kind of drawing or photo, same lighting, same mood, same kind of characters or setting). "
+    "Scene: a confident, well-dressed man in a calm, powerful pose, in a setting coherent with the reference. "
+    "IMPORTANT: absolutely NO text, letters, numbers, logos or speech bubbles anywhere in the image. "
+    "Keep the top 30% and the bottom 20% of the image calm and simple, because text will be added there later."
+)
+
+
 def _green_quads(img: Image.Image, want: int) -> list[np.ndarray]:
     import cv2
     a = np.asarray(img.convert("RGB")).astype(np.int16)
@@ -266,20 +275,21 @@ def _post_font(post: dict) -> Path:
 
 def make(post: dict, originals: list[bytes], jdir: Path) -> tuple[Path, dict] | None:
     cta = post.get("cta") or {}
-    if cta.get("tipo") != "manuale":
-        return None
-    books = [COVERS / f"{b}.png" for b in BOOKS.get(cta.get("manuale") or "", [])]
-    if not books or not all(b.exists() for b in books):
-        return None
+    books = []
+    if cta.get("tipo") == "manuale":
+        books = [COVERS / f"{b}.png" for b in BOOKS.get(cta.get("manuale") or "", [])]
+        if not books or not all(b.exists() for b in books):
+            return None
     text = (post.get("_testo_cta_finale") or "").strip()
     if not text or not config.GEMINI_API_KEY:
         return None
     from . import images
     ref = Image.open(io.BytesIO(originals[0])).convert("RGB")
     n = "one book" if len(books) == 1 else f"{len(books)} books, one in each hand"
+    prompt = PROMPT.format(n=n) if books else PROMPT_SEGUI
     for attempt in range(2):
         try:
-            gen = images._gemini_edit(ref, PROMPT.format(n=n))
+            gen = images._gemini_edit(ref, prompt)
         except Exception as e:
             log.warning("CTA illustrata: Gemini non ha risposto (%s)", e)
             gen = None
@@ -287,11 +297,14 @@ def make(post: dict, originals: list[bytes], jdir: Path) -> tuple[Path, dict] | 
             continue
         size = images.output_size(ref)
         gen = images._fit(gen, size)
-        quads, mask = _green_quads(gen, len(books))
-        if len(quads) != len(books):
-            log.info("CTA illustrata: trovati %s libri su %s, riprovo", len(quads), len(books))
-            continue
-        img = _paste_covers(gen, quads, books, mask)
+        if books:
+            quads, mask = _green_quads(gen, len(books))
+            if len(quads) != len(books):
+                log.info("CTA illustrata: trovati %s libri su %s, riprovo", len(quads), len(books))
+                continue
+            img = _paste_covers(gen, quads, books, mask)
+        else:
+            img = gen
         bg = img.copy()
         img = _texts(img, text, _post_font(post))
         out = jdir / "cta_illustrata.jpg"
