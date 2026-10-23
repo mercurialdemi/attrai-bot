@@ -30,6 +30,8 @@ FONTS = {
 for _fam in ("montserrat", "poppins", "arimo"):
     for _w in ("regular", "semibold", "bold"):
         FONTS[f"{_w}_{_fam}"] = config.ROOT / "assets" / f"{_fam}_{_w}.ttf"
+SAFE_X = 0.065   # margine laterale minimo: dentro la zona che Instagram mostra sempre (anche nella griglia 3:4)
+SAFE_Y = 0.05    # margine minimo sopra e sotto
 FAMILIES = ["", "_tight", "_montserrat", "_poppins", "_arimo"]   # Inter, Inter Tight, Montserrat, Poppins, Arimo (tipo Helvetica/Arial)
 
 
@@ -327,7 +329,7 @@ def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False) -
     if align == "center":
         width = int(min(W * 0.9, (np.max(rights) - np.min(lefts)) * 1.1))
     else:
-        width = int(W - left - max(left * 0.6, W * 0.05))
+        width = int(W - max(left, W * SAFE_X) - max(left, W * SAFE_X))
     # maschera da cancellare: tutto ciò che non è sfondo (testo, watermark, avatar), un po' allargata
     # soglia di cancellazione in base al rumore dello sfondo: su un nero pulito si tolgono anche gli aloni grigi
     noise = float(np.percentile(np.abs(border - bg).max(axis=1), 95))
@@ -460,8 +462,8 @@ def render(img: Image.Image, lay: Layout, text: str, placements: list | None = N
     if lay.centered_v:
         y = int((H - total) / 2)
     else:
-        y = max(int(H * 0.06), min(lay.top - int(size * 0.2), int(H - total - H * 0.08)))
-    left = lay.left
+        y = max(int(H * max(0.06, SAFE_Y)), min(lay.top - int(size * 0.2), int(H - total - H * 0.08)))
+    left = max(lay.left, int(W * SAFE_X))
     if lay.align != "center" and lay.right and abs((lay.left + lay.right) / 2 - W / 2) < W * 0.045:
         # testo allineato a sinistra ma blocco centrato nella slide: si ricentra il blocco italiano
         block_w = max((draw.textlength(ln, font=font) for ln in lines if ln), default=0)
@@ -914,12 +916,17 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
         # spazio in larghezza: l'italiano è più lungo dell'inglese. Invece di rimpicciolire o andare a capo
         # più volte, le righe possono allungarsi fino al margine simmetrico a quello di partenza
         al0 = bl.get("allineamento", "left")
+        sx = int(W * SAFE_X)
+        # il testo resta sempre dentro la zona sicura di Instagram (margini laterali minimi)
+        box = (max(box[0], sx), box[1], min(box[2], W - sx), box[3])
+        bw = max(40, box[2] - box[0])
         if al0 == "left":
-            max_w = max(bw, W - box[0] - max(box[0], int(W * 0.04)))
+            max_w = max(bw, W - box[0] - max(box[0], sx))
         elif al0 == "right":
-            max_w = max(bw, box[2] - max(W - box[2], int(W * 0.04)))
+            max_w = max(bw, box[2] - max(W - box[2], sx))
         else:
-            max_w = max(bw, W - 2 * max(min(box[0], W - box[2]), int(W * 0.04)))
+            max_w = max(bw, W - 2 * max(min(box[0], W - box[2]), sx))
+        max_w = min(max_w, W - 2 * sx)
         car = bl.get("carattere") or "normale"
         weight = car if car in ("titolo", "stretto") else (bl.get("peso") or "regular")
         paras = _tokens(text)
@@ -969,7 +976,7 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
         bot_off = font.getbbox(" ".join(w for w, _ in last))[3] if last else font.size
         real_h = (total - lh) + bot_off - top_off
         y = box[1] + (bh - real_h) / 2 - top_off
-        margin = int(H * 0.05)
+        margin = int(H * max(0.05, SAFE_Y))
         if y + (total - lh) + bot_off > H - margin:            # mai attaccato al bordo in basso
             y = H - margin - (total - lh) - bot_off
         if y + top_off < margin:
