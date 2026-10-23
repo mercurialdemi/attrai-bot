@@ -21,7 +21,9 @@ def gclient():
     global _gclient
     if _gclient is None:
         from google import genai
-        _gclient = genai.Client(api_key=config.GEMINI_API_KEY)
+        from google.genai import types
+        # mai bloccati all'infinito: se Gemini non risponde entro 2 minuti si passa oltre
+        _gclient = genai.Client(api_key=config.GEMINI_API_KEY, http_options=types.HttpOptions(timeout=120_000))
     return _gclient
 
 
@@ -541,7 +543,7 @@ def _sem() -> asyncio.Semaphore:
 
 async def render_all(post: dict, originals: list[bytes], brand: dict, job_dir: Path,
                      only: set[int] | None = None,
-                     existing: list[Path] | None = None) -> tuple[list[Path], list[int]]:
+                     existing: list[Path] | None = None, progress=None) -> tuple[list[Path], list[int]]:
     """Genera le slide (solo quelle in `only`, se indicato). Restituisce percorsi e slide non riuscite."""
     job_dir.mkdir(parents=True, exist_ok=True)
     sem = _sem()
@@ -561,6 +563,9 @@ async def render_all(post: dict, originals: list[bytes], brand: dict, job_dir: P
     if not brand.get("watermark", {}).get("solo_se_presente", True):
         wm_post = True
 
+    done = [0]
+    todo = len(slides) if only is None else len(only)
+
     async def one(i: int):
         if only is not None and (i + 1) not in only and existing and i < len(existing) and existing[i].exists():
             paths[i] = existing[i]
@@ -570,6 +575,12 @@ async def render_all(post: dict, originals: list[bytes], brand: dict, job_dir: P
         async with sem:
             img, ok, problems = await asyncio.to_thread(render_slide, src, slides[i], brand, config.SLIDE_TEXT_MODE)
             _free_memory()
+        done[0] += 1
+        if progress:
+            try:
+                await progress(done[0], todo)
+            except Exception:
+                pass
         if not ok:
             failed.append(i + 1)
             slides[i]["_problema"] = problems

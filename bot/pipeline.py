@@ -37,7 +37,9 @@ async def build_post(src: instagram.SourcePost, brand: dict, suffix: str,
 
     da_fare = sum(1 for x in post["slides"] if x.get("da_modificare", True) or x.get("watermark_originale"))
     await status(f"Preparo le slide: {da_fare} da rifare in italiano, {len(post['slides']) - da_fare} già a posto…")
-    paths, failed = await images.render_all(post, originals, brand, jdir)
+    async def progress(n, tot):
+        await status(f"Preparo le slide: {n} di {tot} fatte…")
+    paths, failed = await images.render_all(post, originals, brand, jdir, progress=progress)
     paths, failed = apply_cta_slide(post, paths, failed, jdir)
     post["_fallite"] = failed
     return post, paths, failed
