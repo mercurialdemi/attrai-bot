@@ -622,6 +622,34 @@ def erase_local(img: Image.Image, box: tuple[int, int, int, int], bg: tuple,
     for ex in exclude or []:                       # i pixel degli altri blocchi non contano per questo riquadro
         ex0, ey0, ex1, ey1 = ex
         own[max(0, ey0 - Y0):max(0, ey1 - Y0), max(0, ex0 - X0):max(0, ex1 - X0)] = False
+    # righe quasi tutte "non sfondo" sono una foto, non testo (il testo lascia sempre spazi tra le lettere)
+    photo_rows = own.mean(axis=1) > 0.75
+    if photo_rows.any():
+        own[photo_rows] = False
+        # e anche le righe di confine subito sotto/sopra (sfumatura della foto)
+        idx = np.where(photo_rows)[0]
+        for r_ in idx:
+            for d_ in (-2, -1, 1, 2):
+                if 0 <= r_ + d_ < own.shape[0] and own[r_ + d_].mean() > 0.4:
+                    own[r_ + d_] = False
+    # ciò che tocca il bordo esterno della zona (es. il fondo di una foto appena sopra la fascia nera)
+    # non è testo: non si cancella, altrimenti resterebbe un rettangolo nero sulla foto
+    try:
+        import cv2
+        n, lab = cv2.connectedComponents(own.astype(np.uint8), connectivity=8)
+        if n > 1:
+            border = np.zeros_like(own)
+            border[0, :] = border[-1, :] = True
+            border[:, 0] = border[:, -1] = True
+            inside = np.zeros_like(own)
+            inside[max(0, y0 - Y0):max(0, y1 - Y0), max(0, x0 - X0):max(0, x1 - X0)] = True
+            touch = set(np.unique(lab[border & own]).tolist()) - {0}
+            keep_in = set(np.unique(lab[inside & own]).tolist()) - {0}
+            drop = [c for c in touch if c not in keep_in or (lab == c)[~inside].sum() > (lab == c)[inside].sum()]
+            if drop:
+                own[np.isin(lab, drop)] = False
+    except ImportError:
+        pass
     pitch = None
     if own.any():
         ys, xs = np.where(own)

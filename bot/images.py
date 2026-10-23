@@ -378,6 +378,11 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
     original_jpeg = _jpeg(original)
     orig_fit = _fit(original, size)
     blocks0 = [b for b in (slide.get("blocchi") or []) if (b.get("testo") or "").strip()]
+    if (slide.get("_peso_post") or "").endswith("_tight"):
+        # il post usa un font compatto (stile Helvetica): stesso font anche per copertina e titoli normali
+        for b in blocks0:
+            if (b.get("carattere") or "normale") == "normale" and not (b.get("peso") or "").endswith("_tight"):
+                b["peso"] = (b.get("peso") or "bold") + "_tight"
     if mode == "codice" and blocks0:
         local = textslide.try_local_clean(orig_fit, blocks0)
         if local:
