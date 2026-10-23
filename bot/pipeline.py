@@ -97,6 +97,16 @@ def styled_cta_slide(post: dict, jdir: Path) -> tuple[Path, dict] | None:
     return out, info
 
 
+def _light(c: str | None) -> str:
+    """Sullo sfondo scurito il testo deve essere chiaro: un colore scuro diventa bianco."""
+    c = (c or "#FFFFFF").lstrip("#")
+    try:
+        r, g, b = (int(c[k:k + 2], 16) for k in (0, 2, 4))
+    except ValueError:
+        return "#FFFFFF"
+    return "#" + c if (0.299 * r + 0.587 * g + 0.114 * b) > 140 else "#FFFFFF"
+
+
 def _cta_on_photo(post: dict, text: str, jdir: Path) -> tuple[Path, dict] | None:
     """Post fatto solo di foto/illustrazioni: la CTA va sullo sfondo ripulito di una slide del post,
     scurito per leggerla bene, con lo stesso font e gli stessi colori dei testi del post."""
@@ -111,15 +121,17 @@ def _cta_on_photo(post: dict, text: str, jdir: Path) -> tuple[Path, dict] | None
         return None
     i = cands[-1]
     ref = next((b for b in slides[i]["blocchi"] if (b.get("testo") or "").strip()), {})
+    from PIL import ImageFilter
     bg = Image.open(slides[i]["_canva"]["sfondo"]).convert("RGB")
-    shade = Image.new("RGB", bg.size, (0, 0, 0))
-    bg = Image.blend(bg, shade, 0.6)
+    # sfondo sfocato e scurito: richiama il post, il testo si legge bene e non si vede nessun residuo
+    bg = bg.filter(ImageFilter.GaussianBlur(max(8, bg.width // 45)))
+    bg = Image.blend(bg, Image.new("RGB", bg.size, (0, 0, 0)), 0.55)
     paras = [p for p in text.split("\n\n") if p.strip()]
     hl = (ref.get("colore_evidenziato") or "").strip()
     if hl and len(paras) > 1:
         paras[0] = "[[" + paras[0].replace("\n", " ") + "]]"
     block = {"testo": "\n\n".join(paras), "x": 90, "y": 280, "w": 820, "h": 440,
-             "colore": ref.get("colore") or "#FFFFFF", "colore_evidenziato": hl,
+             "colore": _light(ref.get("colore")), "colore_evidenziato": hl,
              "allineamento": "center", "carattere": ref.get("carattere") or "normale",
              "peso": ref.get("peso") or "semibold", "maiuscolo": bool(ref.get("maiuscolo"))}
     W, H = bg.size

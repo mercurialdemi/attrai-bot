@@ -78,11 +78,23 @@ def _composite(original: Image.Image, edited: Image.Image, boxes: list[tuple[int
     from PIL import ImageFilter
     W, H = original.size
     edited = edited if edited.size == original.size else _fit(edited, original.size)
+    import numpy as np
     mask = Image.new("L", (W, H), 0)
     d = ImageDraw.Draw(mask)
     px, py = int(W * pad), int(H * pad)
     for x0, y0, x1, y1 in boxes:
         d.rectangle((max(0, x0 - px), max(0, y0 - py), min(W, x1 + px), min(H, y1 + py)), fill=255)
+    # i riquadri di Claude possono essere un po' stretti: si prende da Gemini anche ciò che ha cambiato
+    # (lettere cancellate) nei dintorni dei riquadri, così non restano pezzi di parole
+    near = Image.new("L", (W, H), 0)
+    dn = ImageDraw.Draw(near)
+    qx, qy = int(W * 0.12), int(H * 0.08)
+    for x0, y0, x1, y1 in boxes:
+        dn.rectangle((max(0, x0 - qx), max(0, y0 - qy), min(W, x1 + qx), min(H, y1 + qy)), fill=255)
+    diff = np.abs(np.asarray(edited, np.int16) - np.asarray(original, np.int16)).max(axis=2) > 60
+    changed = Image.fromarray((diff * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(9))
+    changed = Image.fromarray(np.minimum(np.asarray(changed), np.asarray(near)))
+    mask = Image.fromarray(np.maximum(np.asarray(mask), np.asarray(changed)))
     mask = mask.filter(ImageFilter.GaussianBlur(max(2, W // 200)))
     return Image.composite(edited, original, mask)
 

@@ -194,6 +194,51 @@ def _settings(brand: dict) -> dict:
     }
 
 
+FIT_TOOL = {
+    "name": "post_in_tema",
+    "description": "Quali post sono in tema con la nostra pagina.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "post": {"type": "array", "items": {"type": "object", "properties": {
+                "numero": {"type": "integer"},
+                "in_tema": {"type": "boolean"},
+                "motivo": {"type": "string", "description": "Di cosa parla e perché va bene per noi, massimo 12 parole."},
+            }, "required": ["numero", "in_tema", "motivo"]}},
+        },
+        "required": ["post"],
+    },
+}
+
+
+def _fit_filter(cands: list, brand: dict) -> tuple[list, bool]:
+    """Tiene solo i post in tema con la nostra nicchia e il nostro tono (Claude Haiku, solo testo: costa pochissimo).
+    Restituisce (post in tema, filtro riuscito)."""
+    if not cands:
+        return cands, True
+    elenco = "\n\n".join(f"{i}. @{p.owner}: {' '.join((p.caption or '(nessuna descrizione)').split())[:350]}"
+                          for i, p in enumerate(cands, 1))
+    system = (f"Sei il responsabile contenuti di {brand['nome']}. Posizionamento: {brand.get('posizionamento', '').strip()}\n"
+              f"Tono: {' '.join(brand.get('tono', []))}\n"
+              "Per ogni post dì se è in tema: psicologia maschile, attrazione, seduzione, donne, relazioni, rotture, "
+              "rispetto, status, mentalità e disciplina maschile. Fuori tema: meme senza contenuto, sport, auto, "
+              "pubblicità, notizie, contenuti romantici o motivazionali generici, giveaway.")
+    try:
+        out = writer._tool_call(system, [{"type": "text", "text": elenco}], FIT_TOOL,
+                                model=config.CHECK_MODEL, max_tokens=4000)
+    except Exception as e:
+        log.warning("Filtro di tema non riuscito: %s", e)
+        return cands, False
+    keep = []
+    for r in out.get("post", []):
+        n = r.get("numero")
+        if isinstance(n, int) and 1 <= n <= len(cands) and r.get("in_tema"):
+            cands[n - 1].motivo = r.get("motivo", "")
+            keep.append(cands[n - 1])
+    keep.sort(key=lambda p: p.score, reverse=True)
+    return keep, True
+
+
 def _offset_file():
     return config.DATA_DIR / "classifica_mostrati.txt"
 
@@ -204,7 +249,7 @@ def _link_lines(items: list, start: int, min_score: float) -> list[str]:
         anteprima = " ".join((p.caption or "").split())[:70]
         nums = f"❤️ {p.likes or 0} · 💬 {p.comments or 0}"
         out.append(f"{i}. @{p.owner} · {p.score:.1f}x la sua media{'' if p.score >= min_score else ' (sotto media)'}"
-                   f" · {nums}\n{p.url}" + (f"\n“{anteprima}…”" if anteprima else ""))
+                   f" · {nums}\n{p.url}" + (f"\n{p.motivo}" if p.motivo else (f"\n“{anteprima}…”" if anteprima else "")))
     return out
 
 
@@ -258,9 +303,16 @@ async def run_report(bot, chat_ids: list[int]) -> None:
                              + (" e anche la lettura con accesso non è riuscita: controlla che INSTAGRAM_COOKIES sia ancora valido."
                                 if config.INSTAGRAM_COOKIES else
                                 ": inserisci INSTAGRAM_COOKIES su Render (vedi la guida)."))
+        own = {(brand.get("handle") or "").lower()}
+        posts = [p for p in posts if p.owner not in own]      # i nostri post non servono nel report
+        if not posts:
+            await _broadcast(bot, chat_ids, "Report: in pagine_monitorate c'è solo la nostra pagina. "
+                                            "Aggiungi le pagine dei collaboratori da cui prendere i post.")
+            return
         if not st["prepara"]:
-            # solo link: classifica lunga salvata, si mostrano i primi; /altri mostra i successivi
+            # solo link: classifica lunga, tenuti solo i post in tema; /altri mostra i successivi
             cands = rank_candidates(posts, st["ore"], st["candidati"] * 4)
+            cands, filtered = await asyncio.to_thread(_fit_filter, cands, brand)
             storage.save_ranking([_to_dict(p) for p in cands])
             if not cands:
                 await _broadcast(bot, chat_ids, f"Report: nessun post nuovo con immagini nelle ultime {st['ore']} ore.")
@@ -269,7 +321,8 @@ async def run_report(bot, chat_ids: list[int]) -> None:
             _offset_file().write_text(str(len(first)))
             await _send_links(
                 bot, chat_ids,
-                f"☀️ Migliori post delle ultime {st['ore']} ore (rendimento rispetto alla media di ogni pagina):",
+                f"☀️ Migliori post in tema delle ultime {st['ore']} ore (rendimento rispetto alla media di ogni pagina):"
+                + ("" if filtered else "\n(filtro di tema non riuscito: li vedi tutti)"),
                 _link_lines(first, 1, st["min_score"]),
                 "Mandami il link di quelli che ti piacciono e li preparo in italiano."
                 + (f"\nScrivi /altri per vederne altri {min(st['candidati'], len(cands) - len(first))}." if len(cands) > len(first) else ""))
