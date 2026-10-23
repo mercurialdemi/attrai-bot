@@ -967,7 +967,7 @@ def boxes_on_plain(img: Image.Image, lay, blocks: list[dict]) -> list:
         line_h = float(np.median([r[1] - r[0] + 1 for r in g]))
         out.append((box, pitch, line_h))
     # blocchi allineati a sinistra quasi sullo stesso margine: stesso margine esatto
-    lefts = [b[0][0] for b, bl in zip(out, blocks) if (bl.get("allineamento") or "left") == "left" and b[1] is not None or b[2]]
+    lefts = [b[0][0] for b, bl in zip(out, blocks) if (bl.get("allineamento") or "left") == "left"]
     if len(lefts) >= 2 and max(lefts) - min(lefts) < W * 0.04:
         m = min(lefts)
         out = [((m, b[0][1], b[0][2], b[0][3]), b[1], b[2]) if (bl.get("allineamento") or "left") == "left" else b
@@ -1187,6 +1187,18 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
         # CASELLA DI TESTO: il testo italiano sta nello stesso riquadro occupato dall'originale.
         # Le righe si ridistribuiscono liberamente, ma non si esce mai dalla casella.
         max_w = int(bw * 1.02)
+        car0 = bl.get("carattere") or "normale"
+        if car0 != "fumetto":
+            # titoli e testi su foto/fasce: le righe possono allungarsi fino al margine simmetrico
+            # (l'italiano è più lungo: così resta grande come l'originale), ma mai oltre un blocco vicino
+            if al0 == "left":
+                wide = min(W - box[0] - max(box[0], sx), lim_r - box[0])
+            elif al0 == "right":
+                wide = min(box[2] - max(W - box[2], sx), box[2] - lim_l)
+            else:
+                half = min((box[0] + box[2]) / 2 - lim_l, lim_r - (box[0] + box[2]) / 2)
+                wide = min(W - 2 * max(min(box[0], W - box[2]), sx), 2 * half)
+            max_w = int(max(max_w, min(wide, W - 2 * sx)))
         # la casella si accorcia se esce dalla zona sicura in alto o in basso (il testo si rimpicciolisce
         # invece di essere spinto giù sopra i personaggi)
         top_eff, bot_eff = max(box[1], int(H * SAFE_Y)), min(box[3], H - int(H * SAFE_Y))
@@ -1252,7 +1264,9 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
         space = draw.textlength(" ", font=font)
         al = bl.get("allineamento", "left")
         x_left = box[0]
-        if al == "left" and abs((box[0] + box[2]) / 2 - W / 2) < W * 0.045:
+        shared_left = any(j != idx and (blocks[j].get("allineamento") or "left") == "left"
+                          and abs(all_bb[j][0] - all_bb[idx][0]) < W * 0.04 for j in range(len(blocks)))
+        if al == "left" and not shared_left and abs((box[0] + box[2]) / 2 - W / 2) < W * 0.045:
             # blocco centrato nella slide: resta centrato anche se le righe italiane hanno lunghezza diversa
             widest = max((_line_w(draw, ln, font, bfont) for ln in lines if ln), default=0)
             x_left = int((W - widest) / 2)
