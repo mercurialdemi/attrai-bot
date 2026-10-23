@@ -34,9 +34,9 @@ PROMPT = (
     "Create a NEW vertical 4:5 illustration in EXACTLY the same art style, colors and rendering as the reference "
     "image (same kind of drawing, same lighting, same mood). Scene: a confident, well-dressed man, the kind of "
     "character that appears in the reference style, standing or sitting and proudly holding up {n} towards the "
-    "viewer. They are real thick HARDCOVER BOOKS: draw the book body in 3D with visible thickness, the spine "
-    "and the page edges, slightly tilted, held firmly with fingers on the sides or behind the book. "
-    "Each book's FRONT COVER face must be a perfectly flat, solid, pure bright green (#00FF00) area, "
+    "viewer. The books are seen from the front, slightly tilted, held firmly with fingers on the sides or behind "
+    "them, with some empty space around each book (the 3D thickness will be added later, do not draw it). "
+    "Each book's FRONT COVER must be a perfectly flat, solid, pure bright green (#00FF00) rectangle, "
     "fully visible, not covered by fingers or hands, with no texture and no drawing on it. "
     "The background is a stylish city/office setting in the same style. "
     "IMPORTANT: absolutely NO text, letters, numbers, logos or speech bubbles anywhere in the image. "
@@ -91,11 +91,38 @@ def _book_face(cover: Image.Image) -> Image.Image:
     return img
 
 
+def _draw_thickness(out: np.ndarray, q: np.ndarray) -> None:
+    """Corpo del libro rigido sotto la copertina: ombra, blocco delle pagine a destra e sotto, dorso a sinistra."""
+    import cv2
+    tl, tr, br, bl = q
+    wv, hv = tr - tl, bl - tl
+    w, h = np.linalg.norm(wv), np.linalg.norm(hv)
+    t = (wv / max(w, 1)) * w * 0.065 + (hv / max(h, 1)) * h * 0.045      # spessore verso destra e in basso
+    # ombra morbida
+    sh = np.zeros(out.shape[:2], np.uint8)
+    cv2.fillConvexPoly(sh, (q + t * 2.2).astype(np.int32), 255)
+    sh = cv2.GaussianBlur(sh, (0, 0), max(4, w * 0.03))
+    out[:] = (out * (1 - 0.45 * sh[..., None] / 255.0)).astype(np.uint8)
+    paper, dark, line = (205, 222, 232), (35, 30, 28), (150, 165, 175)        # BGR
+    right = np.array([tr, tr + t, br + t, br], np.int32)
+    bottom = np.array([bl, br, br + t, bl + t], np.int32)
+    cv2.fillConvexPoly(out, right, paper)
+    cv2.fillConvexPoly(out, bottom, paper)
+    for k in range(1, 7):                                                     # righe delle pagine
+        f = k / 7
+        cv2.line(out, tuple((tr + t * f).astype(int)), tuple((br + t * f).astype(int)), line, 1, cv2.LINE_AA)
+        cv2.line(out, tuple((bl + t * f).astype(int)), tuple((br + t * f).astype(int)), line, 1, cv2.LINE_AA)
+    # copertina rigida che sporge un filo attorno alle pagine
+    cv2.polylines(out, [np.array([tr + t, br + t, bl + t], np.int32)], False, dark, max(2, int(w * 0.012)),
+                  cv2.LINE_AA)
+
+
 def _paste_covers(img: Image.Image, quads: list[np.ndarray], covers: list[Path], mask: np.ndarray) -> Image.Image:
     import cv2
     out = cv2.cvtColor(np.asarray(img.convert("RGB")), cv2.COLOR_RGB2BGR)
     H, W = out.shape[:2]
     for q, cp in zip(quads, covers):
+        _draw_thickness(out, q)
         cov = cv2.cvtColor(np.asarray(_book_face(Image.open(cp))), cv2.COLOR_RGB2BGR)
         ch, cw = cov.shape[:2]
         src = np.array([[0, 0], [cw - 1, 0], [cw - 1, ch - 1], [0, ch - 1]], dtype=np.float32)
