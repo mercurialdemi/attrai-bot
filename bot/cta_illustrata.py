@@ -34,8 +34,10 @@ PROMPT = (
     "Create a NEW vertical 4:5 illustration in EXACTLY the same art style, colors and rendering as the reference "
     "image (same kind of drawing, same lighting, same mood). Scene: a confident, well-dressed man, the kind of "
     "character that appears in the reference style, standing or sitting and proudly holding up {n} towards the "
-    "viewer. Each book's FRONT COVER must be a perfectly flat, solid, pure bright green (#00FF00) rectangle, "
-    "facing the camera, fully visible, not covered by fingers or hands, with no texture and no drawing on it. "
+    "viewer. They are real thick HARDCOVER BOOKS: draw the book body in 3D with visible thickness, the spine "
+    "and the page edges, slightly tilted, held firmly with fingers on the sides or behind the book. "
+    "Each book's FRONT COVER face must be a perfectly flat, solid, pure bright green (#00FF00) area, "
+    "fully visible, not covered by fingers or hands, with no texture and no drawing on it. "
     "The background is a stylish city/office setting in the same style. "
     "IMPORTANT: absolutely NO text, letters, numbers, logos or speech bubbles anywhere in the image. "
     "Keep the top 30% of the image and the bottom 16% of the image calm and simple (sky, wall or floor), "
@@ -68,12 +70,33 @@ def _green_quads(img: Image.Image, want: int) -> list[np.ndarray]:
     return quads, mask
 
 
+def _book_face(cover: Image.Image) -> Image.Image:
+    """La copertina come quella di un libro stampato: bordo scuro sottile, piega vicino al dorso,
+    leggera lucentezza e ombra, così non sembra un rettangolo piatto incollato."""
+    cov = cover.convert("RGB")
+    W, H = cov.size
+    a = np.asarray(cov).astype(np.float32)
+    x = np.linspace(0, 1, W)[None, :, None]
+    y = np.linspace(0, 1, H)[:, None, None]
+    shade = 1.0 - 0.28 * np.clip(1 - x / 0.06, 0, 1)                 # zona del dorso più scura
+    shade *= 1.0 - 0.10 * np.clip((x - 0.85) / 0.15, 0, 1)            # bordo esterno leggermente in ombra
+    hinge = np.exp(-((x - 0.045) ** 2) / 0.00012) * 0.18               # piega della copertina rigida
+    gloss = 0.10 * np.exp(-(((x - 0.30) - (y - 0.15) * 0.6) ** 2) / 0.02)   # riflesso diagonale
+    a = a * (shade - hinge) + 255 * gloss
+    a = np.clip(a, 0, 255).astype(np.uint8)
+    img = Image.fromarray(a)
+    d = ImageDraw.Draw(img)
+    e = max(2, W // 120)
+    d.rectangle((0, 0, W - 1, H - 1), outline=(25, 22, 20), width=e)   # bordo della copertina
+    return img
+
+
 def _paste_covers(img: Image.Image, quads: list[np.ndarray], covers: list[Path], mask: np.ndarray) -> Image.Image:
     import cv2
     out = cv2.cvtColor(np.asarray(img.convert("RGB")), cv2.COLOR_RGB2BGR)
     H, W = out.shape[:2]
     for q, cp in zip(quads, covers):
-        cov = cv2.cvtColor(np.asarray(Image.open(cp).convert("RGB")), cv2.COLOR_RGB2BGR)
+        cov = cv2.cvtColor(np.asarray(_book_face(Image.open(cp))), cv2.COLOR_RGB2BGR)
         ch, cw = cov.shape[:2]
         src = np.array([[0, 0], [cw - 1, 0], [cw - 1, ch - 1], [0, ch - 1]], dtype=np.float32)
         M = cv2.getPerspectiveTransform(src, q)
