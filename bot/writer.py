@@ -73,9 +73,11 @@ _SLIDE_ITEM = {
             },
         },
         "e_cta": {"type": "boolean", "description": "true se la slide è una call to action (segui la pagina, salva, condividi, link in bio, acquista), di qualsiasi pagina."},
+        "sfondo": {"type": "string", "enum": ["tinta_unita", "foto", "disegno"],
+                   "description": "Che cosa c'è dietro il testo: tinta_unita = colore pieno o sfumatura semplice; foto = fotografia vera; disegno = illustrazione, fumetto, vignetta, grafica disegnata."},
         "da_modificare": {"type": "boolean", "description": "true solo se la slide va cambiata: testo non in italiano, oppure CTA/handle/watermark di un'altra pagina. false se è già in italiano e non ha riferimenti ad altre pagine: in quel caso la slide resta identica all'originale."},
     },
-    "required": ["numero", "testo_originale", "testo", "watermark_originale", "watermark_riquadro", "altri_marchi", "blocchi", "e_cta", "da_modificare"],
+    "required": ["numero", "testo_originale", "testo", "sfondo", "watermark_originale", "watermark_riquadro", "altri_marchi", "blocchi", "e_cta", "da_modificare"],
 }
 
 _CTA = {

@@ -368,6 +368,47 @@ def _avoid_boxes(slide: dict, W: int, H: int) -> list[tuple[int, int, int, int]]
     return boxes
 
 
+REBUILD_PROMPT = (
+    "Recreate this exact image as a clean version WITHOUT ANY TEXT. Keep everything else identical: same "
+    "characters, faces, poses, clothes, objects, background, composition, framing, colors, drawing style and line "
+    "quality. Remove every letter, word, caption, number, watermark, handle and logo. Keep empty speech bubbles "
+    "and their tails if there are any, but with no text inside. Where text was written directly on the background "
+    "(wall, sky), continue the background naturally. Output a single image with the same aspect ratio."
+)
+
+
+def _rebuild_drawing(original, orig_fit, size, slide, blocks0, brand, testo, original_jpeg):
+    """Slide disegnata: Gemini la ricostruisce da zero senza scritte, il codice scrive l'italiano nelle caselle
+    del testo originale. Restituisce (img, True, "") oppure None se non riesce (si passa al metodo normale)."""
+    boxes = textslide.ink_boxes(orig_fit, blocks0)
+    for attempt in range(2):
+        try:
+            gen = _gemini_edit(original, REBUILD_PROMPT)
+        except Exception as e:
+            log.warning("Ricostruzione disegno: Gemini non ha risposto (%s)", e)
+            slide["_motivo_codice"] = f"ricostruzione: Gemini non ha risposto ({str(e)[:100]})"
+            return None
+        if gen is None:
+            continue
+        clean = _fit(gen, size)
+        placements: list = []
+        img = textslide.render_blocks(clean, orig_fit, blocks0, placements, boxes=boxes)
+        ok, problems = (True, "")
+        if config.SLIDE_CHECK:
+            ok, problems = writer.check_slide(_jpeg(img), testo, slide.get("watermark_originale", ""), original_jpeg)
+        if ok:
+            slide["_canva"] = {"tipo": "testo", "righe": placements}
+            slide["_via"] = "disegno-ricostruito"
+            slide["_sfondo"] = clean
+            if needs_logo(slide, brand):
+                slide["_sfondo"] = add_brand_mark(clean, brand, _avoid_boxes(slide, *clean.size), textslide.wm_box(slide, *clean.size))
+                img = add_brand_mark(img, brand, _avoid_boxes(slide, *img.size), textslide.wm_box(slide, *img.size))
+            return img, True, ""
+        slide["_motivo_codice"] = f"ricostruzione: {problems}"
+        log.info("Slide %s ricostruita ma scartata: %s", slide.get("numero"), problems)
+    return None
+
+
 def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> tuple[Image.Image, bool, str]:
     """Restituisce (slide, ok, problemi). ok=False se dopo tutti i tentativi la slide non è corretta:
     in quel caso NON va consegnata come pronta."""
@@ -407,6 +448,10 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
         for b in blocks0:
             if (b.get("carattere") or "normale") == "normale" and "_" not in (b.get("peso") or ""):
                 b["peso"] = (b.get("peso") or "bold") + "_" + fam
+    if mode == "codice" and blocks0 and slide.get("sfondo") == "disegno" and config.RICOSTRUISCI_DISEGNI == "gemini":
+        rebuilt = _rebuild_drawing(original, orig_fit, size, slide, blocks0, brand, testo, original_jpeg)
+        if rebuilt is not None:
+            return rebuilt
     if mode == "codice" and blocks0:
         uni = textslide.analyze(orig_fit, slide.get("testo_originale", ""),
                                 has_mark=bool((slide.get("watermark_originale") or "").strip()))

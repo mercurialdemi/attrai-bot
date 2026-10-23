@@ -74,3 +74,7 @@ def missing_keys() -> list[str]:
         "APIFY_TOKEN": APIFY_TOKEN,
     }
     return [k for k, v in required.items() if not v]
+
+# Slide disegnate (fumetti, illustrazioni): si ricostruiscono da zero senza scritte e il testo lo scrive il codice.
+#   gemini (ora) | off (vecchio metodo: si cancellano solo le lettere)
+RICOSTRUISCI_DISEGNI = _env("RICOSTRUISCI_DISEGNI", "gemini").lower()

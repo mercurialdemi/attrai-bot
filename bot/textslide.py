@@ -968,6 +968,56 @@ def dark_fade(img: Image.Image, original: Image.Image, boxes: list) -> Image.Ima
     return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
 
 
+def ink_boxes(img: Image.Image, blocks: list[dict]) -> list:
+    """Caselle precise del testo originale di ogni blocco, cercando le lettere per colore attorno al riquadro di
+    Claude (per quando lo sfondo viene ricostruito da zero e non si può confrontare 'prima e dopo')."""
+    import cv2
+    a = cv2.cvtColor(np.asarray(img.convert("RGB")), cv2.COLOR_RGB2BGR)
+    rgb = np.asarray(img.convert("RGB")).astype(np.int16)
+    H, W = a.shape[:2]
+    claude = [block_box(bl, W, H) for bl in blocks]
+    out = []
+    for i, bl in enumerate(blocks):
+        box = claude[i]
+        cols = [c for c in (_hex(bl.get("colore")), _hex(bl.get("colore_evidenziato")) if bl.get("colore_evidenziato") else None) if c]
+        m = _color_mask(a, box, cols, W, H) > 0
+        # i pixel più vicini al riquadro di un altro blocco appartengono a quello
+        for j, ob in enumerate(claude):
+            if j == i:
+                continue
+            ys_, xs_ = np.nonzero(m)
+            if not len(xs_):
+                break
+            d_me = np.maximum(np.maximum(box[0] - xs_, xs_ - box[2]), 0) + np.maximum(np.maximum(box[1] - ys_, ys_ - box[3]), 0)
+            d_ot = np.maximum(np.maximum(ob[0] - xs_, xs_ - ob[2]), 0) + np.maximum(np.maximum(ob[1] - ys_, ys_ - ob[3]), 0)
+            far = d_ot < d_me
+            m[ys_[far], xs_[far]] = False
+        ink = np.zeros((H, W), bool)
+        for c in cols:
+            ink |= np.abs(rgb - np.array(c)).max(axis=2) < 75
+        ink &= m
+        near = np.zeros((H, W), bool)                 # solo attorno al riquadro di Claude (non i tratti del disegno)
+        ex, ey = int(W * 0.03), int(H * 0.012)
+        near[max(0, box[1] - ey):min(H, box[3] + ey), max(0, box[0] - ex):min(W, box[2] + ex)] = True
+        ink &= near
+        # righe di testo vere: abbastanza inchiostro in orizzontale
+        rowsum = ink.sum(axis=1)
+        ink[rowsum < max(4, int((box[2] - box[0]) * 0.03))] = False
+        ys, xs = np.nonzero(ink)
+        if len(xs) < 30:
+            out.append((box, None, None))
+            continue
+        tight = (int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max()))
+        rows = [r for r in _runs(ink.sum(axis=1)[tight[1]:tight[3] + 1] >= 3, min_gap=2) if r[1] - r[0] >= 6]
+        pitch = float(np.median(np.diff([r[0] for r in rows]))) if len(rows) >= 2 else None
+        line_h = float(np.median([r[1] - r[0] + 1 for r in rows])) if rows else None
+        n_orig = max(1, len([x for x in (bl.get("testo") or "").split("\n") if x.strip()]))
+        if len(rows) < min(n_orig, 2):            # righe attaccate: misure non affidabili, conta solo la casella
+            pitch = line_h = None
+        out.append((tight, pitch, line_h))
+    return out
+
+
 def other_marks(slide: dict, W: int, H: int) -> list:
     return [block_box(r, W, H) for r in (slide.get("altri_marchi") or []) if r.get("w") and r.get("h")]
 
