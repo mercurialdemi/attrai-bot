@@ -27,6 +27,10 @@ FONTS = {
     "semibold_tight": config.ROOT / "assets" / "stretto_testo_semibold.ttf",
     "bold_tight": config.ROOT / "assets" / "stretto_testo_bold.ttf",
 }
+for _fam in ("montserrat", "poppins", "arimo"):
+    for _w in ("regular", "semibold", "bold"):
+        FONTS[f"{_w}_{_fam}"] = config.ROOT / "assets" / f"{_fam}_{_w}.ttf"
+FAMILIES = ["", "_tight", "_montserrat", "_poppins", "_arimo"]   # Inter, Inter Tight, Montserrat, Poppins, Arimo (tipo Helvetica/Arial)
 
 
 @dataclass
@@ -90,6 +94,52 @@ def _size_from_text(text_lines, original_text: str, weight: str) -> int | None:
         if w100 > 50 and len(ln) >= 4:
             est.append(100 * (x1 - x0 + 1) / w100)
     return int(np.median(est)) if est else None
+
+
+def _identify_font(ink: np.ndarray, text_lines: list, orig_lines: list[str]):
+    """Restituisce (nome font, dimensione) del font disponibile più simile all'originale, o None."""
+    if not orig_lines or len(orig_lines) != len(text_lines):
+        return None
+    pairs = sorted([(t, l) for t, l in zip(orig_lines, text_lines) if len(t) >= 6],
+                   key=lambda p: -(p[1][3] - p[1][2]))[:3]
+    if not pairs:
+        return None
+    crops = []
+    for t, (y0, y1, x0, x1) in pairs:
+        c = ink[y0:y1 + 1, x0:x1 + 1]
+        ys, xs = np.where(c)
+        if len(xs) < 30:
+            continue
+        crops.append((t, c[ys.min():ys.max() + 1, xs.min():xs.max() + 1], x1 - x0 + 1))
+    if not crops:
+        return None
+    best, best_score = None, -1.0
+    for fam in FAMILIES:
+        for w in ("regular", "semibold", "bold"):
+            name = w + fam
+            f = _font(name, 100)
+            scores, sizes = [], []
+            for t, crop, width in crops:
+                bb = f.getbbox(t)
+                tw, th = bb[2] - bb[0], bb[3] - bb[1]
+                if tw <= 0 or th <= 0:
+                    continue
+                im = Image.new("L", (tw + 4, th + 4), 0)
+                ImageDraw.Draw(im).text((2 - bb[0], 2 - bb[1]), t, font=f, fill=255)
+                ch, cw = crop.shape
+                r = np.asarray(im.resize((cw, ch))) > 110
+                inter = (r & crop).sum()
+                union = (r | crop).sum()
+                # proporzioni: a parità di larghezza l'altezza deve tornare
+                prop = min(th / tw, ch / cw) / max(th / tw, ch / cw)
+                scores.append(inter / max(1, union) * prop)
+                # dimensione: media tra quella che dà la stessa larghezza e quella che dà la stessa altezza
+                sizes.append(50 * width / tw + 50 * ch / th)
+            if scores:
+                sc = float(np.mean(scores))
+                if sc > best_score:
+                    best, best_score = (name, int(np.median(sizes))), sc
+    return best if best_score > 0.25 else None
 
 
 def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False) -> Layout | None:
@@ -179,39 +229,33 @@ def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False) -
             runs += [e - s0 + 1 for s0, e in _runs(ink[y, l[2]:l[3] + 1], min_gap=0)]
     stroke = (np.median(runs) / max(size, 1)) if runs else 0.1
     weight = "bold" if stroke > 0.125 else ("semibold" if stroke > 0.105 else "regular")
-    # corpo dall'altezza vera delle lettere: la dimensione in cui "Hg" è alto come le righe misurate
-    h75 = float(np.percentile(t_heights, 75))
-    size_h = size
-    for cand in range(max(12, int(h75 * 0.7)), int(h75 * 1.6) + 1):
-        bb = _font(weight, cand).getbbox("Hgjy")
-        if bb[3] - bb[1] >= h75:
-            size_h = cand
-            break
-    # corpo dalla larghezza (confronto con il testo letto da Claude): se a parità di altezza l'originale è
-    # molto più stretto di Inter, il font è "compatto" (stile Helvetica Neue) e si usa Inter Tight
-    tight = False
-    by_text = _size_from_text(text_lines, original_text, weight)
-    if not by_text:
-        flat_text = " ".join((original_text or "").split())
-        if len(flat_text) > 12:
-            ink_w = sum(l[3] - l[2] + 1 for l in text_lines)
-            probe = _font(weight, 100)
-            w100 = probe.getlength(flat_text) - probe.getlength(" ") * max(0, len(text_lines) - 1)
-            by_text = int(100 * ink_w / w100) if w100 > 0 else None
-    if by_text and by_text < 0.95 * size_h:
-        tight, size = True, size_h
+    # RICONOSCIMENTO DEL FONT: ogni riga dell'originale (con il suo testo letto da Claude) si confronta con la
+    # stessa riga scritta in ogni font e spessore disponibile, portata alla stessa larghezza: vince quello
+    # con la forma più simile (sovrapposizione dei pixel). Da lì si ricava anche la dimensione esatta.
+    orig_lines = [ln.strip() for ln in (original_text or "").split("\n") if ln.strip()]
+    family, found = "", _identify_font(ink, text_lines, orig_lines)
+    if found:
+        wname, size = found
+        weight, _, family = wname.partition("_")
+        family = "_" + family if family else ""
     else:
-        size = by_text or size_h
-    stroke = (np.median(runs) / size) if runs else 0.1
-    weight = "bold" if stroke > 0.125 else ("semibold" if stroke > 0.105 else "regular")
+        h75 = float(np.percentile(t_heights, 75))
+        for cand in range(max(12, int(h75 * 0.6)), int(h75 * 1.7) + 1):
+            bb = _font(weight, cand).getbbox("Hgjy")
+            if bb[3] - bb[1] >= h75:
+                size = cand
+                break
+        weight = weight
 
     # interlinea misurata: distanza tipica tra l'inizio di due righe consecutive
     tops = [l[0] for l in text_lines]
     gaps = np.diff(tops) if len(tops) > 1 else np.array([size * 1.32])
     pitch = float(np.percentile(gaps, 30)) if len(gaps) else size * 1.32
-    line_ratio = float(np.clip(pitch / max(size, 1), 1.1, 1.8))
-    big = [g - pitch for g in gaps if g > pitch * 1.4]
-    blank_ratio = float(np.clip((np.median(big) / max(size, 1)) if big else 0.8, 0.4, 1.6))
+    step0 = float(np.min(gaps)) if len(tops) > 1 else pitch
+    # interlinea vera (anche serratissima, righe che quasi si toccano) e stacco vero tra i paragrafi
+    line_ratio = float(np.clip(step0 / max(size, 1), 0.95, 1.8))
+    big = [g - step0 for g in gaps if g > step0 * 1.22]
+    blank_ratio = float(np.clip((np.median(big) / max(size, 1)) if big else 0.8, 0.12, 1.6))
     # titoletto colorato: il primo paragrafo ha un colore diverso dal resto (es. "3. Titolo" in rosso)
     head_color, head_weight = None, ""
     def _line_color(l):
@@ -275,10 +319,10 @@ def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False) -
                 head_color = None                    # i colori per paragrafo comprendono il titoletto
                 # colore principale = quello del paragrafo più chiaro/contrastato (il testo "forte")
                 color = max((c for c, _ in para_colors), key=lambda c: abs(np.array(c) - bg).max())
-    if tight:
-        weight = weight if weight.endswith("_tight") else weight + "_tight"
-        if head_weight and not head_weight.endswith("_tight"):
-            head_weight += "_tight"
+    if family:
+        weight = weight + family
+        if head_weight:
+            head_weight = head_weight + family
     block_center = (top + bottom) / 2
     if align == "center":
         width = int(min(W * 0.9, (np.max(rights) - np.min(lefts)) * 1.1))
@@ -291,7 +335,7 @@ def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False) -
     erase = _dilate(erase, max(2, size // 10))
     return Layout(bg=tuple(int(c) for c in bg), color=color, weight=weight, align=align, left=left,
                   top=int(top), bottom=int(bottom), width=width, size=max(14, size),
-                  centered_v=abs(block_center - H / 2) < H * 0.08, mask=erase,
+                  centered_v=abs(block_center - H / 2) < H * 0.03, mask=erase,
                   line_ratio=line_ratio, blank_ratio=blank_ratio, right=int(np.max(rights)),
                   head_color=head_color, head_weight=head_weight, para_colors=para_colors)
 
@@ -539,9 +583,10 @@ def _tokens(text: str) -> list[list[list[tuple[str, int]]]]:
 
 
 def _bold_weight(weight: str) -> str:
-    if weight.endswith("_tight"):
-        return "bold_tight"
-    return "bold" if weight in ("regular", "semibold") else weight
+    base, _, fam = weight.partition("_")
+    if base in ("regular", "semibold", "bold"):
+        return "bold" + ("_" + fam if fam else "")
+    return weight
 
 
 def _wfont(font, bfont, flag):
@@ -866,6 +911,15 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
         color = _hex(bl.get("colore")) if (boxes or not color) else color
         hl_color = _hex(bl.get("colore_evidenziato")) if bl.get("colore_evidenziato") else color
         bw, bh = max(40, box[2] - box[0]), max(20, box[3] - box[1])
+        # spazio in larghezza: l'italiano è più lungo dell'inglese. Invece di rimpicciolire o andare a capo
+        # più volte, le righe possono allungarsi fino al margine simmetrico a quello di partenza
+        al0 = bl.get("allineamento", "left")
+        if al0 == "left":
+            max_w = max(bw, W - box[0] - max(box[0], int(W * 0.04)))
+        elif al0 == "right":
+            max_w = max(bw, box[2] - max(W - box[2], int(W * 0.04)))
+        else:
+            max_w = max(bw, W - 2 * max(min(box[0], W - box[2]), int(W * 0.04)))
         car = bl.get("carattere") or "normale"
         weight = car if car in ("titolo", "stretto") else (bl.get("peso") or "regular")
         paras = _tokens(text)
@@ -885,7 +939,13 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
         while size >= 14:
             font = _font(weight, size)
             bfont = _font(_bold_weight(weight), size)
-            lines = _layout(draw, paras, font, int(bw * 1.03), bfont)
+            lines = _layout(draw, paras, font, int(max_w), bfont)
+            # gli a capo dell'inglese non devono obbligare a più righe: se ridistribuendo le parole
+            # le righe diminuiscono (es. 3 come l'originale invece di 4), si usa quella versione
+            flat = [[[w for r in rows for w in r]] for rows in paras]
+            lines_flat = _layout(draw, flat, font, int(max_w), bfont)
+            if len(lines_flat) < len(lines):
+                lines = lines_flat
             lh = int(size * ratio)
             total = sum(int(size * 0.6) if ln is None else lh for ln in lines)
             ink_h = total - lh + size * 0.95          # altezza reale delle lettere (l'ultima riga senza interlinea)
@@ -893,7 +953,7 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
             # l'italiano è spesso più lungo: se le lettere hanno la misura dell'originale si accetta
             # un po' di altezza in più (fino al 25%) invece di rimpicciolire subito il titolo
             room = 1.25 if (pitch and line_h) else 1.12
-            if ink_h <= bh * room and widest <= bw * 1.05:
+            if ink_h <= bh * room and widest <= max_w:
                 best = (font, bfont, lines, lh, total)
                 break
             size -= 1 if size < 40 else 2
