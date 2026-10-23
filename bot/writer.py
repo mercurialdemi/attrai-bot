@@ -109,9 +109,10 @@ CAPTION_TOOL = {
             "testo_slide_finale": {
                 "type": "string",
                 "description": "Testo della NOSTRA slide finale di CTA (c'è in OGNI post), che verrà scritta con lo stesso stile "
-                               "grafico delle altre slide. Va SCELTO tra i TESTI DELLE NOSTRE SLIDE CTA, copiato com'è: quello "
-                               "dello stesso tipo della CTA scelta (per un manuale, quello di quel manuale). Se per quel manuale "
-                               "non c'è nessuna slide, scegli uno dei testi 'segui'. Mai testi presi dalle descrizioni.",
+                               "grafico delle altre slide. Parti da uno dei TESTI DELLE NOSTRE SLIDE CTA dello stesso tipo della "
+                               "CTA scelta (per un manuale, uno di quel manuale; se non ce ne sono, uno 'segui') e ADATTALO al "
+                               "post: stessa struttura, stessa leva e lunghezza simile, ma con le parole che lo legano al tema e al "
+                               "dolore di questo post. Mai partire dalle CTA delle descrizioni. Righe corte con a capo.",
             },
             "slide_cta": {
                 "type": "array",
@@ -581,14 +582,12 @@ def apply_cta_texts(slides_out: dict, new: list[dict]) -> None:
 
 
 def pick_cta_slide_text(proposed: str, cta: dict) -> str:
-    """Il testo della slide CTA finale viene SOLO dalle nostre slide CTA (lette da /analizza):
-    quella del manuale scelto, altrimenti una 'segui la pagina'. Se Claude ne ha copiata una, resta quella."""
+    """Il testo della slide CTA finale: Claude adatta al post una delle nostre slide CTA (lette da /analizza).
+    Se manca o è troppo lunga, si usa una delle nostre così com'è (manuale scelto, altrimenti 'segui')."""
     texts = load_style().get("testi_slide_cta") or []
-    if not texts:
-        return proposed                     # nessuna slide letta ancora: si usa la proposta di Claude
+    if not texts or (proposed and len(proposed) <= 400):
+        return proposed                     # la CTA adattata da Claude partendo dalle nostre slide
     norm = lambda t: " ".join(t.lower().split())
-    if any(norm(t["testo"]) == norm(proposed) for t in texts):
-        return proposed
     if cta.get("tipo") == "manuale":
         same = [t for t in texts if t["tipo"] == "manuale" and t.get("manuale") == cta.get("manuale")]
         if same:
