@@ -22,7 +22,7 @@ FONTS = {
     "bold": config.ROOT / "assets" / "testo_bold.otf",
     "titolo": config.ROOT / "assets" / "titolo_anton.ttf",          # titoli stretti e pesanti (stile Anton/Bebas)
     "stretto": config.ROOT / "assets" / "titolo_oswald_bold.ttf",   # stretto ma meno pesante (stile Oswald)
-    "fumetto": config.ROOT / "assets" / "fumetto_marker.ttf",       # lettering a mano dei fumetti
+    "fumetto": config.ROOT / "assets" / "fumetto_chewy.ttf",        # lettering a mano dei fumetti
     # testo con lettere strette e ravvicinate (stile Helvetica Neue / SF compatto)
     "regular_tight": config.ROOT / "assets" / "stretto_testo_regular.ttf",
     "semibold_tight": config.ROOT / "assets" / "stretto_testo_semibold.ttf",

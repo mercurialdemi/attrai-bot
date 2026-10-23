@@ -20,8 +20,7 @@ from . import config
 log = logging.getLogger(__name__)
 
 COVERS = config.ROOT / "assets" / "manuali"
-MARKER = config.ROOT / "assets" / "fumetto_marker.ttf"
-BODY = config.ROOT / "assets" / "titolo_oswald_bold.ttf"
+COMIC = config.ROOT / "assets" / "fumetto_chewy.ttf"
 
 # quali copertine mostrare per ogni CTA
 BOOKS = {
@@ -189,7 +188,7 @@ def _panel(img: Image.Image, box, radius: int):
     return Image.alpha_composite(img.convert("RGBA"), layer)
 
 
-def _texts(img: Image.Image, text: str) -> Image.Image:
+def _texts(img: Image.Image, text: str, font_path: Path = COMIC) -> Image.Image:
     """Titolo in alto, frase e chiusura in basso, in riquadri bianchi stile fumetto."""
     W, H = img.size
     paras = [p.strip() for p in text.split("\n\n") if p.strip()]
@@ -197,6 +196,8 @@ def _texts(img: Image.Image, text: str) -> Image.Image:
         return img
     head = paras[0].upper()
     body = "\n".join(paras[1:-1]) if len(paras) > 2 else ""
+    if Path(font_path) == COMIC:
+        body = body.upper()                  # il lettering dei fumetti è sempre maiuscolo
     close = paras[-1].upper() if len(paras) > 1 else ""
     red = (205, 30, 30)
     margin = int(W * 0.065)
@@ -207,6 +208,8 @@ def _texts(img: Image.Image, text: str) -> Image.Image:
         words = head.split()
         if len(words) > 2:
             head = " ".join(words[:-2] + ["[[" + " ".join(words[-2:]) + "]]"])
+    # un solo font in tutta la slide: quello del post (lettering da fumetto nei post disegnati)
+    MARKER = BODY = font_path
     fh = ImageFont.truetype(str(MARKER), int(W * 0.075))
     lines_h = _wrap(d, head, fh, inner)
     while len(lines_h) > 3 and fh.size > 30:
@@ -243,6 +246,24 @@ def _texts(img: Image.Image, text: str) -> Image.Image:
     return img.convert("RGB")
 
 
+def _post_font(post: dict) -> Path:
+    from . import textslide
+    blocks = [b for sl in post.get("slides", []) for b in (sl.get("blocchi") or [])]
+    if any(b.get("carattere") == "fumetto" for b in blocks):
+        return textslide.FONTS["fumetto"]
+    w = post.get("_peso_testo") or ""
+    if w:
+        base, _, fam = w.partition("_")
+        key = "bold" + ("_" + fam if fam else "")
+        if key in textslide.FONTS and textslide.FONTS[key].exists():
+            return textslide.FONTS[key]
+    cars = [b.get("carattere") for b in blocks]
+    for c in ("titolo", "stretto"):
+        if c in cars:
+            return textslide.FONTS[c]
+    return textslide.FONTS["bold"]
+
+
 def make(post: dict, originals: list[bytes], jdir: Path) -> tuple[Path, dict] | None:
     cta = post.get("cta") or {}
     if cta.get("tipo") != "manuale":
@@ -272,7 +293,7 @@ def make(post: dict, originals: list[bytes], jdir: Path) -> tuple[Path, dict] | 
             continue
         img = _paste_covers(gen, quads, books, mask)
         bg = img.copy()
-        img = _texts(img, text)
+        img = _texts(img, text, _post_font(post))
         out = jdir / "cta_illustrata.jpg"
         img.save(out, "JPEG", quality=95, subsampling=0)
         bgp = jdir / "sfondo_cta_illustrata.jpg"
