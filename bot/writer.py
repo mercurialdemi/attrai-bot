@@ -504,6 +504,11 @@ SOSTANZA (la descrizione deve insegnare, non intrattenere)
 - Didattica: struttura chiara. Hook che apre il problema, spiegazione del meccanismo, 2-4 punti pratici
   (ognuno una frase d'azione + il perché), chiusura che fissa il concetto, poi la CTA.
 - Ogni frase deve aggiungere informazione. Se una frase si può togliere senza perdere niente, toglila.
+- Basi scientifiche: quando il tema lo permette, porta almeno 2 riferimenti reali e verificabili (studio,
+  ricercatore, università o anno) e spiega in parole semplici cosa hanno scoperto e perché conta per il lettore.
+  Solo riferimenti che conosci con certezza: meglio uno vero che due inventati. Mai inventare numeri.
+- Chiusura prima della CTA: niente domande generiche ("Sei d'accordo?", "Cosa ne pensi?"). Se fai una domanda
+  deve essere introspettiva e specifica sul tema del post.
 
 FLUIDITÀ (la descrizione deve sembrare scritta di getto da un italiano, non tradotta)
 - Frasi brevi e parlate, ritmo da messaggio vocale: una idea per frase, molti a capo.
