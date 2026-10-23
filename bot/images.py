@@ -464,6 +464,7 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
                 areas.append(wb)
             areas += textslide.other_marks(slide, W_, H_)
             clean = textslide.inpaint_boxes(orig_fit, areas, colors=cols)
+            clean = textslide.dark_fade(clean, orig_fit, [textslide.block_box(b, W_, H_) for b in blocks0])
             placements = []
             img = textslide.render_blocks(clean, orig_fit, blocks0, placements)
             ok, problems = (True, "")

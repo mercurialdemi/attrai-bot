@@ -928,7 +928,43 @@ def boxes_on_plain(img: Image.Image, lay, blocks: list[dict]) -> list:
         pitch = float(np.median(np.diff([r[0] for r in g]))) if len(g) >= 2 else None
         line_h = float(np.median([r[1] - r[0] + 1 for r in g]))
         out.append((box, pitch, line_h))
+    # blocchi allineati a sinistra quasi sullo stesso margine: stesso margine esatto
+    lefts = [b[0][0] for b, bl in zip(out, blocks) if (bl.get("allineamento") or "left") == "left" and b[1] is not None or b[2]]
+    if len(lefts) >= 2 and max(lefts) - min(lefts) < W * 0.04:
+        m = min(lefts)
+        out = [((m, b[0][1], b[0][2], b[0][3]), b[1], b[2]) if (bl.get("allineamento") or "left") == "left" else b
+               for b, bl in zip(out, blocks)]
     return out
+
+
+def dark_fade(img: Image.Image, original: Image.Image, boxes: list) -> Image.Image:
+    """Testo su una fascia scura che sfuma nella foto (copertine): invece di ricostruire la foto dietro le lettere,
+    si ridisegna la fascia scura con una sfumatura morbida verso l'alto, un po' più alta del testo nuovo.
+    Si applica solo se dietro il testo originale lo sfondo era già scuro."""
+    W, H = img.size
+    if not boxes:
+        return img
+    top = min(b[1] for b in boxes)
+    bot = max(b[3] for b in boxes)
+    g = np.asarray(original.convert("L")).astype(np.int16)
+    band = g[max(0, top):min(H, bot)]
+    if band.size == 0:
+        return img
+    dark = band[band < 90]
+    if dark.size < band.size * 0.5:
+        return img                                   # dietro il testo non c'è una fascia scura
+    rgb = np.asarray(original.convert("RGB")).astype(np.int16)[max(0, top):min(H, bot)]
+    col = np.median(rgb[band < 90], axis=0)
+    a = np.asarray(img.convert("RGB")).astype(np.float32)
+    y = np.arange(H, dtype=np.float32)[:, None]
+    start, full = top - H * 0.16, top - H * 0.02
+    alpha = np.clip((y - start) / max(1.0, full - start), 0, 1)
+    if bot < H * 0.8:                                # fascia in mezzo alla slide: sfuma anche sotto
+        end0, end1 = bot + H * 0.02, bot + H * 0.14
+        alpha = np.minimum(alpha, np.clip((end1 - y) / max(1.0, end1 - end0), 0, 1))
+    alpha = alpha ** 1.3
+    a = a * (1 - alpha[..., None]) + col[None, None, :] * alpha[..., None]
+    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
 
 
 def other_marks(slide: dict, W: int, H: int) -> list:
@@ -1071,25 +1107,28 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
                     break
             ratio = float(np.clip(pitch / max(size, 1), 1.02, 1.6))
             size = min(size, int(pitch / 1.02))      # mai più grande di quanto permette l'interlinea originale
-        while size >= 14:
-            font = _font(weight, size)
-            bfont = _font(_bold_weight(weight), size)
-            lh = int(size * ratio)
-            # due modi di andare a capo: quelli dell'originale, oppure parole ridistribuite liberamente.
-            # Vince il primo che sta tutto nella casella (larghezza e altezza).
-            flat = [[[w for r in rows for w in r]] for rows in paras]
-            fitted = None
-            for cand in (_layout(draw, paras, font, int(max_w), bfont), _layout(draw, flat, font, int(max_w), bfont)):
-                total = sum(int(size * 0.6) if ln is None else lh for ln in cand)
-                ink_h = total - lh + size * 0.95
-                widest = max((_line_w(draw, ln, font, bfont) for ln in cand if ln), default=0)
-                if ink_h <= bh * 1.04 and widest <= max_w:
-                    if fitted is None or len(cand) < len(fitted[0]):
-                        fitted = (cand, total)
-            if fitted:
-                best = (font, bfont, fitted[0], lh, fitted[1])
-                break
-            size -= 1 if size < 40 else 2
+        start = size
+        flat = [[[w for r in rows for w in r]] for rows in paras]
+
+        def fit(p_):
+            sz = start
+            while sz >= 14:
+                f_, b_ = _font(weight, sz), _font(_bold_weight(weight), sz)
+                lh_ = int(sz * ratio)
+                cand = _layout(draw, p_, f_, int(max_w), b_)
+                tot = sum(int(sz * 0.6) if ln is None else lh_ for ln in cand)
+                if tot - lh_ + sz * 0.95 <= bh * 1.04 and \
+                        max((_line_w(draw, ln, f_, b_) for ln in cand if ln), default=0) <= max_w:
+                    return (f_, b_, cand, lh_, tot)
+                sz -= 1 if sz < 40 else 2
+            return None
+        # prima gli a capo dell'originale (elenchi, frasi brevi una per riga); le parole si ridistribuiscono
+        # solo se così il testo verrebbe molto più piccolo
+        keep_breaks = fit(paras)
+        reflow = fit(flat) if any(len(rows) > 1 for rows in paras) else None
+        best = keep_breaks
+        if reflow and (not keep_breaks or reflow[0].size > keep_breaks[0].size * 1.2):
+            best = reflow
         if not best:
             font, bfont = _font(weight, 14), _font(_bold_weight(weight), 14)
             lines = _layout(draw, paras, font, bw, bfont)

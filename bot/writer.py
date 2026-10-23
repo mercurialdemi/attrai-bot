@@ -305,7 +305,9 @@ Ricevi le slide di un post di una pagina collaboratrice che ci ha autorizzato a 
 
 - Leggi con attenzione tutto il testo di ogni slide e trascrivilo in testo_originale.
 - {TRADUZIONE.get(modo, TRADUZIONE['fedele'])}
-- Lunghezza simile all'originale e stessi a capo, così il testo entra nello stesso spazio grafico.
+- Impaginazione identica all'originale: STESSI A CAPO e stesso numero di righe. Ogni riga italiana deve avere
+  una lunghezza simile alla riga inglese corrispondente; se in italiano viene più lunga, riformula la riga in
+  modo più asciutto (meno parole, stesso senso) invece di allungarla. Negli elenchi: un elemento per riga, sempre.
 - Battute di vignette/fumetti e testi scritti sopra un disegno o una foto: l'italiano deve essere LUNGO QUANTO
   L'INGLESE O PIÙ CORTO (massimo +5% di caratteri), anche a costo di riformulare in modo più asciutto,
   perché lo spazio attorno ai personaggi è limitato ("I ran into my ex tonight." -> "Stasera ho visto il mio ex.").
