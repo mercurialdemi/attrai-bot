@@ -92,6 +92,12 @@ def _composite(original: Image.Image, edited: Image.Image, boxes: list[tuple[int
     for x0, y0, x1, y1 in boxes:
         dn.rectangle((max(0, x0 - qx), max(0, y0 - qy), min(W, x1 + qx), min(H, y1 + qy)), fill=255)
     diff = np.abs(np.asarray(edited, np.int16) - np.asarray(original, np.int16)).max(axis=2) > 60
+    # solo dove nell'originale c'erano lettere (pixel molto diversi dallo sfondo sfocato), non dove Gemini
+    # ha "reinventato" la foto: così la foto resta quella vera, nitida
+    g = np.asarray(original.convert("L"), np.int16)
+    blur = np.asarray(original.convert("L").filter(ImageFilter.BoxBlur(12)), np.int16)
+    letters = np.abs(g - blur) > 40
+    diff = diff & np.asarray(Image.fromarray((letters * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(7))) > 0
     changed = Image.fromarray((diff * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(9))
     changed = Image.fromarray(np.minimum(np.asarray(changed), np.asarray(near)))
     mask = Image.fromarray(np.maximum(np.asarray(mask), np.asarray(changed)))
@@ -329,9 +335,10 @@ def _remove_watermark(clean: Image.Image, orig_fit: Image.Image, slide: dict):
     if done:
         return clean
     wb = textslide.wm_box(slide, W, H)
-    if wb:
+    marks = ([wb] if wb else []) + textslide.other_marks(slide, W, H)
+    if marks:
         try:
-            return textslide.inpaint_boxes(clean, [wb])
+            return textslide.inpaint_boxes(clean, marks)
         except Exception as e:
             log.warning("Watermark non ricostruito col codice: %s", e)
     try:
@@ -428,6 +435,7 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
             wb = textslide.wm_box(slide, W_, H_)
             if wb:
                 areas.append(wb)
+            areas += textslide.other_marks(slide, W_, H_)
             clean = textslide.inpaint_boxes(orig_fit, areas)
             placements = []
             img = textslide.render_blocks(clean, orig_fit, blocks0, placements)
@@ -466,7 +474,8 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
         if mode == "codice" and blocks:
             W_, H_ = size
             img = _composite(orig_fit, img, [textslide.block_box(b, W_, H_) for b in blocks]
-                             + _wm_bands(slide, W_, H_), pad=0.035)
+                             + ([textslide.wm_box(slide, W_, H_)] if textslide.wm_box(slide, W_, H_) else [])
+                             + textslide.other_marks(slide, W_, H_), pad=0.012)
             # Gemini ha solo ripulito: il testo di Claude lo scrive il codice negli stessi riquadri
             clean = textslide.flatten_ghosts(img, blocks)
             placements: list = []

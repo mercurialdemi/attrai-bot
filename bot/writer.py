@@ -36,9 +36,19 @@ _SLIDE_ITEM = {
         "watermark_originale": {"type": "string", "description": "Handle, nome o logo di una pagina DIVERSA dalla nostra visibile sulla slide e dove si trova (es. '@pagina in basso a destra'). Vuoto se assente o se è il nostro."},
         "watermark_riquadro": {
             "type": "object",
-            "description": "Riquadro stretto attorno al watermark/handle/logo della pagina di origine, in millesimi della slide. Tutti 0 se non c'è.",
+            "description": "Riquadro stretto attorno al watermark/firma/handle della PAGINA CHE HA PUBBLICATO il post "
+                           "(quella indicata come pagina di origine; spesso una firma piccola in basso), in millesimi della "
+                           "slide. Lì andrà il nostro logo. Tutti 0 se non c'è.",
             "properties": {"x": {"type": "integer"}, "y": {"type": "integer"}, "w": {"type": "integer"}, "h": {"type": "integer"}},
             "required": ["x", "y", "w", "h"],
+        },
+        "altri_marchi": {
+            "type": "array",
+            "description": "Riquadri (millesimi) di ALTRI watermark/handle di altre pagine sulla slide (es. la fonte della foto), "
+                           "da cancellare. Lista vuota se non ce ne sono.",
+            "items": {"type": "object",
+                      "properties": {"x": {"type": "integer"}, "y": {"type": "integer"}, "w": {"type": "integer"}, "h": {"type": "integer"}},
+                      "required": ["x", "y", "w", "h"]},
         },
         "blocchi": {
             "type": "array",
@@ -65,7 +75,7 @@ _SLIDE_ITEM = {
         "e_cta": {"type": "boolean", "description": "true se la slide è una call to action (segui la pagina, salva, condividi, link in bio, acquista), di qualsiasi pagina."},
         "da_modificare": {"type": "boolean", "description": "true solo se la slide va cambiata: testo non in italiano, oppure CTA/handle/watermark di un'altra pagina. false se è già in italiano e non ha riferimenti ad altre pagine: in quel caso la slide resta identica all'originale."},
     },
-    "required": ["numero", "testo_originale", "testo", "watermark_originale", "watermark_riquadro", "blocchi", "e_cta", "da_modificare"],
+    "required": ["numero", "testo_originale", "testo", "watermark_originale", "watermark_riquadro", "altri_marchi", "blocchi", "e_cta", "da_modificare"],
 }
 
 _CTA = {
@@ -112,7 +122,7 @@ CAPTION_TOOL = {
                                "grafico delle altre slide. Parti da uno dei TESTI DELLE NOSTRE SLIDE CTA dello stesso tipo della "
                                "CTA scelta (per un manuale, uno di quel manuale; se non ce ne sono, uno 'segui') e ADATTALO al "
                                "post: stessa struttura, stessa leva e lunghezza simile, ma con le parole che lo legano al tema e al "
-                               "dolore di questo post. Mai partire dalle CTA delle descrizioni. Righe corte con a capo.",
+                               "dolore di questo post. Mai partire dalle CTA delle descrizioni. Righe corte con a capo. Niente emoji.",
             },
             "slide_cta": {
                 "type": "array",
@@ -299,7 +309,7 @@ Ricevi le slide di un post di una pagina collaboratrice che ci ha autorizzato a 
 - Stesso numero di slide e stesso ordine.
 - Unica eccezione alla fedeltà: se una slide contiene una CTA o un riferimento alla pagina di origine
   (segui @..., link in bio, nome della pagina), sostituiscilo con il nostro equivalente per {brand['nome']}.
-- Niente asterischi, niente trattini lunghi.
+- Niente asterischi, niente trattini lunghi, niente emoji nel testo delle slide (i font delle slide non le hanno).
 - In blocchi descrivi ogni blocco di testo separato: testo italiano e riquadro che occupa il testo ORIGINALE
   (in millesimi, stretto attorno alle lettere), colore, allineamento, spessore, maiuscolo. Il testo verrà
   riscritto esattamente lì sopra l'immagine ripulita, quindi le misure devono essere accurate.

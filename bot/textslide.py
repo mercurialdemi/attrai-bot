@@ -56,6 +56,16 @@ class Layout:
     head_weight: str = ""
 
 
+import re as _re
+_EMOJI = _re.compile("[\U0001F000-\U0001FAFF\u2600-\u27BF\uFE0F\u200D\u2B00-\u2BFF]")
+
+
+def no_emoji(text: str) -> str:
+    """Le emoji non esistono nei font delle slide (uscirebbe un quadratino): si tolgono."""
+    t = _re.sub(r"[ \t]{2,}", " ", _EMOJI.sub("", text or ""))
+    return "\n".join(line.strip() for line in t.split("\n")).strip()
+
+
 def _font(weight: str, size: int) -> ImageFont.FreeTypeFont:
     p = FONTS.get(weight) or FONTS["regular"]
     if not p.exists():
@@ -443,7 +453,7 @@ def background(img: Image.Image, lay: Layout) -> Image.Image:
 def render(img: Image.Image, lay: Layout, text: str, placements: list | None = None) -> Image.Image:
     """Scrive il testo. Se `placements` è una lista, ci aggiunge (riga, x, y, corpo, peso, colore) per il file Canva."""
     out = _clean(img, lay)
-    text = text.strip()
+    text = no_emoji(text)
     if not text:
         return out
     W, H = out.size
@@ -786,7 +796,7 @@ def flatten_ghosts(img: Image.Image, blocks: list[dict]) -> Image.Image:
     return Image.fromarray(a)
 
 
-def inpaint_boxes(img: Image.Image, boxes: list[tuple[int, int, int, int]], pad: float = 0.012) -> Image.Image:
+def inpaint_boxes(img: Image.Image, boxes: list[tuple[int, int, int, int]], pad: float = 0.025) -> Image.Image:
     """Cancella col codice le scritte dentro i riquadri anche su foto o sfumature (senza Gemini):
     trova i pixel delle lettere confrontando con lo sfondo 'sfocato' e ricostruisce lo sfondo attorno."""
     import cv2
@@ -822,13 +832,18 @@ def inpaint_boxes(img: Image.Image, boxes: list[tuple[int, int, int, int]], pad:
             ref = np.median(s16[yy][sel], axis=0)  # colore dominante della riga (lo sfondo dietro le lettere)
             rd = np.abs(s16[yy] - ref).max(axis=1)
             diff[yy] = np.maximum(diff[yy], rd)
-        m = (diff > 38).astype(np.uint8) * 255
-        m = cv2.dilate(m, np.ones((5, 5), np.uint8), iterations=2)
+        # soglia bassa e allargamento generoso: si prendono anche ombre e aloni attorno alle lettere
+        m = (diff > 26).astype(np.uint8) * 255
+        m = cv2.dilate(m, np.ones((5, 5), np.uint8), iterations=3)
         mask[Y0:Y1, X0:X1] = np.maximum(mask[Y0:Y1, X0:X1], m)
     if not mask.any():
         return img.convert("RGB")
     out = cv2.inpaint(a, mask, 6, cv2.INPAINT_TELEA)
     return Image.fromarray(cv2.cvtColor(out, cv2.COLOR_BGR2RGB))
+
+
+def other_marks(slide: dict, W: int, H: int) -> list:
+    return [block_box(r, W, H) for r in (slide.get("altri_marchi") or []) if r.get("w") and r.get("h")]
 
 
 def wm_box(slide: dict, W: int, H: int):
@@ -897,7 +912,7 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
     W, H = out.size
     draw = ImageDraw.Draw(out)
     for idx, bl in enumerate(blocks):
-        text = (bl.get("testo") or "").strip()
+        text = no_emoji(bl.get("testo") or "")
         if not text:
             continue
         if bl.get("maiuscolo"):
@@ -910,7 +925,8 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
         else:
             box, color = refine_box(original, cleaned, block_box(bl, W, H))
             pitch, line_h = _metrics_from_diff(original, cleaned, box)
-        color = _hex(bl.get("colore")) if (boxes or not color) else color
+        # con parole di due colori (es. nere e rosse) il colore misurato sarebbe una via di mezzo: vale quello di Claude
+        color = _hex(bl.get("colore")) if (boxes or not color or bl.get("colore_evidenziato")) else color
         hl_color = _hex(bl.get("colore_evidenziato")) if bl.get("colore_evidenziato") else color
         bw, bh = max(40, box[2] - box[0]), max(20, box[3] - box[1])
         # spazio in larghezza: l'italiano è più lungo dell'inglese. Invece di rimpicciolire o andare a capo
