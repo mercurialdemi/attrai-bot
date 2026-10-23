@@ -84,6 +84,8 @@ cta:
     introspettiva precisa che costringe il lettore a guardarsi dentro (es. "In quale di questi tre momenti
     non l'hai mai vista?"), poi l'invito. Mai domande generiche tipo "Sei d'accordo col post?".
     Niente emoji nella CTA (né cuori né frecce prima di "Segui").
+    Il titolo di un manuale va SEMPRE tra virgolette, sia nelle slide sia nella descrizione
+    (es. nel manuale "Come diventare l'uomo a cui nessuna sa resistere"), così si capisce che è un titolo.
   dove_si_compra: "link in bio"
 
 manuali:

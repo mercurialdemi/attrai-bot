@@ -122,7 +122,8 @@ CAPTION_TOOL = {
                                "grafico delle altre slide. Parti da uno dei TESTI DELLE NOSTRE SLIDE CTA dello stesso tipo della "
                                "CTA scelta (per un manuale, uno di quel manuale; se non ce ne sono, uno 'segui') e ADATTALO al "
                                "post: stessa struttura, stessa leva e lunghezza simile, ma con le parole che lo legano al tema e al "
-                               "dolore di questo post. Mai partire dalle CTA delle descrizioni. Righe corte con a capo. Niente emoji.",
+                               "dolore di questo post. Mai partire dalle CTA delle descrizioni. Righe corte con a capo. Niente emoji. "
+                               "Il titolo del manuale sempre tra virgolette \"...\".",
             },
             "slide_cta": {
                 "type": "array",
