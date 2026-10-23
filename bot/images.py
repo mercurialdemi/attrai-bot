@@ -427,6 +427,7 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
                 img = add_brand_mark(img, brand, _avoid_boxes(slide, *img.size), textslide.wm_box(slide, *img.size)) if needs_logo(slide, brand) else img
                 return img, True, ""
             log.info("Slide %s pulita col codice ma scartata al controllo: %s", slide.get("numero"), problems)
+            slide["_motivo_codice"] = problems
             slide.pop("_canva", None)
             slide.pop("_sfondo", None)
         # testo su foto o sfumature: le lettere si cancellano col codice ricostruendo lo sfondo attorno
@@ -456,6 +457,7 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
                 img = add_brand_mark(img, brand, _avoid_boxes(slide, *img.size), textslide.wm_box(slide, *img.size)) if needs_logo(slide, brand) else img
                 return img, True, ""
             log.info("Slide %s ricostruita col codice ma scartata al controllo: %s", slide.get("numero"), problems)
+            slide.setdefault("_motivo_codice", problems)
         except Exception as e:
             log.warning("Ricostruzione col codice non riuscita: %s", e)
     feedback, problems = "", ""
@@ -469,7 +471,7 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
             edited = _gemini_edit(original, _prompt(slide, gmode, feedback))
         except Exception as e:  # rete, quota, filtri di sicurezza
             log.warning("Gemini tentativo %s fallito: %s", attempt + 1, e)
-            problems = "Gemini non ha risposto"
+            problems = f"Gemini non ha risposto ({str(e)[:140]})"
             continue
         if edited is None:
             problems = "Gemini non ha prodotto l'immagine"
@@ -499,6 +501,8 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
         return img, True, ""
     # Nessun tentativo valido: restituiamo l'ultima prova (o l'originale) solo per riferimento, segnata come fallita.
     img = best or _fit(original, size)
+    if slide.get("_motivo_codice"):
+        problems = f"{slide['_motivo_codice']} | poi: {problems}" if problems else slide["_motivo_codice"]
     return img, False, problems or "non verificata"
 
 

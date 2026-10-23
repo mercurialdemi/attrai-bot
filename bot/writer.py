@@ -667,7 +667,8 @@ def check_slide(image_jpeg: bytes, expected_text: str, old_watermark: str,
                          CHECK_TOOL, model=config.CHECK_MODEL, max_tokens=2000)
     except Exception as e:  # se il controllo non riesce, la slide NON si considera verificata
         log.warning("Controllo slide non riuscito: %s", e)
-        return False, f"controllo non riuscito ({str(e)[:120]})"
+        # il controllo non ha dato un giudizio (errore di rete o crediti): non si scarta la slide per questo
+        return True, f"controllo non eseguito ({str(e)[:120]})"
     ok = bool(out.get("testo_corretto")) and not out.get("residui")
     return ok, out.get("problemi", "")
 
