@@ -22,6 +22,7 @@ FONTS = {
     "bold": config.ROOT / "assets" / "testo_bold.otf",
     "titolo": config.ROOT / "assets" / "titolo_anton.ttf",          # titoli stretti e pesanti (stile Anton/Bebas)
     "stretto": config.ROOT / "assets" / "titolo_oswald_bold.ttf",   # stretto ma meno pesante (stile Oswald)
+    "fumetto": config.ROOT / "assets" / "fumetto_marker.ttf",       # lettering a mano dei fumetti
     # testo con lettere strette e ravvicinate (stile Helvetica Neue / SF compatto)
     "regular_tight": config.ROOT / "assets" / "stretto_testo_regular.ttf",
     "semibold_tight": config.ROOT / "assets" / "stretto_testo_semibold.ttf",
@@ -659,7 +660,7 @@ def local_background(img: Image.Image, box: tuple[int, int, int, int], exclude: 
     if (sides_a.max(axis=0) - sides_a.min(axis=0)).max() > 22:
         return None
     bg = np.median(ring, axis=0)
-    if (np.abs(ring - bg).max(axis=1) < 30).mean() < 0.88:
+    if (np.abs(ring - bg).max(axis=1) < 20).mean() < 0.93:     # davvero uniforme (non un disegno tratteggiato)
         return None
     return tuple(int(c) for c in bg)
 
@@ -796,14 +797,50 @@ def flatten_ghosts(img: Image.Image, blocks: list[dict]) -> Image.Image:
     return Image.fromarray(a)
 
 
-def inpaint_boxes(img: Image.Image, boxes: list[tuple[int, int, int, int]], pad: float = 0.025) -> Image.Image:
+def _color_mask(a, box, colors, W, H):
+    """Lettere di un colore noto (es. nero del fumetto): pixel di quel colore attorno al riquadro, tenendo
+    solo i pezzi che toccano il riquadro (così si prendono anche le lettere che escono un po' dal riquadro
+    di Claude, ma non i tratti del disegno lontani)."""
+    import cv2
+    x0, y0, x1, y1 = box
+    ex, ey = int(W * 0.06), int(H * 0.04)
+    X0, Y0, X1, Y1 = max(0, x0 - ex), max(0, y0 - ey), min(W, x1 + ex), min(H, y1 + ey)
+    sub = cv2.cvtColor(a[Y0:Y1, X0:X1], cv2.COLOR_BGR2RGB).astype(np.int16)
+    m = np.zeros(sub.shape[:2], bool)
+    for c in colors:
+        m |= np.abs(sub - np.array(c, np.int16)).max(axis=2) < 75
+    m8 = m.astype(np.uint8) * 255
+    # le lettere vicine si uniscono in parole, così una lettera che esce dal riquadro viene presa con la sua parola
+    joined = cv2.dilate(m8, np.ones((5, 9), np.uint8), iterations=2)
+    n, lab = cv2.connectedComponents(joined, connectivity=8)
+    core = np.zeros_like(m)
+    cx0, cy0 = max(0, x0 - X0), max(0, y0 - Y0)
+    core[cy0:max(cy0, y1 - Y0), cx0:max(cx0, x1 - X0)] = True
+    keep = set(np.unique(lab[core & (joined > 0)]).tolist()) - {0}
+    out = np.zeros((H, W), np.uint8)
+    if keep:
+        sel = np.isin(lab, list(keep)) & m
+        sel = cv2.dilate(sel.astype(np.uint8) * 255, np.ones((5, 5), np.uint8), iterations=2)
+        out[Y0:Y1, X0:X1] = sel
+    return out
+
+
+def inpaint_boxes(img: Image.Image, boxes: list[tuple[int, int, int, int]], pad: float = 0.025,
+                  colors: list | None = None) -> Image.Image:
     """Cancella col codice le scritte dentro i riquadri anche su foto o sfumature (senza Gemini):
-    trova i pixel delle lettere confrontando con lo sfondo 'sfocato' e ricostruisce lo sfondo attorno."""
+    trova i pixel delle lettere confrontando con lo sfondo 'sfocato' e ricostruisce lo sfondo attorno.
+    `colors` (per riquadro, facoltativo): colori del testo; se ci sono si cercano le lettere per colore."""
     import cv2
     a = cv2.cvtColor(np.asarray(img.convert("RGB")), cv2.COLOR_RGB2BGR)
     H, W = a.shape[:2]
     mask = np.zeros((H, W), np.uint8)
-    for x0, y0, x1, y1 in boxes:
+    for bi, (x0, y0, x1, y1) in enumerate(boxes):
+        cols = (colors or [None] * len(boxes))[bi] if colors and bi < len(colors) else None
+        if cols:
+            cm = _color_mask(a, (x0, y0, x1, y1), cols, W, H)
+            if cm.any():
+                mask = np.maximum(mask, cm)
+                continue
         px, py = int(W * pad), int(H * pad)
         X0, Y0, X1, Y1 = max(0, x0 - px), max(0, y0 - py), min(W, x1 + px), min(H, y1 + py)
         if X1 - X0 < 4 or Y1 - Y0 < 4:
@@ -911,6 +948,7 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
     out = cleaned.copy()
     W, H = out.size
     draw = ImageDraw.Draw(out)
+    all_bb = [block_box(b, W, H) for b in blocks]
     for idx, bl in enumerate(blocks):
         text = no_emoji(bl.get("testo") or "")
         if not text:
@@ -936,17 +974,42 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
         # il testo resta sempre dentro la zona sicura di Instagram (margini laterali minimi)
         box = (max(box[0], sx), box[1], min(box[2], W - sx), box[3])
         bw = max(40, box[2] - box[0])
+        # limiti dati dagli ALTRI blocchi sulla stessa altezza (es. due battute di fumetto affiancate):
+        # le righe possono allungarsi solo fino a poco prima del blocco vicino
+        gap = int(W * 0.03)
+        lim_l, lim_r = sx, W - sx
+        me = all_bb[idx]
+        mcx = (me[0] + me[2]) / 2
+        for j, ob in enumerate(all_bb):
+            if j == idx or ob[3] < me[1] or ob[1] > me[3]:
+                continue
+            ocx = (ob[0] + ob[2]) / 2
+            if ocx > mcx:                     # blocco alla mia destra: non lo supero
+                lim_r = min(lim_r, max(ob[0] - gap, me[0] + int(W * 0.15)))
+            else:                             # blocco alla mia sinistra
+                lim_l = max(lim_l, min(ob[2] + gap, me[2] - int(W * 0.15)))
+        # il riquadro misurato non può invadere il blocco vicino (le lettere dei due blocchi a volte si toccano)
+        box = (max(box[0], lim_l if lim_l < box[2] - 40 else box[0]), box[1],
+               min(box[2], lim_r if lim_r > box[0] + 40 else box[2]), box[3])
+        bw = max(40, box[2] - box[0])
+        lim_l, lim_r = min(lim_l, box[0]), max(lim_r, box[2])
         if al0 == "left":
-            max_w = max(bw, W - box[0] - max(box[0], sx))
+            max_w = max(bw, min(W - box[0] - max(box[0], sx), lim_r - box[0]))
         elif al0 == "right":
-            max_w = max(bw, box[2] - max(W - box[2], sx))
+            max_w = max(bw, min(box[2] - max(W - box[2], sx), box[2] - lim_l))
         else:
-            max_w = max(bw, W - 2 * max(min(box[0], W - box[2]), sx))
+            half = min((box[0] + box[2]) / 2 - lim_l, lim_r - (box[0] + box[2]) / 2)
+            max_w = max(bw, min(W - 2 * max(min(box[0], W - box[2]), sx), 2 * half))
         max_w = min(max_w, W - 2 * sx)
+        # spazio in altezza: fino al blocco successivo nella stessa colonna
+        lim_b = H
+        for j, ob in enumerate(all_bb):
+            if j != idx and ob[1] >= box[3] - 2 and not (ob[2] < box[0] or ob[0] > box[2]):
+                lim_b = min(lim_b, ob[1] - int(H * 0.01))
         car = bl.get("carattere") or "normale"
-        weight = car if car in ("titolo", "stretto") else (bl.get("peso") or "regular")
+        weight = car if car in ("titolo", "stretto", "fumetto") else (bl.get("peso") or "regular")
         paras = _tokens(text)
-        ratio = 1.15 if car in ("titolo", "stretto") else 1.25   # spazio per gli accenti sulle maiuscole
+        ratio = 1.15 if car in ("titolo", "stretto", "fumetto") else 1.25   # spazio per gli accenti sulle maiuscole
         size, best = max(14, int(bh)), None
         if pitch:                                   # mai più grande dell'originale
             size = min(size, int(pitch / ratio * 1.02))
@@ -959,6 +1022,7 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
                     size = cand
                     break
             ratio = float(np.clip(pitch / max(size, 1), 1.02, 1.6))
+            size = min(size, int(pitch / 1.02))      # mai più grande di quanto permette l'interlinea originale
         while size >= 14:
             font = _font(weight, size)
             bfont = _font(_bold_weight(weight), size)
@@ -976,6 +1040,7 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
             # l'italiano è spesso più lungo: se le lettere hanno la misura dell'originale si accetta
             # un po' di altezza in più (fino al 25%) invece di rimpicciolire subito il titolo
             room = 1.25 if (pitch and line_h) else 1.12
+            room = min(room, max(1.0, (lim_b - box[1]) / max(bh, 1)))
             if ink_h <= bh * room and widest <= max_w:
                 best = (font, bfont, lines, lh, total)
                 break
@@ -1010,6 +1075,7 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
                 continue
             tw = _line_w(draw, ln, font, bfont)
             x = x_left if al == "left" else (box[2] - tw if al == "right" else box[0] + (bw - tw) / 2)
+            x = min(max(x, sx), W - sx - tw) if tw <= W - 2 * sx else sx      # mai fuori dalla slide
             runs = []
             for w, fl in ln:
                 c = hl_color if fl & 1 else color
@@ -1019,6 +1085,7 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
                 x += draw.textlength(w, font=f) + space
             if placements is not None:
                 x_start = x_left if al == "left" else (box[2] - tw if al == "right" else box[0] + (bw - tw) / 2)
+                x_start = min(max(x_start, sx), W - sx - tw) if tw <= W - 2 * sx else sx
                 placements.append({"testo": " ".join(w for w, _ in ln), "x": float(x_start), "y": float(y),
                                    "size": font.size, "weight": weight, "color": color,
                                    "runs": [[w, list(c), b] for w, c, b in runs]})

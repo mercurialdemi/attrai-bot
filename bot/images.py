@@ -381,7 +381,7 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
         return original, True, ""
     testo = (slide.get("testo") or "").strip()
     # serve il percorso a blocchi solo per titoli con font stretti o parole evidenziate davvero ([[ ]])
-    special = any(b.get("carattere") in ("titolo", "stretto") or "[[" in (b.get("testo") or "") or "{{" in (b.get("testo") or "")
+    special = any(b.get("carattere") in ("titolo", "stretto", "fumetto") or "[[" in (b.get("testo") or "") or "{{" in (b.get("testo") or "")
                   for b in (slide.get("blocchi") or []))
     if config.SLIDE_TEXT_MODE != "gemini-sempre" and not special:
         lay = textslide.analyze(original, slide.get("testo_originale", ""),
@@ -434,11 +434,14 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
         try:
             W_, H_ = orig_fit.size
             areas = [textslide.block_box(b, W_, H_) for b in blocks0]
+            cols = [[c for c in (textslide._hex(b.get("colore")),
+                                 textslide._hex(b.get("colore_evidenziato")) if b.get("colore_evidenziato") else None) if c]
+                    for b in blocks0]
             wb = textslide.wm_box(slide, W_, H_)
             if wb:
                 areas.append(wb)
             areas += textslide.other_marks(slide, W_, H_)
-            clean = textslide.inpaint_boxes(orig_fit, areas)
+            clean = textslide.inpaint_boxes(orig_fit, areas, colors=cols)
             placements = []
             img = textslide.render_blocks(clean, orig_fit, blocks0, placements)
             ok, problems = (True, "")
