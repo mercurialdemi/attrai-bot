@@ -316,6 +316,9 @@ Ricevi le slide di un post di una pagina collaboratrice che ci ha autorizzato a 
 - In blocchi descrivi ogni blocco di testo separato: testo italiano e riquadro che occupa il testo ORIGINALE
   (in millesimi, stretto attorno alle lettere), colore, allineamento, spessore, maiuscolo. Il testo verrà
   riscritto esattamente lì sopra l'immagine ripulita, quindi le misure devono essere accurate.
+  OGNI scritta della slide deve stare in un blocco (titoletti colorati, sottotitoli piccoli, numeri, frasi
+  finali): se una scritta resta fuori dai blocchi rimane in inglese sulla slide. Se titoletto e testo hanno
+  colori diversi, o se c'è un sottotitolo separato, sono blocchi separati.
   Non includere nei blocchi il watermark o l'handle della pagina. Ogni slide con testo da tradurre deve
   avere i suoi blocchi: un blocco per ogni gruppo di righe separato da uno spazio vuoto.
   PAROLE EVIDENZIATE: guarda con attenzione ogni slide. Se alcune parole hanno un colore diverso dal resto

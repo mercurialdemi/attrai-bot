@@ -408,6 +408,27 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
             if (b.get("carattere") or "normale") == "normale" and "_" not in (b.get("peso") or ""):
                 b["peso"] = (b.get("peso") or "bold") + "_" + fam
     if mode == "codice" and blocks0:
+        uni = textslide.analyze(orig_fit, slide.get("testo_originale", ""),
+                                has_mark=bool((slide.get("watermark_originale") or "").strip()))
+        if uni:
+            # slide tutta su colore pieno: si cancella TUTTO ciò che non è sfondo (nessun residuo, anche
+            # se un blocco è stato misurato male) e si riscrivono i blocchi nelle loro caselle
+            clean = textslide.background(orig_fit, uni)
+            placements: list = []
+            img = textslide.render_blocks(clean, orig_fit, blocks0, placements,
+                                          boxes=textslide.boxes_on_plain(orig_fit, uni, blocks0))
+            ok, problems = (True, "")
+            if config.SLIDE_CHECK:
+                ok, problems = writer.check_slide(_jpeg(img), testo, slide.get("watermark_originale", ""),
+                                                  original_jpeg)
+            if ok:
+                slide["_canva"] = {"tipo": "testo", "righe": placements}
+                slide["_via"] = "blocchi-sfondo-pieno"
+                slide["_sfondo"] = (add_brand_mark(clean, brand, _avoid_boxes(slide, *clean.size), textslide.wm_box(slide, *clean.size))
+                                    if needs_logo(slide, brand) else clean)
+                img = add_brand_mark(img, brand, _avoid_boxes(slide, *img.size), textslide.wm_box(slide, *img.size)) if needs_logo(slide, brand) else img
+                return img, True, ""
+            slide["_motivo_codice"] = problems
         local = textslide.try_local_clean(orig_fit, blocks0)
         if local:
             # il testo sta su fasce/zone di colore uniforme: cancellazione precisa col codice, niente Gemini

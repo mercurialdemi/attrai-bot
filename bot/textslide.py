@@ -889,6 +889,36 @@ def inpaint_boxes(img: Image.Image, boxes: list[tuple[int, int, int, int]], pad:
     return Image.fromarray(cv2.cvtColor(out, cv2.COLOR_BGR2RGB))
 
 
+def boxes_on_plain(img: Image.Image, lay, blocks: list[dict]) -> list:
+    """Slide su colore pieno: per ogni blocco la casella vera del testo originale (righe misurate e assegnate
+    al blocco più vicino), con interlinea e altezza delle lettere. Formato come try_local_clean."""
+    a = np.asarray(img.convert("RGB")).astype(np.int16)
+    H, W, _ = a.shape
+    ink = np.abs(a - np.array(lay.bg)).max(axis=2) > 70
+    ink[int(H * 0.9):] = False                       # fascia bassa: marchi, non testo
+    rows = [r for r in _runs(ink.sum(axis=1) >= 2, min_gap=1) if r[1] - r[0] >= 5]
+    bbs = [block_box(b, W, H) for b in blocks]
+    groups = [[] for _ in blocks]
+    for r in rows:
+        cy = (r[0] + r[1]) / 2
+        d = [0 if b[1] <= cy <= b[3] else min(abs(cy - b[1]), abs(cy - b[3])) for b in bbs]
+        k = int(np.argmin(d))
+        if d[k] < H * 0.12:
+            groups[k].append(r)
+    out = []
+    for b, g in zip(bbs, groups):
+        if not g:
+            out.append((b, None, None))
+            continue
+        y0, y1 = g[0][0], g[-1][1]
+        cols = np.where(ink[y0:y1 + 1].any(axis=0))[0]
+        box = (int(cols.min()), int(y0), int(cols.max()), int(y1))
+        pitch = float(np.median(np.diff([r[0] for r in g]))) if len(g) >= 2 else None
+        line_h = float(np.median([r[1] - r[0] + 1 for r in g]))
+        out.append((box, pitch, line_h))
+    return out
+
+
 def other_marks(slide: dict, W: int, H: int) -> list:
     return [block_box(r, W, H) for r in (slide.get("altri_marchi") or []) if r.get("w") and r.get("h")]
 
@@ -991,8 +1021,9 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
         me = all_bb[idx]
         mcx = (me[0] + me[2]) / 2
         for j, ob in enumerate(all_bb):
-            if j == idx or ob[3] < me[1] or ob[1] > me[3]:
-                continue
+            ov = min(ob[3], me[3]) - max(ob[1], me[1])
+            if j == idx or ov < 0.3 * min(ob[3] - ob[1], me[3] - me[1]):
+                continue                      # affiancati solo se condividono davvero la stessa altezza
             ocx = (ob[0] + ob[2]) / 2
             if ocx > mcx:                     # blocco alla mia destra: non lo supero
                 lim_r = min(lim_r, max(ob[0] - gap, me[0] + int(W * 0.15)))
