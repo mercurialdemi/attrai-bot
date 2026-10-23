@@ -156,8 +156,20 @@ def apply_cta_slide(post: dict, paths: list[Path], failed: list[int], jdir: Path
     """In fondo al carosello va sempre la nostra slide CTA: sostituisce la CTA della pagina di origine
     (se c'è) oppure si aggiunge come ultima slide. Prima scelta: CTA scritta nello stesso stile del post."""
     if paths:
+        styled = None
+        plain_post = any(sl.get("_via") == "testo-su-sfondo-uniforme" for sl in post.get("slides", []))
+        if not plain_post and (post.get("cta") or {}).get("tipo") == "manuale":
+            # post disegnato o fotografico con CTA a un manuale: scena illustrata con le copertine vere
+            try:
+                from . import cta_illustrata
+                op = jdir / "originali" / "01.jpg"
+                if op.exists():
+                    styled = cta_illustrata.make(post, [op.read_bytes()], jdir)
+            except Exception:
+                import logging
+                logging.getLogger(__name__).exception("CTA illustrata non creata")
         try:
-            styled = styled_cta_slide(post, jdir)
+            styled = styled or styled_cta_slide(post, jdir)
         except Exception:
             import logging
             logging.getLogger(__name__).exception("Slide CTA nello stile del post non creata")
