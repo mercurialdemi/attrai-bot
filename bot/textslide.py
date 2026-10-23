@@ -964,6 +964,13 @@ def dark_fade(img: Image.Image, original: Image.Image, boxes: list) -> Image.Ima
         end0, end1 = bot + H * 0.02, bot + H * 0.14
         alpha = np.minimum(alpha, np.clip((end1 - y) / max(1.0, end1 - end0), 0, 1))
     alpha = alpha ** 1.3
+    alpha = np.broadcast_to(alpha, (H, W)).copy()
+    # sopra il testo si scurisce SOLO ciò che nell'originale era già scuro: elementi chiari o colorati
+    # (badge col numero, foto) restano intatti; dentro la fascia del testo invece tutto diventa fascia piena
+    lum = np.asarray(original.convert("L")).astype(np.float32)
+    dark_w = np.clip((140 - lum) / 90, 0, 1)
+    above = np.arange(H)[:, None] < top - H * 0.01
+    alpha = np.where(above, np.minimum(alpha, dark_w), alpha)
     a = a * (1 - alpha[..., None]) + col[None, None, :] * alpha[..., None]
     return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
 

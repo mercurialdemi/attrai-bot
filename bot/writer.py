@@ -682,7 +682,12 @@ def check_slide(image_jpeg: bytes, expected_text: str, old_watermark: str,
         _image_block(image_jpeg, 1024),
         {"type": "text", "text": (
             f"{attese}\n\nVecchio watermark da eliminare: {old_watermark or 'nessuno'}.\n"
-            + ("Confronta con l'originale: illustrazioni, sfondo e posizione dei blocchi di testo devono essere gli stessi. "
+            + ("NON sono errori (non bocciare per questi): fascia scura dietro il testo un po' più alta o più scura, "
+               "sfumatura leggermente diversa, testo un po' più grande o più piccolo, righe andate a capo in modo diverso, "
+               "piccole differenze di luminosità. Sono errori: lettere sbagliate o mancanti, residui di testo vecchio, "
+               "testo sopra volti/personaggi/elementi importanti, testo tagliato o fuori dalla slide, elementi grafici "
+               "spariti o deformati (es. badge col numero).\n"
+               "Confronta con l'originale: illustrazioni, sfondo e posizione dei blocchi di testo devono essere gli stessi. "
                "Se il testo ora copre un'illustrazione o un elemento che nell'originale era libero, oppure manca o è "
                "deformato un elemento grafico, metti testo_corretto=false e descrivilo in problemi.\n" if original_jpeg else "")
             +

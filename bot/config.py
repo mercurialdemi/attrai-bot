@@ -77,4 +77,4 @@ def missing_keys() -> list[str]:
 
 # Slide disegnate (fumetti, illustrazioni): si ricostruiscono da zero senza scritte e il testo lo scrive il codice.
 #   gemini (ora) | off (vecchio metodo: si cancellano solo le lettere)
-RICOSTRUISCI_DISEGNI = _env("RICOSTRUISCI_DISEGNI", "gemini").lower()
+RICOSTRUISCI_DISEGNI = _env("RICOSTRUISCI_DISEGNI", "off").lower()   # prova del 23/10: Gemini sposta fumetti e personaggi
