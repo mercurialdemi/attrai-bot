@@ -616,6 +616,24 @@ def apply_cta_texts(slides_out: dict, new: list[dict]) -> None:
         s["_cta_riscritta"] = True
 
 
+def quote_titles(text: str, brand: dict | None = None) -> str:
+    """Mette tra virgolette i titoli dei manuali quando non lo sono già."""
+    if not text:
+        return text
+    brand = brand or load_brand()
+    titles = sorted({t for m in brand.get("manuali", []) for t in (m.get("titoli") or [])}, key=len, reverse=True)
+    for t in titles:
+        pat = re.compile(r'(?<!["“«@\w])(' + re.escape(t) + r')(?!["”»\w])', re.IGNORECASE)
+        # niente virgolette se il titolo è già dentro un titolo più lungo tra virgolette
+        def rep(m):
+            before = text[:m.start()]
+            if before.count('"') % 2 == 1 or before.count("“") > before.count("”"):
+                return m.group(1)
+            return f'"{m.group(1)}"'
+        text = pat.sub(rep, text)
+    return text
+
+
 def pick_cta_slide_text(proposed: str, cta: dict) -> str:
     """Il testo della slide CTA finale: Claude adatta al post una delle nostre slide CTA (lette da /analizza).
     Se manca o è troppo lunga, si usa una delle nostre così com'è (manuale scelto, altrimenti 'segui')."""
@@ -636,8 +654,10 @@ def create_post(caption: str, owner: str, images: list[bytes], brand: dict,
     slides_out = translate_slides(caption, owner, images, brand, rules)
     cap = write_caption(slides_out, caption, brand, rules, recent)
     apply_cta_texts(slides_out, cap.pop("slide_cta", None) or [])
-    slides_out["_testo_cta_finale"] = pick_cta_slide_text(clean_text(cap.pop("testo_slide_finale", "") or ""),
-                                                          cap.get("cta") or {})
+    slides_out["_testo_cta_finale"] = quote_titles(pick_cta_slide_text(clean_text(cap.pop("testo_slide_finale", "") or ""),
+                                                                       cap.get("cta") or {}), brand)
+    if cap.get("descrizione"):
+        cap["descrizione"] = quote_titles(cap["descrizione"], brand)
     post = _finalize({**slides_out, **cap})
     post["slide_da_rifare"] = []
     return post

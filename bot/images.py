@@ -464,9 +464,15 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
                 areas.append(wb)
             areas += textslide.other_marks(slide, W_, H_)
             clean = textslide.inpaint_boxes(orig_fit, areas, colors=cols)
-            clean = textslide.dark_fade(clean, orig_fit, [textslide.block_box(b, W_, H_) for b in blocks0])
+            # caselle misurate PRIMA della sfumatura (dopo, tutta la fascia risulterebbe "cambiata")
+            pre = []
+            for b_ in blocks0:
+                bx, _c = textslide.refine_box(orig_fit, clean, textslide.block_box(b_, W_, H_))
+                pt, lh_ = textslide._metrics_from_diff(orig_fit, clean, bx)
+                pre.append((bx, pt, lh_))
+            clean = textslide.dark_fade(clean, orig_fit, [p_[0] for p_ in pre])
             placements = []
-            img = textslide.render_blocks(clean, orig_fit, blocks0, placements)
+            img = textslide.render_blocks(clean, orig_fit, blocks0, placements, boxes=pre)
             ok, problems = (True, "")
             if config.SLIDE_CHECK:
                 ok, problems = writer.check_slide(_jpeg(img), testo, slide.get("watermark_originale", ""),

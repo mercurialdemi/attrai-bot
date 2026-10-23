@@ -591,10 +591,11 @@ def _tokens(text: str) -> list[list[list[tuple[str, int]]]]:
     """Testo -> paragrafi -> righe -> parole (parola, stile). Stile: 1 = colore evidenziato ([[ ]]),
     2 = grassetto ({{ }}), 3 = entrambi."""
     paras = []
+    hl, bd = False, False                  # un'evidenziazione può continuare sulla riga dopo
     for para in text.split("\n\n"):
         rows = []
         for row in para.split("\n"):
-            words, hl, bd = [], False, False
+            words = []
             for w in row.split():
                 if w.startswith("[["):
                     hl = True
@@ -957,7 +958,7 @@ def dark_fade(img: Image.Image, original: Image.Image, boxes: list) -> Image.Ima
     col = np.median(rgb[band < 90], axis=0)
     a = np.asarray(img.convert("RGB")).astype(np.float32)
     y = np.arange(H, dtype=np.float32)[:, None]
-    start, full = top - H * 0.16, top - H * 0.02
+    start, full = top - H * 0.26, top - H * 0.02      # sfumatura lunga: nessun bordo netto sulla foto
     alpha = np.clip((y - start) / max(1.0, full - start), 0, 1)
     if bot < H * 0.8:                                # fascia in mezzo alla slide: sfuma anche sotto
         end0, end1 = bot + H * 0.02, bot + H * 0.14
@@ -1070,8 +1071,9 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
         mcx = (me[0] + me[2]) / 2
         for j, ob in enumerate(all_bb):
             ov = min(ob[3], me[3]) - max(ob[1], me[1])
-            if j == idx or ov < 0.3 * min(ob[3] - ob[1], me[3] - me[1]):
-                continue                      # affiancati solo se condividono davvero la stessa altezza
+            hov = min(ob[2], me[2]) - max(ob[0], me[0])
+            if j == idx or ov < 0.3 * min(ob[3] - ob[1], me[3] - me[1]) or hov > 0.2 * min(ob[2] - ob[0], me[2] - me[0]):
+                continue                      # affiancati solo se stessa altezza e uno a fianco dell'altro
             ocx = (ob[0] + ob[2]) / 2
             if ocx > mcx:                     # blocco alla mia destra: non lo supero
                 lim_r = min(lim_r, max(ob[0] - gap, me[0] + int(W * 0.15)))
@@ -1081,6 +1083,13 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
         box = (max(box[0], lim_l if lim_l < box[2] - 40 else box[0]), box[1],
                min(box[2], lim_r if lim_r > box[0] + 40 else box[2]), box[3])
         bw = max(40, box[2] - box[0])
+        # la casella non può scendere sul blocco successivo (es. titolo grande con sottotitolo piccolo sotto)
+        for j, ob in enumerate(all_bb):
+            if j == idx or ob[1] <= all_bb[idx][1] or ob[2] < box[0] or ob[0] > box[2]:
+                continue
+            if ob[1] < box[3] + int(H * 0.005):
+                box = (box[0], box[1], box[2], max(box[1] + 20, ob[1] - int(H * 0.008)))
+                bh = box[3] - box[1]
         # CASELLA DI TESTO: il testo italiano sta nello stesso riquadro occupato dall'originale.
         # Le righe si ridistribuiscono liberamente, ma non si esce mai dalla casella.
         max_w = int(bw * 1.02)

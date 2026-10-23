@@ -92,6 +92,7 @@ manuali:
   # Quale manuale per quale dolore (decide la CTA). Mai proporre il bundle friendzone + seduzione.
   - id: attraiseduci
     nome: AttraiSeduci (manuale di seduzione)
+    titoli: ["Come diventare l'uomo a cui nessuna sa resistere"]
     dolori: >
       Tutto ciò che serve per creare una presenza magnetica, entrare nella mente di una donna e capire come
       funziona davvero il desiderio femminile. Per l'uomo che non sa creare attrazione o la perde per strada:
@@ -101,6 +102,7 @@ manuali:
       scarsità, no contact dopo una rottura, rispetto perso dentro la coppia.
   - id: potere-sociale
     nome: "Bundle AttraiSeduci + Potere Sociale"
+    titoli: ["Potere Sociale"]
     vendita: >
       Potere Sociale NON si vende da solo: esiste solo nel bundle con il manuale di seduzione AttraiSeduci.
       Si propone quando il post parla di RISPETTO, DINAMICHE SOCIALI, MASCOLINITÀ, status, frame e leadership.
@@ -115,6 +117,7 @@ manuali:
       calma come potere, reputazione, riprova sociale, mascolinità e uso dell'ambiguità.
   - id: friendzone
     nome: "Perché le donne ti mettono nella friendzone (e come uscirne)"
+    titoli: ["Perché le donne ti mettono nella friendzone (e come uscirne)", "Perché le donne ti mettono nella friendzone", "Come uscire dalla friend-zone"]
     vendita: >
       Si propone SOLO quando il post tocca il dolore di essere vicino a lei ma non scelto: il limbo, essere
       importante ma non desiderato. Mai proporlo in bundle con il manuale di seduzione.
