@@ -27,6 +27,7 @@ async def build_post(src: instagram.SourcePost, brand: dict, suffix: str,
     await status(f"Traduco e adatto {len(originals)} slide…")
     post = await asyncio.to_thread(writer.create_post, src.caption, src.owner, originals, brand,
                                    storage.list_rules(), storage.recent_style())
+    post["musica"] = src.musica
     post["slides"] = post["slides"][:len(originals)]
 
     jdir = job_dir(src.url, suffix)
@@ -213,6 +214,7 @@ def summary(post: dict, failed: list[int], header: str = "") -> str:
     lines += [
         f"Tipo: {post.get('formato')} {post.get('natura')} | Hook: {post.get('tipo_hook')}",
         f"CTA: {cta_txt}. {cta.get('motivo', '')}",
+        f"Musica dell'originale: {post.get('musica') or 'non indicata da Instagram (o post senza musica)'}",
     ]
     if failed:
         motivi = []

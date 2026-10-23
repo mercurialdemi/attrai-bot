@@ -35,6 +35,7 @@ class SourcePost:
     timestamp: str = ""            # ISO, ora di pubblicazione
     score: float = 0.0             # rendimento rispetto alla media della pagina (report)
     motivo: str = ""               # perché è stato scelto (report)
+    musica: str = ""               # brano usato nel post originale ("Artista – Titolo"), se Instagram lo indica
 
     @property
     def is_video(self) -> bool:
@@ -58,6 +59,37 @@ def _dedupe(urls: list[str]) -> list[str]:
     return out
 
 
+def _music(it) -> str:
+    """Cerca nei dati del post il brano usato (i nomi dei campi cambiano a seconda di come Instagram li dà)."""
+    found = []
+
+    def walk(o, depth=0):
+        if depth > 6 or found:
+            return
+        if isinstance(o, dict):
+            keys = {k.lower(): k for k in o}
+            artist = next((o[keys[k]] for k in ("artist_name", "artistname", "artist", "display_artist") if k in keys
+                           and isinstance(o[keys[k]], str) and o[keys[k]].strip()), "")
+            song = next((o[keys[k]] for k in ("song_name", "songname", "title", "song_title", "audio_title") if k in keys
+                         and isinstance(o[keys[k]], str) and o[keys[k]].strip()), "")
+            if song and (artist or any(m in " ".join(keys) for m in ("music", "audio", "song"))):
+                found.append(f"{artist} – {song}" if artist else song)
+                return
+            for k, v in o.items():
+                if any(m in k.lower() for m in ("music", "audio", "song", "clips")) or isinstance(v, (dict, list)):
+                    walk(v, depth + 1)
+        elif isinstance(o, list):
+            for v in o[:20]:
+                walk(v, depth + 1)
+
+    for key in it:
+        if any(m in key.lower() for m in ("music", "audio", "song", "clips")):
+            walk(it[key])
+    if not found:
+        walk({k: v for k, v in it.items() if k not in ("childPosts", "latestComments")})
+    return found[0][:120] if found else ""
+
+
 def _parse_item(url: str, it: dict) -> SourcePost:
     images: list[str] = []
     for child in it.get("childPosts") or []:
@@ -76,6 +108,7 @@ def _parse_item(url: str, it: dict) -> SourcePost:
         likes=it.get("likesCount"),
         comments=it.get("commentsCount"),
         timestamp=it.get("timestamp") or "",
+        musica=_music(it),
     )
 
 
