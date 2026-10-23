@@ -85,6 +85,8 @@ def styled_cta_slide(post: dict, jdir: Path) -> tuple[Path, dict] | None:
                             has_mark=bool((slides[i].get("watermark_originale") or "").strip()))
     if not lay:
         return None
+    if post.get("_peso_testo"):
+        lay.weight = post["_peso_testo"]
     placements: list = []
     img = textslide.render(original, lay, text, placements)
     out = jdir / "cta_stile_post.jpg"

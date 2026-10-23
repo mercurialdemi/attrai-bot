@@ -22,6 +22,10 @@ FONTS = {
     "bold": config.ROOT / "assets" / "testo_bold.otf",
     "titolo": config.ROOT / "assets" / "titolo_anton.ttf",          # titoli stretti e pesanti (stile Anton/Bebas)
     "stretto": config.ROOT / "assets" / "titolo_oswald_bold.ttf",   # stretto ma meno pesante (stile Oswald)
+    # testo con lettere strette e ravvicinate (stile Helvetica Neue / SF compatto)
+    "regular_tight": config.ROOT / "assets" / "stretto_testo_regular.ttf",
+    "semibold_tight": config.ROOT / "assets" / "stretto_testo_semibold.ttf",
+    "bold_tight": config.ROOT / "assets" / "stretto_testo_bold.ttf",
 }
 
 
@@ -42,6 +46,7 @@ class Layout:
     blank_ratio: float = 0.8
     right: int = 0        # bordo destro del testo originale (per capire se il blocco era centrato nella slide)
     head_color: tuple | None = None   # colore del primo paragrafo (titoletto) se diverso dal resto
+    para_colors: list | None = None   # parti di colore diverso dell'originale [(colore, righe)] (es. grigio poi bianco)
     head_weight: str = ""
 
 
@@ -105,9 +110,27 @@ def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False) -
     if ink.sum() < 50:
         return None
     lines = []
-    for y0, y1 in _runs(ink.sum(axis=1) >= 2, min_gap=1):
-        cols = np.where(ink[y0:y1 + 1].any(axis=0))[0]
-        lines.append((y0, y1, int(cols.min()), int(cols.max())))
+    prof = ink.sum(axis=1)
+    raw = _runs(prof >= 2, min_gap=1)
+    # quante righe di testo ha l'originale (dalla trascrizione di Claude, che mantiene gli a capo)
+    n_orig = len([ln for ln in (original_text or "").split("\n") if ln.strip()])
+    text_runs = [r for r in raw if r[0] < H * 0.9 and r[1] - r[0] >= 6]
+    unit = None
+    if n_orig > len(text_runs) >= 1:
+        # interlinea serrata: più righe si toccano e sembrano un blocco unico. Si divide ogni blocco
+        # in parti uguali, tante quante le righe che contiene
+        unit = sum(r[1] - r[0] + 1 for r in text_runs) / n_orig
+    for y0, y1 in raw:
+        parts = [(y0, y1)]
+        if unit and y0 < H * 0.9:
+            k = int(round((y1 - y0 + 1) / unit))
+            if k >= 2:
+                step = (y1 - y0 + 1) / k
+                parts = [(int(y0 + q * step), int(y0 + (q + 1) * step) - 1) for q in range(k)]
+        for p0, p1 in parts:
+            cols = np.where(ink[p0:p1 + 1].any(axis=0))[0]
+            if len(cols):
+                lines.append((p0, p1, int(cols.min()), int(cols.max())))
     if not lines:
         return None
     heights = np.array([l[1] - l[0] + 1 for l in lines])
@@ -156,11 +179,31 @@ def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False) -
             runs += [e - s0 + 1 for s0, e in _runs(ink[y, l[2]:l[3] + 1], min_gap=0)]
     stroke = (np.median(runs) / max(size, 1)) if runs else 0.1
     weight = "bold" if stroke > 0.125 else ("semibold" if stroke > 0.105 else "regular")
+    # corpo dall'altezza vera delle lettere: la dimensione in cui "Hg" è alto come le righe misurate
+    h75 = float(np.percentile(t_heights, 75))
+    size_h = size
+    for cand in range(max(12, int(h75 * 0.7)), int(h75 * 1.6) + 1):
+        bb = _font(weight, cand).getbbox("Hgjy")
+        if bb[3] - bb[1] >= h75:
+            size_h = cand
+            break
+    # corpo dalla larghezza (confronto con il testo letto da Claude): se a parità di altezza l'originale è
+    # molto più stretto di Inter, il font è "compatto" (stile Helvetica Neue) e si usa Inter Tight
+    tight = False
     by_text = _size_from_text(text_lines, original_text, weight)
-    if by_text:
-        size = by_text
-        stroke = (np.median(runs) / size) if runs else 0.1
-        weight = "bold" if stroke > 0.125 else ("semibold" if stroke > 0.105 else "regular")
+    if not by_text:
+        flat_text = " ".join((original_text or "").split())
+        if len(flat_text) > 12:
+            ink_w = sum(l[3] - l[2] + 1 for l in text_lines)
+            probe = _font(weight, 100)
+            w100 = probe.getlength(flat_text) - probe.getlength(" ") * max(0, len(text_lines) - 1)
+            by_text = int(100 * ink_w / w100) if w100 > 0 else None
+    if by_text and by_text < 0.95 * size_h:
+        tight, size = True, size_h
+    else:
+        size = by_text or size_h
+    stroke = (np.median(runs) / size) if runs else 0.1
+    weight = "bold" if stroke > 0.125 else ("semibold" if stroke > 0.105 else "regular")
 
     # interlinea misurata: distanza tipica tra l'inizio di due righe consecutive
     tops = [l[0] for l in text_lines]
@@ -202,6 +245,40 @@ def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False) -
                 if br:                          # peso del testo normale, senza il titoletto
                     sb = np.median(br) / max(size, 1)
                     weight = "bold" if sb > 0.125 else ("semibold" if sb > 0.105 else "regular")
+    # paragrafi dell'originale (anche con stacchi piccoli) e il loro colore: es. prima parte grigia, poi bianca
+    para_colors = None
+    groups, cur = [], [text_lines[0]]
+    step = float(np.min(gaps)) if len(tops) > 1 else pitch      # distanza tra righe dello stesso paragrafo
+    for k in range(1, len(text_lines)):
+        if text_lines[k][0] - text_lines[k - 1][0] > step * 1.22:
+            groups.append(cur)
+            cur = []
+        cur.append(text_lines[k])
+    groups.append(cur)
+    if len(groups) >= 2:
+        cols = []
+        for g in groups:
+            cs = [c for c in (_line_color(l) for l in g) if c is not None]
+            cols.append(np.median(cs, axis=0) if cs else None)
+        if all(c is not None for c in cols):
+            arr = np.array(cols)
+            if (arr.max(axis=0) - arr.min(axis=0)).max() > 60:
+                # paragrafi vicini con lo stesso colore diventano un'unica parte: [(colore, righe), ...]
+                segs = []
+                for c, g in zip(cols, groups):
+                    c = tuple(int(v) for v in c)
+                    if segs and max(abs(a_ - b_) for a_, b_ in zip(segs[-1][0], c)) < 40:
+                        segs[-1] = (segs[-1][0], segs[-1][1] + len(g))
+                    else:
+                        segs.append((c, len(g)))
+                para_colors = segs
+                head_color = None                    # i colori per paragrafo comprendono il titoletto
+                # colore principale = quello del paragrafo più chiaro/contrastato (il testo "forte")
+                color = max((c for c, _ in para_colors), key=lambda c: abs(np.array(c) - bg).max())
+    if tight:
+        weight = weight if weight.endswith("_tight") else weight + "_tight"
+        if head_weight and not head_weight.endswith("_tight"):
+            head_weight += "_tight"
     block_center = (top + bottom) / 2
     if align == "center":
         width = int(min(W * 0.9, (np.max(rights) - np.min(lefts)) * 1.1))
@@ -216,7 +293,7 @@ def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False) -
                   top=int(top), bottom=int(bottom), width=width, size=max(14, size),
                   centered_v=abs(block_center - H / 2) < H * 0.08, mask=erase,
                   line_ratio=line_ratio, blank_ratio=blank_ratio, right=int(np.max(rights)),
-                  head_color=head_color, head_weight=head_weight)
+                  head_color=head_color, head_weight=head_weight, para_colors=para_colors)
 
 
 def _dilate(m: np.ndarray, r: int) -> np.ndarray:
@@ -240,7 +317,7 @@ def _clean(img: Image.Image, lay: Layout) -> Image.Image:
     # aloni grigi rimasti attorno al testo cancellato (compressione JPEG): nella fascia del testo
     # tutto ciò che è vicino al colore di sfondo diventa sfondo pieno
     H = a.shape[0]
-    y0, y1 = max(0, lay.top - lay.size), min(H, lay.bottom + lay.size)
+    y0, y1 = 0, H          # tutta la slide: anche l'ombra del watermark cancellato in basso
     band = a[y0:y1].astype(np.int16)
     near = np.abs(band - np.array(lay.bg)).max(axis=2) < 70
     band[near] = np.array(lay.bg)
@@ -346,12 +423,39 @@ def render(img: Image.Image, lay: Layout, text: str, placements: list | None = N
         block_w = max((draw.textlength(ln, font=font) for ln in lines if ln), default=0)
         left = int((W - block_w) / 2)
     in_head = bool(lay.head_color)
+    # colore di ogni paragrafo italiano: si segue la posizione nel testo (prima parte grigia, poi bianca, ecc.)
+    seg_of_line = []
+    if lay.para_colors:
+        tot_o = sum(n for _, n in lay.para_colors)
+        bounds, acc = [], 0
+        for _, n in lay.para_colors:
+            acc += n
+            bounds.append(acc / tot_o)
+        real = [ln for ln in lines if ln]
+        tot_i, done, k = max(1, len(real)), 0, 0
+        para_start = []
+        for ln in lines:
+            if not ln:
+                k = 0
+                continue
+            if k == 0:
+                para_start.append(done)
+            k += 1
+            done += 1
+        para_seg = []
+        for st in para_start:
+            frac = (st + 0.5) / tot_i
+            para_seg.append(next((i for i, b_ in enumerate(bounds) if frac <= b_), len(bounds) - 1))
+    para = 0
     for ln in lines:
         if not ln:
             y += blank_h
             in_head = False                     # il titoletto colorato è solo il primo paragrafo
+            para += 1
             continue
         f, col, wt = font, lay.color, lay.weight
+        if lay.para_colors:
+            col = lay.para_colors[para_seg[min(para, len(para_seg) - 1)]][0]
         if in_head:
             col, wt = lay.head_color, (lay.head_weight or lay.weight)
             f = _font(wt, size)
@@ -435,6 +539,8 @@ def _tokens(text: str) -> list[list[list[tuple[str, int]]]]:
 
 
 def _bold_weight(weight: str) -> str:
+    if weight.endswith("_tight"):
+        return "bold_tight"
     return "bold" if weight in ("regular", "semibold") else weight
 
 

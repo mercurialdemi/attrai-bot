@@ -363,6 +363,8 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
     if config.SLIDE_TEXT_MODE != "gemini-sempre" and not special:
         lay = textslide.analyze(original, slide.get("testo_originale", ""),
                                 has_mark=bool((slide.get("watermark_originale") or "").strip()))
+        if lay and slide.get("_peso_post"):
+            lay.weight = slide["_peso_post"]          # stesso font e spessore in tutte le slide del post
         if lay:
             placements: list = []
             img = textslide.render(original, lay, testo, placements)
@@ -470,6 +472,24 @@ _SEM: asyncio.Semaphore | None = None
 _SEM_LOOP = None
 
 
+def _post_weight(slides: list[dict], originals: list[bytes]) -> str | None:
+    from collections import Counter
+    votes = Counter()
+    for sl, data in zip(slides, originals):
+        if not sl.get("da_modificare", True) or any(b.get("carattere") in ("titolo", "stretto")
+                                                    for b in (sl.get("blocchi") or [])):
+            continue
+        try:
+            lay = textslide.analyze(Image.open(io.BytesIO(data)).convert("RGB"), sl.get("testo_originale", ""),
+                                    has_mark=bool((sl.get("watermark_originale") or "").strip()))
+        except Exception:
+            lay = None
+        if lay:
+            votes[lay.weight] += 1
+    _free_memory()
+    return votes.most_common(1)[0][0] if sum(votes.values()) >= 2 else None
+
+
 def _free_memory() -> None:
     """Restituisce al sistema la memoria delle immagini già lavorate (il server ha solo 512 MB)."""
     import ctypes
@@ -500,6 +520,12 @@ async def render_all(post: dict, originals: list[bytes], brand: dict, job_dir: P
     paths: list[Path] = [job_dir / f"slide_{i + 1:02d}.jpg" for i in range(len(slides))]
     failed: list[int] = []
     version = len(list(job_dir.glob("*.jpg")))
+    # stesso font in tutto il post: si misura il testo di ogni slide di solo testo e si usa quello più frequente
+    peso = await asyncio.to_thread(_post_weight, slides, originals)
+    if peso:
+        post["_peso_testo"] = peso
+        for sl in slides:
+            sl["_peso_post"] = peso
     # il nostro logo: solo sulla prima slide, e solo se il post è di un'altra pagina (aveva il suo watermark)
     wm_post = any((sl.get("watermark_originale") or "").strip() for sl in slides
                   if not sl.get("_cta_riscritta") and "CTA AttraiSeduci" not in (sl.get("testo") or ""))

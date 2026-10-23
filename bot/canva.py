@@ -14,7 +14,8 @@ from pptx.enum.text import MSO_AUTO_SIZE, PP_ALIGN
 from pptx.util import Emu, Pt
 
 PX = 9525          # 1 pixel a 96 dpi in EMU
-FONT_NAMES = {"regular": "Inter", "semibold": "Inter SemiBold", "bold": "Inter", "titolo": "Anton", "stretto": "Oswald"}
+FONT_NAMES = {"regular": "Inter", "semibold": "Inter SemiBold", "bold": "Inter", "titolo": "Anton", "stretto": "Oswald",
+              "regular_tight": "Inter Tight", "semibold_tight": "Inter Tight SemiBold", "bold_tight": "Inter Tight"}
 
 
 def build(post: dict, paths: list[Path], out_path: Path, failed: list[int] | None = None) -> Path:
@@ -53,7 +54,7 @@ def build(post: dict, paths: list[Path], out_path: Path, failed: list[int] | Non
                     f = run.font
                     f.name = FONT_NAMES.get(r["weight"], "Inter")
                     f.size = Pt(size * 0.75)          # pixel -> punti
-                    f.bold = r["weight"] == "bold" or strong
+                    f.bold = r["weight"] in ("bold", "bold_tight") or strong
                     f.color.rgb = RGBColor(*list(col)[:3])
         else:
             s.shapes.add_picture(str(p), 0, 0, Emu(W * PX), Emu(H * PX))
