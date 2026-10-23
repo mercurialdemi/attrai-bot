@@ -550,7 +550,15 @@ def refine_box(original: Image.Image, cleaned: Image.Image, box: tuple[int, int,
     diff = np.abs(a - b).max(axis=2) > 90
     if diff.sum() < 30:
         return box, None
-    ys, xs = np.where(diff)
+    # solo le righe con vere lettere: il "codino" della vignetta (una linea sottile) non fa parte della casella
+    rows = diff.sum(axis=1)
+    dense = rows >= max(4, int(diff.shape[1] * 0.025))
+    core = diff & dense[:, None]
+    if core.sum() >= 30:
+        diff_box = core
+    else:
+        diff_box = diff
+    ys, xs = np.where(diff_box)
     ry0, ry1 = np.percentile(ys, [1, 99]).astype(int)
     rx0, rx1 = np.percentile(xs, [1, 99]).astype(int)
     color = tuple(int(c) for c in np.median(a[diff], axis=0))
@@ -803,7 +811,7 @@ def _color_mask(a, box, colors, W, H):
     di Claude, ma non i tratti del disegno lontani)."""
     import cv2
     x0, y0, x1, y1 = box
-    ex, ey = int(W * 0.06), int(H * 0.04)
+    ex, ey = int(W * 0.06), int(H * 0.015)      # in verticale poco margine: sotto le battute ci sono le teste
     X0, Y0, X1, Y1 = max(0, x0 - ex), max(0, y0 - ey), min(W, x1 + ex), min(H, y1 + ey)
     sub = cv2.cvtColor(a[Y0:Y1, X0:X1], cv2.COLOR_BGR2RGB).astype(np.int16)
     m = np.zeros(sub.shape[:2], bool)
@@ -812,7 +820,7 @@ def _color_mask(a, box, colors, W, H):
     m8 = m.astype(np.uint8) * 255
     # le lettere vicine si uniscono in parole, così una lettera che esce dal riquadro viene presa con la sua parola
     # righe e parole della stessa battuta si uniscono (anche in verticale), così si cancella tutta la battuta
-    joined = cv2.dilate(m8, np.ones((9, 11), np.uint8), iterations=2)
+    joined = cv2.dilate(m8, np.ones((7, 11), np.uint8), iterations=2)
     n, lab = cv2.connectedComponents(joined, connectivity=8)
     core = np.zeros_like(m)
     cx0, cy0 = max(0, x0 - X0), max(0, y0 - Y0)
@@ -935,7 +943,7 @@ def _metrics_from_diff(original: Image.Image, cleaned: Image.Image, box) -> tupl
     a = np.asarray(original.crop((x0, y0, x1, y1)).convert("RGB"), np.int16)
     b = np.asarray(cleaned.crop((x0, y0, x1, y1)).convert("RGB"), np.int16)
     m = np.abs(a - b).max(axis=2) > 60
-    rows = [r for r in _runs(m.sum(axis=1) >= max(3, int(m.shape[1] * 0.01)), min_gap=2) if r[1] - r[0] >= 6]
+    rows = [r for r in _runs(m.sum(axis=1) >= max(4, int(m.shape[1] * 0.025)), min_gap=2) if r[1] - r[0] >= 6]
     if not rows:
         return None, None
     line_h = float(np.median([r[1] - r[0] + 1 for r in rows]))
@@ -994,20 +1002,15 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
         box = (max(box[0], lim_l if lim_l < box[2] - 40 else box[0]), box[1],
                min(box[2], lim_r if lim_r > box[0] + 40 else box[2]), box[3])
         bw = max(40, box[2] - box[0])
-        lim_l, lim_r = min(lim_l, box[0]), max(lim_r, box[2])
-        if al0 == "left":
-            max_w = max(bw, min(W - box[0] - max(box[0], sx), lim_r - box[0]))
-        elif al0 == "right":
-            max_w = max(bw, min(box[2] - max(W - box[2], sx), box[2] - lim_l))
-        else:
-            half = min((box[0] + box[2]) / 2 - lim_l, lim_r - (box[0] + box[2]) / 2)
-            max_w = max(bw, min(W - 2 * max(min(box[0], W - box[2]), sx), 2 * half))
-        max_w = min(max_w, W - 2 * sx)
-        # spazio in altezza: fino al blocco successivo nella stessa colonna
-        lim_b = H
-        for j, ob in enumerate(all_bb):
-            if j != idx and ob[1] >= box[3] - 2 and not (ob[2] < box[0] or ob[0] > box[2]):
-                lim_b = min(lim_b, ob[1] - int(H * 0.01))
+        # CASELLA DI TESTO: il testo italiano sta nello stesso riquadro occupato dall'originale.
+        # Le righe si ridistribuiscono liberamente, ma non si esce mai dalla casella.
+        max_w = int(bw * 1.02)
+        # la casella si accorcia se esce dalla zona sicura in alto o in basso (il testo si rimpicciolisce
+        # invece di essere spinto giù sopra i personaggi)
+        top_eff, bot_eff = max(box[1], int(H * SAFE_Y)), min(box[3], H - int(H * SAFE_Y))
+        if bot_eff - top_eff > 30:
+            box = (box[0], top_eff, box[2], bot_eff)
+            bh = box[3] - box[1]
         car = bl.get("carattere") or "normale"
         weight = car if car in ("titolo", "stretto", "fumetto") else (bl.get("peso") or "regular")
         paras = _tokens(text)
@@ -1028,31 +1031,20 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
         while size >= 14:
             font = _font(weight, size)
             bfont = _font(_bold_weight(weight), size)
-            lines = _layout(draw, paras, font, int(max_w), bfont)
-            # gli a capo dell'inglese non devono obbligare a più righe: se ridistribuendo le parole
-            # le righe diminuiscono (es. 3 come l'originale invece di 4), si usa quella versione
-            flat = [[[w for r in rows for w in r]] for rows in paras]
-            lines_flat = _layout(draw, flat, font, int(max_w), bfont)
-            if len(lines_flat) < len(lines):
-                lines = lines_flat
             lh = int(size * ratio)
-            total = sum(int(size * 0.6) if ln is None else lh for ln in lines)
-            ink_h = total - lh + size * 0.95          # altezza reale delle lettere (l'ultima riga senza interlinea)
-            widest = max((_line_w(draw, ln, font, bfont) for ln in lines if ln), default=0)
-            # l'italiano è spesso più lungo: se le lettere hanno la misura dell'originale si accetta
-            # un po' di altezza in più (fino al 25%) invece di rimpicciolire subito il titolo
-            room = 1.25 if (pitch and line_h) else 1.12
-            room = min(room, max(1.0, (lim_b - box[1]) / max(bh, 1)))
-            if car == "fumetto":
-                # nelle vignette il testo non scende sui personaggi: se serve spazio cresce VERSO L'ALTO
-                # (di solito sopra c'è muro o cielo), fino al margine o al blocco sopra
-                top_lim = int(H * SAFE_Y)
-                for j, ob in enumerate(all_bb):
-                    if j != idx and ob[3] <= box[1] + 2 and not (ob[2] < box[0] or ob[0] > box[2]):
-                        top_lim = max(top_lim, ob[3] + int(H * 0.01))
-                room = max(1.0, min(1.6, (box[3] - top_lim) / max(bh, 1)))
-            if ink_h <= bh * room and widest <= max_w:
-                best = (font, bfont, lines, lh, total)
+            # due modi di andare a capo: quelli dell'originale, oppure parole ridistribuite liberamente.
+            # Vince il primo che sta tutto nella casella (larghezza e altezza).
+            flat = [[[w for r in rows for w in r]] for rows in paras]
+            fitted = None
+            for cand in (_layout(draw, paras, font, int(max_w), bfont), _layout(draw, flat, font, int(max_w), bfont)):
+                total = sum(int(size * 0.6) if ln is None else lh for ln in cand)
+                ink_h = total - lh + size * 0.95
+                widest = max((_line_w(draw, ln, font, bfont) for ln in cand if ln), default=0)
+                if ink_h <= bh * 1.04 and widest <= max_w:
+                    if fitted is None or len(cand) < len(fitted[0]):
+                        fitted = (cand, total)
+            if fitted:
+                best = (font, bfont, fitted[0], lh, fitted[1])
                 break
             size -= 1 if size < 40 else 2
         if not best:
@@ -1067,8 +1059,6 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
         bot_off = font.getbbox(" ".join(w for w, _ in last))[3] if last else font.size
         real_h = (total - lh) + bot_off - top_off
         y = box[1] + (bh - real_h) / 2 - top_off
-        if car == "fumetto" and real_h > bh:
-            y = box[3] - real_h - top_off            # vignetta: il testo finisce dove finiva l'originale
         margin = int(H * max(0.05, SAFE_Y))
         if y + (total - lh) + bot_off > H - margin:            # mai attaccato al bordo in basso
             y = H - margin - (total - lh) - bot_off
