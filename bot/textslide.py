@@ -899,7 +899,44 @@ def inpaint_boxes(img: Image.Image, boxes: list[tuple[int, int, int, int]], pad:
     if not mask.any():
         return img.convert("RGB")
     out = cv2.inpaint(a, mask, 6, cv2.INPAINT_TELEA)
+    out = _retexture(a, out, mask)
     return Image.fromarray(cv2.cvtColor(out, cv2.COLOR_BGR2RGB))
+
+
+def _retexture(orig: np.ndarray, filled: np.ndarray, mask: np.ndarray) -> np.ndarray:
+    """La ricostruzione 'liscia' lascia una macchia sfocata su sfondi con texture (tratteggio, grana).
+    Si rimette la texture: alla zona riempita si aggiunge il dettaglio fine (alte frequenze) di una zona vicina
+    senza testo (sopra o sotto), così il muro tratteggiato resta tratteggiato."""
+    import cv2
+    H, W = mask.shape
+    n, lab, stats, _ = cv2.connectedComponentsWithStats((mask > 0).astype(np.uint8), connectivity=8)
+    out = filled.astype(np.float32)
+    detail = orig.astype(np.float32) - cv2.GaussianBlur(orig, (0, 0), 3).astype(np.float32)
+    for k in range(1, n):
+        x, y, w, h, area = stats[k]
+        if area < 200:
+            continue
+        best, best_e = None, None
+        for dy in (-h - 4, h + 4, -2 * h - 8, 2 * h + 8, -h // 2 - 4, h // 2 + 4):
+            sy = y + dy
+            if sy < 0 or sy + h > H:
+                continue
+            if (mask[sy:sy + h, x:x + w] > 0).mean() > 0.05:
+                continue
+            d = detail[sy:sy + h, x:x + w]
+            strong = (np.abs(d).max(axis=2) > 45).mean()        # contorni netti (linee, capelli): da evitare
+            if strong > 0.04:
+                continue
+            e = float(np.abs(d).mean())
+            if best_e is None or e < best_e:
+                best, best_e = sy, e
+        if best is None:
+            continue
+        reg = lab[y:y + h, x:x + w] == k
+        soft = cv2.GaussianBlur(reg.astype(np.float32), (0, 0), 2)
+        tex = np.clip(detail[best:best + h, x:x + w], -30, 30)
+        out[y:y + h, x:x + w] += tex * soft[..., None]
+    return np.clip(out, 0, 255).astype(np.uint8)
 
 
 def boxes_on_plain(img: Image.Image, lay, blocks: list[dict]) -> list:
