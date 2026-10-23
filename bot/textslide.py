@@ -811,11 +811,13 @@ def _color_mask(a, box, colors, W, H):
         m |= np.abs(sub - np.array(c, np.int16)).max(axis=2) < 75
     m8 = m.astype(np.uint8) * 255
     # le lettere vicine si uniscono in parole, così una lettera che esce dal riquadro viene presa con la sua parola
-    joined = cv2.dilate(m8, np.ones((5, 9), np.uint8), iterations=2)
+    # righe e parole della stessa battuta si uniscono (anche in verticale), così si cancella tutta la battuta
+    joined = cv2.dilate(m8, np.ones((9, 11), np.uint8), iterations=2)
     n, lab = cv2.connectedComponents(joined, connectivity=8)
     core = np.zeros_like(m)
     cx0, cy0 = max(0, x0 - X0), max(0, y0 - Y0)
     core[cy0:max(cy0, y1 - Y0), cx0:max(cx0, x1 - X0)] = True
+    lab_keep = None
     keep = set(np.unique(lab[core & (joined > 0)]).tolist()) - {0}
     out = np.zeros((H, W), np.uint8)
     if keep:
@@ -1041,6 +1043,14 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
             # un po' di altezza in più (fino al 25%) invece di rimpicciolire subito il titolo
             room = 1.25 if (pitch and line_h) else 1.12
             room = min(room, max(1.0, (lim_b - box[1]) / max(bh, 1)))
+            if car == "fumetto":
+                # nelle vignette il testo non scende sui personaggi: se serve spazio cresce VERSO L'ALTO
+                # (di solito sopra c'è muro o cielo), fino al margine o al blocco sopra
+                top_lim = int(H * SAFE_Y)
+                for j, ob in enumerate(all_bb):
+                    if j != idx and ob[3] <= box[1] + 2 and not (ob[2] < box[0] or ob[0] > box[2]):
+                        top_lim = max(top_lim, ob[3] + int(H * 0.01))
+                room = max(1.0, min(1.6, (box[3] - top_lim) / max(bh, 1)))
             if ink_h <= bh * room and widest <= max_w:
                 best = (font, bfont, lines, lh, total)
                 break
@@ -1057,6 +1067,8 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
         bot_off = font.getbbox(" ".join(w for w, _ in last))[3] if last else font.size
         real_h = (total - lh) + bot_off - top_off
         y = box[1] + (bh - real_h) / 2 - top_off
+        if car == "fumetto" and real_h > bh:
+            y = box[3] - real_h - top_off            # vignetta: il testo finisce dove finiva l'originale
         margin = int(H * max(0.05, SAFE_Y))
         if y + (total - lh) + bot_off > H - margin:            # mai attaccato al bordo in basso
             y = H - margin - (total - lh) - bot_off

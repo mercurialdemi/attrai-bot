@@ -306,6 +306,9 @@ Ricevi le slide di un post di una pagina collaboratrice che ci ha autorizzato a 
 - Leggi con attenzione tutto il testo di ogni slide e trascrivilo in testo_originale.
 - {TRADUZIONE.get(modo, TRADUZIONE['fedele'])}
 - Lunghezza simile all'originale e stessi a capo, così il testo entra nello stesso spazio grafico.
+- Battute di vignette/fumetti e testi scritti sopra un disegno o una foto: l'italiano deve essere LUNGO QUANTO
+  L'INGLESE O PIÙ CORTO (massimo +5% di caratteri), anche a costo di riformulare in modo più asciutto,
+  perché lo spazio attorno ai personaggi è limitato ("I ran into my ex tonight." -> "Stasera ho visto il mio ex.").
 - Stesso numero di slide e stesso ordine.
 - Unica eccezione alla fedeltà: se una slide contiene una CTA o un riferimento alla pagina di origine
   (segui @..., link in bio, nome della pagina), sostituiscilo con il nostro equivalente per {brand['nome']}.
@@ -543,6 +546,16 @@ REGOLE FISSE DATE DA GABRIELE (hanno la precedenza su tutto il resto)
 
 
 
+def _source_cta_note(slides_out: dict) -> str:
+    """Se il post originale chiude vendendo un prodotto (guide, libri, corso), anche il nostro chiude con il manuale."""
+    cta_txt = " | ".join((s.get("testo_originale") or "")[:300] for s in slides_out.get("slides", []) if s.get("e_cta"))
+    if not cta_txt.strip():
+        return ""
+    return ("\n\nIL POST ORIGINALE CHIUDE CON QUESTA CTA: " + cta_txt + "\n"
+            "Se quella CTA vende o regala un prodotto (guida, libro, ebook, corso, 'commenta X e te lo mando'), "
+            "la nostra CTA DEVE essere al manuale più adatto al dolore del post (tipo=manuale), mai 'segui la pagina'.")
+
+
 def _cta_slides_request(slides_out: dict) -> str:
     cta = [s for s in slides_out.get("slides", []) if s.get("e_cta") and s.get("da_modificare", True)
            and any((b.get("testo") or "").strip() for b in (s.get("blocchi") or []))]
@@ -570,6 +583,7 @@ def write_caption(slides_out: dict, caption: str, brand: dict, rules: list[dict]
         "Scrivi la nostra descrizione con lo strumento descrizione_pronta, seguendo le nostre regole, "
         "e sostituisci la CTA originale con la nostra."
         + _cta_slides_request(slides_out)
+        + _source_cta_note(slides_out)
     )}]
     system = _caption_system(brand, rules, recent)
     try:
