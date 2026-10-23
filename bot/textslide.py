@@ -446,14 +446,26 @@ def _wrap(draw, text: str, font, max_w: int) -> list[str]:
     return out
 
 
+def _is_flat(img: Image.Image, lay: Layout) -> bool:
+    """Sfondo davvero a tinta unita (niente sfumature né texture)?"""
+    a = np.asarray(img.convert("RGB").resize((108, 135))).astype(np.int16)
+    bgp = np.abs(a - np.array(lay.bg)).max(axis=2) < 40          # pixel di sfondo (il resto è testo)
+    if bgp.mean() < 0.6:
+        return False
+    return float(np.percentile(np.abs(a[bgp] - np.array(lay.bg)).max(axis=1), 95)) <= 10
+
+
 def background(img: Image.Image, lay: Layout) -> Image.Image:
-    """La slide senza testo (per il file Canva)."""
+    """La slide senza testo. Se lo sfondo è a tinta unita si ricrea da zero dello stesso colore identico:
+    nessuna sbavatura possibile. Altrimenti si cancella il testo riga per riga."""
+    if _is_flat(img, lay):
+        return Image.new("RGB", img.size, tuple(int(c) for c in lay.bg))
     return _clean(img, lay)
 
 
 def render(img: Image.Image, lay: Layout, text: str, placements: list | None = None) -> Image.Image:
     """Scrive il testo. Se `placements` è una lista, ci aggiunge (riga, x, y, corpo, peso, colore) per il file Canva."""
-    out = _clean(img, lay)
+    out = background(img, lay)
     text = no_emoji(text)
     if not text:
         return out
