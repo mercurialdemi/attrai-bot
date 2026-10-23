@@ -657,6 +657,8 @@ def erase_local(img: Image.Image, box: tuple[int, int, int, int], bg: tuple,
         rows = _runs(own.sum(axis=1) >= 2, min_gap=2)
         if len(rows) >= 2:
             pitch = float(np.median(np.diff([r[0] for r in rows])))
+        if rows:
+            erase_local.last_line_h = float(np.median([r[1] - r[0] + 1 for r in rows]))
     else:
         tight = box
     m = _dilate(own, 3)
@@ -818,9 +820,26 @@ def try_local_clean(original: Image.Image, blocks: list[dict]):
         bgs.append(found[1])
     boxes = []
     for i, (box, bg) in enumerate(zip(all_boxes, bgs)):
+        erase_local.last_line_h = None
         img, tight, pitch = erase_local(img, box, bg, [b for j, b in enumerate(all_boxes) if j != i])
-        boxes.append((tight, pitch))
+        boxes.append((tight, pitch, erase_local.last_line_h))      # altezza delle lettere dell'originale
     return img, boxes
+
+
+def _metrics_from_diff(original: Image.Image, cleaned: Image.Image, box) -> tuple[float | None, float | None]:
+    """Interlinea e altezza delle lettere del testo originale, dove l'immagine pulita differisce dall'originale."""
+    x0, y0, x1, y1 = [int(v) for v in box]
+    if x1 - x0 < 10 or y1 - y0 < 10:
+        return None, None
+    a = np.asarray(original.crop((x0, y0, x1, y1)).convert("RGB"), np.int16)
+    b = np.asarray(cleaned.crop((x0, y0, x1, y1)).convert("RGB"), np.int16)
+    m = np.abs(a - b).max(axis=2) > 60
+    rows = [r for r in _runs(m.sum(axis=1) >= max(3, int(m.shape[1] * 0.01)), min_gap=2) if r[1] - r[0] >= 6]
+    if not rows:
+        return None, None
+    line_h = float(np.median([r[1] - r[0] + 1 for r in rows]))
+    pitch = float(np.median(np.diff([r[0] for r in rows]))) if len(rows) >= 2 else None
+    return pitch, line_h
 
 
 def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict],
@@ -836,11 +855,14 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
             continue
         if bl.get("maiuscolo"):
             text = text.upper()
-        pitch = None
+        pitch, line_h = None, None
         if boxes:
-            (box, pitch), color = boxes[idx], None
+            entry, color = boxes[idx], None
+            box, pitch = entry[0], entry[1]
+            line_h = entry[2] if len(entry) > 2 else None
         else:
             box, color = refine_box(original, cleaned, block_box(bl, W, H))
+            pitch, line_h = _metrics_from_diff(original, cleaned, box)
         color = _hex(bl.get("colore")) if (boxes or not color) else color
         hl_color = _hex(bl.get("colore_evidenziato")) if bl.get("colore_evidenziato") else color
         bw, bh = max(40, box[2] - box[0]), max(20, box[3] - box[1])
@@ -851,6 +873,15 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
         size, best = max(14, int(bh)), None
         if pitch:                                   # mai più grande dell'originale
             size = min(size, int(pitch / ratio * 1.02))
+        if pitch and line_h:
+            # stessa altezza delle lettere e stessa interlinea dell'originale (titoli grandi e serrati)
+            sample = "HÀ" if text.replace("[[", "").replace("]]", "").isupper() else "Hg"
+            for cand in range(14, 400):
+                bb = _font(weight, cand).getbbox(sample.replace("À", ""))
+                if bb[3] - bb[1] >= line_h * 0.97:
+                    size = cand
+                    break
+            ratio = float(np.clip(pitch / max(size, 1), 1.02, 1.6))
         while size >= 14:
             font = _font(weight, size)
             bfont = _font(_bold_weight(weight), size)
@@ -859,7 +890,10 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
             total = sum(int(size * 0.6) if ln is None else lh for ln in lines)
             ink_h = total - lh + size * 0.95          # altezza reale delle lettere (l'ultima riga senza interlinea)
             widest = max((_line_w(draw, ln, font, bfont) for ln in lines if ln), default=0)
-            if ink_h <= bh * 1.12 and widest <= bw * 1.05:
+            # l'italiano è spesso più lungo: se le lettere hanno la misura dell'originale si accetta
+            # un po' di altezza in più (fino al 25%) invece di rimpicciolire subito il titolo
+            room = 1.25 if (pitch and line_h) else 1.12
+            if ink_h <= bh * room and widest <= bw * 1.05:
                 best = (font, bfont, lines, lh, total)
                 break
             size -= 1 if size < 40 else 2
