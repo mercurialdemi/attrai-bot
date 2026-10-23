@@ -87,36 +87,42 @@ cta:
   dove_si_compra: "link in bio"
 
 manuali:
+  # Quale manuale per quale dolore (decide la CTA). Mai proporre il bundle friendzone + seduzione.
   - id: attraiseduci
-    nome: AttraiSeduci
+    nome: AttraiSeduci (manuale di seduzione)
     dolori: >
-      Per l'uomo che non sa creare attrazione o la perde per strada. Cerca tecniche e copioni e viene
-      percepito come bisognoso: frame da elemosina, fame di approvazione, paura del rifiuto.
-      Non sa approcciare né entrare in un gruppo, ha conversazioni piatte che non creano tensione,
-      si blocca nel passaggio dalla conversazione al contatto fisico, al bacio e alla prima volta.
-      Il giorno dopo scrive troppo e cerca rassicurazioni; quando è troppo preso perde valore ai suoi occhi.
-      Copre anche distacco e scarsità, il no contact dopo una rottura e il rispetto perso dentro la coppia.
+      Tutto ciò che serve per creare una presenza magnetica, entrare nella mente di una donna e capire come
+      funziona davvero il desiderio femminile. Per l'uomo che non sa creare attrazione o la perde per strada:
+      cerca tecniche e copioni e viene percepito come bisognoso (frame da elemosina, fame di approvazione,
+      paura del rifiuto). Approccio, conversazioni piatte senza tensione, passaggio al contatto fisico, al bacio
+      e alla prima volta, il giorno dopo scrive troppo, perde valore quando è troppo preso. Anche distacco e
+      scarsità, no contact dopo una rottura, rispetto perso dentro la coppia.
   - id: potere-sociale
     nome: "Bundle AttraiSeduci + Potere Sociale"
     vendita: >
-      Potere Sociale NON si vende da solo: esiste solo nel bundle insieme al manuale AttraiSeduci.
-      Nella CTA non dire mai "il manuale Potere Sociale" da solo: si parla sempre del bundle
-      (AttraiSeduci + Potere Sociale), che unisce attrazione e rispetto sociale.
+      Potere Sociale NON si vende da solo: esiste solo nel bundle con il manuale di seduzione AttraiSeduci.
+      Si propone quando il post parla di RISPETTO, DINAMICHE SOCIALI, MASCOLINITÀ, status, frame e leadership.
+      Nella CTA spiega che dinamiche sociali e attrazione seguono le stesse logiche: chi viene rispettato dagli
+      uomini viene desiderato dalle donne, e chi non sa farsi rispettare nel gruppo perde anche lei.
+      Mai dire "il manuale Potere Sociale" da solo: si parla sempre del bundle.
     dolori: >
       Per l'uomo competente ma invisibile. Lo interrompono, le sue idee vengono ignorate e prese sul serio
       solo se le dice un altro, al lavoro gli parlano sopra, nei gruppi è "quello tranquillo".
       Vede gente mediocre rispettata più di lui e non capisce perché. Non sa dire di no, si fa mettere
-      i piedi in testa, non guida le situazioni. Copre frame, postura e occupazione dello spazio,
-      calma come potere, reputazione, riprova sociale e uso dell'ambiguità.
+      i piedi in testa, non guida le situazioni. Frame, postura e occupazione dello spazio,
+      calma come potere, reputazione, riprova sociale, mascolinità e uso dell'ambiguità.
   - id: friendzone
     nome: "Perché le donne ti mettono nella friendzone (e come uscirne)"
+    vendita: >
+      Si propone SOLO quando il post tocca il dolore di essere vicino a lei ma non scelto: il limbo, essere
+      importante ma non desiderato. Mai proporlo in bundle con il manuale di seduzione.
     dolori: >
       Per l'uomo che per lei è importante ma non desiderato: lo cerca, si confida, gli racconta degli altri,
-      e non prova nessuna attrazione. È diventato il suo confidente con disponibilità eccessiva,
-      idealizzazione, rinuncia alle proprie priorità e paura di perderla, e ha scambiato fiducia e affetto
-      per segnali di interesse. Non capisce perché gentilezza, favori e presenza costante non bastano,
-      e perché lei sceglie un altro. Copre la differenza tra essere apprezzato ed essere desiderato,
-      dipendenza emotiva, iniziativa, dinamiche di potere e come smettere di aspettare di essere scelto.
+      e non prova nessuna attrazione. Resta in un limbo: vicino ma mai scelto. È diventato il suo confidente
+      con disponibilità eccessiva, idealizzazione, rinuncia alle proprie priorità e paura di perderla, e ha
+      scambiato fiducia e affetto per segnali di interesse. Non capisce perché gentilezza, favori e presenza
+      costante non bastano, e perché lei sceglie un altro. Differenza tra essere apprezzato ed essere desiderato,
+      dipendenza emotiva, iniziativa, come smettere di aspettare di essere scelto.
       Tesi: non ci sei finito perché hai fatto troppo poco per lei, ma perché hai rinunciato alla tua indipendenza.
       Non promette che lei si innamorerà: la CTA non deve promettere risultati garantiti con lei.
 
