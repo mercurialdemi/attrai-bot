@@ -12,8 +12,17 @@ handle: attraiseduci          # handle Instagram senza @
 # ---------------------------------------------------------------
 pagine_monitorate:
   - attraiseduci
-  # - collaboratore1
-  # - collaboratore2
+  # collaboratori autorizzati (24/10/2026)
+  - masculineprints
+  - masculinecreed
+  - masculineriots
+  - masculinemind
+  - badboyscode
+  - masculinecraze
+  - thementalpower
+  - romances
+  - potesandquotes_
+  - black_thoughtss_
 
 # Pagine da cui il bot STUDIA strutture, hook e temi (mai copiare i testi): per i post originali da zero
 pagine_studio:
