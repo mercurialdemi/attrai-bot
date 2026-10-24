@@ -33,7 +33,10 @@ for _fam in ("montserrat", "poppins", "arimo"):
         FONTS[f"{_w}_{_fam}"] = config.ROOT / "assets" / f"{_fam}_{_w}.ttf"
 SAFE_X = 0.065   # margine laterale minimo: dentro la zona che Instagram mostra sempre (anche nella griglia 3:4)
 SAFE_Y = 0.05    # margine minimo sopra e sotto
-FAMILIES = ["", "_tight", "_montserrat", "_poppins", "_arimo"]   # Inter, Inter Tight, Montserrat, Poppins, Arimo (tipo Helvetica/Arial)
+for _fam, _file in (("gaegu", "mano_gaegu.ttf"), ("schoolbell", "mano_schoolbell.ttf"), ("architects", "mano_architects.ttf")):
+    for _w in ("regular", "semibold", "bold"):                 # scrittura a mano: un solo spessore
+        FONTS[f"{_w}_{_fam}"] = config.ROOT / "assets" / _file
+FAMILIES = ["", "_tight", "_montserrat", "_poppins", "_arimo", "_gaegu", "_schoolbell", "_architects"]   # Inter, Inter Tight, Montserrat, Poppins, Arimo (tipo Helvetica/Arial)
 
 
 @dataclass
@@ -126,7 +129,7 @@ def _identify_font(ink: np.ndarray, text_lines: list, orig_lines: list[str]):
         crops.append((t, c[ys.min():ys.max() + 1, xs.min():xs.max() + 1], x1 - x0 + 1))
     if not crops:
         return None
-    best, best_score = None, -1.0
+    cand = []
     for fam in FAMILIES:
         for w in ("regular", "semibold", "bold"):
             name = w + fam
@@ -141,18 +144,37 @@ def _identify_font(ink: np.ndarray, text_lines: list, orig_lines: list[str]):
                 ImageDraw.Draw(im).text((2 - bb[0], 2 - bb[1]), t, font=f, fill=255)
                 ch, cw = crop.shape
                 r = np.asarray(im.resize((cw, ch))) > 110
-                inter = (r & crop).sum()
-                union = (r | crop).sum()
-                # proporzioni: a parità di larghezza l'altezza deve tornare
-                prop = min(th / tw, ch / cw) / max(th / tw, ch / cw)
-                scores.append(inter / max(1, union) * prop)
+                # tratti sottili (scrittura a mano): si confrontano le forme un po' "ingrossate",
+                # altrimenti basta un pixel di spostamento per non sovrapporsi
+                import cv2
+                prop = min(th / tw, ch / cw) / max(th / tw, ch / cw)   # a parità di larghezza l'altezza deve tornare
+                raw = (r & crop).sum() / max(1, (r | crop).sum()) * prop
+                k = max(1, int(ch * 0.06))
+                ker = np.ones((k, k), np.uint8)
+                rd = cv2.dilate(r.astype(np.uint8), ker) > 0
+                cd = cv2.dilate(crop.astype(np.uint8), ker) > 0
+                thick = (rd & cd).sum() / max(1, (rd | cd).sum()) * prop
+                scores.append((raw, thick))
                 # dimensione: media tra quella che dà la stessa larghezza e quella che dà la stessa altezza
                 sizes.append(50 * width / tw + 50 * ch / th)
             if scores:
-                sc = float(np.mean(scores))
-                if sc > best_score:
-                    best, best_score = (name, int(np.median(sizes))), sc
-    return best if best_score > 0.25 else None
+                cand.append((name, int(np.median(sizes)), float(np.mean([a_ for a_, _ in scores])),
+                             float(np.mean([b_ for _, b_ in scores]))))
+    if not cand:
+        return None
+    # prima il confronto preciso; se nessun font somiglia abbastanza (tratti sottili, scrittura a mano)
+    # si confrontano le forme ingrossate
+    top = max(cand, key=lambda c_: c_[2])
+    if top[2] > 0.25:
+        return top[0], top[1]
+    HAND = ("_gaegu", "_schoolbell", "_architects")
+    hand = [c_ for c_ in cand if c_[0].endswith(HAND)]
+    if not hand:
+        return None
+    top = max(hand, key=lambda c_: c_[3])                                   # solo i font scritti a mano
+    base = max((c_[3] for c_ in cand if not c_[0].endswith(HAND)), default=0)
+    # si cambia font solo se è chiaramente più simile di Inter (altrimenti resta il riconoscimento normale)
+    return (top[0], top[1]) if top[3] > 0.25 and top[3] > base else None
 
 
 def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False) -> Layout | None:
@@ -249,8 +271,12 @@ def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False) -
     family, found = "", _identify_font(ink, text_lines, orig_lines)
     if found:
         wname, size = found
+        stroke_w = weight                              # spessore misurato sui tratti (affidabile)
         weight, _, family = wname.partition("_")
         family = "_" + family if family else ""
+        order = ["regular", "semibold", "bold"]
+        if stroke_w in order and abs(order.index(stroke_w) - order.index(weight)) > 1:
+            weight = stroke_w                          # forma giusta ma spessore sbagliato: vale lo spessore misurato
     else:
         h75 = float(np.percentile(t_heights, 75))
         for cand in range(max(12, int(h75 * 0.6)), int(h75 * 1.7) + 1):
@@ -452,7 +478,7 @@ def _is_flat(img: Image.Image, lay: Layout) -> bool:
     bgp = np.abs(a - np.array(lay.bg)).max(axis=2) < 40          # pixel di sfondo (il resto è testo)
     if bgp.mean() < 0.6:
         return False
-    return float(np.percentile(np.abs(a[bgp] - np.array(lay.bg)).max(axis=1), 95)) <= 10
+    return float(np.percentile(np.abs(a[bgp] - np.array(lay.bg)).max(axis=1), 95)) <= 5   # grana/carta: non piatto
 
 
 def background(img: Image.Image, lay: Layout) -> Image.Image:
@@ -1275,7 +1301,10 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
                 y += int(font.size * 0.6)
                 continue
             tw = _line_w(draw, ln, font, bfont)
-            x = x_left if al == "left" else (box[2] - tw if al == "right" else box[0] + (bw - tw) / 2)
+            cx = (box[0] + box[2]) / 2
+            if abs(cx - W / 2) < W * 0.05:
+                cx = W / 2                                 # testo centrato nella slide: centro esatto
+            x = x_left if al == "left" else (box[2] - tw if al == "right" else cx - tw / 2)
             x = min(max(x, sx), W - sx - tw) if tw <= W - 2 * sx else sx      # mai fuori dalla slide
             runs = []
             for w, fl in ln:
@@ -1285,7 +1314,7 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
                 runs.append((w, c, bool(fl & 2)))
                 x += draw.textlength(w, font=f) + space
             if placements is not None:
-                x_start = x_left if al == "left" else (box[2] - tw if al == "right" else box[0] + (bw - tw) / 2)
+                x_start = x_left if al == "left" else (box[2] - tw if al == "right" else cx - tw / 2)
                 x_start = min(max(x_start, sx), W - sx - tw) if tw <= W - 2 * sx else sx
                 placements.append({"testo": " ".join(w for w, _ in ln), "x": float(x_start), "y": float(y),
                                    "size": font.size, "weight": weight, "color": color,

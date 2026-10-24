@@ -18,7 +18,10 @@ FONT_NAMES = {"regular": "Inter", "semibold": "Inter SemiBold", "bold": "Inter",
               "regular_tight": "Inter Tight", "semibold_tight": "Inter Tight SemiBold", "bold_tight": "Inter Tight",
               "regular_montserrat": "Montserrat", "semibold_montserrat": "Montserrat SemiBold", "bold_montserrat": "Montserrat",
               "regular_poppins": "Poppins", "semibold_poppins": "Poppins SemiBold", "bold_poppins": "Poppins",
-              "regular_arimo": "Arimo", "semibold_arimo": "Arimo SemiBold", "bold_arimo": "Arimo"}
+              "regular_arimo": "Arimo", "semibold_arimo": "Arimo SemiBold", "bold_arimo": "Arimo",
+              "regular_gaegu": "Gaegu", "semibold_gaegu": "Gaegu", "bold_gaegu": "Gaegu",
+              "regular_schoolbell": "Schoolbell", "semibold_schoolbell": "Schoolbell", "bold_schoolbell": "Schoolbell",
+              "regular_architects": "Architects Daughter", "semibold_architects": "Architects Daughter", "bold_architects": "Architects Daughter"}
 
 
 def build(post: dict, paths: list[Path], out_path: Path, failed: list[int] | None = None) -> Path:
