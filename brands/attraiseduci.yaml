@@ -142,8 +142,8 @@ scuole_di_pensiero:
       Specificità batte genericità: una scena precisa vende più di mille aggettivi. Scrivi come parli a un amico.
       Una sola idea forte per messaggio.
 
-# Parole censurate con gli asterischi in slide e descrizioni (cazzo -> ca**o). Aggiungi o togli quelle che vuoi.
-parole_censurate: [cazzo, cazzi, cazzate, cazzata, incazzato, incazzata, fottuto, fottuta, fottere, fottiti,
+# Parole censurate in slide e descrizioni: la penultima lettera diventa * (sesso -> ses*o, cazzo -> caz*o).
+parole_censurate: [sesso, cazzo, cazzi, cazzate, cazzata, incazzato, incazzata, fottuto, fottuta, fottere, fottiti,
                    merda, puttana, puttane, stronzo, stronza, stronzate, coglione, coglioni, troia, troie, figa,
                    scopare, scopata]
 

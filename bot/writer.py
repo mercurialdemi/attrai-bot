@@ -265,16 +265,14 @@ def plain(t: str) -> str:
     return t.replace("[[", "").replace("]]", "").replace("{{", "").replace("}}", "")
 
 
-_CENSURA_DEFAULT = ["cazzo", "cazzi", "cazzate", "cazzata", "incazzato", "incazzata", "fottuto", "fottuta",
+_CENSURA_DEFAULT = ["sesso", "cazzo", "cazzi", "cazzate", "cazzata", "incazzato", "incazzata", "fottuto", "fottuta",
                     "fottere", "fottiti", "merda", "puttana", "puttane", "stronzo", "stronza", "stronzate",
                     "coglione", "coglioni", "troia", "troie", "figa", "scopare", "scopata"]
 
 
 def _censura_parola(w: str) -> str:
-    """ca**o, me**a, st****o: restano prima e ultime lettere, il resto diventa asterischi."""
-    if len(w) <= 4:
-        return w[0] + "*" * (len(w) - 2) + w[-1]
-    return w[:2] + "*" * (len(w) - 3) + w[-1]
+    """Solo la penultima lettera diventa asterisco: sesso -> ses*o, cazzo -> caz*o."""
+    return w[:-2] + "*" + w[-1] if len(w) >= 3 else w
 
 
 def censor(text: str, brand: dict | None = None) -> str:
