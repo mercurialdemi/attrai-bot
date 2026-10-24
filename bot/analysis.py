@@ -445,9 +445,22 @@ def study_viral(brand: dict, per_page: int = 40, per_handle: int = 6, max_posts:
                 analyses.append(a)
     if not analyses:
         return {}
+    guida = (writer.load_style().get("guida") or "").strip()
+    manuali = "; ".join(f"{m.get('nome')}: {' '.join(str(m.get('dolori', '')).split())[:200]}"
+                        for m in brand.get("manuali", []))
+    system = (
+        f"Sei lo stratega dei contenuti di {brand['nome']} (@{brand['handle']}). Dai caroselli virali di altre "
+        "pagine ricavi cosa funziona davvero, ma TUTTO quello che restituisci deve essere già adattato alla "
+        f"NOSTRA pagina: posizionamento, tono e dolori qui sotto.\n"
+        f"POSIZIONAMENTO: {' '.join(str(brand.get('posizionamento', '')).split())}\n"
+        f"TONO: {' '.join(brand.get('tono', []))}\n"
+        f"I NOSTRI MANUALI E I DOLORI CHE RISOLVONO: {manuali}\n"
+        + (f"COME SCRIVIAMO NOI (dai nostri post migliori):\n{guida[:2000]}\n" if guida else "")
+        + "Scarta temi e formule che non c'entrano con noi (romantici, motivazionali generici, fuori nicchia) e "
+        "riscrivi hook e strutture con la nostra voce: maschile, diretta, cruda, mai romantica. Privilegia i temi "
+        "che portano ai nostri manuali.")
     summ = writer._tool_call(
-        "Sei uno stratega di contenuti Instagram. Dai caroselli virali analizzati ricava cosa funziona davvero.",
-        [{"type": "text", "text": json.dumps(analyses, ensure_ascii=False, indent=1)}],
+        system, [{"type": "text", "text": json.dumps(analyses, ensure_ascii=False, indent=1)}],
         VIRAL_SUMMARY_TOOL, model=config.CAPTION_MODEL, max_tokens=6000)
     return {**{k: summ.get(k) for k in ("temi", "hook", "strutture", "formati", "regole")},
             "caroselli": analyses, "pagine": sorted(by_page), "pagine_config": sorted(handles),
