@@ -532,19 +532,28 @@ POSIZIONAMENTO
 TONO
 {chr(10).join('- ' + t for t in brand.get('tono', []))}
 
-SOSTANZA (la descrizione deve insegnare, non intrattenere)
-- Pragmatica: spiega il MECCANISMO psicologico dietro il contenuto del post (perché succede, cosa scatta nella
-  testa di lei o di lui) e dai indicazioni concrete: cosa fare, cosa smettere di fare, cosa dire, con un esempio reale.
-- Autorevole: parla da chi conosce la materia da anni. Affermazioni nette e motivate, niente "forse", niente
-  frasi motivazionali vuote ("credi in te stesso", "sii la versione migliore di te").
-- Didattica: struttura chiara. Hook che apre il problema, spiegazione del meccanismo, 2-4 punti pratici
-  (ognuno una frase d'azione + il perché), chiusura che fissa il concetto, poi la CTA.
-- Ogni frase deve aggiungere informazione. Se una frase si può togliere senza perdere niente, toglila.
-- Basi scientifiche: quando il tema lo permette, porta almeno 2 riferimenti reali e verificabili (studio,
-  ricercatore, università o anno) e spiega in parole semplici cosa hanno scoperto e perché conta per il lettore.
-  Solo riferimenti che conosci con certezza: meglio uno vero che due inventati. Mai inventare numeri.
-- Chiusura prima della CTA: niente domande generiche ("Sei d'accordo?", "Cosa ne pensi?"). Se fai una domanda
-  deve essere introspettiva e specifica sul tema del post.
+SOSTANZA (la descrizione deve far sentire, poi insegnare: il lettore deve uscirne capendo qualcosa di sé)
+Struttura obbligatoria, in quest'ordine:
+1. APERTURA EMOTIVA (2-3 righe): una scena o una sensazione precisa che il lettore ha vissuto, al tu, al presente
+   ("Le scrivi per primo. Di nuovo. E mentre aspetti la risposta senti che qualcosa non torna."). Deve far dire
+   "parla di me". Mai aprire con una definizione o con una statistica.
+2. IL DOLORE NOMINATO: dì chiaramente cosa gli sta costando questa situazione (rispetto, attrazione, tempo,
+   stima di sé) e perché continua a ripetersi. Diretto, senza addolcire, senza giudicarlo.
+3. IL MECCANISMO (parte didattica): spiega perché succede, cosa scatta nella testa di lei o di lui, con parole
+   semplici. Qui vanno i riferimenti scientifici: almeno 2 reali e verificabili quando il tema lo permette
+   (studio, ricercatore, università o anno) e cosa hanno scoperto, detto in modo che lo capisca chiunque.
+   Solo riferimenti che conosci con certezza: meglio uno vero che due inventati. Mai inventare numeri.
+4. COSA FARE (2-4 punti): ognuno un'azione concreta + il perché in una frase, con un esempio reale
+   (cosa dire, cosa smettere di fare). Numerati o con a capo netti.
+5. CHIUSURA CHE RESTA: una frase forte che fissa il concetto e ridà speranza ("Non sei tu che vali poco. È la
+   posizione che hai accettato."), poi una domanda introspettiva specifica sul tema (mai "Sei d'accordo?",
+   "Cosa ne pensi?"), poi la CTA.
+Tono:
+- Autorevole: parla da chi studia questa materia da anni e l'ha vista succedere mille volte. Affermazioni nette e
+  motivate, niente "forse", "potrebbe", "in alcuni casi". Niente frasi motivazionali vuote ("credi in te stesso",
+  "sii la versione migliore di te").
+- Emotivo ma maschile: fa sentire il peso e poi la via d'uscita, senza piagnistei, senza romanticismo.
+- Ogni frase deve aggiungere informazione o emozione. Se una frase si può togliere senza perdere niente, toglila.
 
 FLUIDITÀ (la descrizione deve sembrare scritta di getto da un italiano, non tradotta)
 - Frasi brevi e parlate, ritmo da messaggio vocale: una idea per frase, molti a capo.
