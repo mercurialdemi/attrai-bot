@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import asyncio
 import io
+import re
 import logging
 from pathlib import Path
 
@@ -135,8 +136,34 @@ def _base_prompt(slide: dict, mode: str, feedback: str = "") -> str:
     )
 
 
+def _openai_text_prompt(slide: dict) -> str:
+    """Prompt per OpenAI quando scrive lui il testo italiano (come nella Carousel Factory del collaboratore:
+    testo esatto tra due marcatori, mai aggiungere o togliere parole), ma partendo dalla slide originale."""
+    wm = slide.get("watermark_originale") or "any handle, page name, username or logo of the original page"
+    testo = (slide.get("testo") or "").strip().replace("[[", "").replace("]]", "").replace("{{", "").replace("}}", "")
+    evid = [b.get("colore_evidenziato") for b in (slide.get("blocchi") or []) if b.get("colore_evidenziato")]
+    hl = ""
+    if "[[" in (slide.get("testo") or ""):
+        parti = re.findall(r"\[\[(.+?)\]\]", slide.get("testo") or "", flags=re.S)
+        hl = (" Words highlighted in a different color in the original stay highlighted in the same color"
+              + (f" ({evid[0]})" if evid else "") + ": " + "; ".join(" ".join(x.split()) for x in parti) + ".")
+    return (
+        "Edit this Instagram carousel slide. Produce ONE single finished slide, same format, no grid, no frame, "
+        "no Instagram interface.\n"
+        "1. Replace ALL the existing text with the Italian text below. Typeset it EXACTLY as written: never add, "
+        "translate, omit or rewrite a word; keep accents, punctuation and the line breaks. Use the same font style, "
+        "weight, size, color, alignment and position as the original text, inside the same text areas, with the same "
+        "margins: it must look like the original designer wrote it in Italian. Nothing may touch or cross the edges."
+        + hl + "\nTEXT_BEGIN\n" + testo + "\nTEXT_END\n"
+        f"2. Completely remove the watermark of the original page ({wm}) and rebuild the background underneath.\n"
+        "3. Keep everything else IDENTICAL to the original: illustration, characters and their poses, speech bubbles "
+        "(shape and position), photo, background texture and grain, colors, composition. Do not add any other text, "
+        "logo, handle or watermark. Keep the bottom-right corner clean."
+    )
+
+
 def _prompt(slide: dict, mode: str, feedback: str = "") -> str:
-    p = _base_prompt(slide, mode)
+    p = _openai_text_prompt(slide) if mode == "openai-testo" else _base_prompt(slide, mode)
     if feedback:
         p += f"\n\nA previous attempt had these problems, fix them: {feedback}"
     return p
@@ -178,6 +205,12 @@ def _openai_edit(original: Image.Image, prompt: str) -> Image.Image | None:
     if not data:
         return None
     return Image.open(io.BytesIO(base64.b64decode(data))).convert("RGB")
+
+
+def _openai_scrive(slide: dict) -> bool:
+    """OpenAI scrive direttamente il testo italiano (stile Carousel Factory) quando è il motore scelto."""
+    return (config.MOTORE_IMMAGINI == "openai" and bool(config.OPENAI_API_KEY)
+            and bool((slide.get("testo") or "").strip()))
 
 
 def _gemini_edit(original: Image.Image, prompt: str) -> Image.Image | None:
@@ -601,7 +634,10 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
         slide["_tentativi"] = attempt + 1
         try:
             has_blocks = any((b.get("testo") or "").strip() for b in (slide.get("blocchi") or []))
-            gmode = "overlay" if (mode == "codice" and has_blocks) else ("gemini" if mode == "codice" else mode)
+            # con OpenAI il testo italiano lo scrive direttamente il modello (è molto bravo con il testo);
+            # con Gemini, che sbaglia le lettere, Gemini pulisce e il testo lo scrive il codice
+            gmode = ("openai-testo" if (_openai_scrive(slide) and mode in ("codice", "gemini"))
+                     else "overlay" if (mode == "codice" and has_blocks) else ("gemini" if mode == "codice" else mode))
             edited = _gemini_edit(original, _prompt(slide, gmode, feedback))
         except Exception as e:  # rete, quota, filtri di sicurezza
             log.warning("Gemini tentativo %s fallito: %s", attempt + 1, e)
@@ -612,7 +648,9 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
             continue
         img = _fit(edited, size)
         blocks = [b for b in (slide.get("blocchi") or []) if (b.get("testo") or "").strip()]
-        if mode == "codice" and blocks:
+        if gmode == "openai-testo":
+            slide["_via"] = "openai-testo"
+        elif mode == "codice" and blocks:
             W_, H_ = size
             img = _composite(orig_fit, img, [textslide.block_box(b, W_, H_) for b in blocks]
                              + ([textslide.wm_box(slide, W_, H_)] if textslide.wm_box(slide, W_, H_) else [])
