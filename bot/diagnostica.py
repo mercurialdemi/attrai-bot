@@ -63,6 +63,32 @@ def _h() -> dict:
     return {"Authorization": f"Bearer {config.GITHUB_TOKEN}", "Accept": "application/vnd.github+json"}
 
 
+def token_check(err: Exception | None = None) -> str:
+    """Spiega perché GitHub rifiuta la chiave (senza mai mostrarla): tipo di chiave, a chi appartiene,
+    messaggio di GitHub e permessi richiesti."""
+    t = (config.GITHUB_TOKEN or "")
+    out = [f"Chiave: inizia con '{t[:11]}', lunga {len(t)} caratteri"
+           + (" (ATTENZIONE: contiene spazi)" if t != t.strip() or " " in t else "")]
+    resp = getattr(err, "response", None)
+    if resp is not None:
+        try:
+            out.append(f"GitHub dice: {resp.json().get('message')}")
+        except Exception:
+            pass
+        need = resp.headers.get("x-accepted-github-permissions")
+        if need:
+            out.append(f"Permessi richiesti: {need}")
+    try:
+        with httpx.Client(timeout=30) as http:
+            u = http.get(f"{API}/user", headers=_h())
+            out.append(f"Proprietario chiave: {u.json().get('login') if u.status_code == 200 else 'risposta ' + str(u.status_code)}")
+            r = http.get(f"{API}/repos/{config.GITHUB_REPO}", headers=_h())
+            out.append(f"Repository {config.GITHUB_REPO}: risposta {r.status_code}, permessi utente {r.json().get('permissions')}")
+    except Exception as e:
+        out.append(f"Verifica non riuscita: {str(e)[:100]}")
+    return "\n".join(out)
+
+
 def _ensure_branch(http: httpx.Client) -> None:
     r = http.get(f"{API}/repos/{config.GITHUB_REPO}/git/ref/heads/{config.DIAG_BRANCH}", headers=_h())
     if r.status_code == 200:

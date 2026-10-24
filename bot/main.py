@@ -183,6 +183,7 @@ async def cmd_diagnosi(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         log.exception("Rapporto non caricato")
         res = f"Rapporto non caricato: {str(e)[:200]}"
+        res += "\n\n" + await asyncio.to_thread(diagnostica.token_check, e)
     await update.effective_message.reply_text(res)
 
 
