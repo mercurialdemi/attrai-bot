@@ -38,7 +38,10 @@ COMMANDS = [
         ("stile", "Cosa ha imparato il bot", "guida di stile e testi CTA ricavati da /analizza"),
         ("studio", "Cosa rende virali i caroselli", "temi, hook, strutture e formati dei caroselli virali (base per i post da zero)"),
         ("statistiche", "Numeri veri degli ultimi post", "copertura, salvataggi, condivisioni, clic (serve Meta)"),
-        ("pagine", "Pagine monitorate", "le pagine dei collaboratori che il bot controlla ogni giorno"),
+        ("pagine", "Collaboratori e competitor", "le pagine dei collaboratori (report) e dei competitor (studio)"),
+        ("aggiungi", "Aggiungi un collaboratore (es. /aggiungi @pagina)", "pagina autorizzata: entra nel report del mattino"),
+        ("studia", "Aggiungi un competitor da studiare", "solo per imparare temi, hook, strutture e CTA: mai nel report"),
+        ("rimuovi", "Togli una pagina", "la toglie sia dai collaboratori sia dai competitor"),
     ]),
     ("Controllo", [
         ("diagnosi", "Manda subito a Claude gli errori (di solito non serve)",
@@ -109,17 +112,67 @@ async def cmd_togli(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.effective_message.reply_text("Regola tolta." if ok else "Non trovo quella regola.")
 
 
+def _handles(args: list[str]) -> list[str]:
+    import re as _re
+    out = []
+    for a in args:
+        m = _re.search(r"(?:instagram\.com/)?@?([A-Za-z0-9._]{2,30})/?$", a.strip().rstrip("/"))
+        if m:
+            out.append(m.group(1).lower())
+    return out
+
+
 async def cmd_pagine(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not await _authorized(update):
         return
     brand = writer.load_brand()
-    pages = [h for h in brand.get("pagine_monitorate") or [] if h]
+    own = (brand.get("handle") or "").lower()
+    pages = [h for h in brand.get("pagine_monitorate") or [] if h and h != own]
+    study = [h for h in brand.get("pagine_studio") or [] if h]
     cfg = brand.get("report") or {}
-    text = ("Pagine monitorate dal report:\n" + "\n".join(f"@{h}" for h in pages)) if pages else \
-        "Nessuna pagina monitorata: aggiungile in pagine_monitorate nel profilo del brand."
-    text += (f"\n\nReport ogni giorno alle {cfg.get('ora', '08:00')}, ultime {cfg.get('finestra_ore', 48)} ore, "
-             f"{cfg.get('candidati', 15)} candidati, {cfg.get('quanti_post', 5)} post pronti.")
+    text = ("COLLABORATORI (report del mattino, post da ripubblicare):\n"
+            + ("\n".join(f"@{h}" for h in pages) or "nessuna")
+            + "\n\nCOMPETITOR DA STUDIARE (solo per imparare, mai nel report):\n"
+            + ("\n".join(f"@{h}" for h in study) or "nessuna")
+            + f"\n\nReport ogni giorno alle {cfg.get('ora', '08:00')}, ultime {cfg.get('finestra_ore', 48)} ore."
+            + "\n\nPer cambiare: /aggiungi @pagina (collaboratore), /studia @pagina (competitor), /rimuovi @pagina")
     await update.effective_message.reply_text(text)
+
+
+async def _change_pages(update, context, kind: str):
+    if not await _authorized(update):
+        return
+    hs = _handles(context.args or [])
+    if not hs:
+        esempio = {"monitorate": "/aggiungi @pagina", "studio": "/studia @pagina", "rimosse": "/rimuovi @pagina"}[kind]
+        await update.effective_message.reply_text(f"Scrivi il nome della pagina, es. {esempio} (anche più di una).")
+        return
+    ch = writer.load_page_changes()
+    for k in ("monitorate", "studio", "rimosse"):
+        ch[k] = [h for h in ch.get(k) or [] if h not in hs]
+    if kind != "rimosse":
+        ch[kind] = list(dict.fromkeys((ch.get(kind) or []) + hs))
+    else:
+        ch["rimosse"] = list(dict.fromkeys((ch.get("rimosse") or []) + hs))
+    writer.save_page_changes(ch)
+    nomi = ", ".join("@" + h for h in hs)
+    msg = {"monitorate": f"Aggiunti ai collaboratori: {nomi}. Da domattina sono nel report.",
+           "studio": f"Aggiunti ai competitor da studiare: {nomi}. Entrano nel prossimo studio settimanale "
+                     "(temi, hook, strutture, CTA); i loro post non finiscono mai nel report.",
+           "rimosse": f"Tolti: {nomi}."}[kind]
+    await update.effective_message.reply_text(msg)
+
+
+async def cmd_aggiungi(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await _change_pages(update, context, "monitorate")
+
+
+async def cmd_studia(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await _change_pages(update, context, "studio")
+
+
+async def cmd_rimuovi(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await _change_pages(update, context, "rimosse")
 
 
 async def cmd_analizza(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -755,6 +808,9 @@ def main():
     app.add_handler(CommandHandler("regole", cmd_regole))
     app.add_handler(CommandHandler("togli", cmd_togli))
     app.add_handler(CommandHandler("pagine", cmd_pagine))
+    app.add_handler(CommandHandler("aggiungi", cmd_aggiungi))
+    app.add_handler(CommandHandler("studia", cmd_studia))
+    app.add_handler(CommandHandler("rimuovi", cmd_rimuovi))
     app.add_handler(CommandHandler("report", cmd_report))
     app.add_handler(CommandHandler("diagnosi", cmd_diagnosi))
     app.add_handler(CommandHandler("altri", cmd_altri))

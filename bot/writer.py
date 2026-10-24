@@ -214,9 +214,32 @@ def client() -> anthropic.Anthropic:
     return _client
 
 
+def _pages_file():
+    return config.DATA_DIR / "pagine.json"
+
+
+def load_page_changes() -> dict:
+    """Pagine aggiunte o tolte dal bot (/aggiungi, /studia, /rimuovi), senza toccare il profilo del brand."""
+    try:
+        return json.loads(_pages_file().read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def save_page_changes(d: dict) -> None:
+    config.DATA_DIR.mkdir(parents=True, exist_ok=True)
+    _pages_file().write_text(json.dumps(d, ensure_ascii=False, indent=1), encoding="utf-8")
+
+
 def load_brand() -> dict:
     with open(config.BRAND_FILE, encoding="utf-8") as f:
-        return yaml.safe_load(f)
+        brand = yaml.safe_load(f)
+    ch = load_page_changes()
+    removed = set(ch.get("rimosse") or [])
+    for key, extra in (("pagine_monitorate", "monitorate"), ("pagine_studio", "studio")):
+        base = [h.lower().lstrip("@") for h in brand.get(key) or [] if h]
+        brand[key] = [h for h in dict.fromkeys(base + list(ch.get(extra) or [])) if h not in removed]
+    return brand
 
 
 def load_cta_models() -> dict:
