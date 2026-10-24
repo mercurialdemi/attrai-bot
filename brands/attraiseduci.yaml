@@ -35,8 +35,8 @@ report:
   candidati: 15          # quanti post mettere in classifica
   quanti_post: 5         # quanti preparare già pronti
   post_per_pagina: 30    # post letti per pagina per calcolare la sua media
-  punteggio_minimo: 1.0  # sopra questa soglia (1.0 = media della pagina) un post ha precedenza
-  completa_sempre: true  # true = se i post sopra media sono pochi, completa con i migliori sotto media (segnalati)
+  punteggio_minimo: 1.5  # solo post andati almeno 1,5 volte la media della loro pagina (1.0 = nella media)
+  completa_sempre: false # false = mai post sotto la soglia, anche se quel giorno ce ne sono pochi
   prepara_post: false    # false = il report manda solo i link dei migliori post (non spende crediti);
                          # true  = li manda già tradotti e pronti (quanti_post ogni mattina)
 

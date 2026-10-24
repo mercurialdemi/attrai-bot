@@ -84,7 +84,11 @@ pipeline.send_post=fs
 import yaml
 asyncio.run(report.run_report(Bot(),[1]))
 print("solo link:", [x[1] for x in sent])
-assert any("bNEW2" in str(x) or "Migliori post" in str(x) for x in sent), "report solo link vuoto"
+assert any("bNEW2" in str(x) or "sopra la media" in str(x) for x in sent), "report solo link vuoto"
+sent.clear()
+asyncio.run(report.run_report(Bot(),[1]))                 # stesso giorno: niente post già mandati
+assert not any("sopra la media" in str(x) for x in sent), "il report ripropone post già mandati"
+report._shown_file().unlink()
 sent.clear()
 _ld=writer.load_brand
 writer.load_brand=lambda: {**_ld(), "report": {**_ld().get("report", {}), "prepara_post": True}}

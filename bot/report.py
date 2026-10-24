@@ -250,6 +250,32 @@ def _fit_filter(cands: list, brand: dict) -> tuple[list, bool]:
     return keep, True
 
 
+def _shown_file():
+    return config.DATA_DIR / "report_gia_mostrati.json"
+
+
+def _already_shown() -> dict:
+    """Link già mandati in un report precedente (per non riproporli il giorno dopo)."""
+    import json
+    try:
+        d = json.loads(_shown_file().read_text())
+    except Exception:
+        return {}
+    limit = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
+    return {u: t for u, t in d.items() if t >= limit}
+
+
+def _mark_shown(urls: list[str]) -> None:
+    import json
+    d = _already_shown()
+    now = datetime.now(timezone.utc).isoformat()
+    d.update({u: now for u in urls})
+    try:
+        _shown_file().write_text(json.dumps(d))
+    except OSError:
+        pass
+
+
 def _offset_file():
     return config.DATA_DIR / "classifica_mostrati.txt"
 
@@ -324,6 +350,15 @@ async def run_report(bot, chat_ids: list[int]) -> None:
         if not st["prepara"]:
             # solo link: classifica lunga, tenuti solo i post in tema; /altri mostra i successivi
             cands = rank_candidates(posts, st["ore"], st["candidati"] * 4)
+            # solo post andati DAVVERO meglio della media della loro pagina, e mai quelli già mandati
+            shown_before = _already_shown()
+            cands = [p for p in cands if p.url not in shown_before
+                     and (st["completa"] or p.score >= st["min_score"])]
+            if not cands:
+                await _broadcast(bot, chat_ids, f"Report: nelle ultime {st['ore']} ore nessun post nuovo dei "
+                                                f"collaboratori ha superato {st['min_score']:.1f}x la media della "
+                                                "sua pagina. Niente da segnalare oggi.")
+                return
             cands, filtered = await asyncio.to_thread(_fit_filter, cands, brand)
             storage.save_ranking([_to_dict(p) for p in cands])
             if not cands:
@@ -331,9 +366,11 @@ async def run_report(bot, chat_ids: list[int]) -> None:
                 return
             first = cands[:st["candidati"]]
             _offset_file().write_text(str(len(first)))
+            _mark_shown([p.url for p in first])
             await _send_links(
                 bot, chat_ids,
-                f"☀️ Migliori post in tema delle ultime {st['ore']} ore (rendimento rispetto alla media di ogni pagina).\n"
+                f"☀️ Post dei collaboratori andati almeno {st['min_score']:.1f}x sopra la media della loro pagina "
+                f"(ultime {st['ore']} ore, mai mandati prima).\n"
                 "📚 didattico = da vendere col manuale · 🔥 virale = per far crescere la pagina:"
                 + ("" if filtered else "\n(filtro di tema non riuscito: li vedi tutti)"),
                 _link_lines(first, 1, st["min_score"]),
@@ -380,6 +417,7 @@ async def run_more(bot, chat_ids: list[int]) -> None:
                 await _broadcast(bot, chat_ids, "Non ci sono altri post nella classifica di oggi.")
                 return
             _offset_file().write_text(str(shown + len(nxt)))
+            _mark_shown([p.url for p in nxt])
             left = len(ranking) - shown - len(nxt)
             await _send_links(bot, chat_ids, "Altri post dalla classifica:",
                               _link_lines(nxt, shown + 1, st["min_score"]),
