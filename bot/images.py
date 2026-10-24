@@ -142,7 +142,47 @@ def _prompt(slide: dict, mode: str, feedback: str = "") -> str:
     return p
 
 
+_oclient = None
+
+
+def _motore() -> str:
+    return "OpenAI" if (config.MOTORE_IMMAGINI == "openai" and config.OPENAI_API_KEY) else "Gemini"
+
+
+def _openai_edit(original: Image.Image, prompt: str) -> Image.Image | None:
+    """Stessa cosa di Gemini con il modello immagini di OpenAI: riceve la slide e il prompt, restituisce la slide nuova."""
+    global _oclient
+    import base64
+    from openai import OpenAI
+    if _oclient is None:
+        _oclient = OpenAI(api_key=config.OPENAI_API_KEY, timeout=180, max_retries=1)
+    scale = 1088 / original.width                               # stessa proporzione, lati multipli di 16
+    w, h = 1088, max(16, round(original.height * scale / 16) * 16)
+    h = min(max(h, w // 3 // 16 * 16 + 16), w * 3)
+    buf = io.BytesIO()
+    original.convert("RGB").save(buf, "PNG")
+    args = dict(model=config.OPENAI_IMAGE_MODEL, image=("slide.png", buf.getvalue(), "image/png"),
+                prompt=prompt, quality=config.OPENAI_IMAGE_QUALITY)
+    if config.OPENAI_IMAGE_MODEL.startswith("gpt-image-2"):
+        args["size"] = f"{w}x{h}"
+    else:                                                       # modelli vecchi: tre formati fissi, fedeltà alta
+        args["size"] = "1024x1536" if h > w * 1.1 else ("1536x1024" if w > h * 1.1 else "1024x1024")
+        args["input_fidelity"] = "high"
+    resp = _oclient.images.edit(**args)
+    data = resp.data[0].b64_json if resp.data else None
+    if not data:
+        return None
+    return Image.open(io.BytesIO(base64.b64decode(data))).convert("RGB")
+
+
 def _gemini_edit(original: Image.Image, prompt: str) -> Image.Image | None:
+    """Motore immagini scelto (il nome è rimasto per compatibilità): OpenAI se configurato, altrimenti Gemini."""
+    if config.MOTORE_IMMAGINI == "openai" and config.OPENAI_API_KEY:
+        return _openai_edit(original, prompt)
+    return _gemini_only(original, prompt)
+
+
+def _gemini_only(original: Image.Image, prompt: str) -> Image.Image | None:
     from google.genai import types
     resp = gclient().models.generate_content(
         model=config.GEMINI_IMAGE_MODEL,
@@ -535,7 +575,8 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
             log.warning("Ricostruzione col codice non riuscita: %s", e)
     feedback, problems = "", ""
     best: Image.Image | None = None
-    slide["_via"] = "gemini-pulizia+blocchi" if (mode == "codice" and blocks0) else f"gemini-{mode}"
+    slide["_via"] = (f"{_motore().lower()}-pulizia+blocchi" if (mode == "codice" and blocks0)
+                    else f"{_motore().lower()}-{mode}")
     for attempt in range(max(1, config.SLIDE_ATTEMPTS)):
         slide["_tentativi"] = attempt + 1
         try:
@@ -544,10 +585,10 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
             edited = _gemini_edit(original, _prompt(slide, gmode, feedback))
         except Exception as e:  # rete, quota, filtri di sicurezza
             log.warning("Gemini tentativo %s fallito: %s", attempt + 1, e)
-            problems = f"Gemini non ha risposto ({str(e)[:140]})"
+            problems = f"{_motore()} non ha risposto ({str(e)[:140]})"
             continue
         if edited is None:
-            problems = "Gemini non ha prodotto l'immagine"
+            problems = f"{_motore()} non ha prodotto l'immagine"
             continue
         img = _fit(edited, size)
         blocks = [b for b in (slide.get("blocchi") or []) if (b.get("testo") or "").strip()]

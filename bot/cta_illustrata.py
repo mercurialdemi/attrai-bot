@@ -281,7 +281,7 @@ def make(post: dict, originals: list[bytes], jdir: Path) -> tuple[Path, dict] | 
         if not books or not all(b.exists() for b in books):
             return None
     text = (post.get("_testo_cta_finale") or "").strip()
-    if not text or not config.GEMINI_API_KEY:
+    if not text or not (config.GEMINI_API_KEY or config.OPENAI_API_KEY):
         return None
     from . import images
     ref = Image.open(io.BytesIO(originals[0])).convert("RGB")

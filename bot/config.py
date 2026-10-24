@@ -34,6 +34,12 @@ CLAUDE_MODEL = _env("CLAUDE_MODEL", "claude-sonnet-5-5")
 # La descrizione è il testo che vende: la scrive il modello più forte nella scrittura (una chiamata per post)
 CAPTION_MODEL = _env("CAPTION_MODEL", "claude-opus-5-5")
 GEMINI_IMAGE_MODEL = _env("GEMINI_IMAGE_MODEL", "gemini-2.5-flash-image")
+OPENAI_API_KEY = _env("OPENAI_API_KEY")
+OPENAI_IMAGE_MODEL = _env("OPENAI_IMAGE_MODEL", "gpt-image-2")
+OPENAI_IMAGE_QUALITY = _env("OPENAI_IMAGE_QUALITY", "high")
+# Motore per le immagini che il codice non sa fare: "openai" se c'è la sua chiave, altrimenti "gemini".
+# Uno solo, per non pagare due volte. MOTORE_IMMAGINI=gemini per tornare a Gemini.
+MOTORE_IMMAGINI = (_env("MOTORE_IMMAGINI", "") or ("openai" if OPENAI_API_KEY else "gemini")).lower()
 APIFY_ACTOR = _env("APIFY_ACTOR", "apify/instagram-scraper")
 # Per i post con limite d'età: cookie di un account Instagram secondario ("sessionid=...; csrftoken=...")
 # e l'attore Apify che li accetta. Si usano solo quando la lettura normale viene bloccata.
@@ -70,7 +76,7 @@ def missing_keys() -> list[str]:
     required = {
         "TELEGRAM_BOT_TOKEN": TELEGRAM_BOT_TOKEN,
         "ANTHROPIC_API_KEY": ANTHROPIC_API_KEY,
-        "GEMINI_API_KEY": GEMINI_API_KEY,
+        "GEMINI_API_KEY o OPENAI_API_KEY": GEMINI_API_KEY or OPENAI_API_KEY,
         "APIFY_TOKEN": APIFY_TOKEN,
     }
     return [k for k, v in required.items() if not v]
