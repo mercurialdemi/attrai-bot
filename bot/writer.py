@@ -228,6 +228,16 @@ def load_cta_models() -> dict:
         return {}
 
 
+def _cta_study_block(style: dict) -> str:
+    st = style.get("cta_studio") or {}
+    if not st.get("lezioni"):
+        return ""
+    schemi = "\n".join(f"- {x}" for x in st.get("schemi_aggancio") or [])
+    return ("COME LE PAGINE MIGLIORI COLLEGANO LA CTA AL POST (studio di " + ", ".join("@" + p for p in st.get("pagine") or [])
+            + "): usalo per scrivere l'aggancio tra il post e la CTA, così che sembri la naturale continuazione.\n"
+            + st["lezioni"] + ("\nSchemi di transizione:\n" + schemi if schemi else "") + "\n")
+
+
 def _cta_models_block() -> str:
     mods = load_cta_models()
     if not mods:
@@ -662,6 +672,7 @@ CTA
 {brand['cta']['stile'].strip()}
 {_cta_memory(style)}
 {_cta_models_block()}
+{_cta_study_block(style)}
 {_feedback_memory(style)}
 Dove si compra: {brand['cta'].get('dove_si_compra', 'link in bio')}.
 Manuali disponibili:

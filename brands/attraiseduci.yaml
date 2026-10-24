@@ -28,6 +28,7 @@ pagine_monitorate:
 # Pagine da cui il bot STUDIA strutture, hook e temi (mai copiare i testi): per i post originali da zero
 pagine_studio:
   - convincimii
+  - evolvitii
 
 report:
   ora: "08:00"           # ora italiana; lascia vuoto ("") per disattivare il report automatico

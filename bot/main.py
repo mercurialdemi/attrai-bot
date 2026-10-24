@@ -163,6 +163,13 @@ async def cmd_stile(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.effective_message.reply_text(
         (f"Testi delle tue slide CTA che uso a fine post ({len(testi)}):\n\n{righe}" if testi else
          "Non ho ancora letto i testi delle tue slide CTA: lancia /analizza.")[:4000])
+    st = style.get("cta_studio") or {}
+    if st.get("lezioni"):
+        schemi = "\n".join(f"• {x}" for x in st.get("schemi_aggancio") or [])
+        await update.effective_message.reply_text(
+            (f"Come {', '.join('@' + p for p in st.get('pagine') or [])} collegano la CTA al post "
+             f"({st.get('post_studiati')} caroselli, {st.get('creato', '')[:10]}):\n\n{st['lezioni']}"
+             + (f"\n\nSchemi di aggancio:\n{schemi}" if schemi else ""))[:4000])
 
 
 async def cmd_statistiche(update: Update, context: ContextTypes.DEFAULT_TYPE):

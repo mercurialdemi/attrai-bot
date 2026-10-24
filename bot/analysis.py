@@ -153,6 +153,22 @@ def run_analysis(brand: dict, n_posts: int = 80) -> dict:
         "post_analizzati": len(scored),
         "creato": datetime.now(timezone.utc).isoformat(timespec="seconds"),
     }
+    # studio delle CTA delle pagine di riferimento: una volta a settimana (costa una lettura in più)
+    prev = writer.load_style().get("cta_studio") or {}
+    try:
+        fresh = prev.get("creato") and (datetime.now(timezone.utc)
+                                        - datetime.fromisoformat(prev["creato"])).days < 7 \
+            and (prev.get("pagine_config") or []) == sorted(h.lower().lstrip("@") for h in brand.get("pagine_studio") or [])
+    except Exception:
+        fresh = False
+    if fresh:
+        style["cta_studio"] = prev
+    else:
+        try:
+            style["cta_studio"] = study_reference_ctas(brand) or prev
+        except Exception as e:
+            log.warning("Studio CTA delle pagine di riferimento non riuscito: %s", e)
+            style["cta_studio"] = prev
     config.DATA_DIR.mkdir(parents=True, exist_ok=True)
     (config.DATA_DIR / "stile.json").write_text(json.dumps(style, ensure_ascii=False, indent=1), encoding="utf-8")
     return style
@@ -251,6 +267,71 @@ def _find_cta_slides(top_posts, brand: dict) -> dict:
             target.write_bytes(imgs[n - 1])
         found[key] = cands[n - 1].url
     return found
+
+
+STUDY_TOOL = {
+    "name": "studio_cta",
+    "description": "Come le pagine di riferimento collegano la CTA finale al post.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "post": {"type": "array", "items": {"type": "object", "properties": {
+                "numero": {"type": "integer"},
+                "ha_cta": {"type": "boolean", "description": "true se l'ultima slide è una CTA (libro, guida, segui, commenta)."},
+                "formato": {"type": "string", "description": "elenco, scena/dialogo, riflessione, storia..."},
+                "aggancio": {"type": "string", "description": "Come la CTA riprende il post (in parole tue, NON copiare il testo): da quale emozione o frase del post parte, come passa al prodotto."},
+                "struttura": {"type": "string", "description": "I passaggi della CTA in ordine, es. 'domanda che riprende il dolore -> ammissione -> presento il libro in una riga -> dove trovarlo'."},
+            }, "required": ["numero", "ha_cta", "formato", "aggancio", "struttura"]}},
+            "lezioni": {"type": "string", "description": "8-12 regole pratiche (una per riga, iniziano con '- ') su come scrivere una CTA che sembra la naturale continuazione del post: transizione, tono, lunghezza, come si nomina il libro, come si chiude. In parole tue."},
+            "schemi_aggancio": {"type": "array", "items": {"type": "string"}, "description": "6-10 schemi di transizione riutilizzabili, scritti in italiano con parole TUE e [segnaposto], es. 'Ora vorrei chiederti… [domanda sul dolore del post]? Per aiutarti ho scritto [libro in una riga]…'."},
+        },
+        "required": ["post", "lezioni", "schemi_aggancio"],
+    },
+}
+
+
+def study_reference_ctas(brand: dict, per_page: int = 40, top: int = 8) -> dict:
+    """Studia le CTA finali delle pagine di riferimento (pagine_studio, es. convincimii): penultima e ultima
+    slide dei caroselli migliori, per capire COME collegano la CTA al post. Si salvano solo regole e schemi
+    scritti con parole nostre, mai i loro testi. Queste pagine non entrano nel report."""
+    handles = [h.lower().lstrip("@") for h in brand.get("pagine_studio") or [] if h]
+    if not handles:
+        return {}
+    posts = instagram.fetch_profiles(handles, per_page)
+    by_page: dict = {}
+    for p in posts:
+        if p.kind.lower() == "sidecar" and len(p.image_urls) >= 3 and _engagement(p) is not None:
+            by_page.setdefault(p.owner, []).append(p)
+    chosen = []
+    for h, ps in by_page.items():
+        ps.sort(key=lambda x: _engagement(x) or 0, reverse=True)
+        chosen += ps[:top]
+    if not chosen:
+        return {}
+    content, n = [], 0
+    for p in chosen:
+        try:
+            imgs = instagram.download_images([p.image_urls[0], p.image_urls[-2], p.image_urls[-1]])
+        except Exception as e:
+            log.warning("Studio CTA: slide non scaricate %s: %s", p.url, e)
+            continue
+        n += 1
+        content += [{"type": "text", "text": f"Post {n} (@{p.owner}): prima slide, penultima, ultima."}]
+        content += [writer._image_block(d, 700) for d in imgs]
+        if n >= 14:
+            break
+    if not n:
+        return {}
+    content.append({"type": "text", "text": (
+        "Sono i caroselli migliori di pagine italiane molto brave a chiudere con una CTA che sembra la naturale "
+        "continuazione del post. Per ogni post guarda come l'ultima slide riprende il post e porta al prodotto. "
+        "Poi ricava le regole e gli schemi. Non copiare mai le loro frasi: descrivi e riscrivi con parole tue.")})
+    out = writer._tool_call("Sei un copywriter che studia le CTA dei migliori caroselli italiani.", content,
+                            STUDY_TOOL, model=config.CAPTION_MODEL, max_tokens=8000)
+    return {"lezioni": (out.get("lezioni") or "").strip(),
+            "schemi_aggancio": [x.strip() for x in out.get("schemi_aggancio") or [] if x.strip()][:10],
+            "pagine": sorted(by_page), "pagine_config": sorted(handles), "post_studiati": n,
+            "creato": datetime.now(timezone.utc).isoformat(timespec="seconds")}
 
 
 def _norm(t: str) -> str:
