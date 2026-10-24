@@ -1,7 +1,7 @@
 {
  "giorno": "2026-10-24",
- "post_preparati": 20,
- "slide_totali": 210,
+ "post_preparati": 21,
+ "slide_totali": 217,
  "slide_fallite": 45,
  "lavorazione": {
   "gemini-pulizia+blocchi": {
@@ -9,7 +9,7 @@
    "fallite": 45
   },
   "testo-su-sfondo-uniforme": {
-   "totali": 67,
+   "totali": 72,
    "fallite": 0
   },
   "blocchi-pulizia-codice": {
@@ -25,7 +25,7 @@
    "fallite": 0
   },
   "cta-stile-post": {
-   "totali": 4,
+   "totali": 5,
    "fallite": 0
   },
   "cta-illustrata": {
@@ -41,7 +41,7 @@
    "fallite": 0
   },
   "openai-testo": {
-   "totali": 6,
+   "totali": 7,
    "fallite": 0
   }
  },
@@ -50,6 +50,11 @@
    "job_id": 24,
    "testo": "testo che esce dal fumetto",
    "quando": "2026-10-24T17:07:58+00:00"
+  },
+  {
+   "job_id": 25,
+   "testo": "il testo si sovrappone",
+   "quando": "2026-10-24T17:30:59+00:00"
   }
  ],
  "post_con_problemi": [
@@ -4672,6 +4677,204 @@
    "descrizione": "Quando lei ti dice \"ho trovato un altro\", ha già deciso. Tu stai solo ricevendo la notizia.\n\nEppure è proprio lì che molti uomini iniziano a lottare.\nChiedono cosa ha lui in più.\nPromettono di cambiare.\nScrivono messaggi lunghi alle due di notte.\n\nE ogni messaggio le conferma che ha fatto bene a scegliere un altro.\n\nNon è debolezza. È chimica.\nNel 2010 l'antropologa Helen Fisher ha fatto la risonanza a persone appena lasciate: davanti alla foto dell'ex si accendevano le aree del cervello legate alla ricompensa e alla dipendenza. Più lei si allontana, più il cervello la vuole.\nNel 2011 Ethan Kross, all'Università del Michigan, ha mostrato che il rifiuto di chi ami attiva zone che si sovrappongono a quelle del dolore fisico.\n\nIn parole semplici: quella voglia di implorare non è amore. È astinenza.\n\nCosa fare quando succede:\n\nRispondi breve. \"Va bene.\" Niente processi, niente domande su di lui. Ogni spiegazione che chiedi è un modo per restare nella stanza.\n\nNon metterti in gara. Una donna che ha già scelto non sta valutando offerte. Se ti proponi, diventi il confronto che la convince di aver fatto bene.\n\nTaglia i contatti. Niente storie guardate, niente \"come stai?\". Il cervello si disintossica solo se smetti di dargli la dose.\n\nSe torna, chiediti se torna per te o perché con lui è andata male. Nel secondo caso sei il piano B.\n\nQuesto non significa fingere che non ti importi. Puoi stare malissimo e uscire comunque a testa alta.\n\nIl dolore passa. Il ricordo di te in ginocchio no. Né per lei, né per te.\n\nPensa all'ultima volta che hai insistito con chi se ne stava già andando: cosa speravi di ottenere davvero?\n\nNel manuale \"Attrai Seduci\" ti spiego perché il desiderio femminile si spegne davanti a chi rincorre e come costruire una presenza che non debba mai mettersi in fila.\n\nLo trovi nel link in bio di @attraiseduci.",
    "segnalazioni": [
     "testo che esce dal fumetto"
+   ]
+  },
+  {
+   "job_id": 25,
+   "fonte": "https://www.instagram.com/p/DeXUF3mFuNX/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "MARRIAGE SUCKS FOR\nMEN NOWADAYS AND\nNOBODY TALKS ABOUT\nHOW RIGGED IT IS...",
+     "testo": "OGGI IL MATRIMONIO\nFREGA GLI UOMINI E\nNESSUNO TI DICE\nCHE È UN GIOCO TRUCCATO...",
+     "blocchi": [
+      {
+       "x": 73,
+       "y": 648,
+       "w": 860,
+       "h": 310,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#F25C5C",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "1. The contract carries real risk.\n\nA man can love deeply and still sign\nterms he never studied. Marriage can\nbe sacred while ignorance remains\nexpensive. Know the laws before\nmaking the promise.",
+     "testo": "1. Quel contratto ha rischi veri.\n\nPuoi amarla alla follia e firmare\ncomunque clausole mai lette. Il matrimonio\npuò essere sacro, ma l'ignoranza si\npaga cara. Studia le leggi prima di\nfare quella promessa.",
+     "blocchi": [
+      {
+       "x": 115,
+       "y": 393,
+       "w": 680,
+       "h": 36,
+       "carattere": "normale",
+       "colore": "#F25C5C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 115,
+       "y": 478,
+       "w": 720,
+       "h": 172,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "2. Responsibility without standards\nbecomes exploitation.\n\nMen are still judged by what they\nprovide. Yet asking for loyalty, respect,\nand peace is often treated like an\nunreasonable demand. Never accept\nduty without mutual responsibility.",
+     "testo": "2. Responsabilità senza standard\ndiventa sfruttamento.\n\nUn uomo viene ancora giudicato per\nciò che porta a casa. Ma se chiede lealtà,\nrispetto e pace, passa per uno che\npretende troppo. Non accettare mai\ndoveri senza responsabilità reciproca.",
+     "blocchi": [
+      {
+       "x": 132,
+       "y": 326,
+       "w": 765,
+       "h": 86,
+       "carattere": "normale",
+       "colore": "#F25C5C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 132,
+       "y": 460,
+       "w": 730,
+       "h": 174,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "3. His sacrifice often becomes\ninvisible.\n\nThe long hours. The pressure. The\nsilence. A man may carry the whole\nhouse emotionally and financially—yet\nonly be noticed the moment he can no\nlonger carry it.",
+     "testo": "3. Il suo sacrificio spesso\nnon lo vede nessuno.\n\nLe ore infinite. La pressione. Il\nsilenzio. Un uomo può reggere tutta la\ncasa, sul piano emotivo ed economico,\ne se ne accorgono solo il giorno\nin cui non ce la fa più.",
+     "blocchi": [
+      {
+       "x": 132,
+       "y": 326,
+       "w": 648,
+       "h": 86,
+       "carattere": "normale",
+       "colore": "#F25C5C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 132,
+       "y": 460,
+       "w": 750,
+       "h": 174,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "4. The wrong choice can cost\nyears.\n\nA destructive marriage can threaten his\nhome, peace, finances, reputation, and\nfatherhood. Chemistry is not enough.\nStudy her character under stress before\nyou trust her with your life.",
+     "testo": "4. La scelta sbagliata ti costa\nanni.\n\nUn matrimonio distruttivo può minacciare\ncasa, serenità, soldi, reputazione e\nil tuo ruolo di padre. La chimica non basta.\nGuarda il suo carattere sotto pressione\nprima di affidarle la tua vita.",
+     "blocchi": [
+      {
+       "x": 132,
+       "y": 326,
+       "w": 628,
+       "h": 86,
+       "carattere": "normale",
+       "colore": "#F25C5C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 132,
+       "y": 460,
+       "w": 765,
+       "h": 174,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "5. I'm not saying don't get married.\n\nMarry with your eyes open. Discuss\nmoney, roles, faith, children, and conflict\nbeforehand. The right marriage can\nmultiply a man. The wrong one can\nslowly dismantle him.",
+     "testo": "5. Non ti sto dicendo di non sposarti.\n\nSposati, ma a occhi aperti. Parlate prima\ndi soldi, ruoli, fede, figli e litigi.\nIl matrimonio giusto rende un uomo\npiù forte. Quello sbagliato lo\nsmonta pezzo dopo pezzo.",
+     "blocchi": [
+      {
+       "x": 132,
+       "y": 393,
+       "w": 765,
+       "h": 36,
+       "carattere": "normale",
+       "colore": "#F25C5C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 132,
+       "y": 460,
+       "w": 768,
+       "h": 128,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se ti sei riconosciuto in questa scena e non sapresti cosa fare al mio posto, ti consiglio di commentare “POTERE”.\n\nAvrai i due manuali che ti insegnano a mantenere il tuo frame quando, sia donne che uomini, ti mettono alla prova, senza reagire\ne senza farti calpestare.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Il matrimonio di per sé non è il nemico: il problema è entrarci alla cieca. Un uomo può amare tanto e firmare comunque un contratto di cui non conosce i rischi legali ed economici, accollarsi doveri senza reciprocità, fare sacrifici che nessuno vede e scegliere la donna sbagliata solo per la chimica. Il messaggio non è \"non sposarti\" ma \"sposati a occhi aperti\": parla di soldi, ruoli, fede, figli e conflitti prima e studia il carattere di lei sotto pressione. Il tono è provocatorio nel gancio e serio, quasi da consiglio tra uomini, nel resto.",
+   "descrizione": "Quante ore hai passato a scegliere l'anello? E quante a capire cosa stai firmando?\n\nMolti uomini arrivano all'altare sapendo tutto della location e niente del contratto.\n\nComunione o separazione dei beni. Cosa succede alla casa se finisce. Come funziona l'affidamento dei figli. Sono domande poco romantiche. Proprio per questo nessuno le fa.\n\nIl matrimonio non è il nemico. Il nemico è entrarci alla cieca.\n\nEd è proprio qui che molti uomini sbagliano.\nScambiano la chimica per carattere. Vedono come si comporta lei quando va tutto bene. E danno per scontato che resterà così anche quando arrivano il mutuo, i turni e un figlio che non dorme.\n\nJohn Gottman ha studiato per decenni coppie che litigavano davanti ai ricercatori. Il segnale che anticipava il divorzio meglio di tutti non erano i litigi. Era il disprezzo: il sarcasmo, gli occhi al cielo, il tono di chi si sente superiore.\n\nQuindi, prima di quella promessa:\n\nGuardala sotto pressione. Un ritardo, un tuo no, un problema di soldi. Se ti risponde con disprezzo adesso, con l'anello al dito non migliorerà.\n\nParlate di soldi, ruoli, figli e fede prima, non dopo. Chi evita questi discorsi da fidanzata li eviterà anche da moglie.\n\nFissa i tuoi standard e dilli ad alta voce. Lealtà, rispetto, pace in casa. Se chiederli ti fa passare per uno che pretende troppo, hai già la tua risposta.\n\nQuesto non significa diventare sospettoso o trattarla come una controparte.\nSignifica scegliere da uomo, non da innamorato che chiude gli occhi.\n\nIl matrimonio giusto ti rende più forte. Quello sbagliato ti costa anni, soldi e pace.\n\nE nessun contratto ti proteggerà quanto la capacità di dire no in tempo.\n\nPensaci: lei ti ha mai visto dire un no senza ritirarlo il giorno dopo?\n\nChi non si fa rispettare da fidanzato non verrà rispettato da marito. Rispetto e attrazione seguono le stesse regole, dentro casa e fuori: le trovi nel bundle \"AttraiSeduci\" + \"Potere Sociale\".\n\nLo trovi nel link in bio di @attraiseduci.",
+   "segnalazioni": [
+    "il testo si sovrappone"
    ]
   }
  ]
