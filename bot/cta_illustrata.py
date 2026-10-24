@@ -395,12 +395,46 @@ def _post_background(post: dict, originals_dir: Path) -> Image.Image | None:
     return Image.open(slides[cands[-1]]["_canva"]["sfondo"]).convert("RGB")
 
 
+PROMPT_SCENA = (
+    "Create a NEW vertical 4:5 illustration in EXACTLY the same art style, colors and rendering as the reference "
+    "image, with the same kind of characters and setting (same man, same woman if present, same place and light). "
+    "A quiet, evocative moment of the same story, no one talking. "
+    "IMPORTANT: absolutely NO speech bubbles, NO balloons, NO captions, NO text, letters, numbers or logos "
+    "anywhere in the image. The center of the image will be covered by a dark text box, so keep the faces and "
+    "the main subjects visible around it."
+)
+
+
+def _is_comic(post: dict) -> bool:
+    return any(b.get("carattere") == "fumetto" for sl in post.get("slides", []) for b in (sl.get("blocchi") or [])) \
+        or any(sl.get("sfondo") == "disegno" for sl in post.get("slides", []))
+
+
 def make_alone(post: dict, jdir: Path) -> tuple[Path, dict] | None:
-    """CTA stile 'alone': nessuna immagine da generare (gratis), sfondo preso dal post."""
+    """CTA stile 'alone': un'immagine nello stile del post SENZA nuvolette né scritte (nessuno che parla dietro
+    la casella), con davanti la casella scura semitrasparente e le copertine vere.
+    Fumetti e disegni: la scena si rigenera senza nuvolette. Foto: si usa lo sfondo già ripulito del post."""
     text = (post.get("_testo_cta_finale") or "").strip()
     if not text:
         return None
-    bg = _post_background(post, jdir / "originali")
+    bg = None
+    op = jdir / "originali" / "01.jpg"
+    if _is_comic(post) or _post_background(post, jdir / "originali") is None:
+        if not op.exists() or not (config.GEMINI_API_KEY or config.OPENAI_API_KEY):
+            return None
+        from . import images
+        ref = Image.open(op).convert("RGB")
+        for _ in range(2):
+            try:
+                gen = images._gemini_edit(ref, PROMPT_SCENA)
+            except Exception as e:
+                log.warning("CTA casella: scena non generata (%s)", e)
+                gen = None
+            if gen is not None:
+                bg = images._fit(gen, images.output_size(ref))
+                break
+    else:
+        bg = _post_background(post, jdir / "originali")
     if bg is None:
         return None
     cta = post.get("cta") or {}
