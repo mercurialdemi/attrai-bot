@@ -481,6 +481,20 @@ def _cta_memory(style: dict) -> str:
             + mode)
 
 
+def _scuole(brand: dict) -> str:
+    """Principi dei grandi del settore (seduzione e scrittura che vende): ispirano ragionamento e CTA,
+    ma non vengono mai nominati né copiati."""
+    sc = brand.get("scuole_di_pensiero") or []
+    if not sc:
+        return ""
+    lines = "\n".join(f"- {s['fonte']}: {' '.join(str(s['principi']).split())}" for s in sc)
+    return ("SCUOLE DI PENSIERO (ragiona con la profondità di questi maestri del settore)\n" + lines + "\n"
+            "Usali come lente per spiegare il meccanismo del post e per costruire la CTA: scegli il principio che "
+            "colpisce il dolore di questo post e trasformalo in una frase nostra, concreta, nel tono AttraiSeduci. "
+            "Non nominare mai questi autori, non copiare le loro frasi né i loro termini tecnici in inglese "
+            "(niente 'DHV', 'neediness', 'inner game' ecc.): il lettore deve sentire solo la voce di AttraiSeduci.\n")
+
+
 def _caption_system(brand: dict, rules: list[dict], recent: dict) -> str:
     manuali = "\n".join(
         f"- id: {m['id']} | {m['nome']} | dolori che risolve: {' '.join(str(m.get('dolori', '')).split())}"
@@ -539,6 +553,7 @@ Ultimi tipi di hook usati (dal più recente): {ultimi_hook}. Non usare lo stesso
 Autori citati di recente, da non ripetere: {ultimi_autori}.
 Cita solo autori e studi reali che conosci con certezza; se non sei sicuro, non citare.
 
+{_scuole(brand)}
 CTA
 {brand['cta']['regola'].strip()}
 {brand['cta']['stile'].strip()}

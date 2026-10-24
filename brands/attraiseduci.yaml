@@ -88,6 +88,40 @@ cta:
     (es. nel manuale "Come diventare l'uomo a cui nessuna sa resistere"), così si capisce che è un titolo.
   dove_si_compra: "link in bio"
 
+# Scuole di pensiero da cui prendere ISPIRAZIONE (principi e modo di ragionare, mai frasi copiate, mai nominati
+# nei post). Servono a scrivere descrizioni e CTA con la profondità di chi ha fatto scuola nel settore.
+scuole_di_pensiero:
+  - fonte: David DeAngelo
+    principi: >
+      L'attrazione non è una scelta razionale: lei la sente, non la decide. Essere gentili e disponibili non
+      genera attrazione, la genera la sicurezza. Ironia sicura di sé invece di cercare approvazione. Chi rincorre
+      perde valore ai suoi occhi.
+  - fonte: Neil Strauss
+    principi: >
+      Riprova sociale e preselezione: un uomo desiderato da altri vale di più. Il gioco interiore conta più delle
+      tecniche: le tecniche senza identità crollano. Il vero cambiamento è diventare l'uomo, non recitarlo.
+  - fonte: Mark Manson (Models)
+    principi: >
+      Non-bisogno (non-neediness): attrae chi non dipende dalla risposta di lei. Onestà e vulnerabilità come
+      forza: dire cosa vuoi e accettare il rifiuto. Polarizzare: meglio piacere molto a poche che poco a tutte.
+      Il rifiuto è informazione, non un giudizio sul tuo valore.
+  - fonte: Richard La Ruina
+    principi: >
+      L'azione batte la teoria: la paura si scioglie solo esponendosi. Passi concreti e graduali, una abilità
+      alla volta. Nessuno nasce bravo: è un'abilità allenabile come le altre.
+  - fonte: Robert Greene (L'arte della seduzione)
+    principi: >
+      Mistero e ambiguità tengono viva l'attenzione; la disponibilità totale la spegne. La scarsità crea valore.
+      Seduce chi sa leggere i bisogni nascosti dell'altra persona.
+  - fonte: Eugene Schwartz (scrittura che vende)
+    principi: >
+      Il desiderio non si crea, si incanala: parti dal dolore che il lettore sente già. Parla al suo livello di
+      consapevolezza: se non sa di avere il problema, prima mostraglielo; se lo sa, mostragli la via d'uscita.
+  - fonte: Gary Halbert (scrittura che vende)
+    principi: >
+      Specificità batte genericità: una scena precisa vende più di mille aggettivi. Scrivi come parli a un amico.
+      Una sola idea forte per messaggio.
+
 manuali:
   # Quale manuale per quale dolore (decide la CTA). Mai proporre il bundle friendzone + seduzione.
   - id: attraiseduci
