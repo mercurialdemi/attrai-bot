@@ -1,7 +1,7 @@
 {
  "giorno": "2026-10-24",
- "post_preparati": 19,
- "slide_totali": 202,
+ "post_preparati": 20,
+ "slide_totali": 210,
  "slide_fallite": 45,
  "lavorazione": {
   "gemini-pulizia+blocchi": {
@@ -17,7 +17,7 @@
    "fallite": 0
   },
   "blocchi-ricostruzione-codice": {
-   "totali": 7,
+   "totali": 8,
    "fallite": 0
   },
   "cta-stile-post-foto": {
@@ -29,7 +29,7 @@
    "fallite": 0
   },
   "cta-illustrata": {
-   "totali": 3,
+   "totali": 4,
    "fallite": 0
   },
   "blocchi-sfondo-pieno": {
@@ -39,9 +39,19 @@
   "disegno-ricostruito": {
    "totali": 3,
    "fallite": 0
+  },
+  "openai-testo": {
+   "totali": 6,
+   "fallite": 0
   }
  },
- "segnalazioni": [],
+ "segnalazioni": [
+  {
+   "job_id": 24,
+   "testo": "testo che esce dal fumetto",
+   "quando": "2026-10-24T17:07:58+00:00"
+  }
+ ],
  "post_con_problemi": [
   {
    "job_id": 7,
@@ -4384,6 +4394,285 @@
    "concetto": "Una lista di presunte verità scomode sulla psicologia di uomini e donne: l'uomo fa l'amico solo se lei gli piace, la donna solo se lui non le piace; dietro un uomo di successo c'è una donna che c'era dall'inizio, dietro una donna di successo c'è un amore finito male. In mezzo un gioco (\"rileggi il punto 2\") e alla fine una provocazione sulla persona che compare per prima quando premi condividi. Il registro è provocatorio e ironico, fatto per far discutere e far condividere.",
    "descrizione": "⚠️ Se lei ti piace e siete \"solo amici\", non state vivendo la stessa amicizia.\n\nTu sei lì che aspetti.\nLei è lì perché con te si sente tranquilla.\n\nNon è cattiveria. Funziona così.\n\nNel 2012 la ricercatrice April Bleske-Rechek, dell'Università del Wisconsin, ha intervistato coppie di amici uomo e donna. Li ha sentiti separatamente, e a ognuno ha promesso che l'altro non avrebbe mai letto le risposte.\nGli uomini erano molto più attratti dalle loro amiche di quanto le amiche lo fossero da loro. E in più pensavano che l'interesse fosse ricambiato.\nLe donne no. Erano convinte che anche lui le vedesse solo come amiche.\n\nSiete amici tutti e due, ma ognuno racconta una storia diversa.\n\nEd è qui che molti uomini sbagliano.\nRestano vicini sperando che, prima o poi, la vicinanza diventi desiderio.\n\nAscolti i suoi sfoghi.\nCi sei quando l'altro non le risponde.\nLe scrivi per primo, sposti i tuoi piani, le dici sempre di sì.\n\nPiù diventi indispensabile, più diventi sicuro.\nE per lei sicuro vuol dire senza tensione.\n\nCosa fare, in concreto.\n\nSmetti di farle da confidente quando ti parla degli altri uomini. Ogni volta che ascolti in silenzio, ti rimetti da solo nel ruolo che lei ti ha dato.\n\nRimetti al centro la tua vita. Se sei sempre disponibile, a lei non manca niente di te, e quindi non ti desidera.\n\nSii chiaro una volta sola. Niente lettere o discorsi infiniti: \"Mi piaci, e non mi va di essere solo tuo amico.\" Poi conta quello che fa, non quello che dice.\n\nQuesto non vuol dire diventare freddo o sparire per ripicca.\nVuol dire smettere di fingere che ti basti l'amicizia quando non ti basta.\n\nDalla friendzone non esci dandole di più.\nNe esci quando smetti di aspettare che lei ti scelga.\n\nDa quanto tempo resti accanto a lei sperando che cambi idea su di te?\n\nNel manuale \"Perché le donne ti mettono nella friendzone (e come uscirne)\" ti spiego perché non ci sei finito per aver fatto troppo poco, ma per aver rinunciato alla tua indipendenza. E ti spiego come riprendertela, prima di sprecare altri mesi in attesa.\n\nLo trovi nel link in bio di @attraiseduci.\n\n#friendzone #attrazione #psicologia #seduzione #relazioni",
    "segnalazioni": []
+  },
+  {
+   "job_id": 24,
+   "fonte": "https://www.instagram.com/p/De4b9RWm_rX/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "I MET\nSOMEONE ELSE...\nGOOD.",
+     "testo": "HO TROVATO\nUN ALTRO...\n\nBENE.",
+     "blocchi": [
+      {
+       "x": 295,
+       "y": 55,
+       "w": 470,
+       "h": 101,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 635,
+       "y": 290,
+       "w": 285,
+       "h": 45,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "GOOD?\nYOU EXPECTED ME\nTO COMPETE FOR\nA WOMAN WHO\nALREADY MADE\nHER CHOICE?",
+     "testo": "BENE?\n\nPENSAVI CHE\nMI METTESSI IN GARA\nPER UNA DONNA\nCHE HA GIÀ\nSCELTO?",
+     "blocchi": [
+      {
+       "x": 52,
+       "y": 160,
+       "w": 245,
+       "h": 45,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 432,
+       "y": 23,
+       "w": 448,
+       "h": 245,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "YOU'RE NOT EVEN\nGOING TO FIGHT\nFOR ME?\nA MAN FIGHTS FOR\nHIS RELATIONSHIP.\nHE DOESN'T AUDITION\nFOR A PLACE\nIN A TRIANGLE.",
+     "testo": "NON LOTTI\nNEMMENO\nPER ME?\n\nUN UOMO LOTTA\nPER LA SUA RELAZIONE.\n\nNON SI METTE IN FILA\nPER UN POSTO\nIN UN TRIANGOLO.",
+     "blocchi": [
+      {
+       "x": 73,
+       "y": 55,
+       "w": 450,
+       "h": 125,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 490,
+       "y": 320,
+       "w": 475,
+       "h": 90,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 520,
+       "y": 538,
+       "w": 455,
+       "h": 122,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "SO I MEANT\nNOTHING TO YOU?\nYOU DID.\nTHAT'S WHY I WON'T\nLET WHAT WE HAD\nTURN ME INTO YOUR\nBACKUP PLAN.",
+     "testo": "QUINDI NON\nCONTAVO NIENTE?\n\nCONTAVI.\n\nPER QUESTO\nNON LASCIO CHE\nLA NOSTRA STORIA\nMI RIDUCA\nA PIANO B.",
+     "blocchi": [
+      {
+       "x": 62,
+       "y": 58,
+       "w": 438,
+       "h": 106,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 650,
+       "y": 31,
+       "w": 245,
+       "h": 47,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 610,
+       "y": 90,
+       "w": 385,
+       "h": 152,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "WHAT IF I MADE\nA MISTAKE?\nTHEN LIVE WITH\nTHE LESSON.\nI WON'T LIVE WITH\nTHE DISRESPECT.",
+     "testo": "E SE AVESSI\nSBAGLIATO?\n\nALLORA TIENITI\nLA LEZIONE.\n\nIO NON MI TENGO\nIL TUO DISPREZZO.",
+     "blocchi": [
+      {
+       "x": 68,
+       "y": 74,
+       "w": 392,
+       "h": 82,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 590,
+       "y": 47,
+       "w": 352,
+       "h": 75,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 557,
+       "y": 160,
+       "w": 412,
+       "h": 82,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "YOU MOVED ON\nTHAT FAST?\nNO.\nI JUST STOPPED\nBEGGING TO STAY\nWHERE I WAS\nALREADY REPLACED.",
+     "testo": "HAI GIÀ\nVOLTATO PAGINA?\n\nNO.\n\nHO SOLO SMESSO\nDI ELEMOSINARE\nUN POSTO DOVE\nMI AVEVI GIÀ\nSOSTITUITO.",
+     "blocchi": [
+      {
+       "x": 333,
+       "y": 31,
+       "w": 333,
+       "h": 102,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 755,
+       "y": 602,
+       "w": 130,
+       "h": 50,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 667,
+       "y": 719,
+       "w": 318,
+       "h": 180,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "THE MOMENT SHE\nCHOOSES ANOTHER MAN,\nSTOP COMPETING.\nA MAN WITH\nSELF-RESPECT\nDOESN'T AUDITION\nFOR A PLACE\nHE ALREADY EARNED.",
+     "testo": "QUANDO LEI\nSCEGLIE UN ALTRO UOMO,\nESCI DALLA GARA.\n\nUN UOMO CHE\nSI RISPETTA\nNON SI RIMETTE IN FILA\nPER UN POSTO\nGIÀ GUADAGNATO.",
+     "blocchi": [
+      {
+       "x": 21,
+       "y": 55,
+       "w": 505,
+       "h": 128,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 620,
+       "y": 707,
+       "w": 365,
+       "h": 215,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "cta-illustrata",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Un libro che entra nel cervello delle donne per mostrarti gli stimoli, i pattern e i segnali a cui ogni donna risponde biologicamente, segnali che generano attrazione e segnali che la spengono.\n\nPerché quando capisci le regole, tutto diventa un gioco...\nse vuoi smettere di essere quello \"sempre buono ma mai scelto davvero\"\n\nti consiglio di dare un'occhiata al link in bio o commenta con \"ATTRAZIONE\" e te lo mando.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Lei gli dice di aver conosciuto un altro e lui risponde \"bene\", senza drammi. Non si mette a fare a gara per una donna che ha già scelto: un uomo lotta per la sua relazione, non per un posto in un triangolo. Non accetta di fare il piano B né di farsi mancare di rispetto, e se ne va con dignità. Il tono è provocatorio e da \"uomo che si rispetta\", con battute secche e sicure.",
+   "descrizione": "Quando lei ti dice \"ho trovato un altro\", ha già deciso. Tu stai solo ricevendo la notizia.\n\nEppure è proprio lì che molti uomini iniziano a lottare.\nChiedono cosa ha lui in più.\nPromettono di cambiare.\nScrivono messaggi lunghi alle due di notte.\n\nE ogni messaggio le conferma che ha fatto bene a scegliere un altro.\n\nNon è debolezza. È chimica.\nNel 2010 l'antropologa Helen Fisher ha fatto la risonanza a persone appena lasciate: davanti alla foto dell'ex si accendevano le aree del cervello legate alla ricompensa e alla dipendenza. Più lei si allontana, più il cervello la vuole.\nNel 2011 Ethan Kross, all'Università del Michigan, ha mostrato che il rifiuto di chi ami attiva zone che si sovrappongono a quelle del dolore fisico.\n\nIn parole semplici: quella voglia di implorare non è amore. È astinenza.\n\nCosa fare quando succede:\n\nRispondi breve. \"Va bene.\" Niente processi, niente domande su di lui. Ogni spiegazione che chiedi è un modo per restare nella stanza.\n\nNon metterti in gara. Una donna che ha già scelto non sta valutando offerte. Se ti proponi, diventi il confronto che la convince di aver fatto bene.\n\nTaglia i contatti. Niente storie guardate, niente \"come stai?\". Il cervello si disintossica solo se smetti di dargli la dose.\n\nSe torna, chiediti se torna per te o perché con lui è andata male. Nel secondo caso sei il piano B.\n\nQuesto non significa fingere che non ti importi. Puoi stare malissimo e uscire comunque a testa alta.\n\nIl dolore passa. Il ricordo di te in ginocchio no. Né per lei, né per te.\n\nPensa all'ultima volta che hai insistito con chi se ne stava già andando: cosa speravi di ottenere davvero?\n\nNel manuale \"Attrai Seduci\" ti spiego perché il desiderio femminile si spegne davanti a chi rincorre e come costruire una presenza che non debba mai mettersi in fila.\n\nLo trovi nel link in bio di @attraiseduci.",
+   "segnalazioni": [
+    "testo che esce dal fumetto"
+   ]
   }
  ]
 }
