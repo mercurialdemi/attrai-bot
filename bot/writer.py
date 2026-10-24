@@ -340,12 +340,15 @@ Ricevi le slide di un post di una pagina collaboratrice che ci ha autorizzato a 
 
 - Leggi con attenzione tutto il testo di ogni slide e trascrivilo in testo_originale.
 - {TRADUZIONE.get(modo, TRADUZIONE['fedele'])}
-- Impaginazione identica all'originale: STESSI A CAPO e stesso numero di righe. Ogni riga italiana deve avere
-  una lunghezza simile alla riga inglese corrispondente; se in italiano viene più lunga, riformula la riga in
-  modo più asciutto (meno parole, stesso senso) invece di allungarla. Negli elenchi: un elemento per riga, sempre.
-- Battute di vignette/fumetti e testi scritti sopra un disegno o una foto: l'italiano deve essere LUNGO QUANTO
-  L'INGLESE O PIÙ CORTO (massimo +5% di caratteri), anche a costo di riformulare in modo più asciutto,
-  perché lo spazio attorno ai personaggi è limitato ("I ran into my ex tonight." -> "Stasera ho visto il mio ex.").
+- PRIMA il senso, POI l'impaginazione. Scrivi ogni frase come la direbbe a voce un italiano, poi sistemala nelle
+  righe. Gli a capo dell'originale sono un'indicazione, non un vincolo: se per suonare naturale serve una riga
+  in più o in meno, va bene (il testo si ridistribuisce da solo nello stesso spazio). Una frase rigida che
+  rispetta le righe è un errore; una frase naturale con un a capo diverso no.
+  Negli elenchi: un elemento per riga, sempre. Titoli e copertine: corti e d'impatto come l'originale.
+- Battute di vignette/fumetti: lo spazio nella nuvoletta è limitato, quindi l'italiano non deve essere molto più
+  lungo dell'inglese (massimo +15% di caratteri). Si ottiene con la frase più parlata e asciutta, non con
+  quella letterale: "I ran into my ex tonight." -> "Stasera ho visto il mio ex."; "You moved on that fast?" ->
+  "Hai già voltato pagina?"; "I just stopped begging" -> "Ho solo smesso di elemosinare".
 - Stesso numero di slide e stesso ordine.
 - Unica eccezione alla fedeltà: se una slide contiene una CTA o un riferimento alla pagina di origine
   (segui @..., link in bio, nome della pagina), sostituiscilo con il nostro equivalente per {brand['nome']}.
@@ -431,7 +434,8 @@ def polish_slides(out: dict) -> dict:
     for sl in out.get("slides", []):
         bl = [b.get("testo", "") for b in (sl.get("blocchi") or [])]
         if sl.get("da_modificare", True) and bl:
-            items.append({"numero": sl["numero"], "originale": sl.get("testo_originale", ""), "blocchi": bl})
+            items.append({"numero": sl["numero"], "originale": sl.get("testo_originale", ""), "blocchi": bl,
+                          "fumetto": any((b.get("carattere") == "fumetto") for b in (sl.get("blocchi") or []))})
     if not items:
         return out
     guida = (load_style().get("guida") or "").strip()
@@ -446,14 +450,24 @@ def polish_slides(out: dict) -> dict:
               "('Un gioco spietato.' -> 'E vince sempre lei.'; 'Ignorarlo ti costa caro' -> 'Ignoralo e la paghi').\n"
               "- Ordine delle parole italiano: 'Quasi tutte le donne moderne fanno troppo rumore per capirne il motivo' "
               "-> 'Oggi quasi nessuna lo capisce: è troppo impegnata ad alzare la voce.'\n"
+              "- Segnali di traduzione da eliminare sempre: soggetto ripetuto ('Lui... lui... lui'), possessivi inutili "
+              "('la sua mano' -> 'la mano'), 'di lei/di lui' al posto di 'suo', 'essere in grado di' (-> 'riuscire', "
+              "'sapere'), 'qualcuno che' a inizio frase, 'andare a + infinito', gerundi a catena, 'il quale/la quale', "
+              "'uno/una' davanti a tutto ('Un uomo che si rispetta' va bene, 'Ha un modo di fare un sorriso' no).\n"
+              "- Esempi: 'She doesn't respect a man who always says yes' -> NO 'Lei non rispetta un uomo che dice sempre "
+              "sì' -> SÌ 'Un uomo che dice sempre sì, lei non lo rispetta.'; 'Stop seeking her approval' -> NO 'Smetti "
+              "di cercare la sua approvazione' -> SÌ 'Smetti di chiederle il permesso di esistere.'; 'It's not about "
+              "looks' -> NO 'Non riguarda l'aspetto' -> SÌ 'Non è questione di faccia.'\n"
               "- Vietato lo slang giovanile o da strada: 'fra', 'frate', 'bro', 'zio', 'raga', 'tipo' come intercalare.\n"
               "- Vietati calchi e formule da traduzione ('il fatto è che', 'alla fine della giornata', 'fare la differenza', "
               "'in termini di', 'questo significa che'). Parole inglesi solo se un italiano le usa davvero così.\n"
               "VINCOLI\n"
               "- Stesse idee, stesso ordine, nessuna idea aggiunta o tolta.\n"
-              "- Mantieni maiuscole, a capo, virgolette, i [[ ]] (parole colorate) e i {{ }} (parole in grassetto). Lunghezza simile "
-              "(massimo +10% caratteri), perché il testo deve stare nello stesso spazio.\n"
-              "- Se una frase suona già scritta da un italiano, lasciala com'è."
+              "- Mantieni maiuscole, virgolette, i [[ ]] (parole colorate) e i {{ }} (parole in grassetto). Gli a capo "
+              "puoi spostarli se serve alla naturalezza. Lunghezza: massimo +15% caratteri nelle slide con fumetto "
+              "(campo fumetto=true), massimo +25% nelle altre.\n"
+              "- Se una frase suona già scritta da un italiano, lasciala com'è; se ha anche solo un'ombra di "
+              "traduzione, riscrivila."
               + (f"\nVOCE DELLA PAGINA (dai post migliori):\n{guida[:2500]}" if guida else ""))
     content = [{"type": "text", "text": (
         f"Concetto del carosello: {out.get('concetto', '')}\n\n"
