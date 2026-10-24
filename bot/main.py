@@ -34,6 +34,7 @@ COMMANDS = [
         ("analizza", "Rifai subito lo studio (lo fa già da solo ogni notte)",
          "il bot studia da solo ogni notte i tuoi post, le descrizioni e le slide CTA; usalo solo per averlo subito"),
         ("stile", "Cosa ha imparato il bot", "guida di stile e testi CTA ricavati da /analizza"),
+        ("studio", "Cosa rende virali i caroselli", "temi, hook, strutture e formati dei caroselli virali (base per i post da zero)"),
         ("statistiche", "Numeri veri degli ultimi post", "copertura, salvataggi, condivisioni, clic (serve Meta)"),
         ("pagine", "Pagine monitorate", "le pagine dei collaboratori che il bot controlla ogni giorno"),
     ]),
@@ -170,6 +171,29 @@ async def cmd_stile(update: Update, context: ContextTypes.DEFAULT_TYPE):
             (f"Come {', '.join('@' + p for p in st.get('pagine') or [])} collegano la CTA al post "
              f"({st.get('post_studiati')} caroselli, {st.get('creato', '')[:10]}):\n\n{st['lezioni']}"
              + (f"\n\nSchemi di aggancio:\n{schemi}" if schemi else ""))[:4000])
+
+
+async def cmd_studio(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Cosa ha imparato il bot dai caroselli virali: temi, hook, strutture, formati, regole."""
+    if not await _authorized(update):
+        return
+    sv = writer.load_style().get("studio_virali") or {}
+    if not sv.get("regole"):
+        await update.effective_message.reply_text(
+            "Lo studio dei caroselli virali non è ancora pronto: si fa da solo ogni settimana durante la notte.")
+        return
+    lista = lambda xs: "\n".join(f"• {x}" for x in xs or [])
+    parti = [
+        f"Studio dei caroselli virali ({len(sv.get('caroselli') or [])} caroselli di "
+        f"{', '.join('@' + p for p in sv.get('pagine') or [])}, {sv.get('creato', '')[:10]})",
+        "TEMI CHE RENDONO DI PIÙ\n" + lista(sv.get("temi")),
+        "HOOK VINCENTI\n" + lista(sv.get("hook")),
+        "STRUTTURE VINCENTI\n" + lista(sv.get("strutture")),
+        "FORMATI\n" + (sv.get("formati") or ""),
+        "REGOLE\n" + (sv.get("regole") or ""),
+    ]
+    for p_ in parti:
+        await update.effective_message.reply_text(p_[:4000])
 
 
 async def cmd_statistiche(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -643,6 +667,7 @@ def main():
     app.add_handler(CommandHandler("statistiche", cmd_statistiche))
     app.add_handler(CommandHandler("analizza", cmd_analizza))
     app.add_handler(CommandHandler("stile", cmd_stile))
+    app.add_handler(CommandHandler("studio", cmd_studio))
     app.add_handler(MessageHandler(filters.PHOTO | filters.Document.IMAGE, on_media))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_text))
     async def notify_restart(context: ContextTypes.DEFAULT_TYPE):

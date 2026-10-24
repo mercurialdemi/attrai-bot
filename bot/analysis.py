@@ -169,6 +169,20 @@ def run_analysis(brand: dict, n_posts: int = 80) -> dict:
         except Exception as e:
             log.warning("Studio CTA delle pagine di riferimento non riuscito: %s", e)
             style["cta_studio"] = prev
+    # studio dei caroselli virali (temi, hook, strutture): una volta a settimana, base per i post da zero
+    pv = writer.load_style().get("studio_virali") or {}
+    try:
+        fresh_v = pv.get("creato") and (datetime.now(timezone.utc) - datetime.fromisoformat(pv["creato"])).days < 7
+    except Exception:
+        fresh_v = False
+    if fresh_v:
+        style["studio_virali"] = pv
+    else:
+        try:
+            style["studio_virali"] = study_viral(brand) or pv
+        except Exception as e:
+            log.warning("Studio dei caroselli virali non riuscito: %s", e)
+            style["studio_virali"] = pv
     config.DATA_DIR.mkdir(parents=True, exist_ok=True)
     (config.DATA_DIR / "stile.json").write_text(json.dumps(style, ensure_ascii=False, indent=1), encoding="utf-8")
     return style
@@ -331,6 +345,112 @@ def study_reference_ctas(brand: dict, per_page: int = 40, top: int = 8) -> dict:
     return {"lezioni": (out.get("lezioni") or "").strip(),
             "schemi_aggancio": [x.strip() for x in out.get("schemi_aggancio") or [] if x.strip()][:10],
             "pagine": sorted(by_page), "pagine_config": sorted(handles), "post_studiati": n,
+            "creato": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+
+
+VIRAL_POST_TOOL = {
+    "name": "carosello_studiato",
+    "description": "Analisi di un gruppo di caroselli virali.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "post": {"type": "array", "items": {"type": "object", "properties": {
+                "numero": {"type": "integer"},
+                "tema": {"type": "string", "description": "Di cosa parla, in 6-10 parole."},
+                "dolore": {"type": "string", "description": "Il dolore o desiderio del lettore che tocca."},
+                "tipo_hook": {"type": "string", "description": "Che tipo di gancio usa la prima slide (verità scomoda, domanda, numero/elenco, scena, provocazione, segreto, confronto, profezia...)."},
+                "hook": {"type": "string", "description": "Il meccanismo del gancio, riscritto con parole TUE (non copiare)."},
+                "formato": {"type": "string", "description": "fumetto/dialogo, testo su fondo pieno, foto con titolo, elenco numerato, storia..."},
+                "struttura": {"type": "string", "description": "Ruolo di ogni slide in ordine, es. '1 gancio -> 2 scena -> 3 errore -> 4 meccanismo -> 5 svolta -> 6 frase finale -> 7 CTA'."},
+                "slide": {"type": "integer"},
+                "perche_funziona": {"type": "string", "description": "In 1-2 frasi: perché questo post è andato virale (emozione, identificazione, condivisibilità, polemica...)."},
+            }, "required": ["numero", "tema", "dolore", "tipo_hook", "hook", "formato", "struttura", "slide", "perche_funziona"]}},
+        },
+        "required": ["post"],
+    },
+}
+
+VIRAL_SUMMARY_TOOL = {
+    "name": "studio_virali",
+    "description": "Cosa rende virali i caroselli della nicchia.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "temi": {"type": "array", "items": {"type": "string"}, "description": "I temi e i dolori che rendono di più, dal più forte."},
+            "hook": {"type": "array", "items": {"type": "string"}, "description": "8-12 formule di gancio vincenti, scritte con parole nostre e [segnaposto], con il tipo tra parentesi."},
+            "strutture": {"type": "array", "items": {"type": "string"}, "description": "5-8 strutture di carosello vincenti: nome, numero di slide, ruolo di ogni slide, quando usarla."},
+            "formati": {"type": "string", "description": "Quali formati grafici rendono di più (fumetto, testo su nero, foto...) e per quali temi."},
+            "regole": {"type": "string", "description": "8-12 regole pratiche (righe che iniziano con '- ') per scrivere da zero un carosello che diventi virale in questa nicchia."},
+        },
+        "required": ["temi", "hook", "strutture", "formati", "regole"],
+    },
+}
+
+
+def study_viral(brand: dict, per_page: int = 40, per_handle: int = 6, max_posts: int = 16) -> dict:
+    """Studio dei caroselli VIRALI delle pagine di riferimento e dei collaboratori: temi, dolori, hook,
+    strutture e formati che rendono di più. È la base per creare caroselli da zero (mai copiare: si salvano
+    solo schemi e regole con parole nostre). Virale = almeno 2 volte la mediana della sua pagina."""
+    handles = list(dict.fromkeys(
+        [h.lower().lstrip("@") for h in brand.get("pagine_studio") or [] if h]
+        + [h.lower().lstrip("@") for h in brand.get("pagine_monitorate") or [] if h]))
+    own = (brand.get("handle") or "").lower()
+    handles = [h for h in handles if h != own]
+    if not handles:
+        return {}
+    posts = instagram.fetch_profiles(handles, per_page)
+    by_page: dict = {}
+    for p in posts:
+        if _engagement(p) is not None:
+            by_page.setdefault(p.owner, []).append(p)
+    chosen = []
+    study_first = {h.lower().lstrip("@") for h in brand.get("pagine_studio") or []}
+    for h, ps in sorted(by_page.items(), key=lambda kv: kv[0] not in study_first):
+        med = statistics.median([_engagement(x) for x in ps]) or 1
+        vir = [x for x in ps if x.kind.lower() == "sidecar" and len(x.image_urls) >= 3
+               and (_engagement(x) or 0) >= 2 * med]
+        vir.sort(key=lambda x: (_engagement(x) or 0) / med, reverse=True)
+        chosen += [(x, (_engagement(x) or 0) / med) for x in vir[:per_handle]]
+    chosen = chosen[:max_posts]
+    if not chosen:
+        return {}
+    analyses = []
+    for start in range(0, len(chosen), 4):                 # 4 caroselli per chiamata
+        content, batch = [], chosen[start:start + 4]
+        for k, (p, sc) in enumerate(batch, 1):
+            try:
+                imgs = instagram.download_images(p.image_urls[:10])
+            except Exception as e:
+                log.warning("Studio virali: slide non scaricate %s: %s", p.url, e)
+                continue
+            content.append({"type": "text", "text": f"CAROSELLO {k} (@{p.owner}, {sc:.1f}x la media della pagina, "
+                                                    f"{len(p.image_urls)} slide):"})
+            content += [writer._image_block(d, 640) for d in imgs]
+        if not content:
+            continue
+        content.append({"type": "text", "text": "Analizza ogni carosello con lo strumento carosello_studiato. "
+                                                "Non copiare i testi: descrivi con parole tue."})
+        try:
+            out = writer._tool_call("Sei uno stratega di contenuti Instagram nella nicchia psicologia maschile e "
+                                    "attrazione. Studi perché certi caroselli diventano virali.", content,
+                                    VIRAL_POST_TOOL, max_tokens=6000)
+        except Exception as e:
+            log.warning("Studio virali: analisi fallita: %s", e)
+            continue
+        for a in out.get("post", []):
+            n = a.get("numero")
+            if isinstance(n, int) and 1 <= n <= len(batch):
+                a["pagina"], a["rendimento"] = batch[n - 1][0].owner, round(batch[n - 1][1], 1)
+                a.pop("numero", None)
+                analyses.append(a)
+    if not analyses:
+        return {}
+    summ = writer._tool_call(
+        "Sei uno stratega di contenuti Instagram. Dai caroselli virali analizzati ricava cosa funziona davvero.",
+        [{"type": "text", "text": json.dumps(analyses, ensure_ascii=False, indent=1)}],
+        VIRAL_SUMMARY_TOOL, model=config.CAPTION_MODEL, max_tokens=6000)
+    return {**{k: summ.get(k) for k in ("temi", "hook", "strutture", "formati", "regole")},
+            "caroselli": analyses, "pagine": sorted(by_page), "pagine_config": sorted(handles),
             "creato": datetime.now(timezone.utc).isoformat(timespec="seconds")}
 
 
