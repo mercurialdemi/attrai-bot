@@ -38,8 +38,8 @@ COMMANDS = [
         ("pagine", "Pagine monitorate", "le pagine dei collaboratori che il bot controlla ogni giorno"),
     ]),
     ("Controllo", [
-        ("diagnosi", "Manda a Claude le slide non riuscite",
-         "carica su GitHub gli errori degli ultimi 3 giorni, così Claude li corregge"),
+        ("diagnosi", "Manda subito a Claude gli errori (di solito non serve)",
+         "gli errori e le segnalazioni partono già da soli; usalo solo per mandarli di nuovo"),
         ("id", "Il tuo ID Telegram", "serve per dare accesso al bot a un'altra persona"),
     ]),
 ]
@@ -52,7 +52,8 @@ HELP = (
     "• Per modificare un post rispondi ai suoi messaggi con cosa cambiare, es. \"slide 2 più corta\", "
     "\"cambia l'hook\", \"metti CTA al manuale Potere Sociale\", \"rifai la grafica della slide 4\".\n"
     "• regola: ...  → una regola fissa che il bot segue sempre.\n"
-    "• segnala: ...  (rispondendo a un post) → un difetto che Claude corregge nel codice.\n"
+    "• segnala: ...  (rispondendo alla slide sbagliata) → il post parte subito verso Claude, che lo corregge "
+    "e lo aggiunge alle prove fisse.\n"
     "• Slide CTA finale tua: mandami l'immagine con didascalia \"cta segui\" (o \"cta friendzone\"...).\n\n"
     "COMANDI (toccali per usarli, oppure scrivi / per il menu)\n"
     + "\n".join(f"\n{group.upper()}\n" + "\n".join(f"/{c} – {long}" for c, _short, long in cmds)
@@ -421,7 +422,17 @@ async def on_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
             jid = last["id"] if last else None
         diagnostica.record_report(jid, sm.group(2).strip(), update.effective_user.id)
         await msg.reply_text("Segnalazione salvata" + (f" sul post {jid}" if jid else "")
-                             + ": stanotte la guardo insieme alle immagini e correggo il bot. Domattina ti arriva il riepilogo.")
+                             + ": la mando subito a Claude con le immagini del post. Stanotte la corregge "
+                               "e la aggiunge alle prove fisse; domattina ti arriva il riepilogo.")
+
+        async def invia():                     # niente /diagnosi: il post segnalato parte subito
+            try:
+                res = await asyncio.to_thread(diagnostica.upload_daily, 72)
+                log.info("Segnalazione caricata: %s", res)
+            except Exception:
+                log.exception("Segnalazione non caricata subito (riprovo stanotte)")
+        if diagnostica.enabled():
+            context.application.create_task(invia())
         return
 
     m = re.match(r"^\s*regola\s*:\s*(.+)$", text, re.IGNORECASE | re.DOTALL)
