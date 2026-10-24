@@ -127,9 +127,9 @@ CAPTION_TOOL = {
             "testo_slide_finale": {
                 "type": "string",
                 "description": "Testo della NOSTRA slide finale di CTA (c'è in OGNI post, anche 'segui la pagina'), scritto "
-                               "poi con lo stesso stile grafico delle altre slide. Base: tra i TESTI DELLE NOSTRE SLIDE CTA "
-                               "dello stesso tipo della CTA scelta (per un manuale quelli di quel manuale, altrimenti quelli "
-                               "'segui') prendi quello più coerente con questo post. Tieni la sua leva, la sua chiusura e la "
+                               "poi con lo stesso stile grafico delle altre slide. Base: per un manuale, il MODELLO CTA SCRITTO DA "
+                               "GABRIELE per quel manuale più coerente con questo post (se mancano, i TESTI DELLE NOSTRE SLIDE "
+                               "CTA di quel manuale); per 'segui la pagina', i nostri testi 'segui'. Tieni la sua leva, la sua chiusura e la "
                                "parola da commentare IDENTICHE. RISCRIVI invece l'aggancio iniziale perché continui QUESTO "
                                "post nel suo formato e nel suo contenuto, nominando la cosa concreta di cui parla: "
                                "elenco -> 'Se ti sei riconosciuto anche in uno solo di questi 5 segnali…' (mai 'scena'); "
@@ -217,6 +217,27 @@ def client() -> anthropic.Anthropic:
 def load_brand() -> dict:
     with open(config.BRAND_FILE, encoding="utf-8") as f:
         return yaml.safe_load(f)
+
+
+def load_cta_models() -> dict:
+    """CTA modello scritte da Gabriele, per manuale: {id_manuale: {"parola": ..., "modelli": [...]}}."""
+    p = config.BRAND_FILE.with_name(config.BRAND_FILE.stem + "_cta.yaml")
+    try:
+        return yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+    except (OSError, yaml.YAMLError):
+        return {}
+
+
+def _cta_models_block() -> str:
+    mods = load_cta_models()
+    if not mods:
+        return ""
+    out = ["MODELLI CTA SCRITTI DA GABRIELE (la slide CTA finale per un manuale parte SEMPRE da uno di questi):"]
+    for mid, m in mods.items():
+        out.append(f"- manuale {mid} · parola da commentare: \"{m.get('parola', '')}\"")
+        for i, t in enumerate(m.get("modelli") or [], 1):
+            out.append(f"  {mid}#{i}: " + " / ".join(x.strip() for x in t.strip().splitlines() if x.strip()))
+    return "\n".join(out) + "\n"
 
 
 def load_style() -> dict:
@@ -508,8 +529,8 @@ def _scuole(brand: dict) -> str:
 
 def _caption_system(brand: dict, rules: list[dict], recent: dict) -> str:
     manuali = "\n".join(
-        f"- id: {m['id']} | {m['nome']} | TITOLO DA SCRIVERE (sempre tra virgolette, mai 'il manuale AttraiSeduci'): "
-        + ('"Come diventare l\'uomo a cui nessuna sa resistere" + "Potere Sociale"' if m['id'] == "potere-sociale"
+        f"- id: {m['id']} | {m['nome']} | TITOLO DA SCRIVERE (sempre tra virgolette): "
+        + ('il bundle "AttraiSeduci" + "Potere Sociale"' if m['id'] == "potere-sociale"
            else ", ".join(f'"{t}"' for t in (m.get("titoli") or [])[:1]))
         + f" | dolori che risolve: {' '.join(str(m.get('dolori', '')).split())}"
         + (f" | COME SI VENDE: {' '.join(str(m['vendita']).split())}" if m.get("vendita") else "")
@@ -581,6 +602,7 @@ CTA
 {brand['cta']['regola'].strip()}
 {brand['cta']['stile'].strip()}
 {_cta_memory(style)}
+{_cta_models_block()}
 {_feedback_memory(style)}
 Dove si compra: {brand['cta'].get('dove_si_compra', 'link in bio')}.
 Manuali disponibili:
@@ -681,10 +703,12 @@ def pick_cta_slide_text(proposed: str, cta: dict) -> str:
     (mai una a caso). Senza nostre slide CTA si usa il testo proposto."""
     import difflib
     texts = load_style().get("testi_slide_cta") or []
-    if not texts:
+    if not texts and not load_cta_models():
         return proposed
     if cta.get("tipo") == "manuale":
-        pool = [t for t in texts if t["tipo"] == "manuale" and t.get("manuale") == cta.get("manuale")]
+        mods = (load_cta_models().get(cta.get("manuale")) or {}).get("modelli") or []
+        pool = ([{"tipo": "manuale", "manuale": cta.get("manuale"), "testo": m.strip()} for m in mods]
+                or [t for t in texts if t["tipo"] == "manuale" and t.get("manuale") == cta.get("manuale")])
     else:
         pool = []
     pool = pool or [t for t in texts if t["tipo"] == "segui"]
@@ -708,7 +732,8 @@ def pick_cta_slide_text(proposed: str, cta: dict) -> str:
 def align_description_cta(desc: str, slide_text: str) -> str:
     """La CTA della descrizione chiede la stessa cosa della slide finale: se la slide dice di commentare una
     parola (es. "POTERE"), anche la descrizione chiude con quella parola."""
-    m = re.search(r'comment\w*[^"“”«»\n]{0,40}["“«]([^"“”«»]{2,30})["”»]', slide_text or "", re.IGNORECASE)
+    m = (re.search(r'comment\w*[^"“”«»\n]{0,40}["“«]([^"“”«»]{2,30})["”»]', slide_text or "", re.IGNORECASE)
+         or re.search(r'scriv\w*\s+["“«]([^"“”«»]{2,30})["”»]', slide_text or "", re.IGNORECASE))
     if not m or not desc:
         return desc
     kw = m.group(1).strip()

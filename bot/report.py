@@ -330,6 +330,30 @@ def _pool(cands: list[instagram.SourcePost], st: dict) -> list[instagram.SourceP
     return cands if st["completa"] else [p for p in cands if p.score >= st["min_score"]]
 
 
+def _page_summary(posts: list, handles: list[str], hours: int, min_score: float, own: set) -> str:
+    """Una riga per pagina: quanti post letti, quanti recenti con immagini, il migliore rispetto alla sua media.
+    Così si vede che ogni pagina è stata letta, anche quando nessun suo post entra nel report."""
+    since = datetime.now(timezone.utc) - timedelta(hours=hours)
+    righe = []
+    for h in handles:
+        if h in own:
+            continue
+        mine = [p for p in posts if p.owner == h]
+        if not mine:
+            righe.append(f"@{h}: non letta")
+            continue
+        rec = [p for p in mine if (_parse_ts(p.timestamp) or since) >= since]
+        img = [p for p in rec if not p.is_video and p.image_urls]
+        best = max((p.score or 0 for p in img), default=0)
+        txt = f"@{h}: {len(mine)} post letti, {len(rec)} nelle ultime {hours} ore"
+        if rec and not img:
+            txt += " (solo video/reel)"
+        elif img:
+            txt += f", il migliore {best:.1f}x" + (" ✅" if best >= min_score else "")
+        righe.append(txt)
+    return "Pagine controllate:\n" + "\n".join(righe)
+
+
 async def run_report(bot, chat_ids: list[int]) -> None:
     if _running.locked():
         await _broadcast(bot, chat_ids, "Il report è già in preparazione, arriva tra poco.")
@@ -373,10 +397,11 @@ async def run_report(bot, chat_ids: list[int]) -> None:
             # mandato torna solo se nel frattempo ha almeno raddoppiato)
             cands = [p for p in cands if _ripescabile(p, shown_before)
                      and (st["completa"] or p.score >= st["min_score"])]
+            riepilogo = _page_summary(posts, handles, st["ore"], st["min_score"], own)
             if not cands:
                 await _broadcast(bot, chat_ids, f"Report: nelle ultime {st['ore']} ore nessun post nuovo dei "
                                                 f"collaboratori ha superato {st['min_score']:.1f}x la media della "
-                                                "sua pagina. Niente da segnalare oggi.")
+                                                "sua pagina. Niente da segnalare oggi.\n\n" + riepilogo)
                 return
             cands, filtered = await asyncio.to_thread(_fit_filter, cands, brand)
             storage.save_ranking([_to_dict(p) for p in cands])
@@ -393,7 +418,7 @@ async def run_report(bot, chat_ids: list[int]) -> None:
                 "📚 didattico = da vendere col manuale · 🔥 virale = per far crescere la pagina:"
                 + ("" if filtered else "\n(filtro di tema non riuscito: li vedi tutti)"),
                 _link_lines(first, 1, st["min_score"]),
-                "Mandami il link di quelli che ti piacciono e li preparo in italiano."
+                riepilogo + "\n\nMandami il link di quelli che ti piacciono e li preparo in italiano."
                 + (f"\nScrivi /altri per vederne altri {min(st['candidati'], len(cands) - len(first))}." if len(cands) > len(first) else ""))
             return
         cands = rank_candidates(posts, st["ore"], st["candidati"])
