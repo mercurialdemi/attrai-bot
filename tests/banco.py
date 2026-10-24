@@ -55,6 +55,9 @@ CASI = {
         dict(testo="HAI GIÀ\nVOLTATO PAGINA?", x=333, y=31, w=333, h=102, colore="#111111", allineamento="center", maiuscolo=True, carattere=F),
         dict(testo="NO.", x=755, y=602, w=130, h=50, colore="#111111", allineamento="center", maiuscolo=True, carattere=F),
         dict(testo="HO SOLO SMESSO\nDI ELEMOSINARE\nUN POSTO DOVE\nMI AVEVI GIÀ\nSOSTITUITO.", x=667, y=719, w=318, h=180, colore="#111111", allineamento="center", maiuscolo=True, carattere=F)]),
+    "lista_poppins.jpg": ("tinta_unita", "1. The contract carries real risk.\n\nA man can love deeply and still sign\nterms he never studied. Marriage can\nbe sacred while ignorance remains\nexpensive. Know the laws before\nmaking the promise.", [
+        dict(testo="1. Quel contratto ha rischi veri.", x=60, y=195, w=380, h=25, colore="#DF5D60", allineamento="left", carattere=S, peso="bold"),
+        dict(testo="Puoi amarla alla follia e firmare comunque clausole mai lette. Il matrimonio può essere sacro, ma l'ignoranza si paga cara. Studia le leggi prima di fare quella promessa.", x=60, y=240, w=420, h=90, colore="#DBDBDB", allineamento="left", carattere=S, peso="regular")]),
 }
 
 

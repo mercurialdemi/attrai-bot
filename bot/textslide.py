@@ -513,11 +513,11 @@ def render(img: Image.Image, lay: Layout, text: str, placements: list | None = N
     else:
         y = max(int(H * max(0.06, SAFE_Y)), min(lay.top - int(size * 0.2), int(H - total - H * 0.08)))
     left = max(lay.left, int(W * SAFE_X))
-    if lay.align != "center" and lay.right and abs((lay.left + lay.right) / 2 - W / 2) < W * 0.045:
+    if lay.align != "center" and lay.right and abs((lay.left + lay.right) / 2 - W / 2) < W * 0.02:
         # testo allineato a sinistra ma blocco centrato nella slide: si ricentra il blocco italiano
         block_w = max((draw.textlength(ln, font=font) for ln in lines if ln), default=0)
         left = int((W - block_w) / 2)
-    in_head = bool(lay.head_color)
+    in_head = bool(lay.head_color or lay.head_weight)   # titoletto: colore e/o spessore suoi (es. rosso grassetto)
     # colore di ogni paragrafo italiano: si segue la posizione nel testo (prima parte grigia, poi bianca, ecc.)
     seg_of_line = []
     if lay.para_colors:
@@ -552,7 +552,7 @@ def render(img: Image.Image, lay: Layout, text: str, placements: list | None = N
         if lay.para_colors:
             col = lay.para_colors[para_seg[min(para, len(para_seg) - 1)]][0]
         if in_head:
-            col, wt = lay.head_color, (lay.head_weight or lay.weight)
+            col, wt = (lay.head_color or col), (lay.head_weight or lay.weight)
             f = _font(wt, size)
         if lay.align == "center":
             x = (W - draw.textlength(ln, font=f)) / 2
