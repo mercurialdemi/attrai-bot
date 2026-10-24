@@ -243,7 +243,8 @@ def _fit_filter(cands: list, brand: dict) -> tuple[list, bool]:
     for r in out.get("post", []):
         n = r.get("numero")
         if isinstance(n, int) and 1 <= n <= len(cands) and r.get("in_tema"):
-            cands[n - 1].motivo = r.get("motivo", "")
+            prima = cands[n - 1].motivo if (cands[n - 1].motivo or "").startswith("📈") else ""
+            cands[n - 1].motivo = (prima + "\n" if prima else "") + r.get("motivo", "")
             cands[n - 1].natura = r.get("natura", "")
             keep.append(cands[n - 1])
     keep.sort(key=lambda p: p.score, reverse=True)
@@ -255,25 +256,41 @@ def _shown_file():
 
 
 def _already_shown() -> dict:
-    """Link già mandati in un report precedente (per non riproporli il giorno dopo)."""
+    """Link già mandati in un report precedente, con il rendimento che avevano allora: {url: [quando, punteggio]}."""
     import json
     try:
         d = json.loads(_shown_file().read_text())
     except Exception:
         return {}
     limit = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
-    return {u: t for u, t in d.items() if t >= limit}
+    out = {}
+    for u, v in d.items():
+        v = v if isinstance(v, list) else [v, 0.0]
+        if v[0] >= limit:
+            out[u] = v
+    return out
 
 
-def _mark_shown(urls: list[str]) -> None:
+def _mark_shown(posts: list) -> None:
     import json
     d = _already_shown()
     now = datetime.now(timezone.utc).isoformat()
-    d.update({u: now for u in urls})
+    d.update({p.url: [now, float(p.score or 0)] for p in posts})
     try:
         _shown_file().write_text(json.dumps(d))
     except OSError:
         pass
+
+
+def _ripescabile(p, shown: dict) -> bool:
+    """Un post già mandato torna solo se nel frattempo è esploso (rendimento almeno raddoppiato)."""
+    old = shown.get(p.url)
+    if not old:
+        return True
+    if old[1] and p.score >= 2 * old[1]:
+        p.motivo = f"📈 in forte crescita: da {old[1]:.1f}x a {p.score:.1f}x"
+        return True
+    return False
 
 
 def _offset_file():
@@ -352,7 +369,9 @@ async def run_report(bot, chat_ids: list[int]) -> None:
             cands = rank_candidates(posts, st["ore"], st["candidati"] * 4)
             # solo post andati DAVVERO meglio della media della loro pagina, e mai quelli già mandati
             shown_before = _already_shown()
-            cands = [p for p in cands if p.url not in shown_before
+            # (un post partito piano che il giorno dopo esplode compare appena supera la soglia; uno già
+            # mandato torna solo se nel frattempo ha almeno raddoppiato)
+            cands = [p for p in cands if _ripescabile(p, shown_before)
                      and (st["completa"] or p.score >= st["min_score"])]
             if not cands:
                 await _broadcast(bot, chat_ids, f"Report: nelle ultime {st['ore']} ore nessun post nuovo dei "
@@ -366,7 +385,7 @@ async def run_report(bot, chat_ids: list[int]) -> None:
                 return
             first = cands[:st["candidati"]]
             _offset_file().write_text(str(len(first)))
-            _mark_shown([p.url for p in first])
+            _mark_shown(first)
             await _send_links(
                 bot, chat_ids,
                 f"☀️ Post dei collaboratori andati almeno {st['min_score']:.1f}x sopra la media della loro pagina "
@@ -417,7 +436,7 @@ async def run_more(bot, chat_ids: list[int]) -> None:
                 await _broadcast(bot, chat_ids, "Non ci sono altri post nella classifica di oggi.")
                 return
             _offset_file().write_text(str(shown + len(nxt)))
-            _mark_shown([p.url for p in nxt])
+            _mark_shown(nxt)
             left = len(ranking) - shown - len(nxt)
             await _send_links(bot, chat_ids, "Altri post dalla classifica:",
                               _link_lines(nxt, shown + 1, st["min_score"]),

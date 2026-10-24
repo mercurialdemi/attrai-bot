@@ -88,6 +88,10 @@ assert any("bNEW2" in str(x) or "sopra la media" in str(x) for x in sent), "repo
 sent.clear()
 asyncio.run(report.run_report(Bot(),[1]))                 # stesso giorno: niente post già mandati
 assert not any("sopra la media" in str(x) for x in sent), "il report ripropone post già mandati"
+import json as _j                                         # se nel frattempo raddoppia, torna come "in crescita"
+_d=_j.loads(report._shown_file().read_text()); _d={u:[v[0],0.5] for u,v in _d.items()}; report._shown_file().write_text(_j.dumps(_d))
+sent.clear(); asyncio.run(report.run_report(Bot(),[1]))
+assert any("sopra la media" in str(x) for x in sent), "post esploso dopo non ripreso"
 report._shown_file().unlink()
 sent.clear()
 _ld=writer.load_brand

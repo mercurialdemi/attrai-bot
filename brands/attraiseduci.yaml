@@ -31,7 +31,7 @@ pagine_studio:
 report:
   ora: "08:00"           # ora italiana; lascia vuoto ("") per disattivare il report automatico
   fuso: Europe/Rome
-  finestra_ore: 48       # considera i post pubblicati nelle ultime 48 ore
+  finestra_ore: 72       # considera i post pubblicati negli ultimi 3 giorni (anche quelli partiti piano)
   candidati: 15          # quanti post mettere in classifica
   quanti_post: 5         # quanti preparare già pronti
   post_per_pagina: 30    # post letti per pagina per calcolare la sua media
