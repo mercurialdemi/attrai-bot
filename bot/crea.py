@@ -41,13 +41,15 @@ IDEA_TOOL = {
             "struttura": {"type": "string", "description": "Ruolo di ogni slide in ordine."},
             "concetto": {"type": "string", "description": "Il messaggio di tutto il carosello in 3-4 frasi."},
             "slides": {"type": "array", "minItems": 5, "maxItems": 9, "items": {"type": "object", "properties": {
+                "titolo": {"type": "string", "description": (
+                    "Copertina: il gancio, grande, massimo 12-14 parole. Slide interne: un titoletto breve (2-7 "
+                    "parole) oppure vuoto. Le parole più forti tra [[ ]] (vengono in rosso).")},
                 "testo": {"type": "string", "description": (
-                    "Testo della slide in MAIUSCOLO, righe corte con a capo. Prima slide: solo il gancio, "
-                    "grande e d'impatto (massimo 12-14 parole). Slide interne: un titoletto breve tra [[ ]] "
-                    "(viene in rosso), una riga vuota, poi 2-5 righe di testo. Le parole più forti si possono "
-                    "mettere tra [[ ]]. Ultima slide (prima della CTA): una frase che chiude e resta. "
-                    "Niente emoji, niente asterischi, niente CTA (la aggiungiamo noi).")},
-            }, "required": ["testo"]}},
+                    "Copertina: un sottotitolo breve che apre la curiosità (una frase) oppure vuoto. Slide interne: "
+                    "il corpo, 2-5 frasi brevi scritte normalmente (non in maiuscolo), con a capo tra le frasi; "
+                    "le 1-3 espressioni chiave tra [[ ]] (vengono in rosso). Ultima slide prima della CTA: una frase "
+                    "che chiude e resta. Niente emoji, niente asterischi, niente CTA (la aggiungiamo noi).")},
+            }, "required": ["titolo", "testo"]}},
         },
         "required": ["tema", "dolore", "manuale", "natura", "tipo_hook", "struttura", "concetto", "slides"],
     },
@@ -125,16 +127,26 @@ def write_carousel(brand: dict, rules: list[dict], recent: dict, hint: str = "")
         req + ("\nGià creati di recente (NON ripetere tema, hook e struttura):\n" + gia + "\n" if gia else "")
         + "\nScrivi il carosello con lo strumento carosello_nuovo.")}]
     idea = writer._tool_call(_system(brand, rules), content, IDEA_TOOL, model=config.CAPTION_MODEL, max_tokens=6000)
-    slides = [{"numero": i, "testo": writer.clean_text(s.get("testo") or "").upper(), "testo_originale": "",
-               "da_modificare": True, "e_cta": False, "sfondo": "tinta_unita",
-               "blocchi": [{"testo": writer.clean_text(s.get("testo") or "").upper()}]}
-              for i, s in enumerate(idea.get("slides") or [], 1) if (s.get("testo") or "").strip()]
+    slides = []
+    for i, s_ in enumerate(idea.get("slides") or [], 1):
+        tit = writer.clean_text(s_.get("titolo") or "").upper()
+        body = writer.clean_text(s_.get("testo") or "")
+        if not (tit or body):
+            continue
+        slides.append({"numero": i, "testo": compose(tit, body), "testo_originale": "", "da_modificare": True,
+                       "e_cta": False, "sfondo": "tinta_unita",
+                       "blocchi": [{"testo": t} for t in (tit, body) if t]})
     out = {"concetto": idea.get("concetto", ""), "senso": idea.get("tema", ""), "formato": "carosello",
            "natura": idea.get("natura", "virale"), "slides": slides}
     try:
         out = writer.polish_slides(out)                    # rilettura da copywriter italiano
         for sl in out["slides"]:
-            sl["testo"] = (sl["blocchi"][0]["testo"] if sl.get("blocchi") else sl["testo"]).upper()
+            bl = [b["testo"] for b in sl.get("blocchi") or []]
+            if len(bl) == 2:
+                sl["testo"] = compose(bl[0].upper(), bl[1])
+            elif len(bl) == 1:
+                tit, body = split_parts(sl["testo"])
+                sl["testo"] = compose(bl[0].upper(), "") if tit and not body else compose("", bl[0])
     except Exception as e:
         log.warning("Rilettura del carosello non riuscita: %s", e)
     cap = writer.write_caption(out, "", brand, rules, recent)
@@ -152,12 +164,22 @@ def write_carousel(brand: dict, rules: list[dict], recent: dict, hint: str = "")
     return post
 
 
-def _head_first(text: str) -> str:
-    """Se il modello non ha messo il titoletto tra [[ ]], il primo paragrafo diventa il titoletto rosso."""
-    paras = [p for p in text.split("\n\n") if p.strip()]
-    if len(paras) >= 2 and "[[" not in paras[0]:
-        paras[0] = "[[" + paras[0] + "]]"
-    return "\n\n".join(paras)
+def compose(titolo: str, testo: str) -> str:
+    """Testo della slide: titolo (in maiuscolo) + riga vuota + corpo. È l'unica fonte per disegnarla."""
+    return "\n\n".join(x for x in (titolo.strip(), testo.strip()) if x)
+
+
+def _is_caps(t: str) -> bool:
+    letters = [c for c in t.replace("[[", "").replace("]]", "") if c.isalpha()]
+    return bool(letters) and sum(c.isupper() for c in letters) >= 0.8 * len(letters)
+
+
+def split_parts(text: str) -> tuple[str, str]:
+    """(titolo, corpo): il primo paragrafo in MAIUSCOLO è il titolo, il resto è il corpo."""
+    paras = [p for p in (text or "").split("\n\n") if p.strip()]
+    if paras and _is_caps(paras[0]):
+        return paras[0], "\n\n".join(paras[1:])
+    return "", "\n\n".join(paras)
 
 
 def _righe(text: str, per_riga: int) -> int:
@@ -167,32 +189,43 @@ def _righe(text: str, per_riga: int) -> int:
                       for l in text.split("\n") if l.strip()))
 
 
-def render_slide(text: str, cover: bool, brand: dict, logo: bool, placements: list | None = None) -> Image.Image:
-    """Testo su nero: bianco con titoletti e parole forti in rosso, lettering condensato maiuscolo.
-    L'altezza dei riquadri dipende dal numero di righe, così il testo ha sempre la stessa grandezza."""
+def render_slide(text: str, cover: bool, brand: dict, logo: bool, placements: list | None = None,
+                 cta: bool = False) -> Image.Image:
+    """Testo su nero con gerarchia: TITOLO condensato maiuscolo, sottotitolo/corpo in carattere leggibile
+    (Poppins) scritto normalmente, parole chiave in rosso. Grandezze fisse per tipo di testo."""
     img = Image.new("RGB", SIZE, BG)
     W, H = SIZE
-    base = {"colore": WHITE, "colore_evidenziato": RED, "carattere": "titolo", "maiuscolo": True}
+    tit, body = split_parts(text)
+    if cta and not tit:
+        paras = [p for p in text.split("\n\n") if p.strip()]
+        if len(paras) > 1:
+            tit, body = paras[0].upper(), "\n\n".join(paras[1:])
     blocks = []
     if cover:
-        n = _righe(text, 18)
-        h = min(560, 120 * n)
-        blocks.append({**base, "testo": text, "x": 80, "y": (1000 - h) // 2 + 40, "w": 840, "h": h,
-                       "allineamento": "center"})
+        ht = min(520, 118 * _righe(tit, 18)) if tit else 0
+        hs = min(220, 52 * _righe(body, 36)) if body else 0
+        gap = 45 if (tit and body) else 0
+        top = (1000 - (ht + gap + hs)) // 2 + 30
+        if tit:
+            blocks.append({"testo": tit, "x": 80, "y": top, "w": 840, "h": ht, "allineamento": "center",
+                           "carattere": "titolo", "maiuscolo": True, "colore": WHITE, "colore_evidenziato": RED})
+        if body:
+            blocks.append({"testo": body, "x": 120, "y": top + ht + gap, "w": 760, "h": hs,
+                           "allineamento": "center", "carattere": "normale", "peso": "regular_poppins",
+                           "colore": "#D9D9D9", "colore_evidenziato": RED})
     else:
-        t = _head_first(text)
-        paras = [p for p in t.split("\n\n") if p.strip()]
-        head = paras[0] if paras[0].startswith("[[") else ""
-        body = "\n\n".join(paras[1:] if head else paras)
-        nb = _righe(body, 30)
-        hh = 62 * _righe(head, 30) if head else 0
-        hb = min(600, 58 * nb)
-        gap = 40 if head else 0
-        top = (1000 - (hh + gap + hb)) // 2
-        if head:
-            blocks.append({**base, "testo": head, "x": 95, "y": top, "w": 810, "h": hh, "allineamento": "left"})
-        blocks.append({**base, "testo": body, "x": 95, "y": top + hh + gap, "w": 810, "h": hb,
-                       "allineamento": "left"})
+        ht = min(260, 64 * _righe(tit, 28)) if tit else 0
+        hb = min(600, 47 * _righe(body, 34)) if body else 0
+        gap = 42 if (tit and body) else 0
+        top = (1000 - (ht + gap + hb)) // 2
+        if tit:
+            blocks.append({"testo": tit, "x": 95, "y": top, "w": 810, "h": ht, "allineamento": "left",
+                           "carattere": "titolo", "maiuscolo": True, "colore": RED if "[[" not in tit else WHITE,
+                           "colore_evidenziato": RED})
+        if body:
+            blocks.append({"testo": body, "x": 95, "y": top + ht + gap, "w": 810, "h": hb,
+                           "allineamento": "left", "carattere": "normale", "peso": "regular_poppins",
+                           "colore": WHITE, "colore_evidenziato": RED})
     boxes = [(textslide.block_box(b, W, H), None) for b in blocks]
     out = textslide.render_blocks(img, img, blocks, placements if placements is not None else [], boxes=boxes)
     if logo:
@@ -227,7 +260,7 @@ def render_post(post: dict, brand: dict, jdir: Path, only: set[int] | None = Non
         p = jdir / "cta_creata.jpg"
         pl = []
         if only is None or n in only or not p.exists():
-            render_slide(cta_text.upper(), cover=False, brand=brand, logo=False, placements=pl).save(
+            render_slide(cta_text, cover=False, brand=brand, logo=False, placements=pl, cta=True).save(
                 p, "JPEG", quality=95, subsampling=0)
         old_cta = next((s_ for s_ in post["slides"] if s_.get("e_cta")), {})
         post["slides"] = main + [{"numero": n, "testo": cta_text, "e_cta": True, "_via": "cta-creata",
