@@ -265,8 +265,41 @@ def plain(t: str) -> str:
     return t.replace("[[", "").replace("]]", "").replace("{{", "").replace("}}", "")
 
 
+_CENSURA_DEFAULT = ["cazzo", "cazzi", "cazzate", "cazzata", "incazzato", "incazzata", "fottuto", "fottuta",
+                    "fottere", "fottiti", "merda", "puttana", "puttane", "stronzo", "stronza", "stronzate",
+                    "coglione", "coglioni", "troia", "troie", "figa", "scopare", "scopata"]
+
+
+def _censura_parola(w: str) -> str:
+    """ca**o, me**a, st****o: restano prima e ultime lettere, il resto diventa asterischi."""
+    if len(w) <= 4:
+        return w[0] + "*" * (len(w) - 2) + w[-1]
+    return w[:2] + "*" * (len(w) - 3) + w[-1]
+
+
+def censor(text: str, brand: dict | None = None) -> str:
+    """Parolacce censurate con gli asterischi (elenco in brand: parole_censurate)."""
+    words = (brand or {}).get("parole_censurate") if brand else None
+    words = words or _CENSURA_DEFAULT
+    if not text:
+        return text
+    pat = re.compile(r"\b(" + "|".join(re.escape(w) for w in sorted(words, key=len, reverse=True)) + r")\b",
+                     re.IGNORECASE)
+    return pat.sub(lambda m: _censura_parola(m.group(0)), text)
+
+
 def clean_text(s: str) -> str:
-    s = s.replace("**", "").replace("*", "")
+    # via gli asterischi del grassetto markdown, ma restano quelli DENTRO una parola (censura: ca**o)
+    def _ast(m):
+        a, b = m.start(), m.end()
+        inside = a > 0 and b < len(s) and s[a - 1].isalpha() and s[b].isalpha()
+        return m.group(0) if inside else ""
+    s = re.sub(r"\*+", _ast, s)
+    s = re.sub(r"[ \t]{2,}", " ", s)
+    try:
+        s = censor(s, load_brand())
+    except Exception:
+        s = censor(s)
     s = re.sub(r"\s*[—–]\s*", ", ", s)
     return s.strip()
 
@@ -352,7 +385,10 @@ Ricevi le slide di un post di una pagina collaboratrice che ci ha autorizzato a 
 - Stesso numero di slide e stesso ordine.
 - Unica eccezione alla fedeltà: se una slide contiene una CTA o un riferimento alla pagina di origine
   (segui @..., link in bio, nome della pagina), sostituiscilo con il nostro equivalente per {brand['nome']}.
-- Niente asterischi, niente trattini lunghi, niente emoji nel testo delle slide (i font delle slide non le hanno).
+- Niente asterischi (salvo la censura), niente trattini lunghi, niente emoji nel testo delle slide.
+- Niente volgarità gratuite o parole che suonano basse ('cesso', 'sfigato', 'sbruffone' come insulto facile):
+  usa parole forti ma pulite ('uno qualunque', 'il primo che passa', 'uno che si vende meglio di te').
+  Una parolaccia si tiene solo se nell'originale c'è e dà forza alla frase: verrà censurata da sola (ca**o).
 - In blocchi descrivi ogni blocco di testo separato: testo italiano e riquadro che occupa il testo ORIGINALE
   (in millesimi, stretto attorno alle lettere), colore, allineamento, spessore, maiuscolo. Il testo verrà
   riscritto esattamente lì sopra l'immagine ripulita, quindi le misure devono essere accurate.
@@ -459,6 +495,8 @@ def polish_slides(out: dict) -> dict:
               "di cercare la sua approvazione' -> SÌ 'Smetti di chiederle il permesso di esistere.'; 'It's not about "
               "looks' -> NO 'Non riguarda l'aspetto' -> SÌ 'Non è questione di faccia.'\n"
               "- Vietato lo slang giovanile o da strada: 'fra', 'frate', 'bro', 'zio', 'raga', 'tipo' come intercalare.\n"
+              "- Niente volgarità gratuite o parole basse ('cesso', 'sfigato'): parole forti ma pulite. Una parolaccia "
+              "resta solo se c'era nell'originale e dà forza (viene censurata da sola con gli asterischi).\n"
               "- Vietati calchi e formule da traduzione ('il fatto è che', 'alla fine della giornata', 'fare la differenza', "
               "'in termini di', 'questo significa che'). Parole inglesi solo se un italiano le usa davvero così.\n"
               "VINCOLI\n"
@@ -571,18 +609,21 @@ TONO
 {chr(10).join('- ' + t for t in brand.get('tono', []))}
 
 SOSTANZA (la descrizione deve far sentire, poi insegnare: il lettore deve uscirne capendo qualcosa di sé)
-Struttura obbligatoria, in quest'ordine:
+Percorso (non uno schema fisso: varia la forma da un post all'altro):
 1. APERTURA EMOTIVA (2-3 righe): una scena o una sensazione precisa che il lettore ha vissuto, al tu, al presente
    ("Le scrivi per primo. Di nuovo. E mentre aspetti la risposta senti che qualcosa non torna."). Deve far dire
    "parla di me". Mai aprire con una definizione o con una statistica.
 2. IL DOLORE NOMINATO: dì chiaramente cosa gli sta costando questa situazione (rispetto, attrazione, tempo,
    stima di sé) e perché continua a ripetersi. Diretto, senza addolcire, senza giudicarlo.
-3. IL MECCANISMO (parte didattica): spiega perché succede, cosa scatta nella testa di lei o di lui, con parole
-   semplici. Qui vanno i riferimenti scientifici: almeno 2 reali e verificabili quando il tema lo permette
-   (studio, ricercatore, università o anno) e cosa hanno scoperto, detto in modo che lo capisca chiunque.
-   Solo riferimenti che conosci con certezza: meglio uno vero che due inventati. Mai inventare numeri.
-4. COSA FARE (2-4 punti): ognuno un'azione concreta + il perché in una frase, con un esempio reale
-   (cosa dire, cosa smettere di fare). Numerati o con a capo netti.
+3. LA DINAMICA, APPROFONDITA (il cuore della descrizione): NON ripetere quello che dicono già le slide.
+   Vai oltre: spiega cosa succede sotto (nella testa di lei, nella testa di lui, nel rapporto), perché funziona
+   così, cosa nessuno gli ha mai spiegato, e porta il concetto un passo più avanti rispetto al post. Qui vanno i
+   riferimenti scientifici: almeno 2 reali e verificabili quando il tema lo permette (studio, ricercatore,
+   università o anno) e cosa hanno scoperto, detto in modo che lo capisca chiunque. Solo riferimenti che
+   conosci con certezza: meglio uno vero che due inventati. Mai inventare numeri.
+4. COSA CAMBIA PER LUI: il passaggio pratico, scritto come ragionamento in prosa. Un elenco numerato solo
+   se il post stesso è un elenco o se servono davvero dei passaggi in sequenza: nella maggior parte delle
+   descrizioni NIENTE punti numerati.
 5. CHIUSURA CHE RESTA: una frase forte che fissa il concetto e ridà speranza ("Non sei tu che vali poco. È la
    posizione che hai accettato."), poi una domanda introspettiva specifica sul tema (mai "Sei d'accordo?",
    "Cosa ne pensi?"), poi la CTA.

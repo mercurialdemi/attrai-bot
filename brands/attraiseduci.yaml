@@ -142,6 +142,11 @@ scuole_di_pensiero:
       Specificità batte genericità: una scena precisa vende più di mille aggettivi. Scrivi come parli a un amico.
       Una sola idea forte per messaggio.
 
+# Parole censurate con gli asterischi in slide e descrizioni (cazzo -> ca**o). Aggiungi o togli quelle che vuoi.
+parole_censurate: [cazzo, cazzi, cazzate, cazzata, incazzato, incazzata, fottuto, fottuta, fottere, fottiti,
+                   merda, puttana, puttane, stronzo, stronza, stronzate, coglione, coglioni, troia, troie, figa,
+                   scopare, scopata]
+
 manuali:
   # Quale manuale per quale dolore (decide la CTA). Mai proporre il bundle friendzone + seduzione.
   - id: attraiseduci
