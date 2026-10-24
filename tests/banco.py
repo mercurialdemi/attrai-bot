@@ -51,6 +51,10 @@ CASI = {
     "fumetto_cucina.jpg": ("disegno", "x", [
         dict(testo="STASERA HO VISTO\nIL MIO EX.", x=145, y=40, w=420, h=95, colore="#111111", allineamento="center", maiuscolo=True, carattere=F),
         dict(testo="OK.", x=770, y=60, w=150, h=55, colore="#111111", allineamento="center", maiuscolo=True, carattere=F)]),
+    "fumetto_palestra.jpg": ("disegno", "YOU MOVED ON\nTHAT FAST?\nNO.\nI JUST STOPPED\nBEGGING TO STAY\nWHERE I WAS\nALREADY REPLACED.", [
+        dict(testo="HAI GIÀ\nVOLTATO PAGINA?", x=333, y=31, w=333, h=102, colore="#111111", allineamento="center", maiuscolo=True, carattere=F),
+        dict(testo="NO.", x=755, y=602, w=130, h=50, colore="#111111", allineamento="center", maiuscolo=True, carattere=F),
+        dict(testo="HO SOLO SMESSO\nDI ELEMOSINARE\nUN POSTO DOVE\nMI AVEVI GIÀ\nSOSTITUITO.", x=667, y=719, w=318, h=180, colore="#111111", allineamento="center", maiuscolo=True, carattere=F)]),
 }
 
 

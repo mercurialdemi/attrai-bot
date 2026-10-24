@@ -857,6 +857,19 @@ def _color_mask(a, box, colors, W, H):
     for c in colors:
         m |= np.abs(sub - np.array(c, np.int16)).max(axis=2) < 75
     m8 = m.astype(np.uint8) * 255
+    # il contorno del fumetto ha lo stesso colore delle lettere: i pezzi lunghi e sottili (contorni, codine)
+    # o che toccano il bordo della zona di ricerca non sono lettere e restano dove sono
+    n0, lab0, st0, _c0 = cv2.connectedComponentsWithStats(m8, connectivity=8)
+    bw, bh = max(1, x1 - x0), max(1, y1 - y0)
+    sh, sw = m8.shape
+    for i in range(1, n0):
+        cx_, cy_, cw_, ch_, area_ = st0[i]
+        tocca = cx_ <= 0 or cy_ <= 0 or cx_ + cw_ >= sw or cy_ + ch_ >= sh
+        grande = cw_ > 0.55 * bw or ch_ > 0.9 * bh or cw_ > 0.3 * W or ch_ > 0.2 * H
+        sottile = area_ < 0.22 * cw_ * ch_
+        if (tocca and (cw_ > 0.15 * bw or ch_ > 0.5 * bh)) or (grande and sottile):
+            m8[lab0 == i] = 0
+    m = m8 > 0
     # le lettere vicine si uniscono in parole, così una lettera che esce dal riquadro viene presa con la sua parola
     # righe e parole della stessa battuta si uniscono (anche in verticale), così si cancella tutta la battuta
     joined = cv2.dilate(m8, np.ones((7, 11), np.uint8), iterations=2)
