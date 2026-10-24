@@ -145,7 +145,12 @@ def _prompt(slide: dict, mode: str, feedback: str = "") -> str:
 _oclient = None
 
 
+_ULTIMO_MOTORE = {"nome": ""}
+
+
 def _motore() -> str:
+    if _ULTIMO_MOTORE["nome"]:
+        return _ULTIMO_MOTORE["nome"]
     return "OpenAI" if (config.MOTORE_IMMAGINI == "openai" and config.OPENAI_API_KEY) else "Gemini"
 
 
@@ -176,9 +181,24 @@ def _openai_edit(original: Image.Image, prompt: str) -> Image.Image | None:
 
 
 def _gemini_edit(original: Image.Image, prompt: str) -> Image.Image | None:
-    """Motore immagini scelto (il nome è rimasto per compatibilità): OpenAI se configurato, altrimenti Gemini."""
-    if config.MOTORE_IMMAGINI == "openai" and config.OPENAI_API_KEY:
+    """Motore immagini scelto (il nome è rimasto per compatibilità). Con "gemini-poi-openai" si prova Gemini e,
+    solo se non risponde, non produce l'immagine o il credito è finito, si passa a OpenAI."""
+    m = config.MOTORE_IMMAGINI
+    if m == "openai" and config.OPENAI_API_KEY:
+        _ULTIMO_MOTORE["nome"] = "OpenAI"
         return _openai_edit(original, prompt)
+    if m == "gemini-poi-openai" and config.OPENAI_API_KEY:
+        try:
+            out = _gemini_only(original, prompt)
+            if out is not None:
+                _ULTIMO_MOTORE["nome"] = "Gemini"
+                return out
+            log.warning("Gemini non ha prodotto l'immagine: passo a OpenAI")
+        except Exception as e:
+            log.warning("Gemini non disponibile (%s): passo a OpenAI", str(e)[:150])
+        _ULTIMO_MOTORE["nome"] = "OpenAI"
+        return _openai_edit(original, prompt)
+    _ULTIMO_MOTORE["nome"] = "Gemini"
     return _gemini_only(original, prompt)
 
 

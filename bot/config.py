@@ -37,9 +37,12 @@ GEMINI_IMAGE_MODEL = _env("GEMINI_IMAGE_MODEL", "gemini-2.5-flash-image")
 OPENAI_API_KEY = _env("OPENAI_API_KEY")
 OPENAI_IMAGE_MODEL = _env("OPENAI_IMAGE_MODEL", "gpt-image-2")
 OPENAI_IMAGE_QUALITY = _env("OPENAI_IMAGE_QUALITY", "high")
-# Motore per le immagini che il codice non sa fare: "openai" se c'è la sua chiave, altrimenti "gemini".
-# Uno solo, per non pagare due volte. MOTORE_IMMAGINI=gemini per tornare a Gemini.
-MOTORE_IMMAGINI = (_env("MOTORE_IMMAGINI", "") or ("openai" if OPENAI_API_KEY else "gemini")).lower()
+# Motore per le immagini che il codice non sa fare:
+#   gemini-poi-openai (predefinito se ci sono entrambe le chiavi) = prima Gemini; solo se fallisce o il credito
+#                     è finito si usa OpenAI. Si paga OpenAI solo per le slide che Gemini non riesce a fare.
+#   openai | gemini   = un motore solo.
+MOTORE_IMMAGINI = (_env("MOTORE_IMMAGINI", "") or (
+    "gemini-poi-openai" if (OPENAI_API_KEY and GEMINI_API_KEY) else ("openai" if OPENAI_API_KEY else "gemini"))).lower()
 APIFY_ACTOR = _env("APIFY_ACTOR", "apify/instagram-scraper")
 # Per i post con limite d'età: cookie di un account Instagram secondario ("sessionid=...; csrftoken=...")
 # e l'attore Apify che li accetta. Si usano solo quando la lettura normale viene bloccata.
