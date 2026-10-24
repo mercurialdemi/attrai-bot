@@ -35,6 +35,7 @@ class SourcePost:
     timestamp: str = ""            # ISO, ora di pubblicazione
     score: float = 0.0             # rendimento rispetto alla media della pagina (report)
     motivo: str = ""               # perché è stato scelto (report)
+    natura: str = ""               # didattico | virale (report)
     musica: str = ""               # brano usato nel post originale ("Artista – Titolo"), se Instagram lo indica
 
     @property

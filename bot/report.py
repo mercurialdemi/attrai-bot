@@ -154,7 +154,8 @@ async def _broadcast(bot, chat_ids: list[int], text: str):
 
 def _to_dict(p: instagram.SourcePost) -> dict:
     return {"url": p.url, "owner": p.owner, "caption": p.caption, "kind": p.kind, "image_urls": p.image_urls,
-            "likes": p.likes, "comments": p.comments, "timestamp": p.timestamp, "score": p.score}
+            "likes": p.likes, "comments": p.comments, "timestamp": p.timestamp, "score": p.score,
+            "motivo": p.motivo, "natura": p.natura}
 
 
 async def _produce(bot, chat_ids: list[int], brand: dict, chosen: list[instagram.SourcePost],
@@ -203,8 +204,14 @@ FIT_TOOL = {
             "post": {"type": "array", "items": {"type": "object", "properties": {
                 "numero": {"type": "integer"},
                 "in_tema": {"type": "boolean"},
+                "natura": {"type": "string", "enum": ["didattico", "virale"],
+                           "description": "didattico = insegna qualcosa, dà valore reale, apre un problema o un dolore "
+                                          "specifico (segnali, errori, cosa fare, meccanismi psicologici, dialoghi che "
+                                          "mostrano una dinamica) -> da usare con CTA al manuale. virale = da volume: "
+                                          "frase d'impatto, meme, citazione, provocazione, poco valore pratico -> CTA "
+                                          "segui la pagina."},
                 "motivo": {"type": "string", "description": "Di cosa parla e perché va bene per noi, massimo 12 parole."},
-            }, "required": ["numero", "in_tema", "motivo"]}},
+            }, "required": ["numero", "in_tema", "natura", "motivo"]}},
         },
         "required": ["post"],
     },
@@ -222,7 +229,10 @@ def _fit_filter(cands: list, brand: dict) -> tuple[list, bool]:
               f"Tono: {' '.join(brand.get('tono', []))}\n"
               "Per ogni post dì se è in tema: psicologia maschile, attrazione, seduzione, donne, relazioni, rotture, "
               "rispetto, status, mentalità e disciplina maschile. Fuori tema: meme senza contenuto, sport, auto, "
-              "pubblicità, notizie, contenuti romantici o motivazionali generici, giveaway.")
+              "pubblicità, notizie, contenuti romantici o motivazionali generici, giveaway.\n"
+              "Per ogni post in tema dì anche se è DIDATTICO (insegna, dà valore, tocca un dolore specifico: va "
+              "venduto con il manuale) o VIRALE (da volume: frase d'impatto, meme, citazione, provocazione: serve a "
+              "far crescere la pagina).")
     try:
         out = writer._tool_call(system, [{"type": "text", "text": elenco}], FIT_TOOL,
                                 model=config.CHECK_MODEL, max_tokens=4000)
@@ -234,6 +244,7 @@ def _fit_filter(cands: list, brand: dict) -> tuple[list, bool]:
         n = r.get("numero")
         if isinstance(n, int) and 1 <= n <= len(cands) and r.get("in_tema"):
             cands[n - 1].motivo = r.get("motivo", "")
+            cands[n - 1].natura = r.get("natura", "")
             keep.append(cands[n - 1])
     keep.sort(key=lambda p: p.score, reverse=True)
     return keep, True
@@ -248,7 +259,8 @@ def _link_lines(items: list, start: int, min_score: float) -> list[str]:
     for i, p in enumerate(items, start):
         anteprima = " ".join((p.caption or "").split())[:70]
         nums = f"❤️ {p.likes or 0} · 💬 {p.comments or 0}"
-        out.append(f"{i}. @{p.owner} · {p.score:.1f}x la sua media{'' if p.score >= min_score else ' (sotto media)'}"
+        tipo = {"didattico": "📚 DIDATTICO (CTA manuale)", "virale": "🔥 VIRALE (segui la pagina)"}.get(p.natura, "")
+        out.append(f"{i}. " + (f"{tipo}\n" if tipo else "") + f"@{p.owner} · {p.score:.1f}x la sua media{'' if p.score >= min_score else ' (sotto media)'}"
                    f" · {nums}\n{p.url}" + (f"\n{p.motivo}" if p.motivo else (f"\n“{anteprima}…”" if anteprima else "")))
     return out
 
@@ -321,7 +333,8 @@ async def run_report(bot, chat_ids: list[int]) -> None:
             _offset_file().write_text(str(len(first)))
             await _send_links(
                 bot, chat_ids,
-                f"☀️ Migliori post in tema delle ultime {st['ore']} ore (rendimento rispetto alla media di ogni pagina):"
+                f"☀️ Migliori post in tema delle ultime {st['ore']} ore (rendimento rispetto alla media di ogni pagina).\n"
+                "📚 didattico = da vendere col manuale · 🔥 virale = per far crescere la pagina:"
                 + ("" if filtered else "\n(filtro di tema non riuscito: li vedi tutti)"),
                 _link_lines(first, 1, st["min_score"]),
                 "Mandami il link di quelli che ti piacciono e li preparo in italiano."
