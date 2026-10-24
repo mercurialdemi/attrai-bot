@@ -101,7 +101,7 @@ SLIDES_TOOL = {
             "senso": {"type": "string", "description": "1-2 frasi: di cosa parla il post e perché funziona."},
             "formato": {"type": "string", "enum": ["carosello", "singolo"]},
             "natura": {"type": "string", "enum": ["didattico", "virale"],
-                       "description": "didattico = valore reale, problema specifico o dolore forte; virale = volume, poco valore reale."},
+                       "description": "didattico = INSEGNA qualcosa di concreto: spiega un meccanismo, un trucco, cosa fare o non fare, segnali da riconoscere, errori con la soluzione. Chi lo legge ne esce sapendo fare o capire qualcosa in più -> CTA al manuale. virale = punta sull'EMOZIONE più che sull'insegnamento: provoca, polarizza, tocca l'ego o l'orgoglio, fa sentire rabbia, rivalsa, riconoscimento o nostalgia (frasi d'impatto, verità scomode, scene e dialoghi che fanno dire 'è proprio così', confronti uomo/donna, meme, citazioni). Anche se tocca un tema serio, se non spiega come fare è virale -> CTA segui la pagina. Nel dubbio: se non c'è un insegnamento pratico, è virale."},
             "slides": {"type": "array", "items": _SLIDE_ITEM},
         },
         "required": ["concetto", "senso", "formato", "natura", "slides"],

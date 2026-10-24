@@ -205,11 +205,7 @@ FIT_TOOL = {
                 "numero": {"type": "integer"},
                 "in_tema": {"type": "boolean"},
                 "natura": {"type": "string", "enum": ["didattico", "virale"],
-                           "description": "didattico = insegna qualcosa, dà valore reale, apre un problema o un dolore "
-                                          "specifico (segnali, errori, cosa fare, meccanismi psicologici, dialoghi che "
-                                          "mostrano una dinamica) -> da usare con CTA al manuale. virale = da volume: "
-                                          "frase d'impatto, meme, citazione, provocazione, poco valore pratico -> CTA "
-                                          "segui la pagina."},
+                           "description": "didattico = INSEGNA qualcosa di concreto: spiega un meccanismo, un trucco, cosa fare o non fare, segnali da riconoscere, errori con la soluzione. Chi lo legge ne esce sapendo fare o capire qualcosa in più -> CTA al manuale. virale = punta sull'EMOZIONE più che sull'insegnamento: provoca, polarizza, tocca l'ego o l'orgoglio, fa sentire rabbia, rivalsa, riconoscimento o nostalgia (frasi d'impatto, verità scomode, scene e dialoghi che fanno dire 'è proprio così', confronti uomo/donna, meme, citazioni). Anche se tocca un tema serio, se non spiega come fare è virale -> CTA segui la pagina. Nel dubbio: se non c'è un insegnamento pratico, è virale."},
                 "motivo": {"type": "string", "description": "Di cosa parla e perché va bene per noi, massimo 12 parole."},
             }, "required": ["numero", "in_tema", "natura", "motivo"]}},
         },
@@ -230,9 +226,7 @@ def _fit_filter(cands: list, brand: dict) -> tuple[list, bool]:
               "Per ogni post dì se è in tema: psicologia maschile, attrazione, seduzione, donne, relazioni, rotture, "
               "rispetto, status, mentalità e disciplina maschile. Fuori tema: meme senza contenuto, sport, auto, "
               "pubblicità, notizie, contenuti romantici o motivazionali generici, giveaway.\n"
-              "Per ogni post in tema dì anche se è DIDATTICO (insegna, dà valore, tocca un dolore specifico: va "
-              "venduto con il manuale) o VIRALE (da volume: frase d'impatto, meme, citazione, provocazione: serve a "
-              "far crescere la pagina).")
+              "Per ogni post in tema dì anche se è DIDATTICO o VIRALE. didattico = INSEGNA qualcosa di concreto: spiega un meccanismo, un trucco, cosa fare o non fare, segnali da riconoscere, errori con la soluzione. Chi lo legge ne esce sapendo fare o capire qualcosa in più -> CTA al manuale. virale = punta sull'EMOZIONE più che sull'insegnamento: provoca, polarizza, tocca l'ego o l'orgoglio, fa sentire rabbia, rivalsa, riconoscimento o nostalgia (frasi d'impatto, verità scomode, scene e dialoghi che fanno dire 'è proprio così', confronti uomo/donna, meme, citazioni). Anche se tocca un tema serio, se non spiega come fare è virale -> CTA segui la pagina. Nel dubbio: se non c'è un insegnamento pratico, è virale.")
     try:
         out = writer._tool_call(system, [{"type": "text", "text": elenco}], FIT_TOOL,
                                 model=config.CHECK_MODEL, max_tokens=4000)

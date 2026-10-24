@@ -80,8 +80,11 @@ hook:
 cta:
   regola: |
     Post a immagine singola -> CTA segui la pagina.
-    Post didattico, di valore, o che apre un problema specifico / un dolore forte (anche caroselli a dialogo) -> CTA ad acquistare il manuale giusto.
-    Post da volume / virale con poco valore reale -> CTA segui la pagina.
+    Post DIDATTICO -> CTA ad acquistare il manuale giusto. Didattico = insegna qualcosa di concreto: spiega un
+    meccanismo, un trucco, cosa fare o non fare, segnali da riconoscere, errori con la soluzione.
+    Post VIRALE -> CTA segui la pagina. Virale = punta sull'emozione più che sull'insegnamento: provoca, polarizza,
+    tocca ego e orgoglio, fa sentire rabbia, rivalsa o riconoscimento (frasi d'impatto, verità scomode, scene e
+    dialoghi che fanno dire "è proprio così", confronti, meme). Nel dubbio: senza insegnamento pratico è virale.
     La CTA del post originale va sempre tolta e sostituita con quella di AttraiSeduci (anche dentro le slide).
     OGNI post ha la sua CTA finale (anche le immagini singole). CTA al manuale SOLO se il post dà valore reale
     ed è chiaramente collegato al dolore che risolve quel manuale; in tutti gli altri casi (post leggero, virale,
