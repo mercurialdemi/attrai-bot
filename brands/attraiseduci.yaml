@@ -42,6 +42,12 @@ report:
   prepara_post: false    # false = il report manda solo i link dei migliori post (non spende crediti);
                          # true  = li manda già tradotti e pronti (quanti_post ogni mattina)
 
+# Caroselli ORIGINALI creati da zero ogni mattina (testo su nero, nello stile della pagina).
+# al_giorno: 0 per spegnerli. Si possono anche chiedere a mano con /crea.
+crea:
+  al_giorno: 2
+  ora: "08:30"
+
 # Studio automatico della pagina (stile, CTA, risultati dei post del bot): ogni settimana
 studio:                  # lo studio della pagina si rifà da solo ogni notte (riepilogo il lunedì)
   attivo: true

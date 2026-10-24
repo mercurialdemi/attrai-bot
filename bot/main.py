@@ -11,7 +11,7 @@ from telegram import Update
 from telegram.constants import ChatAction
 from telegram.ext import (Application, CommandHandler, ContextTypes, MessageHandler, filters)
 
-from . import analysis, config, diagnostica, images, instagram, instagram_api, pipeline, report, storage, writer
+from . import analysis, config, crea, diagnostica, images, instagram, instagram_api, pipeline, report, storage, writer
 
 logging.basicConfig(format="%(asctime)s %(levelname)s %(name)s: %(message)s", level=logging.INFO)
 logging.getLogger("httpx").setLevel(logging.WARNING)
@@ -22,6 +22,8 @@ log = logging.getLogger("attraibot")
 COMMANDS = [
     ("Post", [
         ("comandi", "Guida a tutti i comandi", "questa guida"),
+        ("crea", "Carosello originale da zero (es. /crea 2 friendzone)",
+         "crea caroselli nuovi nello stile AttraiSeduci: /crea, /crea 3, /crea segnali di disinteresse"),
         ("report", "Post migliori dei collaboratori, adesso",
          "lancia subito il report del mattino con i post che stanno andando meglio"),
         ("altri", "Altri post dalla classifica", "i post successivi del report, se vuoi sceglierne altri"),
@@ -230,6 +232,43 @@ async def cmd_report(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.application.create_task(report.run_report(context.bot, [update.effective_chat.id]))
 
 
+async def _crea_one(bot, chat_id: int, user_id: int, hint: str, label: str = "") -> None:
+    status = await bot.send_message(chat_id, f"Creo un carosello da zero{label}…")
+    work = storage.start_work(chat_id, "crea " + hint)
+    try:
+        brand = writer.load_brand()
+        post, paths = await asyncio.to_thread(crea.make, brand, storage.list_rules(), storage.recent_style(), hint)
+        job_id = storage.save_job(chat_id, user_id, "creato", brand.get("handle", ""), post, paths)
+        pipeline.after_save(job_id, "creato", post, paths, [])
+        await status.delete()
+        idea = post.get("_idea") or {}
+        header = (f"CAROSELLO ORIGINALE · {idea.get('tema', '')} · "
+                  f"{'📚 didattico' if idea.get('natura') == 'didattico' else '🔥 virale'} · hook: {idea.get('tipo_hook', '')}")
+        await pipeline.send_post(bot, chat_id, job_id, post, paths, [], header=header)
+    except Exception:
+        log.exception("Carosello da zero non creato")
+        await status.edit_text("Non sono riuscito a creare il carosello. Riprova tra poco.")
+    finally:
+        storage.end_work(work)
+
+
+async def cmd_crea(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """/crea [quanti] [tema o indicazioni]: caroselli originali da zero, testo su nero, nello stile della pagina."""
+    if not await _authorized(update):
+        return
+    args = list(context.args or [])
+    n = 1
+    if args and args[0].isdigit():
+        n = max(1, min(5, int(args.pop(0))))
+    hint = " ".join(args).strip()
+
+    async def go():
+        for k in range(n):
+            await _crea_one(context.bot, update.effective_chat.id, update.effective_user.id, hint,
+                            f" ({k + 1} di {n})" if n > 1 else "")
+    context.application.create_task(go())
+
+
 async def cmd_diagnosi(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Carica subito su GitHub il rapporto degli ultimi 3 giorni (slide fallite e segnalazioni)."""
     if not await _authorized(update):
@@ -284,10 +323,47 @@ def _changed_slides(old: dict, new: dict) -> set[int]:
     return changed
 
 
+async def _revise_created(update, context, job: dict, instruction: str, status):
+    """Modifica di un carosello creato da zero: si rifanno solo le slide cambiate, nello stesso stile."""
+    chat_id = update.effective_chat.id
+    brand = writer.load_brand()
+    old = job["post"]
+    jdir = job["slide_paths"][0].parent
+    new = await asyncio.to_thread(writer.revise_post, old, instruction, brand, storage.list_rules(),
+                                  storage.recent_style())
+    new["_originale"] = True
+    n_main = len([s for s in old["slides"] if not s.get("e_cta")])
+    cta_new = next((s.get("testo") for s in new["slides"] if s.get("e_cta")), None)
+    if cta_new and cta_new.strip() != (old.get("_testo_cta_finale") or "").strip():
+        new["_testo_cta_finale"] = cta_new
+    changed = _changed_slides(old, new)
+    if any(k in instruction.lower() for k in ("cta", "ultima slide")):
+        changed.add(n_main + 1)
+    paths = await asyncio.to_thread(crea.render_post, new, brand, jdir, changed or set())
+    new["slide_da_rifare"] = []
+    new["_fallite"] = []
+    storage.update_job(job["id"], new, paths)
+    await status.delete()
+    nums = sorted(n for n in changed if 1 <= n <= len(paths))
+    same_desc = (new.get("descrizione") or "").strip() == (old.get("descrizione") or "").strip()
+    if nums:
+        await pipeline.send_post(context.bot, chat_id, job["id"], new, [paths[n - 1] for n in nums], [],
+                                 numbers=nums, con_descrizione=not same_desc)
+    elif not same_desc:
+        await pipeline.send_post(context.bot, chat_id, job["id"], new, paths, [], only_text=True)
+
+
 async def process_revision(update: Update, context: ContextTypes.DEFAULT_TYPE, job: dict, instruction: str):
     msg = update.effective_message
     chat_id = update.effective_chat.id
     status = await msg.reply_text("Applico la modifica…")
+    if job["post"].get("_originale"):
+        try:
+            await _revise_created(update, context, job, instruction, status)
+        except Exception:
+            log.exception("Errore nella modifica del carosello creato %s", job["id"])
+            await status.edit_text("Non sono riuscito ad applicare la modifica. Riprova riformulandola.")
+        return
     try:
         brand = writer.load_brand()
         old = job["post"]
@@ -526,6 +602,24 @@ async def on_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # ---------------------------------------------------------------- avvio
 
+def _schedule_crea(app: Application):
+    """Ogni mattina N caroselli originali da zero (brand: crea.al_giorno, crea.ora)."""
+    cfg = (writer.load_brand().get("crea") or {})
+    n = int(cfg.get("al_giorno", 0) or 0)
+    chat_ids = sorted(config.REPORT_CHAT_IDS or config.ALLOWED_USER_IDS)
+    if n <= 0 or not cfg.get("ora") or not chat_ids:
+        return
+    tz = ZoneInfo((writer.load_brand().get("report") or {}).get("fuso", "Europe/Rome"))
+    at = datetime.strptime(str(cfg["ora"]), "%H:%M").time().replace(tzinfo=tz)
+
+    async def job(context: ContextTypes.DEFAULT_TYPE):
+        for k in range(n):
+            await _crea_one(context.bot, chat_ids[0], chat_ids[0], "", f" ({k + 1} di {n} di oggi)")
+
+    app.job_queue.run_daily(job, time=at, name="crea_mattutino")
+    log.info("Caroselli da zero programmati: %s ogni giorno alle %s", n, cfg["ora"])
+
+
 def _schedule_report(app: Application):
     cfg = (writer.load_brand().get("report") or {})
     if not cfg.get("ora"):
@@ -668,6 +762,7 @@ def main():
     app.add_handler(CommandHandler("analizza", cmd_analizza))
     app.add_handler(CommandHandler("stile", cmd_stile))
     app.add_handler(CommandHandler("studio", cmd_studio))
+    app.add_handler(CommandHandler("crea", cmd_crea))
     app.add_handler(MessageHandler(filters.PHOTO | filters.Document.IMAGE, on_media))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_text))
     async def notify_restart(context: ContextTypes.DEFAULT_TYPE):
@@ -687,6 +782,7 @@ def main():
             log.info("Pulizia disco: cancellate %s cartelle di post vecchi", n)
     app.job_queue.run_repeating(cleanup, interval=86400, first=60, name="pulizia_disco")
     _schedule_report(app)
+    _schedule_crea(app)
     _schedule_analysis(app)
     _schedule_diagnostics(app)
     log.info("Bot avviato.")
