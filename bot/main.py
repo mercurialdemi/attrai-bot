@@ -17,22 +17,46 @@ logging.basicConfig(format="%(asctime)s %(levelname)s %(name)s: %(message)s", le
 logging.getLogger("httpx").setLevel(logging.WARNING)
 log = logging.getLogger("attraibot")
 
+# Elenco unico dei comandi: compare nel menu "/" di Telegram e nella guida /comandi.
+# Ogni nuovo comando va aggiunto qui (la prova tests/test_comandi.py lo controlla).
+COMMANDS = [
+    ("Post", [
+        ("comandi", "Guida a tutti i comandi", "questa guida"),
+        ("report", "Post migliori dei collaboratori, adesso",
+         "lancia subito il report del mattino con i post che stanno andando meglio"),
+        ("altri", "Altri post dalla classifica", "i post successivi del report, se vuoi sceglierne altri"),
+    ]),
+    ("Regole", [
+        ("regole", "Le regole fisse che hai dato", "elenco numerato delle regole scritte con \"regola: ...\""),
+        ("togli", "Togli una regola (es. /togli 3)", "cancella la regola con quel numero"),
+    ]),
+    ("Studio della pagina", [
+        ("analizza", "Rifai subito lo studio (lo fa già da solo ogni notte)",
+         "il bot studia da solo ogni notte i tuoi post, le descrizioni e le slide CTA; usalo solo per averlo subito"),
+        ("stile", "Cosa ha imparato il bot", "guida di stile e testi CTA ricavati da /analizza"),
+        ("statistiche", "Numeri veri degli ultimi post", "copertura, salvataggi, condivisioni, clic (serve Meta)"),
+        ("pagine", "Pagine monitorate", "le pagine dei collaboratori che il bot controlla ogni giorno"),
+    ]),
+    ("Controllo", [
+        ("diagnosi", "Manda a Claude le slide non riuscite",
+         "carica su GitHub gli errori degli ultimi 3 giorni, così Claude li corregge"),
+        ("id", "Il tuo ID Telegram", "serve per dare accesso al bot a un'altra persona"),
+    ]),
+]
+
 HELP = (
-    "Mandami il link di un post dei nostri collaboratori e te lo restituisco pronto per AttraiSeduci: "
-    "slide in italiano con il nostro logo, descrizione e CTA.\n"
-    "Se Instagram blocca il link, mandami direttamente le slide come album (meglio come File), "
-    "con la descrizione originale nella didascalia.\n\n"
-    "Per modificare un post, rispondi ai suoi messaggi (o scrivi subito dopo) con quello che vuoi cambiare, "
-    "per esempio: \"slide 2 più corta\", \"cambia l'hook\", \"metti CTA al manuale Potere Sociale\", "
-    "\"rifai la grafica della slide 4\".\n\n"
-    "Per dare una regola fissa scrivi: regola: ...\n"
-    "Se un post ha un difetto scrivi: segnala: ... (rispondendo al post): stanotte lo correggo nel codice.\n"
-    "/regole per vederle, /togli N per toglierne una\n"
-    "/report per lanciare subito il report, /altri per i post successivi della classifica\n"
-    "/pagine per le pagine monitorate, /statistiche per i numeri veri degli ultimi post\n"
-    "/analizza per studiare i post di AttraiSeduci e scrivere descrizioni come le tue migliori, /stile per vedere la guida\n"
-    "Slide CTA finale: mandami l'immagine con didascalia \"cta segui\" (o \"cta friendzone\", \"cta potere-sociale\"...)\n"
-    "/id per il tuo ID Telegram"
+    "COSA PUOI FARE\n\n"
+    "• Mandami il link di un post dei collaboratori: te lo restituisco pronto per AttraiSeduci "
+    "(slide in italiano, logo, descrizione e CTA). Puoi mandare più link insieme.\n"
+    "• Se Instagram blocca il link, mandami le slide come album (meglio come File) con la descrizione originale.\n"
+    "• Per modificare un post rispondi ai suoi messaggi con cosa cambiare, es. \"slide 2 più corta\", "
+    "\"cambia l'hook\", \"metti CTA al manuale Potere Sociale\", \"rifai la grafica della slide 4\".\n"
+    "• regola: ...  → una regola fissa che il bot segue sempre.\n"
+    "• segnala: ...  (rispondendo a un post) → un difetto che Claude corregge nel codice.\n"
+    "• Slide CTA finale tua: mandami l'immagine con didascalia \"cta segui\" (o \"cta friendzone\"...).\n\n"
+    "COMANDI (toccali per usarli, oppure scrivi / per il menu)\n"
+    + "\n".join(f"\n{group.upper()}\n" + "\n".join(f"/{c} – {long}" for c, _short, long in cmds)
+                for group, cmds in COMMANDS)
 )
 
 
@@ -445,7 +469,9 @@ def _schedule_report(app: Application):
 
 
 def _schedule_analysis(app: Application):
-    """Ogni lunedì rifà lo studio della pagina: guida di stile, CTA migliori, risultati dei post del bot."""
+    """Ogni notte rifà da solo lo studio della pagina (guida di stile, CTA migliori, testi delle slide CTA,
+    risultati dei post del bot): /analizza non serve più. Il riepilogo arriva solo il lunedì, gli errori sempre.
+    Se lo studio non è mai stato fatto, parte subito all'avvio."""
     cfg = (writer.load_brand().get("studio") or {})
     if cfg.get("attivo", True) is False:
         return
@@ -457,10 +483,12 @@ def _schedule_analysis(app: Application):
         try:
             style = await asyncio.to_thread(analysis.run_analysis, writer.load_brand())
         except Exception as e:
-            log.exception("Studio settimanale fallito")
+            log.exception("Studio della pagina fallito")
             for c in chat_ids:
                 await context.bot.send_message(c, f"Studio settimanale non riuscito: {str(e)[:300]}")
             return
+        if datetime.now(tz).weekday() != 0 and not (context.job.data or {}).get("primo"):
+            return                                               # niente messaggi tutti i giorni
         fb = style.get("feedback_bot") or {}
         righe = [f"Studio settimanale aggiornato su {style['post_analizzati']} post."]
         if fb.get("pubblicati_dal_bot"):
@@ -476,7 +504,9 @@ def _schedule_analysis(app: Application):
         for c in chat_ids:
             await context.bot.send_message(c, "\n".join(righe))
 
-    app.job_queue.run_daily(job, time=at, days=(int(cfg.get("giorno", 1)),), name="studio_settimanale")
+    app.job_queue.run_daily(job, time=at, name="studio_giornaliero")
+    if "testi_slide_cta" not in writer.load_style():          # mai fatto, o fatto prima che leggesse le slide CTA
+        app.job_queue.run_once(job, when=120, data={"primo": True}, name="primo_studio")
 
     async def refresh(context: ContextTypes.DEFAULT_TYPE):   # la chiave Instagram dura 60 giorni: la rinnoviamo ogni settimana
         if instagram_api.enabled():
@@ -538,8 +568,18 @@ def main():
     if not config.ALLOWED_USER_IDS:
         log.warning("ALLOWED_USER_IDS è vuoto: il bot risponderà a tutti solo con il loro ID.")
     storage._db()
-    app = Application.builder().token(config.TELEGRAM_BOT_TOKEN).concurrent_updates(True).build()
-    app.add_handler(CommandHandler(["start", "aiuto", "help"], cmd_start))
+    async def _menu(application: Application):
+        """Menu dei comandi che Telegram mostra scrivendo "/" o col pulsante Menu."""
+        from telegram import BotCommand
+        try:
+            await application.bot.set_my_commands(
+                [BotCommand(c, short) for _g, cmds in COMMANDS for c, short, _l in cmds])
+        except Exception:
+            log.exception("Menu comandi non impostato")
+
+    app = (Application.builder().token(config.TELEGRAM_BOT_TOKEN).concurrent_updates(True)
+           .post_init(_menu).build())
+    app.add_handler(CommandHandler(["start", "aiuto", "help", "comandi"], cmd_start))
     app.add_handler(CommandHandler("id", cmd_id))
     app.add_handler(CommandHandler("regole", cmd_regole))
     app.add_handler(CommandHandler("togli", cmd_togli))

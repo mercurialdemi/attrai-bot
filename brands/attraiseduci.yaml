@@ -32,10 +32,9 @@ report:
                          # true  = li manda già tradotti e pronti (quanti_post ogni mattina)
 
 # Studio automatico della pagina (stile, CTA, risultati dei post del bot): ogni settimana
-studio:
+studio:                  # lo studio della pagina si rifà da solo ogni notte (riepilogo il lunedì)
   attivo: true
-  giorno: 1              # 0 = domenica, 1 = lunedì, ... 6 = sabato
-  ora: "07:30"
+  ora: "04:00"
 
 # Come tradurre il testo delle slide:
 #   fedele   = stesso contenuto, ordine e tono dell'originale, in italiano naturale (consigliato per i post già scelti)
