@@ -508,7 +508,10 @@ def _scuole(brand: dict) -> str:
 
 def _caption_system(brand: dict, rules: list[dict], recent: dict) -> str:
     manuali = "\n".join(
-        f"- id: {m['id']} | {m['nome']} | dolori che risolve: {' '.join(str(m.get('dolori', '')).split())}"
+        f"- id: {m['id']} | {m['nome']} | TITOLO DA SCRIVERE (sempre tra virgolette, mai 'il manuale AttraiSeduci'): "
+        + ('"Come diventare l\'uomo a cui nessuna sa resistere" + "Potere Sociale"' if m['id'] == "potere-sociale"
+           else ", ".join(f'"{t}"' for t in (m.get("titoli") or [])[:1]))
+        + f" | dolori che risolve: {' '.join(str(m.get('dolori', '')).split())}"
         + (f" | COME SI VENDE: {' '.join(str(m['vendita']).split())}" if m.get("vendita") else "")
         for m in brand.get("manuali", [])
     )
@@ -702,6 +705,23 @@ def pick_cta_slide_text(proposed: str, cta: dict) -> str:
     return scored[0][1] if p else pool[0]["testo"]
 
 
+def align_description_cta(desc: str, slide_text: str) -> str:
+    """La CTA della descrizione chiede la stessa cosa della slide finale: se la slide dice di commentare una
+    parola (es. "POTERE"), anche la descrizione chiude con quella parola."""
+    m = re.search(r'comment\w*[^"“”«»\n]{0,40}["“«]([^"“”«»]{2,30})["”»]', slide_text or "", re.IGNORECASE)
+    if not m or not desc:
+        return desc
+    kw = m.group(1).strip()
+    if kw.lower() in desc.lower():
+        return desc
+    line = f'Commenta "{kw}" e te lo mando in privato, oppure lo trovi nel link in bio.'
+    parts = desc.rstrip().split("\n")
+    if parts and "link in bio" in parts[-1].lower():
+        parts[-1] = line
+        return "\n".join(parts)
+    return desc.rstrip() + "\n\n" + line
+
+
 def create_post(caption: str, owner: str, images: list[bytes], brand: dict,
                 rules: list[dict], recent: dict) -> dict:
     slides_out = translate_slides(caption, owner, images, brand, rules)
@@ -710,6 +730,8 @@ def create_post(caption: str, owner: str, images: list[bytes], brand: dict,
     slides_out["_formato_post"] = cap.pop("formato_post", "")
     slides_out["_testo_cta_finale"] = quote_titles(pick_cta_slide_text(clean_text(cap.pop("testo_slide_finale", "") or ""),
                                                                        cap.get("cta") or {}), brand)
+    if cap.get("descrizione"):
+        cap["descrizione"] = align_description_cta(cap["descrizione"], slides_out["_testo_cta_finale"])
     if cap.get("descrizione"):
         cap["descrizione"] = quote_titles(cap["descrizione"], brand)
     post = _finalize({**slides_out, **cap})
