@@ -174,6 +174,18 @@ async def cmd_report(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.application.create_task(report.run_report(context.bot, [update.effective_chat.id]))
 
 
+async def cmd_diagnosi(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Carica subito su GitHub il rapporto degli ultimi 3 giorni (slide fallite e segnalazioni)."""
+    if not await _authorized(update):
+        return
+    try:
+        res = await asyncio.to_thread(diagnostica.upload_daily, 72)
+    except Exception as e:
+        log.exception("Rapporto non caricato")
+        res = f"Rapporto non caricato: {str(e)[:200]}"
+    await update.effective_message.reply_text(res)
+
+
 # ---------------------------------------------------------------- link manuale
 
 async def process_link(update: Update, context: ContextTypes.DEFAULT_TYPE, url: str):
@@ -532,6 +544,7 @@ def main():
     app.add_handler(CommandHandler("togli", cmd_togli))
     app.add_handler(CommandHandler("pagine", cmd_pagine))
     app.add_handler(CommandHandler("report", cmd_report))
+    app.add_handler(CommandHandler("diagnosi", cmd_diagnosi))
     app.add_handler(CommandHandler("altri", cmd_altri))
     app.add_handler(CommandHandler("statistiche", cmd_statistiche))
     app.add_handler(CommandHandler("analizza", cmd_analizza))
