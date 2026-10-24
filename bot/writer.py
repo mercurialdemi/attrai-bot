@@ -120,11 +120,14 @@ CAPTION_TOOL = {
             "cta": _CTA,
             "testo_slide_finale": {
                 "type": "string",
-                "description": "Testo della NOSTRA slide finale di CTA (c'è in OGNI post), che verrà scritta con lo stesso stile "
-                               "grafico delle altre slide. Parti da uno dei TESTI DELLE NOSTRE SLIDE CTA dello stesso tipo della "
-                               "CTA scelta (per un manuale, uno di quel manuale; se non ce ne sono, uno 'segui') e ADATTALO al "
-                               "post: stessa struttura, stessa leva e lunghezza simile, ma con le parole che lo legano al tema e al "
-                               "dolore di questo post. Mai partire dalle CTA delle descrizioni. Righe corte con a capo. Niente emoji. "
+                "description": "Testo della NOSTRA slide finale di CTA (c'è in OGNI post), scritto poi con lo stesso stile "
+                               "grafico delle altre slide. Tra i TESTI DELLE NOSTRE SLIDE CTA dello stesso tipo della CTA "
+                               "scelta (per un manuale, quelli di quel manuale; se non ce ne sono, quelli 'segui') SCEGLI quello "
+                               "più COERENTE con il tema e il dolore di QUESTO post, e copialo. Cambia SOLO le parole che con "
+                               "questo post non c'entrano (es. 'questa scena' se il post non è una scena o un dialogo, un "
+                               "riferimento a un altro tema, un manuale diverso da quello scelto): tutto il resto identico, "
+                               "stesse frasi e stessa parola da commentare. Chi legge deve sentire che la CTA continua il post. "
+                               "Mai partire dalle CTA delle descrizioni. Righe corte con a capo. Niente emoji. "
                                "Il titolo del manuale sempre tra virgolette \"...\".",
             },
             "slide_cta": {
@@ -652,20 +655,28 @@ def quote_titles(text: str, brand: dict | None = None) -> str:
 
 
 def pick_cta_slide_text(proposed: str, cta: dict) -> str:
-    """Il testo della slide CTA finale è COPIATO IDENTICO da una delle nostre slide CTA (lette da /analizza,
-    in ordine di rendimento): una delle migliori del manuale scelto, altrimenti una 'segui la pagina'.
-    Solo se /analizza non ha ancora trovato nessuna nostra slide CTA si usa il testo proposto da Claude."""
+    """Il testo della slide CTA finale viene dalle NOSTRE slide CTA (lette dallo studio della pagina).
+    Claude sceglie quella più coerente col post e cambia solo le parole fuori tema: se il suo testo deriva
+    davvero da una delle nostre, si tiene; altrimenti si usa la nostra più simile a quello che ha proposto
+    (mai una a caso). Senza nostre slide CTA si usa il testo proposto."""
+    import difflib
     texts = load_style().get("testi_slide_cta") or []
     if not texts:
         return proposed
     if cta.get("tipo") == "manuale":
-        same = [t for t in texts if t["tipo"] == "manuale" and t.get("manuale") == cta.get("manuale")]
-        if same:
-            return random.choice(same[:3])["testo"]          # tra le 3 migliori, per non ripetersi sempre
-    follow = [t for t in texts if t["tipo"] == "segui"]
-    if follow:
-        return random.choice(follow[:3])["testo"]
-    return proposed
+        pool = [t for t in texts if t["tipo"] == "manuale" and t.get("manuale") == cta.get("manuale")]
+    else:
+        pool = []
+    pool = pool or [t for t in texts if t["tipo"] == "segui"]
+    if not pool:
+        return proposed
+    norm = lambda x: " ".join((x or "").lower().split())
+    p = norm(proposed)
+    scored = sorted(((difflib.SequenceMatcher(None, p, norm(t["testo"])).ratio(), t["testo"]) for t in pool),
+                    reverse=True)
+    if p and scored[0][0] >= 0.55:
+        return proposed                  # è una delle nostre, adattata solo dove serviva
+    return scored[0][1] if p else pool[0]["testo"]
 
 
 def create_post(caption: str, owner: str, images: list[bytes], brand: dict,
@@ -707,7 +718,8 @@ def check_slide(image_jpeg: bytes, expected_text: str, old_watermark: str,
                "deformato un elemento grafico, metti testo_corretto=false e descrivilo in problemi.\n" if original_jpeg else "")
             +
             "Guarda con attenzione ogni riga: parole scritte una sopra l'altra, pezzi di lettere rimasti (es. 'ıl.', "
-            "'about.'), testo che esce dalla slide o tocca il bordo sono errori gravi.\n"
+            "'about.'), testo che esce dalla slide o tocca il bordo sono errori gravi. Anche gli ACCENTI delle maiuscole "
+            "(È, À, Ù...) che toccano o entrano nella riga di sopra sono un errore grave.\n"
             "Il logo circolare con la scritta AttraiSeduci, se presente, è corretto e non è un residuo.\n"
             "Controlla la slide con lo strumento esito_controllo. Ignora differenze di a capo e di maiuscole."
         )},
