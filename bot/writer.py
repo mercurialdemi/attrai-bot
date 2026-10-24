@@ -118,17 +118,25 @@ CAPTION_TOOL = {
             "tipo_hook": {"type": "string", "enum": HOOK_TYPES},
             "autori_citati": {"type": "array", "items": {"type": "string"}},
             "cta": _CTA,
+            "formato_post": {
+                "type": "string", "enum": ["elenco", "scena", "riflessione", "storia", "domanda", "altro"],
+                "description": "Com'è fatto il post: elenco (N segnali, N cose da fare, punti numerati), scena (dialogo o "
+                               "fumetto tra personaggi), riflessione (frase o tesi), storia (racconto), domanda. Serve a "
+                               "legare la CTA al post.",
+            },
             "testo_slide_finale": {
                 "type": "string",
-                "description": "Testo della NOSTRA slide finale di CTA (c'è in OGNI post), scritto poi con lo stesso stile "
-                               "grafico delle altre slide. Tra i TESTI DELLE NOSTRE SLIDE CTA dello stesso tipo della CTA "
-                               "scelta (per un manuale, quelli di quel manuale; se non ce ne sono, quelli 'segui') SCEGLI quello "
-                               "più COERENTE con il tema e il dolore di QUESTO post, e copialo. Cambia SOLO le parole che con "
-                               "questo post non c'entrano (es. 'questa scena' se il post non è una scena o un dialogo, un "
-                               "riferimento a un altro tema, un manuale diverso da quello scelto): tutto il resto identico, "
-                               "stesse frasi e stessa parola da commentare. Chi legge deve sentire che la CTA continua il post. "
-                               "Mai partire dalle CTA delle descrizioni. Righe corte con a capo. Niente emoji. "
-                               "Il titolo del manuale sempre tra virgolette \"...\".",
+                "description": "Testo della NOSTRA slide finale di CTA (c'è in OGNI post, anche 'segui la pagina'), scritto "
+                               "poi con lo stesso stile grafico delle altre slide. Base: tra i TESTI DELLE NOSTRE SLIDE CTA "
+                               "dello stesso tipo della CTA scelta (per un manuale quelli di quel manuale, altrimenti quelli "
+                               "'segui') prendi quello più coerente con questo post. Tieni la sua leva, la sua chiusura e la "
+                               "parola da commentare IDENTICHE. RISCRIVI invece l'aggancio iniziale perché continui QUESTO "
+                               "post nel suo formato e nel suo contenuto, nominando la cosa concreta di cui parla: "
+                               "elenco -> 'Se ti sei riconosciuto anche in uno solo di questi 5 segnali…' (mai 'scena'); "
+                               "scena -> 'Se ti sei rivisto in questa scena…'; riflessione -> 'Se questa frase ti ha "
+                               "colpito…'; storia -> 'Se questa storia ti suona familiare…'. Chi legge deve sentire che la "
+                               "CTA è la naturale conclusione del post, non un testo incollato. Mai partire dalle CTA delle "
+                               "descrizioni. Righe corte con a capo. Niente emoji. Titolo del manuale sempre tra virgolette \"...\".",
             },
             "slide_cta": {
                 "type": "array",
@@ -145,7 +153,7 @@ CAPTION_TOOL = {
                 },
             },
         },
-        "required": ["descrizione", "tipo_hook", "autori_citati", "cta", "testo_slide_finale", "slide_cta"],
+        "required": ["descrizione", "tipo_hook", "autori_citati", "cta", "formato_post", "testo_slide_finale", "slide_cta"],
     },
 }
 
@@ -156,14 +164,14 @@ POST_TOOL = {
         "type": "object",
         "properties": {
             **SLIDES_TOOL["input_schema"]["properties"],
-            **{k: v for k, v in CAPTION_TOOL["input_schema"]["properties"].items() if k not in ("slide_cta", "testo_slide_finale")},
+            **{k: v for k, v in CAPTION_TOOL["input_schema"]["properties"].items() if k not in ("slide_cta", "testo_slide_finale", "formato_post")},
             "slide_da_rifare": {
                 "type": "array", "items": {"type": "integer"},
                 "description": "Numeri delle slide da rigenerare anche se il testo non cambia (es. richiesta grafica). Altrimenti lista vuota.",
             },
         },
         "required": SLIDES_TOOL["input_schema"]["required"]
-                    + [k for k in CAPTION_TOOL["input_schema"]["required"] if k not in ("slide_cta", "testo_slide_finale")] + ["slide_da_rifare"],
+                    + [k for k in CAPTION_TOOL["input_schema"]["required"] if k not in ("slide_cta", "testo_slide_finale", "formato_post")] + ["slide_da_rifare"],
     },
 }
 
@@ -674,8 +682,14 @@ def pick_cta_slide_text(proposed: str, cta: dict) -> str:
     p = norm(proposed)
     scored = sorted(((difflib.SequenceMatcher(None, p, norm(t["testo"])).ratio(), t["testo"]) for t in pool),
                     reverse=True)
-    if p and scored[0][0] >= 0.55:
-        return proposed                  # è una delle nostre, adattata solo dove serviva
+    if p and scored[0][0] >= 0.35:
+        return proposed                  # è una delle nostre, con l'aggancio riscritto per questo post
+    # stessa chiusura (es. stessa parola da commentare tra virgolette): è comunque la nostra CTA adattata
+    import re as _re
+    for t in pool:
+        keys = _re.findall(r'["“”«»]([^"“”«»]{2,30})["“”«»]', t["testo"])
+        if keys and all(k.lower() in p for k in keys):
+            return proposed
     return scored[0][1] if p else pool[0]["testo"]
 
 
@@ -684,6 +698,7 @@ def create_post(caption: str, owner: str, images: list[bytes], brand: dict,
     slides_out = translate_slides(caption, owner, images, brand, rules)
     cap = write_caption(slides_out, caption, brand, rules, recent)
     apply_cta_texts(slides_out, cap.pop("slide_cta", None) or [])
+    slides_out["_formato_post"] = cap.pop("formato_post", "")
     slides_out["_testo_cta_finale"] = quote_titles(pick_cta_slide_text(clean_text(cap.pop("testo_slide_finale", "") or ""),
                                                                        cap.get("cta") or {}), brand)
     if cap.get("descrizione"):
