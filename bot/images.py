@@ -545,7 +545,13 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
         rebuilt = _rebuild_drawing(original, orig_fit, size, slide, blocks0, brand, testo, original_jpeg)
         if rebuilt is not None:
             return rebuilt
-    if mode == "codice" and blocks0:
+    # FUMETTI: con OpenAI attivo li rifà direttamente OpenAI (testo che riempie la nuvoletta, contorni intatti);
+    # col codice le nuvolette vengono ancora imperfette. Senza OpenAI resta il codice.
+    fumetto_ai = (mode == "codice" and _openai_scrive(slide)
+                  and (slide.get("sfondo") == "disegno" or any(b.get("carattere") == "fumetto" for b in blocks0)))
+    if fumetto_ai:
+        slide["_motivo_codice"] = ""
+    if mode == "codice" and blocks0 and not fumetto_ai:
         uni = textslide.analyze(orig_fit, slide.get("testo_originale", ""),
                                 has_mark=bool((slide.get("watermark_originale") or "").strip()))
         if uni:
