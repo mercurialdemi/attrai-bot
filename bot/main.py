@@ -286,11 +286,44 @@ async def process_revision(update: Update, context: ContextTypes.DEFAULT_TYPE, j
 
         paths = job["slide_paths"]
         new_failed: list[int] = []
+        # la NOSTRA slide CTA finale non si rifà partendo dall'originale (avrebbe i libri dell'altra pagina):
+        # si ricrea con le nostre copertine, nello stile chiesto
+        cta_i = next((i for i in range(len(old["slides"]) - 1, -1, -1)
+                      if str(old["slides"][i].get("_via") or "").startswith("cta-")), None)
+        low = instruction.lower()
+        wants_cta = cta_i is not None and (
+            (cta_i + 1) in changed
+            or any(k in low for k in ("cta", "ultima slide", "libri", "copertin", "manual", "casella", "alone")))
+        if wants_cta:
+            changed.discard(cta_i + 1)
+            if cta_i < len(new["slides"]) and new["slides"][cta_i].get("testo") and \
+                    (new["slides"][cta_i].get("testo") or "").strip() != (old["slides"][cta_i].get("testo") or "").strip():
+                new["_testo_cta_finale"] = new["slides"][cta_i]["testo"]
+            new.setdefault("_testo_cta_finale", old.get("_testo_cta_finale"))
+            style = ("alone" if any(k in low for k in ("casella", "alone", "riquadro", "box", "sfondo del post"))
+                     else "libri" if any(k in low for k in ("libri", "uomo", "copertin", "personaggio"))
+                     else ("libri" if old["slides"][cta_i].get("_via") == "cta-alone" else "alone"))
+            await status.edit_text("Rifaccio la slide CTA con le nostre copertine…")
+            r = await asyncio.to_thread(pipeline.illustrated_cta, {**new, "slides": old["slides"]}, jdir, style)
+            if r:
+                target, info = r
+                info["numero"] = cta_i + 1
+                all_slides = (new["slides"][:n_orig] + extra_slides)
+                if cta_i < len(all_slides):
+                    all_slides[cta_i] = info
+                new["slides"] = all_slides[:n_orig]
+                extra_slides = all_slides[n_orig:]
+                paths = list(paths)
+                paths[cta_i] = target
+                if cta_i >= n_orig:
+                    extra_paths = paths[n_orig:]
+                await pipeline.send_post(context.bot, chat_id, job["id"], new, [target], [],
+                                         numbers=[cta_i + 1], con_descrizione=False)
         if changed:
             await status.edit_text(f"Rifaccio le slide {', '.join(map(str, sorted(changed)))}…")
             new["slides"] = new["slides"][:n_orig]
             paths, new_failed = await images.render_all(new, originals, brand, jdir, only=changed,
-                                                        existing=job["slide_paths"][:n_orig])
+                                                        existing=list(paths)[:n_orig])
             paths = paths + extra_paths
         new["slides"] = new["slides"][:n_orig] + extra_slides
         failed = sorted((old_failed - changed) | set(new_failed))
@@ -302,12 +335,14 @@ async def process_revision(update: Update, context: ContextTypes.DEFAULT_TYPE, j
         await status.delete()
         if changed:
             nums = sorted(changed)
+            # se la descrizione non è cambiata, si rimandano solo le slide rifatte
+            same_desc = (new.get("descrizione") or "").strip() == (old.get("descrizione") or "").strip()
             await pipeline.send_post(context.bot, chat_id, job["id"], new, [paths[i - 1] for i in nums],
-                                     failed, numbers=nums)
+                                     failed, numbers=nums, con_descrizione=not same_desc)
             m = await pipeline.send_canva(context.bot, chat_id, job["id"], new, paths, failed)
             if m:
                 storage.link_message(chat_id, m.message_id, job["id"])
-        else:
+        elif not wants_cta or (new.get("descrizione") or "").strip() != (old.get("descrizione") or "").strip():
             await pipeline.send_post(context.bot, chat_id, job["id"], new, paths, failed, only_text=True)
     except Exception:
         log.exception("Errore nella modifica del post %s", job["id"])

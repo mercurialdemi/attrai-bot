@@ -316,3 +316,114 @@ def make(post: dict, originals: list[bytes], jdir: Path) -> tuple[Path, dict] | 
                 "_canva": {"tipo": "immagine"}}
         return out, info
     return None
+
+
+# ---------------------------------------------------------------- stile "alone" (come @convincimii)
+
+def _flat_cover(cover: Path, h: int) -> Image.Image:
+    """Copertina vera, dritta, con un filo d'ombra: per lo stile con la casella."""
+    c = Image.open(cover).convert("RGBA")
+    w = int(c.width * h / c.height)
+    c = c.resize((w, h), Image.LANCZOS)
+    sh = Image.new("RGBA", (w + 24, h + 24), (0, 0, 0, 0))
+    ImageDraw.Draw(sh).rounded_rectangle((12, 16, w + 12, h + 20), 8, fill=(0, 0, 0, 140))
+    sh = sh.filter(ImageFilter.GaussianBlur(7))
+    sh.alpha_composite(c, (6, 6))
+    return sh
+
+
+def alone(bg: Image.Image, text: str, font_path: Path, covers: list[Path] | None = None,
+          hl=(229, 96, 90)) -> Image.Image:
+    """L'immagine del post resta visibile; davanti, una casella scura semitrasparente con angoli arrotondati
+    e il testo della CTA in bianco, centrato. Se c'è un manuale, le copertine vere sotto la casella."""
+    img = bg.convert("RGBA")
+    W, H = img.size
+    covers = [c for c in (covers or []) if Path(c).exists()]
+    paras = [p.strip() for p in text.split("\n\n") if p.strip()] or [text.strip()]
+    flat = "\n".join(p.replace("\n", " ") for p in paras)
+    if Path(font_path) == COMIC:
+        flat = flat.upper()
+    d = ImageDraw.Draw(img)
+    pad = int(W * 0.06)
+    box_w = int(W * 0.84)
+    inner = box_w - 2 * pad
+    cov_h = int(H * 0.2) if covers else 0
+    max_h = int(H * (0.62 if covers else 0.8))
+    size = int(W * 0.052)
+    while True:
+        f = ImageFont.truetype(str(font_path), size)
+        lines = _wrap(d, flat, f, inner)
+        lh = int(size * 1.28)
+        th = lh * len(lines)
+        if th + 2 * pad <= max_h or size <= 24:
+            break
+        size -= 2
+    box_h = th + 2 * pad
+    gap = int(H * 0.03) if covers else 0
+    top = (H - (box_h + gap + cov_h)) // 2
+    x0 = (W - box_w) // 2
+    layer = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    ImageDraw.Draw(layer).rounded_rectangle((x0, top, x0 + box_w, top + box_h), int(W * 0.045),
+                                            fill=(12, 12, 12, 195))
+    img = Image.alpha_composite(img, layer)
+    d = ImageDraw.Draw(img)
+    y = top + pad - int(size * 0.1)
+    for ln in lines:
+        w = d.textlength(ln.replace("[[", "").replace("]]", ""), font=f)
+        _draw_rich(d, (W - w) / 2, y, ln, f, (255, 255, 255), hl)
+        y += lh
+    if covers:
+        cs = [_flat_cover(c, cov_h) for c in covers]
+        tot = sum(c.width for c in cs) + int(W * 0.04) * (len(cs) - 1)
+        x = (W - tot) // 2
+        yc = top + box_h + gap - 6
+        for c in cs:
+            img.alpha_composite(c, (x, yc))
+            x += c.width + int(W * 0.04)
+    return img.convert("RGB")
+
+
+def _post_background(post: dict, originals_dir: Path) -> Image.Image | None:
+    """Sfondo per lo stile 'alone': l'immagine ripulita (senza scritte) di una slide del post."""
+    slides = post.get("slides", [])
+    cands = [i for i, sl in enumerate(slides)
+             if (sl.get("_canva") or {}).get("sfondo") and Path(sl["_canva"]["sfondo"]).exists()
+             and not sl.get("e_cta")]
+    cands = [i for i in cands if i != 0] or cands
+    if not cands:
+        return None
+    return Image.open(slides[cands[-1]]["_canva"]["sfondo"]).convert("RGB")
+
+
+def make_alone(post: dict, jdir: Path) -> tuple[Path, dict] | None:
+    """CTA stile 'alone': nessuna immagine da generare (gratis), sfondo preso dal post."""
+    text = (post.get("_testo_cta_finale") or "").strip()
+    if not text:
+        return None
+    bg = _post_background(post, jdir / "originali")
+    if bg is None:
+        return None
+    cta = post.get("cta") or {}
+    books = [COVERS / f"{b}.png" for b in BOOKS.get(cta.get("manuale") or "", [])] if cta.get("tipo") == "manuale" else []
+    img = alone(bg, text, _post_font(post), books)
+    out = jdir / "cta_alone.jpg"
+    img.save(out, "JPEG", quality=95, subsampling=0)
+    info = {"numero": 0, "testo": text.replace("[[", "").replace("]]", ""), "testo_originale": "",
+            "watermark_originale": "", "e_cta": True, "da_modificare": False, "_via": "cta-alone",
+            "_canva": {"tipo": "immagine"}}
+    return out, info
+
+
+def next_style() -> str:
+    """Alterna i due stili di CTA illustrata da un post all'altro: 'libri' (uomo con i manuali) e 'alone'."""
+    p = config.DATA_DIR / "cta_turno.txt"
+    try:
+        last = p.read_text().strip()
+    except OSError:
+        last = ""
+    cur = "alone" if last == "libri" else "libri"
+    try:
+        p.write_text(cur)
+    except OSError:
+        pass
+    return cur

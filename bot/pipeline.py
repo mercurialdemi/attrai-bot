@@ -152,6 +152,29 @@ def _cta_on_photo(post: dict, text: str, jdir: Path) -> tuple[Path, dict] | None
     return out, info
 
 
+def illustrated_cta(post: dict, jdir: Path, style: str | None = None):
+    """Post disegnato o fotografico: due stili che si alternano da un post all'altro.
+    'libri' = uomo nello stile del post che mostra le copertine vere, testi in caselle bianche (immagine generata);
+    'alone' = l'immagine del post con davanti una casella scura semitrasparente e le copertine vere (gratis)."""
+    import logging
+    from . import cta_illustrata
+    style = style or cta_illustrata.next_style()
+    op = jdir / "originali" / "01.jpg"
+    order = ["alone", "libri"] if style == "alone" else ["libri", "alone"]
+    for st in order:
+        try:
+            if st == "alone":
+                r = cta_illustrata.make_alone(post, jdir)
+            else:
+                r = cta_illustrata.make(post, [op.read_bytes()], jdir) if op.exists() else None
+        except Exception:
+            logging.getLogger(__name__).exception("CTA illustrata (%s) non creata", st)
+            r = None
+        if r:
+            return r
+    return None
+
+
 def apply_cta_slide(post: dict, paths: list[Path], failed: list[int], jdir: Path):
     """In fondo al carosello va sempre la nostra slide CTA: sostituisce la CTA della pagina di origine
     (se c'è) oppure si aggiunge come ultima slide. Prima scelta: CTA scritta nello stesso stile del post."""
@@ -159,15 +182,7 @@ def apply_cta_slide(post: dict, paths: list[Path], failed: list[int], jdir: Path
         styled = None
         plain_post = any(sl.get("_via") == "testo-su-sfondo-uniforme" for sl in post.get("slides", []))
         if not plain_post:
-            # post disegnato o fotografico con CTA a un manuale: scena illustrata con le copertine vere
-            try:
-                from . import cta_illustrata
-                op = jdir / "originali" / "01.jpg"
-                if op.exists():
-                    styled = cta_illustrata.make(post, [op.read_bytes()], jdir)
-            except Exception:
-                import logging
-                logging.getLogger(__name__).exception("CTA illustrata non creata")
+            styled = illustrated_cta(post, jdir)
         try:
             styled = styled or styled_cta_slide(post, jdir)
         except Exception:
@@ -247,7 +262,8 @@ def summary(post: dict, failed: list[int], header: str = "") -> str:
 
 
 async def send_post(bot, chat_id: int, job_id: int, post: dict, paths: list[Path], failed: list[int],
-                    only_text: bool = False, header: str = "", numbers: list[int] | None = None) -> None:
+                    only_text: bool = False, header: str = "", numbers: list[int] | None = None,
+                    con_descrizione: bool = True) -> None:
     """Invia slide, descrizione e riepilogo. Le slide fallite non vengono inviate.
     `numbers` = numero di slide di ogni percorso (se si invia solo una parte delle slide)."""
     sent: list[Message] = []
@@ -269,8 +285,9 @@ async def send_post(bot, chat_id: int, job_id: int, post: dict, paths: list[Path
         m = await send_canva(bot, chat_id, job_id, post, paths, failed)
         if m:
             sent.append(m)
-    sent.append(await bot.send_message(chat_id, post["descrizione"]))
-    sent.append(await bot.send_message(chat_id, summary(post, failed, header)))
+    if con_descrizione:
+        sent.append(await bot.send_message(chat_id, post["descrizione"]))
+        sent.append(await bot.send_message(chat_id, summary(post, failed, header)))
     if failed and paths:
         orig_dir = paths[0].parent / "originali"
         for n in failed:

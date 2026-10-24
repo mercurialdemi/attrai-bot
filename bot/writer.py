@@ -630,6 +630,12 @@ Tono:
   motivate, niente "forse", "potrebbe", "in alcuni casi". Niente frasi motivazionali vuote ("credi in te stesso",
   "sii la versione migliore di te").
 - Emotivo ma maschile: fa sentire il peso e poi la via d'uscita, senza piagnistei, senza romanticismo.
+- Lucido, quasi machiavellico: mostra come funzionano DAVVERO potere, desiderio, interesse e status tra uomo e
+  donna e tra uomini, senza moralismi, senza favole e senza politicamente corretto. Il lettore deve sentire che
+  gli stai dicendo la verità che gli altri non dicono, sempre dalla sua parte, mai cinico verso di lui.
+- Scorrevole come un discorso a voce: ogni frase tira la successiva, niente blocchi da manuale, niente frasi
+  fatte. Lo studio scientifico entra nel racconto ("Negli anni '80 Gottman ha osservato…"), non come citazione
+  appiccicata.
 - Ogni frase deve aggiungere informazione o emozione. Se una frase si può togliere senza perdere niente, toglila.
 
 FLUIDITÀ (la descrizione deve sembrare scritta di getto da un italiano, non tradotta)
