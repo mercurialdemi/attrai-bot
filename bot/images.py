@@ -351,13 +351,45 @@ def _free_spot(img: Image.Image, w: int, h: int, margin: int, preferred: str,
     return best
 
 
+def misura_watermark(original: Image.Image, slide: dict) -> None:
+    """Misura quanto è alto il watermark della pagina di origine (logo/scritta), così il nostro marchio
+    prende la stessa grandezza: se il loro era piccolo, il nostro è piccolo. Salva l'altezza come frazione
+    della larghezza della slide in slide['_wm_alto']."""
+    import numpy as np
+    W, H = original.size
+    wb = textslide.wm_box(slide, W, H)
+    if not wb:
+        return
+    bh = wb[3] - wb[1]
+    alto = bh
+    try:
+        px, py = int(W * 0.01), int(H * 0.01)
+        x0, y0, x1, y1 = max(0, wb[0] - px), max(0, wb[1] - py), min(W, wb[2] + px), min(H, wb[3] + py)
+        g = np.asarray(original.convert("L").crop((x0, y0, x1, y1))).astype(np.int16)
+        bordo = np.concatenate([g[0], g[-1], g[:, 0], g[:, -1]])
+        bg = float(np.median(bordo))
+        if float(np.abs(bordo - bg).mean()) < 18:          # sfondo abbastanza uniforme: si misurano le lettere vere
+            ink = np.abs(g - bg) > 45
+            rows = np.where(ink.sum(axis=1) >= max(2, ink.shape[1] // 200))[0]
+            if rows.size:
+                h_ink = int(rows[-1] - rows[0] + 1)
+                if bh * 0.3 <= h_ink <= bh * 1.6:
+                    alto = h_ink
+    except Exception as e:
+        log.debug("Misura watermark non riuscita: %s", e)
+    slide["_wm_alto"] = round(alto / W, 4)
+
+
 def add_brand_mark(img: Image.Image, brand: dict, avoid: list | None = None,
-                   at: tuple | None = None) -> Image.Image:
+                   at: tuple | None = None, alto: float | None = None) -> Image.Image:
     """Logo circolare + nome della pagina: al posto del watermark della pagina di origine (`at`, il suo riquadro)
     se lì non copre scritte, altrimenti nell'angolo più libero."""
     wm = brand.get("watermark", {})
     W, H = img.size
     d = max(36, int(W * float(wm.get("larghezza_logo", 0.075))))
+    if at and alto and wm.get("stessa_grandezza", True):
+        # stessa grandezza del watermark che sostituiamo (entro limiti leggibili)
+        d = int(min(max(W * alto, W * 0.032, 28), W * 0.11))
     margin = int(W * 0.04)
     text = wm.get("testo", brand.get("nome", ""))
     font = _font(int(d * 0.42))
@@ -499,8 +531,8 @@ def _rebuild_drawing(original, orig_fit, size, slide, blocks0, brand, testo, ori
             slide["_via"] = "disegno-ricostruito"
             slide["_sfondo"] = clean
             if needs_logo(slide, brand):
-                slide["_sfondo"] = add_brand_mark(clean, brand, _avoid_boxes(slide, *clean.size), textslide.wm_box(slide, *clean.size))
-                img = add_brand_mark(img, brand, _avoid_boxes(slide, *img.size), textslide.wm_box(slide, *img.size))
+                slide["_sfondo"] = add_brand_mark(clean, brand, _avoid_boxes(slide, *clean.size), textslide.wm_box(slide, *clean.size), slide.get('_wm_alto'))
+                img = add_brand_mark(img, brand, _avoid_boxes(slide, *img.size), textslide.wm_box(slide, *img.size), slide.get('_wm_alto'))
             return img, True, ""
         slide["_motivo_codice"] = f"ricostruzione: {problems}"
         log.info("Slide %s ricostruita ma scartata: %s", slide.get("numero"), problems)
@@ -512,11 +544,12 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
     in quel caso NON va consegnata come pronta."""
     original = Image.open(io.BytesIO(original_bytes)).convert("RGB")
     size = output_size(original)
+    misura_watermark(original, slide)
     if not slide.get("da_modificare", True) and not (slide.get("watermark_originale") or "").strip():
         # già in italiano e senza marchi di altre pagine: si consegna l'originale, nessun ritocco
         slide["_via"] = "originale"
         if needs_logo(slide, brand):
-            return add_brand_mark(original, brand, _avoid_boxes(slide, *original.size), textslide.wm_box(slide, *original.size)), True, ""
+            return add_brand_mark(original, brand, _avoid_boxes(slide, *original.size), textslide.wm_box(slide, *original.size), slide.get('_wm_alto')), True, ""
         return original, True, ""
     testo = (slide.get("testo") or "").strip()
     # serve il percorso a blocchi solo per titoli con font stretti o parole evidenziate davvero ([[ ]])
@@ -533,9 +566,9 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
             slide["_canva"] = {"tipo": "testo", "righe": placements}
             slide["_via"] = "testo-su-sfondo-uniforme"
             slide["_sfondo"] = textslide.background(original, lay)
-            img = add_brand_mark(img, brand, _avoid_boxes(slide, *img.size), textslide.wm_box(slide, *img.size)) if needs_logo(slide, brand) else img
+            img = add_brand_mark(img, brand, _avoid_boxes(slide, *img.size), textslide.wm_box(slide, *img.size), slide.get('_wm_alto')) if needs_logo(slide, brand) else img
             if slide.get("_sfondo") is not None and needs_logo(slide, brand):
-                slide["_sfondo"] = add_brand_mark(slide["_sfondo"], brand, _avoid_boxes(slide, *slide["_sfondo"].size), textslide.wm_box(slide, *slide["_sfondo"].size))
+                slide["_sfondo"] = add_brand_mark(slide["_sfondo"], brand, _avoid_boxes(slide, *slide["_sfondo"].size), textslide.wm_box(slide, *slide["_sfondo"].size), slide.get('_wm_alto'))
             return img, True, ""
     original_jpeg = _jpeg(original)
     orig_fit = _fit(original, size)
@@ -573,9 +606,9 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
             if ok:
                 slide["_canva"] = {"tipo": "testo", "righe": placements}
                 slide["_via"] = "blocchi-sfondo-pieno"
-                slide["_sfondo"] = (add_brand_mark(clean, brand, _avoid_boxes(slide, *clean.size), textslide.wm_box(slide, *clean.size))
+                slide["_sfondo"] = (add_brand_mark(clean, brand, _avoid_boxes(slide, *clean.size), textslide.wm_box(slide, *clean.size), slide.get('_wm_alto'))
                                     if needs_logo(slide, brand) else clean)
-                img = add_brand_mark(img, brand, _avoid_boxes(slide, *img.size), textslide.wm_box(slide, *img.size)) if needs_logo(slide, brand) else img
+                img = add_brand_mark(img, brand, _avoid_boxes(slide, *img.size), textslide.wm_box(slide, *img.size), slide.get('_wm_alto')) if needs_logo(slide, brand) else img
                 return img, True, ""
             slide["_motivo_codice"] = problems
         local = textslide.try_local_clean(orig_fit, blocks0)
@@ -588,13 +621,13 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
             img = textslide.render_blocks(clean, orig_fit, blocks0, placements, boxes=boxes)
             slide["_canva"] = {"tipo": "testo", "righe": placements}
             slide["_via"] = "blocchi-pulizia-codice"
-            slide["_sfondo"] = add_brand_mark(clean, brand, _avoid_boxes(slide, *clean.size), textslide.wm_box(slide, *clean.size)) if needs_logo(slide, brand) else clean
+            slide["_sfondo"] = add_brand_mark(clean, brand, _avoid_boxes(slide, *clean.size), textslide.wm_box(slide, *clean.size), slide.get('_wm_alto')) if needs_logo(slide, brand) else clean
             ok, problems = (True, "")
             if config.SLIDE_CHECK:
                 ok, problems = writer.check_slide(_jpeg(img), testo, slide.get("watermark_originale", ""),
                                                   original_jpeg)
             if ok:
-                img = add_brand_mark(img, brand, _avoid_boxes(slide, *img.size), textslide.wm_box(slide, *img.size)) if needs_logo(slide, brand) else img
+                img = add_brand_mark(img, brand, _avoid_boxes(slide, *img.size), textslide.wm_box(slide, *img.size), slide.get('_wm_alto')) if needs_logo(slide, brand) else img
                 return img, True, ""
             log.info("Slide %s pulita col codice ma scartata al controllo: %s", slide.get("numero"), problems)
             slide["_motivo_codice"] = problems
@@ -629,9 +662,9 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
             if ok:
                 slide["_canva"] = {"tipo": "testo", "righe": placements}
                 slide["_via"] = "blocchi-ricostruzione-codice"
-                slide["_sfondo"] = (add_brand_mark(clean, brand, _avoid_boxes(slide, *clean.size), textslide.wm_box(slide, *clean.size))
+                slide["_sfondo"] = (add_brand_mark(clean, brand, _avoid_boxes(slide, *clean.size), textslide.wm_box(slide, *clean.size), slide.get('_wm_alto'))
                                     if needs_logo(slide, brand) else clean)
-                img = add_brand_mark(img, brand, _avoid_boxes(slide, *img.size), textslide.wm_box(slide, *img.size)) if needs_logo(slide, brand) else img
+                img = add_brand_mark(img, brand, _avoid_boxes(slide, *img.size), textslide.wm_box(slide, *img.size), slide.get('_wm_alto')) if needs_logo(slide, brand) else img
                 return img, True, ""
             log.info("Slide %s ricostruita col codice ma scartata al controllo: %s", slide.get("numero"), problems)
             slide.setdefault("_motivo_codice", problems)
@@ -671,7 +704,7 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
             placements: list = []
             img = textslide.render_blocks(clean, orig_fit, blocks, placements)
             slide["_canva"] = {"tipo": "testo", "righe": placements}
-            slide["_sfondo"] = add_brand_mark(clean, brand, _avoid_boxes(slide, *clean.size), textslide.wm_box(slide, *clean.size)) if needs_logo(slide, brand) else clean
+            slide["_sfondo"] = add_brand_mark(clean, brand, _avoid_boxes(slide, *clean.size), textslide.wm_box(slide, *clean.size), slide.get('_wm_alto')) if needs_logo(slide, brand) else clean
         elif mode == "overlay":
             img = draw_text_overlay(img, testo, brand)
         if config.SLIDE_CHECK:
@@ -680,7 +713,7 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
                 log.info("Slide %s scartata al controllo (tentativo %s): %s", slide.get("numero"), attempt + 1, problems)
                 feedback, best = problems, img
                 continue
-        img = add_brand_mark(img, brand, _avoid_boxes(slide, *img.size), textslide.wm_box(slide, *img.size)) if needs_logo(slide, brand) else img
+        img = add_brand_mark(img, brand, _avoid_boxes(slide, *img.size), textslide.wm_box(slide, *img.size), slide.get('_wm_alto')) if needs_logo(slide, brand) else img
         return img, True, ""
     # Nessun tentativo valido: restituiamo l'ultima prova (o l'originale) solo per riferimento, segnata come fallita.
     img = best or _fit(original, size)

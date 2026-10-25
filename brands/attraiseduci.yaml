@@ -206,7 +206,8 @@ watermark:
   solo_se_presente: true       # true = il logo va solo sulle slide che avevano il watermark della pagina di origine
   testo: AttraiSeduci
   posizione: basso-destra      # basso-destra | basso-sinistra | basso-centro | alto-destra | alto-sinistra
-  larghezza_logo: 0.075         # diametro del logo rispetto alla larghezza della slide
+  larghezza_logo: 0.075         # grandezza usata solo se non si riesce a misurare il watermark originale
+  stessa_grandezza: true       # il nostro marchio prende la stessa grandezza del watermark che sostituisce
   colore_testo: auto          # auto = bianco su sfondi scuri, nero su sfondi chiari
 
 # Usato solo in modalità "overlay" (testo scritto dal codice invece che da Gemini).
