@@ -21,13 +21,17 @@ APIFY_TOKEN = _env("APIFY_TOKEN")
 
 # --- Chi può usare il bot (ID Telegram separati da virgola: tu e il tuo socio) ---
 ALLOWED_USER_IDS = {
-    int(x) for x in _env("ALLOWED_USER_IDS").replace(" ", "").split(",") if x.isdigit()
+    int(x) for x in (_env("ALLOWED_USER_IDS") + "," + _env("SOCI_IDS")).replace(" ", "").split(",") if x.isdigit()
 }
+# SOCI_IDS: ID Telegram dei soci aggiunti dopo (stesso accesso, ricevono anche il report)
+_SOCI = {int(x) for x in _env("SOCI_IDS").replace(" ", "").split(",") if x.isdigit()}
 
 # --- Chi riceve il report (se vuoto: tutti gli ALLOWED_USER_IDS) ---
 REPORT_CHAT_IDS = {
     int(x) for x in _env("REPORT_CHAT_IDS").replace(" ", "").split(",") if x.lstrip("-").isdigit()
 }
+if REPORT_CHAT_IDS:
+    REPORT_CHAT_IDS |= _SOCI
 
 # --- Modelli (cambiabili senza toccare il codice) ---
 CLAUDE_MODEL = _env("CLAUDE_MODEL", "claude-sonnet-5-5")
