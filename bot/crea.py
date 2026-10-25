@@ -266,8 +266,9 @@ def render_slide(text: str, cover: bool, brand: dict, logo: bool, placements: li
     look = look or {"palette": "nero", "stile": "impatto"}
     pal = PALETTES.get(look.get("palette"), PALETTES["nero"])
     st = STILI.get(look.get("stile"), STILI["impatto"])
-    img = Image.new("RGB", SIZE, pal["bg"])
-    W, H = SIZE
+    SS = 2                                    # disegno a doppia risoluzione e poi riduco: bordi delle lettere nitidi
+    W, H = SIZE[0] * SS, SIZE[1] * SS
+    img = Image.new("RGB", (W, H), pal["bg"])
     tit, body = split_parts(text)
     if cta and not tit:
         paras = [p for p in text.split("\n\n") if p.strip()]
@@ -310,9 +311,19 @@ def render_slide(text: str, cover: bool, brand: dict, logo: bool, placements: li
                            "allineamento": "left", "carattere": "normale", "peso": "regular_poppins",
                            "colore": pal["testo"], "colore_evidenziato": pal["accento"]})
     boxes = [(textslide.block_box(b, W, H), None) for b in blocks]
-    out = textslide.render_blocks(img, img, blocks, placements if placements is not None else [], boxes=boxes)
+    pl: list = []
+    out = textslide.render_blocks(img, img, blocks, pl, boxes=boxes)
     if logo:
         out = images.add_brand_mark(out, brand, [b for b, _ in boxes])
+    out = out.resize(SIZE, Image.LANCZOS)
+    if placements is not None:                # coordinate per Canva riportate alla grandezza vera
+        for r in pl:
+            for k in ("x", "y"):
+                if isinstance(r.get(k), (int, float)):
+                    r[k] = r[k] / SS
+            if isinstance(r.get("size"), (int, float)):
+                r["size"] = max(1, round(r["size"] / SS))
+        placements.extend(pl)
     return out
 
 
