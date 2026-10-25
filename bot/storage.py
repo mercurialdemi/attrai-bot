@@ -229,7 +229,9 @@ def all_jobs_light(limit: int = 500) -> list[dict]:
         cta = p.get("cta") or {}
         out.append({"id": r["id"], "descrizione": p.get("descrizione", ""), "tipo_hook": p.get("tipo_hook"),
                     "natura": p.get("natura"), "formato": p.get("formato"),
-                    "cta_tipo": cta.get("tipo"), "manuale": cta.get("manuale") or "", "creato": r["created_at"]})
+                    "cta_tipo": cta.get("tipo"), "manuale": cta.get("manuale") or "", "creato": r["created_at"],
+                    "palette": (p.get("_look") or {}).get("palette"),
+                    "stile_grafico": (p.get("_look") or {}).get("stile")})
     return out
 
 

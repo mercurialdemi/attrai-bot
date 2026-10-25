@@ -509,4 +509,7 @@ def _bot_feedback(published: list) -> dict:
         "per_hook": group("tipo_hook"),
         "per_natura": group("natura"),
         "per_cta": group("cta_tipo"),
+        # caroselli creati da zero: quali colori e quali caratteri rendono di più
+        "per_palette": {k: v for k, v in group("palette").items() if k != "?"},
+        "per_stile_grafico": {k: v for k, v in group("stile_grafico").items() if k != "?"},
     }

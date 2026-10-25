@@ -25,6 +25,40 @@ BG = (0, 0, 0)
 WHITE = "#FFFFFF"
 RED = "#E5605A"
 
+# Palette monocolore: sfondo pieno, testo chiaro, un colore d'accento per le parole chiave.
+PALETTES = {
+    "nero":        {"bg": (0, 0, 0),       "testo": "#FFFFFF", "sotto": "#D9D9D9", "accento": "#E5605A"},
+    "verde_scuro": {"bg": (16, 42, 32),    "testo": "#F3EBDD", "sotto": "#D8CFC0", "accento": "#D4A853"},
+    "blu_notte":   {"bg": (13, 22, 38),    "testo": "#FFFFFF", "sotto": "#D5DAE3", "accento": "#E8873A"},
+    "bordeaux":    {"bg": (43, 10, 16),    "testo": "#F5E9E0", "sotto": "#E3D3C8", "accento": "#E8B04A"},
+    "antracite":   {"bg": (27, 27, 27),    "testo": "#FFFFFF", "sotto": "#D9D9D9", "accento": "#E5605A"},
+}
+# Stili di carattere: 'impatto' (condensato maiuscolo, grande) per i contenuti emotivi/virali,
+# 'autorevole' (serif elegante) per i contenuti didattici.
+STILI = {
+    "impatto":    {"carattere": "titolo", "peso": None, "maiuscolo": True},
+    "autorevole": {"carattere": "normale", "peso": "elegante", "maiuscolo": False},
+}
+
+
+def choose_look(natura: str) -> dict:
+    """Sceglie palette e stile. Stile: di norma impatto per i virali e autorevole per i didattici (1 volta su 5
+    l'altro, per imparare). Palette: se lo studio della pagina ha già i risultati dei caroselli pubblicati,
+    si preferiscono i colori che rendono di più; altrimenti si ruota, senza ripetere l'ultima."""
+    stile = "autorevole" if natura == "didattico" else "impatto"
+    if random.random() < 0.2:
+        stile = "impatto" if stile == "autorevole" else "autorevole"
+    fb = (writer.load_style().get("feedback_bot") or {})
+    per_pal = {k: v for k, v in (fb.get("per_palette") or {}).items() if k in PALETTES and v.get("post", 0) >= 2}
+    last = (history()[-1].get("palette") if history() else None)
+    names = [k for k in PALETTES if k != last] or list(PALETTES)
+    if per_pal and random.random() < 0.7:
+        best = sorted(per_pal.items(), key=lambda kv: -kv[1]["rendimento"])
+        palette = next((k for k, _ in best if k != last), best[0][0])
+    else:
+        palette = random.choice(names)
+    return {"palette": palette, "stile": stile}
+
 IDEA_TOOL = {
     "name": "carosello_nuovo",
     "description": "Un carosello originale per la nostra pagina.",
@@ -160,6 +194,7 @@ def write_carousel(brand: dict, rules: list[dict], recent: dict, hint: str = "")
             writer.align_description_cta(cap["descrizione"], out["_testo_cta_finale"]), brand)
     post = writer._finalize({**out, **cap})
     post["_originale"] = True
+    post["_look"] = choose_look(post.get("natura") or idea.get("natura", "virale"))
     post["_idea"] = {k: idea.get(k) for k in ("tema", "dolore", "manuale", "natura", "tipo_hook", "struttura")}
     return post
 
@@ -190,42 +225,52 @@ def _righe(text: str, per_riga: int) -> int:
 
 
 def render_slide(text: str, cover: bool, brand: dict, logo: bool, placements: list | None = None,
-                 cta: bool = False) -> Image.Image:
-    """Testo su nero con gerarchia: TITOLO condensato maiuscolo, sottotitolo/corpo in carattere leggibile
-    (Poppins) scritto normalmente, parole chiave in rosso. Grandezze fisse per tipo di testo."""
-    img = Image.new("RGB", SIZE, BG)
+                 cta: bool = False, look: dict | None = None) -> Image.Image:
+    """Sfondo monocolore con gerarchia: TITOLO (condensato maiuscolo o serif elegante, secondo lo stile),
+    sottotitolo/corpo in Poppins scritto normalmente, parole chiave nel colore d'accento."""
+    look = look or {"palette": "nero", "stile": "impatto"}
+    pal = PALETTES.get(look.get("palette"), PALETTES["nero"])
+    st = STILI.get(look.get("stile"), STILI["impatto"])
+    img = Image.new("RGB", SIZE, pal["bg"])
     W, H = SIZE
     tit, body = split_parts(text)
     if cta and not tit:
         paras = [p for p in text.split("\n\n") if p.strip()]
         if len(paras) > 1:
             tit, body = paras[0].upper(), "\n\n".join(paras[1:])
+    if not st["maiuscolo"] and tit:
+        tit = _sentence(tit)
+    tfont = {"carattere": st["carattere"], "maiuscolo": st["maiuscolo"]}
+    if st["peso"]:
+        tfont["peso"] = st["peso"]
+    # il serif è più largo del condensato: meno caratteri per riga
+    cpl_cover, cpl_head = (18, 28) if st["maiuscolo"] else (16, 24)
     blocks = []
     if cover:
-        ht = min(520, 118 * _righe(tit, 18)) if tit else 0
+        ht = min(520, 118 * _righe(tit, cpl_cover)) if tit else 0
         hs = min(220, 52 * _righe(body, 36)) if body else 0
         gap = 45 if (tit and body) else 0
         top = (1000 - (ht + gap + hs)) // 2 + 30
         if tit:
             blocks.append({"testo": tit, "x": 80, "y": top, "w": 840, "h": ht, "allineamento": "center",
-                           "carattere": "titolo", "maiuscolo": True, "colore": WHITE, "colore_evidenziato": RED})
+                           **tfont, "colore": pal["testo"], "colore_evidenziato": pal["accento"]})
         if body:
             blocks.append({"testo": body, "x": 120, "y": top + ht + gap, "w": 760, "h": hs,
                            "allineamento": "center", "carattere": "normale", "peso": "regular_poppins",
-                           "colore": "#D9D9D9", "colore_evidenziato": RED})
+                           "colore": pal["sotto"], "colore_evidenziato": pal["accento"]})
     else:
-        ht = min(260, 64 * _righe(tit, 28)) if tit else 0
+        ht = min(260, 64 * _righe(tit, cpl_head)) if tit else 0
         hb = min(600, 47 * _righe(body, 34)) if body else 0
         gap = 42 if (tit and body) else 0
         top = (1000 - (ht + gap + hb)) // 2
         if tit:
-            blocks.append({"testo": tit, "x": 95, "y": top, "w": 810, "h": ht, "allineamento": "left",
-                           "carattere": "titolo", "maiuscolo": True, "colore": RED if "[[" not in tit else WHITE,
-                           "colore_evidenziato": RED})
+            blocks.append({"testo": tit, "x": 95, "y": top, "w": 810, "h": ht, "allineamento": "left", **tfont,
+                           "colore": pal["accento"] if "[[" not in tit else pal["testo"],
+                           "colore_evidenziato": pal["accento"]})
         if body:
             blocks.append({"testo": body, "x": 95, "y": top + ht + gap, "w": 810, "h": hb,
                            "allineamento": "left", "carattere": "normale", "peso": "regular_poppins",
-                           "colore": WHITE, "colore_evidenziato": RED})
+                           "colore": pal["testo"], "colore_evidenziato": pal["accento"]})
     boxes = [(textslide.block_box(b, W, H), None) for b in blocks]
     out = textslide.render_blocks(img, img, blocks, placements if placements is not None else [], boxes=boxes)
     if logo:
@@ -233,10 +278,27 @@ def render_slide(text: str, cover: bool, brand: dict, logo: bool, placements: li
     return out
 
 
-def _black(jdir: Path) -> Path:
-    p = jdir / "sfondo_nero.jpg"
+def _sentence(t: str) -> str:
+    """TITOLO IN MAIUSCOLO -> Titolo scritto normalmente (per il serif elegante)."""
+    import re as _re
+    low = t.lower()
+    out, cap = [], True
+    for ch in low:
+        if cap and ch.isalpha():
+            out.append(ch.upper())
+            cap = False
+        else:
+            out.append(ch)
+        if ch in ".!?\n":
+            cap = True
+    return _re.sub(r"\[\[(.)", lambda m: "[[" + m.group(1), "".join(out))
+
+
+def _black(jdir: Path, look: dict | None = None) -> Path:
+    pal = PALETTES.get((look or {}).get("palette"), PALETTES["nero"])
+    p = jdir / f"sfondo_{(look or {}).get('palette') or 'nero'}.jpg"
     if not p.exists():
-        Image.new("RGB", SIZE, BG).save(p, "JPEG", quality=95)
+        Image.new("RGB", SIZE, pal["bg"]).save(p, "JPEG", quality=95)
     return p
 
 
@@ -249,9 +311,9 @@ def render_post(post: dict, brand: dict, jdir: Path, only: set[int] | None = Non
         p = jdir / f"slide_{i:02d}.jpg"
         if only is None or i in only or not p.exists():
             pl: list = []
-            render_slide(sl["testo"], cover=(i == 1), brand=brand, logo=(i == 1), placements=pl).save(
-                p, "JPEG", quality=95, subsampling=0)
-            sl["_canva"] = {"tipo": "testo", "righe": pl, "sfondo": str(_black(jdir))}   # testo modificabile in Canva
+            render_slide(sl["testo"], cover=(i == 1), brand=brand, logo=(i == 1), placements=pl,
+                         look=post.get("_look")).save(p, "JPEG", quality=95, subsampling=0)
+            sl["_canva"] = {"tipo": "testo", "righe": pl, "sfondo": str(_black(jdir, post.get("_look")))}   # testo modificabile in Canva
         sl["numero"], sl["_via"] = i, "creato-testo-su-nero"
         paths.append(p)
     cta_text = (post.get("_testo_cta_finale") or "").strip()
@@ -260,11 +322,12 @@ def render_post(post: dict, brand: dict, jdir: Path, only: set[int] | None = Non
         p = jdir / "cta_creata.jpg"
         pl = []
         if only is None or n in only or not p.exists():
-            render_slide(cta_text, cover=False, brand=brand, logo=False, placements=pl, cta=True).save(
+            render_slide(cta_text, cover=False, brand=brand, logo=False, placements=pl, cta=True,
+                         look=post.get("_look")).save(
                 p, "JPEG", quality=95, subsampling=0)
         old_cta = next((s_ for s_ in post["slides"] if s_.get("e_cta")), {})
         post["slides"] = main + [{"numero": n, "testo": cta_text, "e_cta": True, "_via": "cta-creata",
-                                  "_canva": ({"tipo": "testo", "righe": pl, "sfondo": str(_black(jdir))} if pl
+                                  "_canva": ({"tipo": "testo", "righe": pl, "sfondo": str(_black(jdir, post.get("_look")))} if pl
                                              else old_cta.get("_canva") or {"tipo": "immagine"})}]
         paths.append(p)
     else:
@@ -277,5 +340,6 @@ def make(brand: dict, rules: list[dict], recent: dict, hint: str = "") -> tuple[
     stamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S") + f"_{random.randint(100, 999)}"
     jdir = config.DATA_DIR / "jobs" / f"creato_{stamp}"
     paths = render_post(post, brand, jdir)
-    _remember({**post["_idea"], "quando": datetime.now(timezone.utc).isoformat(timespec="seconds")})
+    _remember({**post["_idea"], **(post.get("_look") or {}),
+               "quando": datetime.now(timezone.utc).isoformat(timespec="seconds")})
     return post, paths

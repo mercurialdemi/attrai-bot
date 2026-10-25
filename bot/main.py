@@ -296,7 +296,8 @@ async def _crea_one(bot, chat_id: int, user_id: int, hint: str, label: str = "")
         await status.delete()
         idea = post.get("_idea") or {}
         header = (f"CAROSELLO ORIGINALE · {idea.get('tema', '')} · "
-                  f"{'📚 didattico' if idea.get('natura') == 'didattico' else '🔥 virale'} · hook: {idea.get('tipo_hook', '')}")
+                  f"{'📚 didattico' if idea.get('natura') == 'didattico' else '🔥 virale'} · hook: {idea.get('tipo_hook', '')}"
+                  f" · stile {(post.get('_look') or {}).get('stile', '')}, sfondo {(post.get('_look') or {}).get('palette', '').replace('_', ' ')}")
         await pipeline.send_post(bot, chat_id, job_id, post, paths, [], header=header)
     except Exception:
         log.exception("Carosello da zero non creato")
@@ -385,6 +386,9 @@ async def _revise_created(update, context, job: dict, instruction: str, status):
     new = await asyncio.to_thread(writer.revise_post, old, instruction, brand, storage.list_rules(),
                                   storage.recent_style())
     new["_originale"] = True
+    for k in ("_look", "_idea"):
+        if old.get(k):
+            new.setdefault(k, old[k])
     n_main = len([s for s in old["slides"] if not s.get("e_cta")])
     cta_new = next((s.get("testo") for s in new["slides"] if s.get("e_cta")), None)
     if cta_new and cta_new.strip() != (old.get("_testo_cta_finale") or "").strip():

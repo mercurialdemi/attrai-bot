@@ -23,6 +23,7 @@ FONTS = {
     "titolo": config.ROOT / "assets" / "titolo_anton.ttf",          # titoli stretti e pesanti (stile Anton/Bebas)
     "stretto": config.ROOT / "assets" / "titolo_oswald_bold.ttf",   # stretto ma meno pesante (stile Oswald)
     "fumetto": config.ROOT / "assets" / "fumetto_chewy.ttf",        # lettering a mano dei fumetti
+    "elegante": config.ROOT / "assets" / "serif_dm.ttf",            # titoli eleganti e autorevoli (post creati)
     # testo con lettere strette e ravvicinate (stile Helvetica Neue / SF compatto)
     "regular_tight": config.ROOT / "assets" / "stretto_testo_regular.ttf",
     "semibold_tight": config.ROOT / "assets" / "stretto_testo_semibold.ttf",
