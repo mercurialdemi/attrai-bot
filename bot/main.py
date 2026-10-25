@@ -51,6 +51,12 @@ COMMANDS = [
 ]
 
 HELP = (
+    "GUIDA RAPIDA (quello che ti serve ogni giorno)\n"
+    "1. Alle 8 ti arriva il report con i post migliori dei collaboratori: mandami i link che ti piacciono.\n"
+    "2. Alle 8:30 ti arrivano 2 caroselli creati da zero.\n"
+    "3. Per correggere qualcosa rispondi al post: \"slide 3 più corta\", \"rifai la CTA con la casella\".\n"
+    "4. Se una slide è sbagliata: rispondi alla slide con \"segnala: ...\" e Claude la corregge.\n"
+    "Tutto il resto (studio della pagina, trend, correzioni) il bot lo fa da solo di notte.\n\n"
     "COSA PUOI FARE\n\n"
     "• Mandami il link di un post dei collaboratori: te lo restituisco pronto per AttraiSeduci "
     "(slide in italiano, logo, descrizione e CTA). Puoi mandare più link insieme.\n"

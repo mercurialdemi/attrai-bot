@@ -373,8 +373,14 @@ VIRAL_POST_TOOL = {
                     "identificazione", "altro"],
                     "description": "Il fattore PRINCIPALE del risultato (o del flop): non sempre è la struttura, spesso è un dolore fortissimo o un tema caldo del momento."},
                 "lezione": {"type": "string", "description": "Una frase riutilizzabile per noi: cosa ripetere (o cosa evitare se il post è debole)."},
+                "testo_copertina": {"type": "string", "enum": ["enorme", "grande", "medio", "piccolo"],
+                    "description": "Quanto è grande il testo del gancio nella prima slide rispetto alla slide (enorme = occupa più di metà slide; piccolo = una riga in un angolo)."},
+                "funzione": {"type": "string", "enum": ["portata", "autorevolezza", "vendita", "connessione"],
+                    "description": "Il ruolo del post nel profilo: portata (virale, nuovi follower), autorevolezza (insegna, fa vedere che sai), vendita (porta al prodotto), connessione (il lettore si sente compreso, commenta, si identifica)."},
+                "coinvolgimento": {"type": "string", "description": "Come porta il lettore DENTRO il post: lo fa sentire compreso? gli fa porre domande? lo lascia arrivare da solo alla soluzione? In 1 frase."},
             }, "required": ["numero", "tema", "dolore", "tipo_hook", "hook", "formato", "struttura", "slide",
-                            "perche_funziona", "formato_narrativo", "fattore", "lezione"]}},
+                            "perche_funziona", "formato_narrativo", "fattore", "lezione", "testo_copertina",
+                            "funzione", "coinvolgimento"]}},
         },
         "required": ["post"],
     },
@@ -474,7 +480,9 @@ def study_viral(brand: dict, per_page: int = 40, per_handle: int = 6, max_posts:
                             "rendimento": round(sc_, 2), "formato": a.get("formato_narrativo"),
                             "tema": a.get("tema"), "dolore": a.get("dolore"), "tipo_hook": a.get("tipo_hook"),
                             "struttura": a.get("struttura"), "fattore": a.get("fattore"),
-                            "lezione": a.get("lezione"), "grafica": a.get("formato")})
+                            "lezione": a.get("lezione"), "grafica": a.get("formato"),
+                            "testo_copertina": a.get("testo_copertina"), "funzione": a.get("funzione"),
+                            "coinvolgimento": a.get("coinvolgimento")})
         try:
             memoria.add(mem)
         except Exception as e:

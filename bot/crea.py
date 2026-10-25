@@ -57,7 +57,8 @@ def choose_look(natura: str) -> dict:
         palette = next((k for k, _ in best if k != last), best[0][0])
     else:
         palette = random.choice(names)
-    return {"palette": palette, "stile": stile}
+    cop = memoria.trends().get("copertina_migliore") or "grande"
+    return {"palette": palette, "stile": stile, "copertina": cop}
 
 IDEA_TOOL = {
     "name": "carosello_nuovo",
@@ -72,6 +73,8 @@ IDEA_TOOL = {
                        "description": "didattico = insegna qualcosa di concreto (meccanismo, trucco, cosa fare); "
                                       "virale = punta su emozione, ego, polemica, riconoscimento."},
             "tipo_hook": {"type": "string"},
+            "funzione": {"type": "string", "enum": memoria.FUNZIONI,
+                         "description": "Il ruolo del carosello nel profilo (te lo indichiamo noi nella richiesta)."},
             "formato": {"type": "string", "enum": memoria.FORMATI,
                         "description": "Come è raccontato (pov, prima persona, immersivo, elenco, dialogo...): segui i "
                                        "formati in crescita e quelli che rendono per noi."},
@@ -88,7 +91,8 @@ IDEA_TOOL = {
                     "che chiude e resta. Niente emoji, niente asterischi, niente CTA (la aggiungiamo noi).")},
             }, "required": ["titolo", "testo"]}},
         },
-        "required": ["tema", "dolore", "manuale", "natura", "tipo_hook", "formato", "struttura", "concetto", "slides"],
+        "required": ["tema", "dolore", "manuale", "natura", "tipo_hook", "funzione", "formato", "struttura", "concetto",
+                     "slides"],
     },
 }
 
@@ -156,6 +160,10 @@ SCRITTURA DA COPYWRITER (il carosello deve sembrare scritto da un professionista
 - La penultima slide è la svolta (il meccanismo nascosto o il ribaltamento); l'ultima chiude con una frase che
   il lettore vorrebbe salvare o mandare a un amico.
 - Prima di consegnare rileggi solo la copertina: se non fermeresti il pollice, riscrivila.
+- PORTA IL LETTORE DENTRO (come fanno le pagine migliori): fallo sentire compreso ("ti è mai successo che..."),
+  mettilo nella scena, fagli farsi le domande giuste e lascialo arrivare DA SOLO alla soluzione invece di
+  dargliela come una lezione. Deve pensare "è esattamente quello che mi succede" e poi "ora ho capito".
+- Copertina: poche parole, scritte GRANDI. Un gancio lungo in piccolo non lo legge nessuno.
 
 REGOLE
 - Si parte sempre dal dolore e dalla dinamica, mai dal manuale.
@@ -174,7 +182,15 @@ def write_carousel(brand: dict, rules: list[dict], recent: dict, hint: str = "")
     recenti = history()[-25:]
     gia = "\n".join(f"- {h.get('tema')} ({h.get('formato')}, {h.get('tipo_hook')}, {h.get('struttura', '')[:60]})"
                     for h in recenti)
-    req = (f"Richiesta di Gabriele: {hint}\n" if hint else "Scegli tu il tema migliore per oggi.\n")
+    funz = memoria.next_function([h.get("funzione") for h in history()])
+    ruoli = {"portata": "PORTATA: virale, emotivo, polarizzante, fatto per essere condiviso e portare follower "
+                        "(CTA segui la pagina)",
+             "autorevolezza": "AUTOREVOLEZZA: didattico, insegna un meccanismo o un trucco concreto, fa vedere che "
+                              "sappiamo di cosa parliamo",
+             "vendita": "VENDITA: tocca un dolore preciso di uno dei nostri manuali e porta alla CTA del manuale",
+             "connessione": "CONNESSIONE: il lettore si sente compreso, si riconosce, commenta e si identifica"}
+    req = (f"Richiesta di Gabriele: {hint}\n" if hint else
+           f"Scegli tu il tema migliore per oggi. FUNZIONE di questo carosello nel mix del profilo: {ruoli[funz]}.\n")
     content = [{"type": "text", "text": (
         req + ("\nGià creati di recente (NON ripetere tema, hook e struttura):\n" + gia + "\n" if gia else "")
         + "\nScrivi il carosello con lo strumento carosello_nuovo.")}]
@@ -213,7 +229,8 @@ def write_carousel(brand: dict, rules: list[dict], recent: dict, hint: str = "")
     post = writer._finalize({**out, **cap})
     post["_originale"] = True
     post["_look"] = choose_look(post.get("natura") or idea.get("natura", "virale"))
-    post["_idea"] = {k: idea.get(k) for k in ("tema", "dolore", "manuale", "natura", "tipo_hook", "formato", "struttura")}
+    post["_idea"] = {k: idea.get(k) for k in ("tema", "dolore", "manuale", "natura", "tipo_hook", "funzione", "formato",
+                                               "struttura")}
     return post
 
 
@@ -265,7 +282,10 @@ def render_slide(text: str, cover: bool, brand: dict, logo: bool, placements: li
     cpl_cover, cpl_head = (18, 28) if st["maiuscolo"] else (16, 24)
     blocks = []
     if cover:
-        ht = min(520, 118 * _righe(tit, cpl_cover)) if tit else 0
+        big = look.get("copertina") in ("enorme", "grande")
+        if big:
+            cpl_cover = max(10, cpl_cover - 5)          # testo più grande: meno caratteri per riga
+        ht = min(600 if big else 520, (150 if big else 118) * _righe(tit, cpl_cover)) if tit else 0
         hs = min(220, 52 * _righe(body, 36)) if body else 0
         gap = 45 if (tit and body) else 0
         top = (1000 - (ht + gap + hs)) // 2 + 30

@@ -21,6 +21,8 @@ log = logging.getLogger(__name__)
 
 FORMATI = ["pov", "prima_persona", "immersivo", "elenco", "dialogo_scena", "verita_scomoda", "storia",
            "confronto", "domanda", "citazione", "tutorial", "altro"]
+FUNZIONI = ["portata", "autorevolezza", "vendita", "connessione"]
+MIX_BASE = {"portata": 0.4, "autorevolezza": 0.3, "connessione": 0.2, "vendita": 0.1}
 FATTORI = ["formato", "struttura", "dolore_forte", "tema_caldo", "hook", "grafica", "polemica", "identificazione",
            "altro"]
 
@@ -133,6 +135,25 @@ def trends(days_recent: int = 30) -> dict:
     out["perche_no"] = [f"[{it.get('rendimento')}x] {it.get('lezione')}"
                         for it in rec_all if it.get("fonte") == "nostro" and (it.get("rendimento") or 9) < 0.8
                         and it.get("lezione")][:5]
+    # grandezza del testo in copertina: rendimento mediano per grandezza (tutti i post, pesati per recenza)
+    agg: dict = {}
+    for it in items:
+        k = it.get("testo_copertina")
+        if k:
+            a = agg.setdefault(k, [0.0, 0.0, 0])
+            w = _weight(it, now)
+            a[0] += w * math.log(max(it.get("rendimento") or 0.01, 0.01))
+            a[1] += w
+            a[2] += 1
+    cop = sorted(((k, math.exp(s_ / w_), n) for k, (s_, w_, n) in agg.items() if w_ > 0 and n >= 3),
+                 key=lambda r: -r[1])
+    out["testo_copertina"] = [f"{k}: {r:.1f}x ({n} post)" for k, r, n in cop]
+    out["copertina_migliore"] = cop[0][0] if cop else ""
+    # il mix dei profili migliori: che parte dei post ha ogni funzione (portata, autorevolezza, vendita, connessione)
+    top = [it for it in items if it.get("fonte") != "nostro" and it.get("funzione")]
+    out["mix_funzioni"] = {k: round(v, 2) for k, v in share(top, "funzione").items()} if len(top) >= 8 else {}
+    out["coinvolgimento"] = list(dict.fromkeys(it.get("coinvolgimento") for it in sorted(items, key=_when, reverse=True)
+                                               if it.get("coinvolgimento") and (it.get("rendimento") or 0) >= 2))[:5]
     fatt = share([it for it in rec if it.get("fattore")], "fattore")
     out["cosa_spinge"] = [f"{k} {round(v * 100)}%" for k, v in sorted(fatt.items(), key=lambda kv: -kv[1])][:5]
     return out
@@ -153,5 +174,20 @@ def prompt_block() -> str:
             f"I nostri formati da NON riproporre:\n{lst(t.get('nostri_formati_peggiori'))}\n"
             f"Perché hanno funzionato (lezioni recenti):\n{lst(t.get('perche_funziona'))}\n"
             f"Perché i nostri post deboli non hanno funzionato:\n{lst(t.get('perche_no'))}\n"
+            f"Grandezza del testo in copertina e rendimento:\n{lst(t.get('testo_copertina'))}\n"
+            f"Come i post migliori portano il lettore dentro:\n{lst(t.get('coinvolgimento'))}\n"
             "Usa questi dati: segui i trend in crescita, riprendi ciò che ha funzionato capendo QUALE fattore l'ha "
             "spinto (formato, dolore, tema caldo...), evita ciò che per noi non rende.\n")
+
+
+def next_function(recent: list[str]) -> str:
+    """La funzione del prossimo carosello: quella più 'in debito' rispetto al mix dei profili migliori
+    (o a un mix di base finché non ci sono dati), guardando gli ultimi caroselli creati."""
+    mix = trends().get("mix_funzioni") or MIX_BASE
+    mix = {k: mix.get(k, 0.0) for k in FUNZIONI}
+    tot = sum(mix.values()) or 1
+    mix = {k: v / tot for k, v in mix.items()}
+    last = [f for f in recent if f in FUNZIONI][-10:]
+    n = len(last) or 1
+    have = {k: last.count(k) / n for k in FUNZIONI}
+    return max(FUNZIONI, key=lambda k: mix[k] - have[k] + (0.001 * mix[k]))
