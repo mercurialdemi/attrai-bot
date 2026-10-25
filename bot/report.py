@@ -379,9 +379,15 @@ async def run_report(bot, chat_ids: list[int]) -> None:
         await _broadcast(bot, chat_ids, f"Report: leggo le pagine monitorate ({len(handles)}), ultime {st['ore']} ore…")
         try:
             posts = await asyncio.to_thread(instagram.fetch_profiles, handles, st["per_pagina"])
-        except Exception:
+        except Exception as e:
             log.exception("Report: lettura pagine fallita")
-            await _broadcast(bot, chat_ids, "Report: non sono riuscito a leggere le pagine. Riprova con /report.")
+            if "limit" in str(e).lower() and ("usage" in str(e).lower() or "monthly" in str(e).lower()):
+                await _broadcast(bot, chat_ids, "Report: Apify ha finito il credito del mese, per questo non legge le "
+                                                "pagine. Su apify.com → Billing → Limits alza il limite mensile (o "
+                                                "passa al piano a pagamento), poi riprova con /report.")
+            else:
+                await _broadcast(bot, chat_ids, "Report: non sono riuscito a leggere le pagine "
+                                                f"({str(e)[:150]}). Riprova con /report.")
             return
 
         letti = {p.owner for p in posts}
