@@ -36,7 +36,7 @@ COMMANDS = [
         ("analizza", "Rifai subito lo studio (lo fa già da solo ogni notte)",
          "il bot studia da solo ogni notte i tuoi post, le descrizioni e le slide CTA; usalo solo per averlo subito"),
         ("stile", "Cosa ha imparato il bot", "guida di stile e testi CTA ricavati da /analizza"),
-        ("studio", "Cosa rende virali i caroselli", "temi, hook, strutture e formati dei caroselli virali (base per i post da zero)"),
+        ("studio", "Perché i post sono andati", "post per post: perché sono andati i post di competitor, collaboratori e nostri, più temi, hook e strutture vincenti (arriva anche da solo ogni 3 giorni)"),
         ("statistiche", "Numeri veri degli ultimi post", "copertura, salvataggi, condivisioni, clic (serve Meta)"),
         ("pagine", "Collaboratori e competitor", "le pagine dei collaboratori (report) e dei competitor (studio)"),
         ("aggiungi", "Aggiungi un collaboratore (es. /aggiungi @pagina)", "pagina autorizzata: entra nel report del mattino"),
@@ -234,6 +234,28 @@ async def cmd_stile(update: Update, context: ContextTypes.DEFAULT_TYPE):
              + (f"\n\nSchemi di aggancio:\n{schemi}" if schemi else ""))[:4000])
 
 
+async def _send_studio(bot, chat_ids: list[int], sv: dict) -> None:
+    """Manda lo studio post per post: perché i post di competitor, collaboratori e nostri sono andati (o no)."""
+    parti = analysis.schede_studio(sv)
+    if not parti:
+        return
+    testa = (f"🧠 STUDIO DELLA NICCHIA ({len(sv.get('caroselli') or [])} post analizzati, {str(sv.get('creato', ''))[:10]})\n"
+             "Per ogni post: perché è andato, dolore, gancio, struttura, formato e cosa ci portiamo a casa noi.")
+    msgs, cur = [], testa
+    for p_ in parti:
+        if len(cur) + len(p_) + 2 > 3800:
+            msgs.append(cur)
+            cur = ""
+        cur += ("\n\n" if cur else "") + p_
+    msgs.append(cur)
+    for c in chat_ids:
+        for m in msgs:
+            try:
+                await bot.send_message(c, m, disable_web_page_preview=True)
+            except Exception as e:
+                log.warning("Invio studio a %s fallito: %s", c, e)
+
+
 async def cmd_studio(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Cosa ha imparato il bot dai caroselli virali: temi, hook, strutture, formati, regole."""
     if not await _authorized(update):
@@ -267,6 +289,7 @@ async def cmd_studio(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"Perché no:\n{lst(t.get('perche_no'))}")
     for p_ in parti:
         await update.effective_message.reply_text(p_[:4000])
+    await _send_studio(context.bot, [update.effective_chat.id], sv)
 
 
 async def cmd_statistiche(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -733,6 +756,8 @@ def _schedule_analysis(app: Application):
             for c in chat_ids:
                 await context.bot.send_message(c, f"Studio settimanale non riuscito: {str(e)[:300]}")
             return
+        if style.get("studio_virali_nuovo"):                     # ogni 3 giorni: il perché di ogni post studiato
+            await _send_studio(context.bot, chat_ids, style.get("studio_virali") or {})
         if datetime.now(tz).weekday() != 0 and not (context.job.data or {}).get("primo"):
             return                                               # niente messaggi tutti i giorni
         fb = style.get("feedback_bot") or {}

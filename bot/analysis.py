@@ -175,11 +175,14 @@ def run_analysis(brand: dict, n_posts: int = 80) -> dict:
         fresh_v = pv.get("creato") and (datetime.now(timezone.utc) - datetime.fromisoformat(pv["creato"])).days < 3
     except Exception:
         fresh_v = False
+    style["studio_virali_nuovo"] = False
     if fresh_v:
         style["studio_virali"] = pv
     else:
         try:
-            style["studio_virali"] = study_viral(brand) or pv
+            nuovo = study_viral(brand)
+            style["studio_virali"] = nuovo or pv
+            style["studio_virali_nuovo"] = bool(nuovo)
         except Exception as e:
             log.warning("Studio dei caroselli virali non riuscito: %s", e)
             style["studio_virali"] = pv
@@ -363,7 +366,7 @@ VIRAL_POST_TOOL = {
                 "formato": {"type": "string", "description": "fumetto/dialogo, testo su fondo pieno, foto con titolo, elenco numerato, storia..."},
                 "struttura": {"type": "string", "description": "Ruolo di ogni slide in ordine, es. '1 gancio -> 2 scena -> 3 errore -> 4 meccanismo -> 5 svolta -> 6 frase finale -> 7 CTA'."},
                 "slide": {"type": "integer"},
-                "perche_funziona": {"type": "string", "description": "In 1-2 frasi: perché questo post è andato virale (emozione, identificazione, condivisibilità, polemica...). Per un post DEBOLE: perché non ha funzionato."},
+                "perche_funziona": {"type": "string", "description": "In 2-3 frasi CONCRETE e specifiche per questo post: perché è andato virale. Quale leva ha toccato (emozione precisa, identificazione, ego, polemica, condivisibilità: perché qualcuno lo manda a un amico o lo salva), cosa fa il gancio nei primi secondi, cosa tiene il lettore fino all'ultima slide. Per un post DEBOLE: perché non ha funzionato. Niente frasi generiche valide per qualsiasi post."},
                 "formato_narrativo": {"type": "string", "enum": [
                     "pov", "prima_persona", "immersivo", "elenco", "dialogo_scena", "verita_scomoda", "storia",
                     "confronto", "domanda", "citazione", "tutorial", "altro"],
@@ -401,6 +404,112 @@ VIRAL_SUMMARY_TOOL = {
         "required": ["temi", "hook", "strutture", "formati", "regole"],
     },
 }
+
+
+def analizza_post(chosen: list, slide_max: int = 10) -> list[dict]:
+    """Analizza uno per uno i post (competitor, collaboratori, nostri): perché sono andati (o no), gancio,
+    struttura, formato, dolore, fattore principale, lezione per noi. Ogni analisi finisce nella memoria dei
+    contenuti. chosen = [(SourcePost, rendimento rispetto alla sua pagina, fonte)]."""
+    analyses = []
+    for start in range(0, len(chosen), 4):                 # 4 caroselli per chiamata
+        content, batch = [], chosen[start:start + 4]
+        for k, (p, sc, fonte) in enumerate(batch, 1):
+            try:
+                imgs = instagram.download_images(p.image_urls[:slide_max])
+            except Exception as e:
+                log.warning("Analisi post: slide non scaricate %s: %s", p.url, e)
+                imgs = []
+            esito = "VIRALE" if sc >= 1.5 else "DEBOLE (spiega perché non ha funzionato)"
+            cap = " ".join((p.caption or "").split())[:600]
+            content.append({"type": "text", "text": f"CAROSELLO {k} (@{p.owner}{' - NOSTRO' if fonte == 'nostro' else ''}, "
+                                                    f"{sc:.1f}x la media della pagina, {esito}, "
+                                                    f"{len(p.image_urls)} slide, {p.likes or 0} like, "
+                                                    f"{p.comments or 0} commenti)"
+                                                    + (f"\nDescrizione: {cap}" if cap else "") + ":"})
+            content += [writer._image_block(d, 640) for d in imgs]
+        content.append({"type": "text", "text": "Analizza ogni carosello con lo strumento carosello_studiato. "
+                                                "Spiega il PERCHÉ in modo concreto e specifico per QUEL post (non frasi "
+                                                "generiche valide per tutti). Non copiare i testi: descrivi con parole tue."})
+        try:
+            out = writer._tool_call("Sei uno stratega di contenuti Instagram nella nicchia psicologia maschile e "
+                                    "attrazione. Studi perché certi caroselli diventano virali.", content,
+                                    VIRAL_POST_TOOL, max_tokens=6000)
+        except Exception as e:
+            log.warning("Analisi post fallita: %s", e)
+            continue
+        mem = []
+        for a in out.get("post", []):
+            n = a.get("numero")
+            if isinstance(n, int) and 1 <= n <= len(batch):
+                p_, sc_, fonte_ = batch[n - 1]
+                a["pagina"], a["rendimento"], a["fonte"], a["url"] = p_.owner, round(sc_, 2), fonte_, p_.url
+                a.pop("numero", None)
+                analyses.append(a)
+                mem.append({"url": p_.url, "pagina": p_.owner, "fonte": fonte_, "data_post": p_.timestamp,
+                            "rendimento": round(sc_, 2), "formato": a.get("formato_narrativo"),
+                            "tema": a.get("tema"), "dolore": a.get("dolore"), "tipo_hook": a.get("tipo_hook"),
+                            "struttura": a.get("struttura"), "fattore": a.get("fattore"),
+                            "lezione": a.get("lezione"), "grafica": a.get("formato"),
+                            "testo_copertina": a.get("testo_copertina"), "funzione": a.get("funzione"),
+                            "coinvolgimento": a.get("coinvolgimento")})
+        try:
+            memoria.add(mem)
+        except Exception as e:
+            log.warning("Memoria dei contenuti non aggiornata: %s", e)
+    return analyses
+
+
+FATTORI_IT = {"formato": "il formato", "struttura": "la struttura", "dolore_forte": "un dolore fortissimo",
+              "tema_caldo": "un tema caldo del momento", "hook": "il gancio", "grafica": "la grafica",
+              "polemica": "la polemica", "identificazione": "l'identificazione", "altro": "altro"}
+
+
+def scheda(a: dict, n: int | None = None) -> str:
+    """Il perché di un post, leggibile su Telegram."""
+    sc = a.get("rendimento") or 0
+    testa = (f"{n}. " if n else "") + f"@{a.get('pagina', '')} · {sc:.1f}x la sua media" + (
+        "" if sc >= 1.5 else " · ❌ debole")
+    righe = [testa]
+    if a.get("url"):
+        righe.append(a["url"])
+    righe.append(("🧠 Perché è andato: " if sc >= 1.5 else "🧠 Perché non è andato: ") + (a.get("perche_funziona") or "").strip())
+    righe.append(f"🎯 Dolore: {a.get('dolore', '')}")
+    righe.append(f"🪝 Gancio ({a.get('tipo_hook', '')}): {a.get('hook', '')}")
+    righe.append(f"🧱 Struttura: {a.get('struttura', '')}")
+    righe.append(f"🎬 Racconto: {str(a.get('formato_narrativo', '')).replace('_', ' ')} · grafica: {a.get('formato', '')}"
+                 f" · testo in copertina {a.get('testo_copertina', '')}")
+    if a.get("coinvolgimento"):
+        righe.append(f"🫵 Come ti porta dentro: {a['coinvolgimento']}")
+    righe.append(f"⚡ Fattore principale: {FATTORI_IT.get(a.get('fattore'), a.get('fattore', ''))}")
+    if a.get("lezione"):
+        righe.append(f"✅ Per noi: {a['lezione']}")
+    return "\n".join(r for r in righe if r.strip())
+
+
+def perche_breve(a: dict) -> str:
+    """Versione corta per il report del mattino: perché è andato, gancio, struttura, fattore, cosa ci serve."""
+    righe = [f"🧠 Perché è andato: {(a.get('perche_funziona') or '').strip()}",
+             f"🪝 Gancio ({a.get('tipo_hook', '')}): {a.get('hook', '')}",
+             f"🎬 Racconto: {str(a.get('formato_narrativo', '')).replace('_', ' ')} · copertina {a.get('testo_copertina', '')}",
+             f"🧱 Struttura: {a.get('struttura', '')}",
+             f"⚡ Fattore principale: {FATTORI_IT.get(a.get('fattore'), a.get('fattore', ''))}"]
+    if a.get("lezione"):
+        righe.append(f"✅ Per noi: {a['lezione']}")
+    return "\n".join(righe)
+
+
+def schede_studio(sv: dict) -> list[str]:
+    """Tutte le schede dell'ultimo studio, divise per competitor, collaboratori e nostri post."""
+    cars = sv.get("caroselli") or []
+    out = []
+    for fonte, titolo in (("competitor", "🔎 COMPETITOR: perché i loro post sono andati"),
+                          ("collaboratore", "🤝 COLLABORATORI: perché i loro post sono andati"),
+                          ("nostro", "🏠 I NOSTRI POST: cosa ha funzionato e cosa no")):
+        gruppo = sorted([a for a in cars if a.get("fonte") == fonte], key=lambda a: -(a.get("rendimento") or 0))
+        if gruppo:
+            out.append(titolo)
+            out += [scheda(a, i) for i, a in enumerate(gruppo, 1)]
+    return out
 
 
 def study_viral(brand: dict, per_page: int = 40, per_handle: int = 6, max_posts: int = 16) -> dict:
@@ -443,50 +552,7 @@ def study_viral(brand: dict, per_page: int = 40, per_handle: int = 6, max_posts:
         chosen += [(x, (_engagement(x) or 0) / med, "nostro") for x in best + worst]
     if not chosen:
         return {}
-    analyses = []
-    for start in range(0, len(chosen), 4):                 # 4 caroselli per chiamata
-        content, batch = [], chosen[start:start + 4]
-        for k, (p, sc, fonte) in enumerate(batch, 1):
-            try:
-                imgs = instagram.download_images(p.image_urls[:10])
-            except Exception as e:
-                log.warning("Studio virali: slide non scaricate %s: %s", p.url, e)
-                continue
-            esito = "VIRALE" if sc >= 1.5 else "DEBOLE (spiega perché non ha funzionato)"
-            content.append({"type": "text", "text": f"CAROSELLO {k} (@{p.owner}{' - NOSTRO' if fonte == 'nostro' else ''}, "
-                                                    f"{sc:.1f}x la media della pagina, {esito}, "
-                                                    f"{len(p.image_urls)} slide):"})
-            content += [writer._image_block(d, 640) for d in imgs]
-        if not content:
-            continue
-        content.append({"type": "text", "text": "Analizza ogni carosello con lo strumento carosello_studiato. "
-                                                "Non copiare i testi: descrivi con parole tue."})
-        try:
-            out = writer._tool_call("Sei uno stratega di contenuti Instagram nella nicchia psicologia maschile e "
-                                    "attrazione. Studi perché certi caroselli diventano virali.", content,
-                                    VIRAL_POST_TOOL, max_tokens=6000)
-        except Exception as e:
-            log.warning("Studio virali: analisi fallita: %s", e)
-            continue
-        mem = []
-        for a in out.get("post", []):
-            n = a.get("numero")
-            if isinstance(n, int) and 1 <= n <= len(batch):
-                p_, sc_, fonte_ = batch[n - 1]
-                a["pagina"], a["rendimento"], a["fonte"] = p_.owner, round(sc_, 2), fonte_
-                a.pop("numero", None)
-                analyses.append(a)
-                mem.append({"url": p_.url, "pagina": p_.owner, "fonte": fonte_, "data_post": p_.timestamp,
-                            "rendimento": round(sc_, 2), "formato": a.get("formato_narrativo"),
-                            "tema": a.get("tema"), "dolore": a.get("dolore"), "tipo_hook": a.get("tipo_hook"),
-                            "struttura": a.get("struttura"), "fattore": a.get("fattore"),
-                            "lezione": a.get("lezione"), "grafica": a.get("formato"),
-                            "testo_copertina": a.get("testo_copertina"), "funzione": a.get("funzione"),
-                            "coinvolgimento": a.get("coinvolgimento")})
-        try:
-            memoria.add(mem)
-        except Exception as e:
-            log.warning("Memoria dei contenuti non aggiornata: %s", e)
+    analyses = analizza_post(chosen)
     if not analyses:
         return {}
     guida = (writer.load_style().get("guida") or "").strip()

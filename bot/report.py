@@ -291,14 +291,30 @@ def _offset_file():
     return config.DATA_DIR / "classifica_mostrati.txt"
 
 
-def _link_lines(items: list, start: int, min_score: float) -> list[str]:
+def _perche(items: list) -> dict:
+    """Per ogni post del report: perché è andato (gancio, struttura, fattore, lezione per noi).
+    Le analisi finiscono anche nella memoria dei contenuti, così il bot impara ogni giorno."""
+    from . import analysis
+    da_fare = [(p, float(p.score or 0), "collaboratore") for p in items if p.image_urls and not p.is_video]
+    if not da_fare:
+        return {}
+    try:
+        return {a["url"]: analysis.perche_breve(a) for a in analysis.analizza_post(da_fare, slide_max=6) if a.get("url")}
+    except Exception as e:
+        log.warning("Report: analisi del perché non riuscita: %s", e)
+        return {}
+
+
+def _link_lines(items: list, start: int, min_score: float, perche: dict | None = None) -> list[str]:
+    perche = perche or {}
     out = []
     for i, p in enumerate(items, start):
         anteprima = " ".join((p.caption or "").split())[:70]
         nums = f"❤️ {p.likes or 0} · 💬 {p.comments or 0}"
         tipo = {"didattico": "📚 DIDATTICO (CTA manuale)", "virale": "🔥 VIRALE (segui la pagina)"}.get(p.natura, "")
         out.append(f"{i}. " + (f"{tipo}\n" if tipo else "") + f"@{p.owner} · {p.score:.1f}x la sua media{'' if p.score >= min_score else ' (sotto media)'}"
-                   f" · {nums}\n{p.url}" + (f"\n{p.motivo}" if p.motivo else (f"\n“{anteprima}…”" if anteprima else "")))
+                   f" · {nums}\n{p.url}" + (f"\n{p.motivo}" if p.motivo else (f"\n“{anteprima}…”" if anteprima else ""))
+                   + (f"\n{perche[p.url]}" if perche.get(p.url) else ""))
     return out
 
 
@@ -410,6 +426,8 @@ async def run_report(bot, chat_ids: list[int]) -> None:
             first = cands[:st["candidati"]]
             _offset_file().write_text(str(len(first)))
             _mark_shown(first)
+            await _broadcast(bot, chat_ids, f"Report: ho trovato {len(first)} post forti, ora studio perché sono andati…")
+            perche = await asyncio.to_thread(_perche, first)
             await _send_links(
                 bot, chat_ids,
                 f"☀️ Post dei collaboratori andati almeno {st['min_score']:.1f}x sopra la media della loro pagina "
@@ -417,7 +435,7 @@ async def run_report(bot, chat_ids: list[int]) -> None:
                 + (" · oggi pochi post forti, ho guardato anche i giorni prima" if ore > st["ore"] else "") + ".\n"
                 "📚 didattico = da vendere col manuale · 🔥 virale = per far crescere la pagina:"
                 + ("" if filtered else "\n(filtro di tema non riuscito: li vedi tutti)"),
-                _link_lines(first, 1, st["min_score"]),
+                _link_lines(first, 1, st["min_score"], perche),
                 riepilogo + "\n\nMandami il link di quelli che ti piacciono e li preparo in italiano."
                 + (f"\nScrivi /altri per vederne altri {min(st['candidati'], len(cands) - len(first))}." if len(cands) > len(first) else ""))
             return
@@ -463,8 +481,9 @@ async def run_more(bot, chat_ids: list[int]) -> None:
             _offset_file().write_text(str(shown + len(nxt)))
             _mark_shown(nxt)
             left = len(ranking) - shown - len(nxt)
+            perche = await asyncio.to_thread(_perche, nxt)
             await _send_links(bot, chat_ids, "Altri post dalla classifica:",
-                              _link_lines(nxt, shown + 1, st["min_score"]),
+                              _link_lines(nxt, shown + 1, st["min_score"], perche),
                               "Mandami il link di quelli che ti piacciono." + ("\n/altri per i successivi." if left > 0 else ""))
             return
         done = storage.processed_urls([d["url"] for d in ranking])
