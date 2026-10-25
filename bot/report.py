@@ -384,31 +384,37 @@ async def run_report(bot, chat_ids: list[int]) -> None:
             return
         if not st["prepara"]:
             # solo link: classifica lunga, tenuti solo i post in tema; /altri mostra i successivi
-            cands = rank_candidates(posts, st["ore"], st["candidati"] * 4)
             # solo post andati DAVVERO meglio della media della loro pagina, e mai quelli già mandati
-            shown_before = _already_shown()
             # (un post partito piano che il giorno dopo esplode compare appena supera la soglia; uno già
-            # mandato torna solo se nel frattempo ha almeno raddoppiato)
-            cands = [p for p in cands if _ripescabile(p, shown_before)
-                     and (st["completa"] or p.score >= st["min_score"])]
-            riepilogo = _page_summary(posts, handles, st["ore"], st["min_score"], own)
+            # mandato torna solo se nel frattempo ha almeno raddoppiato).
+            # Se negli ultimi giorni ne sono andati forte pochi, si guarda più indietro (fino a 7 giorni)
+            # invece di mandare post nella media.
+            shown_before = _already_shown()
+            ore, filtered = st["ore"], True
+            windows = sorted({st["ore"], max(st["ore"], 120), max(st["ore"], 168)})
+            for ore in windows:
+                cands = rank_candidates(posts, ore, st["candidati"] * 4)
+                cands = [p for p in cands if _ripescabile(p, shown_before)
+                         and (st["completa"] or p.score >= st["min_score"])]
+                if cands:
+                    cands, filtered = await asyncio.to_thread(_fit_filter, cands, brand)
+                if len(cands) >= st["quanti"]:
+                    break
+            riepilogo = _page_summary(posts, handles, ore, st["min_score"], own)
             if not cands:
-                await _broadcast(bot, chat_ids, f"Report: nelle ultime {st['ore']} ore nessun post nuovo dei "
+                await _broadcast(bot, chat_ids, f"Report: negli ultimi {ore // 24} giorni nessun post nuovo dei "
                                                 f"collaboratori ha superato {st['min_score']:.1f}x la media della "
                                                 "sua pagina. Niente da segnalare oggi.\n\n" + riepilogo)
                 return
-            cands, filtered = await asyncio.to_thread(_fit_filter, cands, brand)
             storage.save_ranking([_to_dict(p) for p in cands])
-            if not cands:
-                await _broadcast(bot, chat_ids, f"Report: nessun post nuovo con immagini nelle ultime {st['ore']} ore.")
-                return
             first = cands[:st["candidati"]]
             _offset_file().write_text(str(len(first)))
             _mark_shown(first)
             await _send_links(
                 bot, chat_ids,
                 f"☀️ Post dei collaboratori andati almeno {st['min_score']:.1f}x sopra la media della loro pagina "
-                f"(ultime {st['ore']} ore, mai mandati prima).\n"
+                f"(ultimi {ore // 24} giorni, mai mandati prima)"
+                + (" · oggi pochi post forti, ho guardato anche i giorni prima" if ore > st["ore"] else "") + ".\n"
                 "📚 didattico = da vendere col manuale · 🔥 virale = per far crescere la pagina:"
                 + ("" if filtered else "\n(filtro di tema non riuscito: li vedi tutti)"),
                 _link_lines(first, 1, st["min_score"]),

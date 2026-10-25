@@ -882,7 +882,8 @@ def check_slide(image_jpeg: bytes, expected_text: str, old_watermark: str,
                "deformato un elemento grafico, metti testo_corretto=false e descrivilo in problemi.\n" if original_jpeg else "")
             +
             "Guarda con attenzione ogni riga: parole scritte una sopra l'altra, pezzi di lettere rimasti (es. 'ıl.', "
-            "'about.'), testo che esce dalla slide o tocca il bordo sono errori gravi. Anche gli ACCENTI delle maiuscole "
+            "'about.'), testo che esce dalla slide o tocca il bordo sono errori gravi, come anche una parola che esce dalla "
+            "nuvoletta di un fumetto o ne tocca il contorno. Anche gli ACCENTI delle maiuscole "
             "(È, À, Ù...) che toccano o entrano nella riga di sopra sono un errore grave.\n"
             "Il logo circolare con la scritta AttraiSeduci, se presente, è corretto e non è un residuo.\n"
             "Controlla la slide con lo strumento esito_controllo. Ignora differenze di a capo e di maiuscole."
