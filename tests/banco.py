@@ -58,6 +58,8 @@ CASI = {
     "lista_poppins.jpg": ("tinta_unita", "1. The contract carries real risk.\n\nA man can love deeply and still sign\nterms he never studied. Marriage can\nbe sacred while ignorance remains\nexpensive. Know the laws before\nmaking the promise.", [
         dict(testo="1. Quel contratto ha rischi veri.", x=60, y=195, w=380, h=25, colore="#DF5D60", allineamento="left", carattere=S, peso="bold"),
         dict(testo="Puoi amarla alla follia e firmare comunque clausole mai lette. Il matrimonio può essere sacro, ma l'ignoranza si paga cara. Studia le leggi prima di fare quella promessa.", x=60, y=240, w=420, h=90, colore="#DBDBDB", allineamento="left", carattere=S, peso="regular")]),
+    "cover_parabola.jpg": ("foto", "MODERN WOMEN TIMELINE:\nFROM H*E TO WIFE.", [
+        dict(testo="LA PARABOLA DELLA\nDONNA MODERNA:\nDA FACILE A MOGLIE.", x=41, y=777, w=908, h=98, colore="#FFFFFF", allineamento="left", maiuscolo=True, carattere=S, peso="bold")]),
 }
 
 

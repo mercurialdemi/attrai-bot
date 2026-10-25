@@ -1284,6 +1284,14 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
         best = keep_breaks
         if reflow and (not keep_breaks or reflow[0].size > keep_breaks[0].size * 1.2):
             best = reflow
+        elif reflow and keep_breaks and pitch and reflow[0].size >= keep_breaks[0].size * 0.95:
+            # l'italiano è andato a capo più volte dell'originale (es. 3 righe al posto di 2): se a grandezza
+            # uguale ci sta nelle righe dell'originale, si torna a quelle (resta nello spazio, es. sulla fascia scura)
+            n_orig = max(1, round((bh + pitch * 0.3) / pitch))
+            n_keep = sum(1 for ln in keep_breaks[2] if ln)
+            n_flow = sum(1 for ln in reflow[2] if ln)
+            if n_keep > n_orig and n_flow <= n_orig:
+                best = reflow
         if not best:
             font, bfont = _font(weight, 14), _font(_bold_weight(weight), 14)
             lines = _layout(draw, paras, font, bw, bfont)
@@ -1306,7 +1314,8 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
         x_left = box[0]
         shared_left = any(j != idx and (blocks[j].get("allineamento") or "left") == "left"
                           and abs(all_bb[j][0] - all_bb[idx][0]) < W * 0.04 for j in range(len(blocks)))
-        if al == "left" and not shared_left and abs((box[0] + box[2]) / 2 - W / 2) < W * 0.045:
+        if al == "left" and not shared_left and abs((box[0] + box[2]) / 2 - W / 2) < W * 0.045 \
+                and (box[2] - box[0]) < W * 0.75:       # un blocco largo quanto la slide è allineato a sinistra, non centrato
             # blocco centrato nella slide: resta centrato anche se le righe italiane hanno lunghezza diversa
             widest = max((_line_w(draw, ln, font, bfont) for ln in lines if ln), default=0)
             x_left = int((W - widest) / 2)

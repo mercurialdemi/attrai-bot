@@ -477,6 +477,11 @@ POLISH_TOOL = {
     "input_schema": {
         "type": "object",
         "properties": {
+            "testo_intero": {"type": "string", "description": (
+                "PRIMA di tutto: il carosello intero riscritto come UN SOLO testo italiano continuo, come lo "
+                "scriverebbe da zero un copywriter italiano (stesse idee, stesso ordine, stessa forza), senza pensare "
+                "alle slide. Le battute e i giochi di parole si ADATTANO in italiano (equivalente che fa lo stesso "
+                "effetto), non si traducono alla lettera. Solo dopo dividi questo testo nelle slide.")},
             "slides": {
                 "type": "array",
                 "items": {
@@ -484,13 +489,13 @@ POLISH_TOOL = {
                     "properties": {
                         "numero": {"type": "integer"},
                         "blocchi": {"type": "array", "items": {"type": "string"},
-                                    "description": "Il testo di ogni blocco, nello stesso ordine e numero, con gli stessi [[ ]] e {{ }}."},
+                                    "description": "Il testo di ogni blocco, nello stesso ordine e numero, con gli stessi [[ ]] e {{ }}, preso dal testo_intero. Una frase che nell'originale continua da una slide all'altra (o da un blocco all'altro) deve continuare allo stesso modo e leggersi bene."},
                     },
                     "required": ["numero", "blocchi"],
                 },
             },
         },
-        "required": ["slides"],
+        "required": ["testo_intero", "slides"],
     },
 }
 
@@ -671,8 +676,15 @@ Tono:
   appiccicata.
 - Ogni frase deve aggiungere informazione o emozione. Se una frase si può togliere senza perdere niente, toglila.
 
-FLUIDITÀ (la descrizione deve sembrare scritta di getto da un italiano, non tradotta)
-- Frasi brevi e parlate, ritmo da messaggio vocale: una idea per frase, molti a capo.
+FLUIDITÀ E FORMA (deve sembrare scritta da un autore autorevole, non da un generatore di post)
+- Paragrafi veri di 2-4 frasi che si legano tra loro, separati da una riga vuota. NON andare a capo dopo ogni
+  frase: niente colonne di frasi singole, niente effetto "elenco di slogan". Al massimo una o due frasi isolate
+  in tutta la descrizione, solo dove serve un colpo.
+- Tono di chi spiega con calma e sicurezza, da esperto: ragionamento che scorre, collegamenti logici
+  ("il motivo è…", "ed è qui che…"), non frasi a effetto una dietro l'altra.
+- Vietate le frasi fatte e le formule da social: "non è debolezza, è…", "non sei tu, è…", "la verità è che",
+  "e qui sta il punto", "spoiler:", "fidati", "leggi bene", "nessuno te lo dice", "cambia tutto",
+  "senza favole", "il gioco cambia", "questo cambia tutto".
 - Vietati i calchi dall'inglese e le formule da traduzione: "il fatto è che", "questo significa che",
   "è importante notare", "alla fine della giornata", "fare la differenza", "in termini di", "nel momento in cui".
 - Niente elenchi di concetti astratti in fila: meglio un esempio concreto, una scena, una frase che punge.
