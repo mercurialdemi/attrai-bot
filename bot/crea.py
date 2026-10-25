@@ -144,6 +144,19 @@ TONO
 I NOSTRI MANUALI E I DOLORI CHE RISOLVONO (un post didattico parte da uno di questi dolori, MAI dal prodotto)
 {manuali}
 
+SCRITTURA DA COPYWRITER (il carosello deve sembrare scritto da un professionista, non da un divulgatore)
+- Il GANCIO non spiega e non riassume: apre una ferita o un vuoto di curiosità che si chiude solo scorrendo.
+  NO titoli-tesi generici tipo "Perché lei si allontana quando sei troppo disponibile" (dicono già tutto).
+  SÌ scene, verità scomode, frasi che il lettore ha vissuto: "Le hai risposto in 3 secondi. Lei ci ha messo 3
+  ore. Indovina chi dei due sta già perdendo." / "Non ti ha lasciato perché eri troppo buono."
+- Specifico batte generico: un dettaglio reale (l'orario, la frase esatta, il gesto) vale più di un concetto.
+- Ogni slide finisce lasciando una domanda aperta che spinge alla successiva (open loop); mai due slide che
+  dicono la stessa cosa con parole diverse.
+- Ritmo: frasi brevi, colpi secchi, alternati a una frase più lunga che spiega. Mai paragrafi da manuale.
+- La penultima slide è la svolta (il meccanismo nascosto o il ribaltamento); l'ultima chiude con una frase che
+  il lettore vorrebbe salvare o mandare a un amico.
+- Prima di consegnare rileggi solo la copertina: se non fermeresti il pollice, riscrivila.
+
 REGOLE
 - Si parte sempre dal dolore e dalla dinamica, mai dal manuale.
 - Un solo concetto forte per carosello, sviluppato slide dopo slide: ogni slide deve far venire voglia di
