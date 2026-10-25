@@ -155,7 +155,7 @@ async def _broadcast(bot, chat_ids: list[int], text: str):
 def _to_dict(p: instagram.SourcePost) -> dict:
     return {"url": p.url, "owner": p.owner, "caption": p.caption, "kind": p.kind, "image_urls": p.image_urls,
             "likes": p.likes, "comments": p.comments, "timestamp": p.timestamp, "score": p.score,
-            "motivo": p.motivo, "natura": p.natura}
+            "motivo": p.motivo, "natura": p.natura, "pagina": getattr(p, "pagina", "")}
 
 
 async def _produce(bot, chat_ids: list[int], brand: dict, chosen: list[instagram.SourcePost],
@@ -203,15 +203,38 @@ FIT_TOOL = {
         "properties": {
             "post": {"type": "array", "items": {"type": "object", "properties": {
                 "numero": {"type": "integer"},
-                "in_tema": {"type": "boolean"},
+                "pagina": {"type": "string", "description": "Il NOME esatto di una delle nostre pagine a cui va questo post, oppure 'nessuna' se non va bene per nessuna."},
                 "natura": {"type": "string", "enum": ["didattico", "virale"],
                            "description": "didattico = INSEGNA qualcosa di concreto: spiega un meccanismo, un trucco, cosa fare o non fare, segnali da riconoscere, errori con la soluzione. Chi lo legge ne esce sapendo fare o capire qualcosa in più -> CTA al manuale. virale = punta sull'EMOZIONE più che sull'insegnamento: provoca, polarizza, tocca l'ego o l'orgoglio, fa sentire rabbia, rivalsa, riconoscimento o nostalgia (frasi d'impatto, verità scomode, scene e dialoghi che fanno dire 'è proprio così', confronti uomo/donna, meme, citazioni). Anche se tocca un tema serio, se non spiega come fare è virale -> CTA segui la pagina. Nel dubbio: se non c'è un insegnamento pratico, è virale."},
-                "motivo": {"type": "string", "description": "Di cosa parla e perché va bene per noi, massimo 12 parole."},
-            }, "required": ["numero", "in_tema", "natura", "motivo"]}},
+                "motivo": {"type": "string", "description": "Di cosa parla e perché va su quella pagina, massimo 12 parole."},
+            }, "required": ["numero", "pagina", "natura", "motivo"]}},
         },
         "required": ["post"],
     },
 }
+
+
+def pagine_nostre(brand: dict) -> list[dict]:
+    """Le nostre pagine (la principale per prima). Se non sono configurate, solo la pagina principale."""
+    pg = [p for p in brand.get("pagine_nostre") or [] if isinstance(p, dict) and p.get("nome")]
+    if not pg:
+        pg = [{"nome": brand["nome"], "handle": brand.get("handle", ""), "pubblico": "uomini",
+               "temi": brand.get("posizionamento", "")}]
+    return pg
+
+
+def _nome_pagina(val, pagine: list[dict]) -> str:
+    v = " ".join(str(val or "").lower().replace("@", "").split())
+    if not v or v.startswith("nessun"):
+        return ""
+    for pg in pagine:
+        nomi = {pg["nome"].lower(), str(pg.get("handle") or "").lower()} - {""}
+        if v in nomi or any(x.replace(" ", "") == v.replace(" ", "") for x in nomi):
+            return pg["nome"]
+    for pg in pagine:
+        if pg["nome"].lower() in v or v in pg["nome"].lower():
+            return pg["nome"]
+    return ""
 
 
 def _fit_filter(cands: list, brand: dict) -> tuple[list, bool]:
@@ -221,12 +244,17 @@ def _fit_filter(cands: list, brand: dict) -> tuple[list, bool]:
         return cands, True
     elenco = "\n\n".join(f"{i}. @{p.owner}: {' '.join((p.caption or '(nessuna descrizione)').split())[:350]}"
                           for i, p in enumerate(cands, 1))
-    system = (f"Sei il responsabile contenuti di {brand['nome']}. Posizionamento: {brand.get('posizionamento', '').strip()}\n"
-              f"Tono: {' '.join(brand.get('tono', []))}\n"
-              "Per ogni post dì se è in tema: psicologia maschile, attrazione, seduzione, donne, relazioni, rotture, "
-              "rispetto, status, mentalità e disciplina maschile. Fuori tema: meme senza contenuto, sport, auto, "
-              "pubblicità, notizie, contenuti romantici o motivazionali generici, giveaway.\n"
-              "Per ogni post in tema dì anche se è DIDATTICO o VIRALE. didattico = INSEGNA qualcosa di concreto: spiega un meccanismo, un trucco, cosa fare o non fare, segnali da riconoscere, errori con la soluzione. Chi lo legge ne esce sapendo fare o capire qualcosa in più -> CTA al manuale. virale = punta sull'EMOZIONE più che sull'insegnamento: provoca, polarizza, tocca l'ego o l'orgoglio, fa sentire rabbia, rivalsa, riconoscimento o nostalgia (frasi d'impatto, verità scomode, scene e dialoghi che fanno dire 'è proprio così', confronti uomo/donna, meme, citazioni). Anche se tocca un tema serio, se non spiega come fare è virale -> CTA segui la pagina. Nel dubbio: se non c'è un insegnamento pratico, è virale.")
+    pagine = pagine_nostre(brand)
+    elenco_pagine = "\n".join(f"- {pg['nome']} (pubblico: {pg.get('pubblico') or '-'}): {' '.join(str(pg.get('temi', '')).split())}"
+                              for pg in pagine)
+    system = (f"Sei il responsabile contenuti di un gruppo di pagine Instagram italiane. Per ogni post decidi a QUALE "
+              f"delle nostre pagine va, guardando di cosa parla davvero e a chi parla:\n{elenco_pagine}\n"
+              f"Se un post va bene per più pagine, scegli quella dove rende di più. Se tocca seduzione, attrazione o "
+              f"psicologia femminile va su {pagine[0]['nome']} anche se è un po' emotivo; se è soprattutto emotivo e "
+              "riflessivo va sulla pagina emotiva; se parla di rottura e post relazione va sulla pagina delle rotture; "
+              "se parla alle donne va sulla pagina femminile. 'nessuna' per: meme senza contenuto, sport, auto, "
+              "pubblicità, notizie, motivazionali generici, giveaway, temi che non c'entrano con nessuna pagina.\n"
+              "Per ogni post dì anche se è DIDATTICO o VIRALE. didattico = INSEGNA qualcosa di concreto: spiega un meccanismo, un trucco, cosa fare o non fare, segnali da riconoscere, errori con la soluzione. Chi lo legge ne esce sapendo fare o capire qualcosa in più -> CTA al manuale. virale = punta sull'EMOZIONE più che sull'insegnamento: provoca, polarizza, tocca l'ego o l'orgoglio, fa sentire rabbia, rivalsa, riconoscimento o nostalgia (frasi d'impatto, verità scomode, scene e dialoghi che fanno dire 'è proprio così', confronti uomo/donna, meme, citazioni). Anche se tocca un tema serio, se non spiega come fare è virale -> CTA segui la pagina. Nel dubbio: se non c'è un insegnamento pratico, è virale.")
     try:
         out = writer._tool_call(system, [{"type": "text", "text": elenco}], FIT_TOOL,
                                 model=config.CHECK_MODEL, max_tokens=4000)
@@ -236,12 +264,15 @@ def _fit_filter(cands: list, brand: dict) -> tuple[list, bool]:
     keep = []
     for r in out.get("post", []):
         n = r.get("numero")
-        if isinstance(n, int) and 1 <= n <= len(cands) and r.get("in_tema"):
+        pg = _nome_pagina(r.get("pagina"), pagine)
+        if isinstance(n, int) and 1 <= n <= len(cands) and pg:
+            cands[n - 1].pagina = pg
             prima = cands[n - 1].motivo if (cands[n - 1].motivo or "").startswith("📈") else ""
             cands[n - 1].motivo = (prima + "\n" if prima else "") + r.get("motivo", "")
             cands[n - 1].natura = r.get("natura", "")
             keep.append(cands[n - 1])
-    keep.sort(key=lambda p: p.score, reverse=True)
+    ordine = {pg["nome"]: i for i, pg in enumerate(pagine)}
+    keep.sort(key=lambda p: (ordine.get(p.pagina, 99), -p.score))   # prima la pagina principale, poi le altre
     return keep, True
 
 
@@ -307,12 +338,20 @@ def _perche(items: list) -> dict:
 
 def _link_lines(items: list, start: int, min_score: float, perche: dict | None = None) -> list[str]:
     perche = perche or {}
+    try:
+        nome_principale = writer.load_brand()["nome"]
+    except Exception:
+        nome_principale = ""
     out = []
     for i, p in enumerate(items, start):
         anteprima = " ".join((p.caption or "").split())[:70]
         nums = f"❤️ {p.likes or 0} · 💬 {p.comments or 0}"
-        tipo = {"didattico": "📚 DIDATTICO (CTA manuale)", "virale": "🔥 VIRALE (segui la pagina)"}.get(p.natura, "")
-        out.append(f"{i}. " + (f"{tipo}\n" if tipo else "") + f"@{p.owner} · {p.score:.1f}x la sua media{'' if p.score >= min_score else ' (sotto media)'}"
+        principale = getattr(p, "pagina", "") in ("", nome_principale)
+        tipo = ({"didattico": "📚 DIDATTICO (CTA manuale)", "virale": "🔥 VIRALE (segui la pagina)"} if principale
+                else {"didattico": "📚 didattico", "virale": "🔥 virale"}).get(p.natura, "")
+        dest = f"➡️ per {p.pagina}" if getattr(p, "pagina", "") else ""
+        testa = " · ".join(x for x in (dest, tipo) if x)
+        out.append(f"{i}. " + (f"{testa}\n" if testa else "") + f"@{p.owner} · {p.score:.1f}x la sua media{'' if p.score >= min_score else ' (sotto media)'}"
                    f" · {nums}\n{p.url}" + (f"\n{p.motivo}" if p.motivo else (f"\n“{anteprima}…”" if anteprima else ""))
                    + (f"\n{perche[p.url]}" if perche.get(p.url) else ""))
     return out

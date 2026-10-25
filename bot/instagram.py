@@ -36,6 +36,7 @@ class SourcePost:
     score: float = 0.0             # rendimento rispetto alla media della pagina (report)
     motivo: str = ""               # perché è stato scelto (report)
     natura: str = ""               # didattico | virale (report)
+    pagina: str = ""               # a quale delle nostre pagine va (report)
     musica: str = ""               # brano usato nel post originale ("Artista – Titolo"), se Instagram lo indica
 
     @property
