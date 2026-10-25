@@ -231,7 +231,8 @@ def all_jobs_light(limit: int = 500) -> list[dict]:
                     "natura": p.get("natura"), "formato": p.get("formato"),
                     "cta_tipo": cta.get("tipo"), "manuale": cta.get("manuale") or "", "creato": r["created_at"],
                     "palette": (p.get("_look") or {}).get("palette"),
-                    "stile_grafico": (p.get("_look") or {}).get("stile")})
+                    "stile_grafico": (p.get("_look") or {}).get("stile"),
+                    "formato_narrativo": (p.get("_idea") or {}).get("formato")})
     return out
 
 

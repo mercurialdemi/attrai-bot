@@ -247,6 +247,18 @@ async def cmd_studio(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "FORMATI\n" + (sv.get("formati") or ""),
         "REGOLE\n" + (sv.get("regole") or ""),
     ]
+    from . import memoria
+    t = memoria.trends()
+    if t.get("post_in_memoria"):
+        lst = lambda xs: "\n".join(f"• {x}" for x in xs) or "• (ancora pochi dati)"
+        parti.append(
+            f"TREND (memoria di {t['post_in_memoria']} caroselli studiati)\n"
+            f"Formati in crescita:\n{lst(t.get('formati_in_crescita'))}\n"
+            f"Temi in crescita:\n{lst(t.get('temi_in_crescita'))}\n"
+            f"Cosa spinge i virali: {', '.join(t.get('cosa_spinge') or []) or '-'}\n\n"
+            f"I NOSTRI POST\nFormati che rendono:\n{lst(t.get('nostri_formati_migliori'))}\n"
+            f"Da non riproporre:\n{lst(t.get('nostri_formati_peggiori'))}\n"
+            f"Perché no:\n{lst(t.get('perche_no'))}")
     for p_ in parti:
         await update.effective_message.reply_text(p_[:4000])
 

@@ -16,7 +16,7 @@ from pathlib import Path
 
 from PIL import Image
 
-from . import config, images, textslide, writer
+from . import config, images, memoria, textslide, writer
 
 log = logging.getLogger(__name__)
 
@@ -72,6 +72,9 @@ IDEA_TOOL = {
                        "description": "didattico = insegna qualcosa di concreto (meccanismo, trucco, cosa fare); "
                                       "virale = punta su emozione, ego, polemica, riconoscimento."},
             "tipo_hook": {"type": "string"},
+            "formato": {"type": "string", "enum": memoria.FORMATI,
+                        "description": "Come è raccontato (pov, prima persona, immersivo, elenco, dialogo...): segui i "
+                                       "formati in crescita e quelli che rendono per noi."},
             "struttura": {"type": "string", "description": "Ruolo di ogni slide in ordine."},
             "concetto": {"type": "string", "description": "Il messaggio di tutto il carosello in 3-4 frasi."},
             "slides": {"type": "array", "minItems": 5, "maxItems": 9, "items": {"type": "object", "properties": {
@@ -85,7 +88,7 @@ IDEA_TOOL = {
                     "che chiude e resta. Niente emoji, niente asterischi, niente CTA (la aggiungiamo noi).")},
             }, "required": ["titolo", "testo"]}},
         },
-        "required": ["tema", "dolore", "manuale", "natura", "tipo_hook", "struttura", "concetto", "slides"],
+        "required": ["tema", "dolore", "manuale", "natura", "tipo_hook", "formato", "struttura", "concetto", "slides"],
     },
 }
 
@@ -136,6 +139,7 @@ TONO
 
 {writer._scuole(brand)}
 {studio}
+{memoria.prompt_block()}
 {('COME SCRIVIAMO NOI (dai nostri post migliori)' + chr(10) + guida[:2500] + chr(10)) if guida else ''}
 I NOSTRI MANUALI E I DOLORI CHE RISOLVONO (un post didattico parte da uno di questi dolori, MAI dal prodotto)
 {manuali}
@@ -155,7 +159,8 @@ REGOLE FISSE DATE DA GABRIELE
 def write_carousel(brand: dict, rules: list[dict], recent: dict, hint: str = "") -> dict:
     """Idea + testo + descrizione + CTA, nello stesso formato dei post tradotti."""
     recenti = history()[-25:]
-    gia = "\n".join(f"- {h.get('tema')} ({h.get('tipo_hook')}, {h.get('struttura', '')[:60]})" for h in recenti)
+    gia = "\n".join(f"- {h.get('tema')} ({h.get('formato')}, {h.get('tipo_hook')}, {h.get('struttura', '')[:60]})"
+                    for h in recenti)
     req = (f"Richiesta di Gabriele: {hint}\n" if hint else "Scegli tu il tema migliore per oggi.\n")
     content = [{"type": "text", "text": (
         req + ("\nGià creati di recente (NON ripetere tema, hook e struttura):\n" + gia + "\n" if gia else "")
@@ -195,7 +200,7 @@ def write_carousel(brand: dict, rules: list[dict], recent: dict, hint: str = "")
     post = writer._finalize({**out, **cap})
     post["_originale"] = True
     post["_look"] = choose_look(post.get("natura") or idea.get("natura", "virale"))
-    post["_idea"] = {k: idea.get(k) for k in ("tema", "dolore", "manuale", "natura", "tipo_hook", "struttura")}
+    post["_idea"] = {k: idea.get(k) for k in ("tema", "dolore", "manuale", "natura", "tipo_hook", "formato", "struttura")}
     return post
 
 

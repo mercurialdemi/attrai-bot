@@ -15,7 +15,7 @@ import logging
 import statistics
 from datetime import datetime, timezone
 
-from . import config, instagram, instagram_api, writer
+from . import config, instagram, instagram_api, memoria, writer
 
 log = logging.getLogger(__name__)
 
@@ -169,10 +169,10 @@ def run_analysis(brand: dict, n_posts: int = 80) -> dict:
         except Exception as e:
             log.warning("Studio CTA delle pagine di riferimento non riuscito: %s", e)
             style["cta_studio"] = prev
-    # studio dei caroselli virali (temi, hook, strutture): una volta a settimana, base per i post da zero
+    # studio dei caroselli virali (temi, hook, strutture, trend): ogni 3 giorni, base per i post da zero
     pv = writer.load_style().get("studio_virali") or {}
     try:
-        fresh_v = pv.get("creato") and (datetime.now(timezone.utc) - datetime.fromisoformat(pv["creato"])).days < 7
+        fresh_v = pv.get("creato") and (datetime.now(timezone.utc) - datetime.fromisoformat(pv["creato"])).days < 3
     except Exception:
         fresh_v = False
     if fresh_v:
@@ -363,8 +363,18 @@ VIRAL_POST_TOOL = {
                 "formato": {"type": "string", "description": "fumetto/dialogo, testo su fondo pieno, foto con titolo, elenco numerato, storia..."},
                 "struttura": {"type": "string", "description": "Ruolo di ogni slide in ordine, es. '1 gancio -> 2 scena -> 3 errore -> 4 meccanismo -> 5 svolta -> 6 frase finale -> 7 CTA'."},
                 "slide": {"type": "integer"},
-                "perche_funziona": {"type": "string", "description": "In 1-2 frasi: perché questo post è andato virale (emozione, identificazione, condivisibilità, polemica...)."},
-            }, "required": ["numero", "tema", "dolore", "tipo_hook", "hook", "formato", "struttura", "slide", "perche_funziona"]}},
+                "perche_funziona": {"type": "string", "description": "In 1-2 frasi: perché questo post è andato virale (emozione, identificazione, condivisibilità, polemica...). Per un post DEBOLE: perché non ha funzionato."},
+                "formato_narrativo": {"type": "string", "enum": [
+                    "pov", "prima_persona", "immersivo", "elenco", "dialogo_scena", "verita_scomoda", "storia",
+                    "confronto", "domanda", "citazione", "tutorial", "altro"],
+                    "description": "Come è raccontato: pov (il lettore è dentro la scena, 'POV: ...'), prima persona ('io ho...'), immersivo (seconda persona al presente, 'Sei lì, lei ti guarda...'), elenco, dialogo/scena, verità scomoda, storia, confronto, domanda, citazione, tutorial."},
+                "fattore": {"type": "string", "enum": [
+                    "formato", "struttura", "dolore_forte", "tema_caldo", "hook", "grafica", "polemica",
+                    "identificazione", "altro"],
+                    "description": "Il fattore PRINCIPALE del risultato (o del flop): non sempre è la struttura, spesso è un dolore fortissimo o un tema caldo del momento."},
+                "lezione": {"type": "string", "description": "Una frase riutilizzabile per noi: cosa ripetere (o cosa evitare se il post è debole)."},
+            }, "required": ["numero", "tema", "dolore", "tipo_hook", "hook", "formato", "struttura", "slide",
+                            "perche_funziona", "formato_narrativo", "fattore", "lezione"]}},
         },
         "required": ["post"],
     },
@@ -411,19 +421,34 @@ def study_viral(brand: dict, per_page: int = 40, per_handle: int = 6, max_posts:
                and (_engagement(x) or 0) >= 2 * med]
         vir.sort(key=lambda x: (_engagement(x) or 0) / med, reverse=True)
         chosen += [(x, (_engagement(x) or 0) / med) for x in vir[:per_handle]]
-    chosen = chosen[:max_posts]
+    chosen = [(x, sc, "competitor" if x.owner in study_first else "collaboratore") for x, sc in chosen[:max_posts]]
+    # i NOSTRI post: i migliori (perché hanno funzionato) e i più deboli (perché no)
+    try:
+        mine = [p for p in instagram.fetch_profiles([own], per_page) if _engagement(p) is not None
+                and p.kind.lower() == "sidecar" and len(p.image_urls) >= 3] if own else []
+    except Exception as e:
+        log.warning("Studio virali: post nostri non letti: %s", e)
+        mine = []
+    if len(mine) >= 6:
+        med = statistics.median([_engagement(x) for x in mine]) or 1
+        ranked = sorted(mine, key=lambda x: (_engagement(x) or 0) / med, reverse=True)
+        best = [x for x in ranked if (_engagement(x) or 0) >= 1.5 * med][:4]
+        worst = [x for x in reversed(ranked) if (_engagement(x) or 0) <= 0.6 * med][:3]
+        chosen += [(x, (_engagement(x) or 0) / med, "nostro") for x in best + worst]
     if not chosen:
         return {}
     analyses = []
     for start in range(0, len(chosen), 4):                 # 4 caroselli per chiamata
         content, batch = [], chosen[start:start + 4]
-        for k, (p, sc) in enumerate(batch, 1):
+        for k, (p, sc, fonte) in enumerate(batch, 1):
             try:
                 imgs = instagram.download_images(p.image_urls[:10])
             except Exception as e:
                 log.warning("Studio virali: slide non scaricate %s: %s", p.url, e)
                 continue
-            content.append({"type": "text", "text": f"CAROSELLO {k} (@{p.owner}, {sc:.1f}x la media della pagina, "
+            esito = "VIRALE" if sc >= 1.5 else "DEBOLE (spiega perché non ha funzionato)"
+            content.append({"type": "text", "text": f"CAROSELLO {k} (@{p.owner}{' - NOSTRO' if fonte == 'nostro' else ''}, "
+                                                    f"{sc:.1f}x la media della pagina, {esito}, "
                                                     f"{len(p.image_urls)} slide):"})
             content += [writer._image_block(d, 640) for d in imgs]
         if not content:
@@ -437,12 +462,23 @@ def study_viral(brand: dict, per_page: int = 40, per_handle: int = 6, max_posts:
         except Exception as e:
             log.warning("Studio virali: analisi fallita: %s", e)
             continue
+        mem = []
         for a in out.get("post", []):
             n = a.get("numero")
             if isinstance(n, int) and 1 <= n <= len(batch):
-                a["pagina"], a["rendimento"] = batch[n - 1][0].owner, round(batch[n - 1][1], 1)
+                p_, sc_, fonte_ = batch[n - 1]
+                a["pagina"], a["rendimento"], a["fonte"] = p_.owner, round(sc_, 2), fonte_
                 a.pop("numero", None)
                 analyses.append(a)
+                mem.append({"url": p_.url, "pagina": p_.owner, "fonte": fonte_, "data_post": p_.timestamp,
+                            "rendimento": round(sc_, 2), "formato": a.get("formato_narrativo"),
+                            "tema": a.get("tema"), "dolore": a.get("dolore"), "tipo_hook": a.get("tipo_hook"),
+                            "struttura": a.get("struttura"), "fattore": a.get("fattore"),
+                            "lezione": a.get("lezione"), "grafica": a.get("formato")})
+        try:
+            memoria.add(mem)
+        except Exception as e:
+            log.warning("Memoria dei contenuti non aggiornata: %s", e)
     if not analyses:
         return {}
     guida = (writer.load_style().get("guida") or "").strip()
@@ -460,7 +496,8 @@ def study_viral(brand: dict, per_page: int = 40, per_handle: int = 6, max_posts:
         "riscrivi hook e strutture con la nostra voce: maschile, diretta, cruda, mai romantica. Privilegia i temi "
         "che portano ai nostri manuali.")
     summ = writer._tool_call(
-        system, [{"type": "text", "text": json.dumps(analyses, ensure_ascii=False, indent=1)}],
+        system, [{"type": "text", "text": json.dumps([a for a in analyses if (a.get("rendimento") or 0) >= 1.5],
+                                                     ensure_ascii=False, indent=1)}],
         VIRAL_SUMMARY_TOOL, model=config.CAPTION_MODEL, max_tokens=6000)
     return {**{k: summ.get(k) for k in ("temi", "hook", "strutture", "formati", "regole")},
             "caroselli": analyses, "pagine": sorted(by_page), "pagine_config": sorted(handles),
@@ -512,4 +549,5 @@ def _bot_feedback(published: list) -> dict:
         # caroselli creati da zero: quali colori e quali caratteri rendono di più
         "per_palette": {k: v for k, v in group("palette").items() if k != "?"},
         "per_stile_grafico": {k: v for k, v in group("stile_grafico").items() if k != "?"},
+        "per_formato_narrativo": {k: v for k, v in group("formato_narrativo").items() if k != "?"},
     }
