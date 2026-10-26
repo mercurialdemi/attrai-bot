@@ -18,10 +18,10 @@ def fake_create(**k):
         out={"senso":"s","formato":"carosello","natura":"didattico","slides":[
             {"numero":1,"testo_originale":"Hi","testo":"Ciao — **mondo**","watermark_originale":"@other basso destra"},
             {"numero":2,"testo_originale":"Bye","testo":"Addio","watermark_originale":""}]}
-        assert "SIGNIFICATO" in k["system"]
+        assert "SIGNIFICATO" in (k["system"] if isinstance(k["system"], str) else k["system"][0]["text"])
     elif name=="descrizione_pronta":
         out={"descrizione":"Desc","tipo_hook":"verità brutale","autori_citati":["Buss"],"cta":{"tipo":"manuale","manuale":"friendzone","frase":"x","motivo":"m"}}
-        assert "GUIDA DI STILE" in k["system"]
+        assert "GUIDA DI STILE" in (k["system"] if isinstance(k["system"], str) else k["system"][0]["text"])
     elif name=="esito_controllo":
         out=check_results.pop(0) if check_results else {"testo_corretto":True,"residui":False,"problemi":""}
     elif name=="studio_pagina":
