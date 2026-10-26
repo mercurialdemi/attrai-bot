@@ -433,7 +433,7 @@ def analizza_post(chosen: list, slide_max: int = 10) -> list[dict]:
         try:
             out = writer._tool_call("Sei uno stratega di contenuti Instagram nella nicchia psicologia maschile e "
                                     "attrazione. Studi perché certi caroselli diventano virali.", content,
-                                    VIRAL_POST_TOOL, max_tokens=6000)
+                                    VIRAL_POST_TOOL, model=config.ANALYSIS_MODEL, max_tokens=6000)
         except Exception as e:
             log.warning("Analisi post fallita: %s", e)
             continue

@@ -359,7 +359,8 @@ def _tool_call(system: str, content: list, tool: dict, model: str | None = None,
             resp = client().messages.create(
                 model=model or config.CLAUDE_MODEL,
                 max_tokens=max_tokens,
-                system=system,
+                # cache: istruzioni e strumento uguali da una chiamata all'altra costano un decimo dalla seconda in poi
+                system=[{"type": "text", "text": system, "cache_control": {"type": "ephemeral"}}] if system else [],
                 tools=[strict_tool if use_strict else tool],
                 tool_choice={"type": "auto"},
                 messages=[{"role": "user", "content": list(content) + [instruction]}],

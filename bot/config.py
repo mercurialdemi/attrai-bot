@@ -60,6 +60,8 @@ DIAG_BRANCH = _env("DIAG_BRANCH", "diagnostica")
 APIFY_LOGIN_ACTOR = _env("APIFY_LOGIN_ACTOR", "fmchisti/instagram-posts-scraper")
 # Modello economico che controlla ogni slide prodotta da Gemini (testo giusto, niente residui)
 CHECK_MODEL = _env("CHECK_MODEL", "claude-haiku-5-5")
+# analisi del perché dei post (report e studio): Sonnet basta e costa molto meno di Opus
+ANALYSIS_MODEL = _env("ANALYSIS_MODEL", "claude-sonnet-5-5")
 SLIDE_CHECK = _env("SLIDE_CHECK", "on").lower() not in ("off", "0", "no", "false")
 SLIDE_ATTEMPTS = int(_env("SLIDE_ATTEMPTS", "2"))   # tentativi Gemini per slide prima di segnalarla
 
