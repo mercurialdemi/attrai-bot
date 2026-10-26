@@ -1,0 +1,657 @@
+{
+ "giorno": "2026-10-26",
+ "post_preparati": 2,
+ "slide_totali": 25,
+ "slide_fallite": 0,
+ "lavorazione": {
+  "blocchi-pulizia-codice": {
+   "totali": 1,
+   "fallite": 0
+  },
+  "testo-su-sfondo-uniforme": {
+   "totali": 21,
+   "fallite": 0
+  },
+  "cta-stile-post": {
+   "totali": 2,
+   "fallite": 0
+  },
+  "blocchi-ricostruzione-codice": {
+   "totali": 1,
+   "fallite": 0
+  }
+ },
+ "segnalazioni": [
+  {
+   "job_id": 31,
+   "testo": "testo che esce dallo sfondo nero",
+   "quando": "2026-10-25T11:50:47+00:00"
+  },
+  {
+   "job_id": 31,
+   "testo": "ancora non è abbastanza fluido il testo",
+   "quando": "2026-10-25T11:51:44+00:00"
+  }
+ ],
+ "post_con_problemi": [
+  {
+   "job_id": 31,
+   "fonte": "https://www.instagram.com/p/De199tLn7WO/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "blocchi-pulizia-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "MODERN WOMEN TIMELINE:\nFROM H*E TO WIFE.",
+     "testo": "LA PARABOLA DELLA DONNA MODERNA:\nDA FACILE A MOGLIE.",
+     "blocchi": [
+      {
+       "x": 41,
+       "y": 777,
+       "w": 908,
+       "h": 98,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "18–22:\nTHE H*E PHASE.\n\"I'm young.\nI wanna have fun.\"\nBad boys.\nRandom hookups.\nSituationships.\nCommitment? F*ck that.",
+     "testo": "18-22:\n\nLA FASE FACILE.\n\n\"Sono giovane.\nVoglio divertirmi.\"\nBad boy.\nAvventure di una notte.\nStorie senza nome.\n\nImpegnarsi? Col ca**o.",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 209,
+       "w": 195,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 264,
+       "w": 518,
+       "h": 37,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 316,
+       "w": 566,
+       "h": 286,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 631,
+       "w": 737,
+       "h": 42,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "23–25:\nTHE EXPERIMENTAL PHASE.\n\"I'm finding myself.\"\nNew d*ck. New heartbreak.\nNew healing era.\nSame f*cking decisions.",
+     "testo": "23-25:\n\nLA FASE DEGLI\nESPERIMENTI.\n\n\"Sto cercando me stessa.\"\nNuovo letto. Nuovo cuore spezzato.\nNuovo percorso di guarigione.\n\nE sempre le stesse ca**o di scelte.",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 234,
+       "w": 195,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 311,
+       "w": 654,
+       "h": 88,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 410,
+       "w": 820,
+       "h": 172,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 612,
+       "w": 728,
+       "h": 43,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "26–28:\nTHE AWAKENING.\n\"I'm done with toxic men.\"\nTranslation:\nGetting played isn't\ncute anymore.",
+     "testo": "26-28:\n\nIL RISVEGLIO.\n\n\"Ho chiuso con gli uomini tossici.\"\nTraduzione:\n\nFarsi usare ha smesso\ndi essere divertente.",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 258,
+       "w": 195,
+       "h": 41,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 350,
+       "w": 566,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 404,
+       "w": 800,
+       "h": 96,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 522,
+       "w": 586,
+       "h": 107,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Suddenly, the boring guy\nwith a career looks\ninteresting.",
+     "testo": "All'improvviso, il ragazzo noioso\n\ncon un lavoro serio\ncomincia a sembrarle interessante.",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 359,
+       "w": 767,
+       "h": 47,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 418,
+       "w": 576,
+       "h": 113,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "29–31:\nTHE HUSBAND HUNT.\n\"I know my worth.\"\nSix feet. Six figures.\nEmotionally available.\nMust accept everything.",
+     "testo": "29-31:\n\nA CACCIA DI MARITO.\n\n\"So quanto valgo.\"\nAlmeno 1,85. Almeno centomila l'anno.\nEmotivamente disponibile.\nE deve accettare tutto.",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 273,
+       "w": 195,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 363,
+       "w": 693,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 416,
+       "w": 728,
+       "h": 208,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "She wants a premium\nhusband after years of\ntreating commitment\nlike a free trial.",
+     "testo": "Pretende un marito premium\ndopo anni passati a\n\ntrattare l'impegno\ncome una prova gratuita.",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 332,
+       "w": 664,
+       "h": 94,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 461,
+       "w": 640,
+       "h": 90,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "32–35:\nTHE PANIC PHASE.\n\"Why won't men commit?\"\nThe players still\nwant s*x.\nThe serious men want\ncompatibility.",
+     "testo": "32-35:\n\nLA FASE DEL PANICO.\n\n\"Perché nessuno vuole impegnarsi?\"\nI donnaioli vogliono\nancora e solo ses*o.\nGli uomini seri cercano\nla donna giusta.",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 254,
+       "w": 195,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 342,
+       "w": 605,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 395,
+       "w": 684,
+       "h": 254,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "And her dating resume\nreads like a f*cking\ncrime documentary.",
+     "testo": "E il suo passato sentimentale\n\nsembra un ca**o di\ndocumentario di cronaca nera.",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 359,
+       "w": 698,
+       "h": 47,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 418,
+       "w": 615,
+       "h": 113,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 10,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "36+:\nTHE REBRANDING.\n\"I've always wanted\na traditional man.\"\nNow she wants marriage.\nStability.\nA provider.",
+     "testo": "36+:\n\nIL RESTYLING.\n\n\"Ho sempre voluto\nun uomo tradizionale.\"\nOra vuole sposarsi.\nStabilità.\nUno che la mantenga.",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 254,
+       "w": 161,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 342,
+       "w": 605,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 395,
+       "w": 771,
+       "h": 254,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 11,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "FUNNY HOW\nPATRIARCHY\nBECOMES\nATTRACTIVE\nWHEN THE BILLS\nSHOW UP.",
+     "testo": "BUFFO COME IL\nPATRIARCATO\nDIVENTI DI COLPO\nATTRAENTE\nQUANDO ARRIVANO\nLE BOLLETTE.",
+     "blocchi": [
+      {
+       "x": 39,
+       "y": 293,
+       "w": 757,
+       "h": 379,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 12,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "THE IRONY:\nAt 22:\n\"MEN ARE USELESS.\"\nAt 32:\n\"WHY CAN'T I FIND\nA HUSBAND?\"",
+     "testo": "IRONIA DELLA SORTE:\n\nA 22 anni:\n\n\"GLI UOMINI NON SERVONO A NIENTE.\"\n\nA 32 anni:\n\n\"PERCHÉ NON TROVO\nMARITO?\"",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 246,
+       "w": 371,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 328,
+       "w": 161,
+       "h": 33,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 405,
+       "w": 698,
+       "h": 33,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 483,
+       "w": 161,
+       "h": 33,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 556,
+       "w": 605,
+       "h": 70,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 13,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Apparently, independence\ncame with a\nreturn policy.",
+     "testo": "A quanto pare, l'indipendenza\n\nera soddisfatti\no rimborsati.",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 359,
+       "w": 800,
+       "h": 47,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 418,
+       "w": 400,
+       "h": 113,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 14,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "THE BRUTAL TRUTH:\nYou can spend your youth\ntreating commitment\nlike a joke.\nYou can call every\ndecent man boring.",
+     "testo": "LA VERITÀ CHE FA MALE:\n\nPuoi passare la giovinezza\na prendere l'impegno\nper uno scherzo.\n\nPuoi bollare come noioso\nogni uomo per bene.",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 289,
+       "w": 669,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 344,
+       "w": 796,
+       "h": 122,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 522,
+       "w": 600,
+       "h": 99,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 15,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "You can chase chaos\nand call it freedom.",
+     "testo": "Puoi rincorrere il caos\n\ne chiamarlo libertà.",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 383,
+       "w": 649,
+       "h": 43,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 461,
+       "w": 576,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 16,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "BUT YOU DON'T\nGET TO DEMAND\nTHAT THE MEN\nYOU REJECTED\nWAIT AROUND\nFOR YOUR\nREBRANDING.",
+     "testo": "MA NON PUOI\nPRETENDERE\nCHE GLI UOMINI\nCHE HAI SCARTATO\nRESTINO LÌ AD ASPETTARE\nIL TUO\nRESTYLING.",
+     "blocchi": [
+      {
+       "x": 39,
+       "y": 328,
+       "w": 757,
+       "h": 371,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 17,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se hai riconosciuto\nanche una sola di queste fasi,\nnon sei finito qui per caso.\n\nSmetti di fare la sala d'attesa\nper il restyling di qualcun altro.\n\nSegui @attraiseduci:\nogni giorno parliamo di relazioni,\nseduzione e psicologia femminile.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Il carosello racconta, fascia d'età per fascia d'età, il percorso della \"donna moderna\": a vent'anni rifiuta l'impegno e corre dietro ai bad boy, poi ripete gli stessi errori chiamandoli crescita, e verso i trent'anni scopre all'improvviso che il ragazzo serio e noioso era quello giusto. A quel punto pretende un marito perfetto, va nel panico e si reinventa come donna tradizionale. La morale: puoi scegliere il caos da giovane, ma non puoi pretendere che gli uomini che hai scartato restino ad aspettarti. Il tono è provocatorio, sarcastico e tagliente.",
+   "descrizione": "Quante volte ti sei sentito dire che eri \"troppo tranquillo\"?\n\nTroppo serio. Troppo prevedibile. Il classico bravo ragazzo con cui \"non scatta niente\".\nE intanto lei usciva con quello che spariva per tre giorni e tornava come se niente fosse.\n\nPoi passano gli anni. E all'improvviso ti riscrive.\nTi trova maturo. Affidabile. \"Diverso dagli altri\".\n\nEd è proprio qui che molti uomini commettono l'errore più caro: lo prendono come una vittoria.\n\nNon lo è.\nNon ti sta scegliendo. Ti sta ripescando.\n\nNel 1972 il biologo Robert Trivers ha spiegato che chi rischia di più in un rapporto è anche più selettivo, e cambia criteri in base a ciò che gli serve in quel momento. Prima vince il brivido. Poi vince la sicurezza.\n\nNel 2004 Roy Baumeister e Kathleen Vohs l'hanno detto in modo ancora più crudo: tra uomini e donne funziona come un mercato, e chi ha più richiesta detta il prezzo.\nFinché lei ha opzioni, le regole le fa lei.\nQuando le opzioni calano, cambiano le regole. E di colpo il requisito diventa \"un uomo tradizionale\".\n\nC'è una parte che nessuno ti racconta.\nIl tuo valore, se lo costruisci, cresce con il tempo. Lavoro, carattere, calma, una vita che regge da sola. A 35 anni sei un uomo molto più solido di quello che eri a 22.\n\nE troppi uomini lo regalano come premio di consolazione a chi li ha scartati quando non conveniva.\n\nQuesto non significa diventare rancoroso o odiare le donne.\nSignifica smettere di fare la sala d'attesa.\nNon sei il piano B da tenere da parte finché la festa non finisce.\n\nCostruisci la tua vita.\nE scegli una donna che ti ha voluto quando non c'era niente da guadagnare, non quando le sei diventato utile.\n\nIl tempo che hai investito su di te non è il rimborso per le scelte di qualcun altro.\n\nIn quale di queste fasi l'hai conosciuta? E in quale ti ha cercato davvero?\n\nSe anche una sola di queste fasi ti ha ricordato qualcuna che conosci, segui @attraiseduci: ogni giorno parliamo di attrazione, valore e dinamiche tra uomo e donna, senza favole.\n\n#attrazione #relazioni #psicologiamaschile #valore #attraiseduci",
+   "segnalazioni": [
+    "testo che esce dallo sfondo nero",
+    "ancora non è abbastanza fluido il testo"
+   ]
+  }
+ ]
+}
