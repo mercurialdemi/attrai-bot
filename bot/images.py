@@ -782,7 +782,7 @@ async def render_all(post: dict, originals: list[bytes], brand: dict, job_dir: P
             sl["_peso_post"] = peso
     # il nostro logo: solo sulla prima slide, e solo se il post è di un'altra pagina (aveva il suo watermark)
     wm_post = any((sl.get("watermark_originale") or "").strip() for sl in slides
-                  if not sl.get("_cta_riscritta") and "CTA AttraiSeduci" not in (sl.get("testo") or ""))
+                  if not sl.get("_cta_riscritta") and "(slide CTA " not in (sl.get("testo") or ""))
     if not brand.get("watermark", {}).get("solo_se_presente", True):
         wm_post = True
 

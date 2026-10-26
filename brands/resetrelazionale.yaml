@@ -1,0 +1,103 @@
+# Scheda della pagina ResetRelazionale: il bot la usa per i post preparati nel gruppo di questa pagina.
+# Modificala liberamente. Le parti segnate DA COMPLETARE aspettano i dati di Gabriele.
+
+nome: ResetRelazionale
+handle: ""                   # DA COMPLETARE: nome Instagram senza @
+
+pubblico: uomini dai 25 ai 55 anni
+temi_report: >
+  Rotture e post relazione per uomini: superare la fine di una storia, il dolore dopo la rottura, l'ex,
+  il contatto zero, la tentazione di scriverle, vederla con un altro, ricostruirsi dopo, tornare a stare bene da soli.
+
+# Collaboratori di questa pagina (report del mattino): DA COMPLETARE, oppure /aggiungi @pagina dal gruppo
+pagine_monitorate: []
+
+# Pagine da studiare (mai nel report): /studia @pagina dal gruppo
+pagine_studio: []
+
+report:
+  ora: "08:00"           # il report arriva nel gruppo della pagina (se il gruppo non è collegato, non parte)
+  fuso: Europe/Rome
+  finestra_ore: 72
+  candidati: 15
+  quanti_post: 5
+  post_per_pagina: 30
+  punteggio_minimo: 1.5
+  completa_sempre: false
+  prepara_post: false
+
+# Caroselli originali da zero ogni mattina: spenti finché la pagina non è pronta (metti 2 per accenderli)
+crea:
+  al_giorno: 0
+  ora: "08:30"
+
+studio:
+  attivo: true
+  ora: "04:00"
+
+traduzione_slide: fedele
+
+posizionamento: >
+  Il punto di riferimento italiano per l'uomo che sta attraversando una rottura: capire cosa è successo,
+  smettere di soffrire per lei e ricostruirsi più forte.
+
+tono:
+  - Maschile, diretto, crudo ma mai cinico: parla a un uomo ferito come un fratello maggiore che ci è già passato.
+  - Niente vittimismo e niente romanticismo: si riconosce il dolore e si spinge all'azione.
+  - "Italiano fluido e naturale, come lo scriverebbe un italiano: mai una traduzione parola per parola."
+  - "Niente slang giovanile o da strada (fra, bro, zio, raga): tono adulto e sicuro."
+
+regole_formato:
+  - Descrizione massimo 2200 caratteri.
+  - Niente grassetto, niente asterischi, niente trattini lunghi.
+  - Testo delle slide breve e leggibile su telefono, con la stessa divisione in frasi e lo stesso peso dell'originale.
+
+hook:
+  regola: >
+    L'apertura della descrizione non parte di default dalla citazione di un autore o studio.
+    Ruota tra: frase secca, confessione in prima persona, verità brutale, aneddoto di terzi, domanda retorica.
+    Due descrizioni consecutive non aprono mai con la stessa struttura.
+  struttura: >
+    Varia apertura, sviluppo e chiusura rispetto ai post precedenti.
+    Non ripetere gli autori citati di recente: pesca da un insieme ampio e vario.
+
+cta:
+  regola: |
+    Questa pagina per ora non vende manuali: OGNI post chiude con la CTA "segui la pagina".
+    La CTA del post originale va sempre tolta e sostituita con la nostra (anche dentro le slide).
+  stile: |
+    Scritta da copywriter professionista, mai banale. La CTA è la conclusione naturale del post e ne rispetta
+    il formato: post a elenco -> si aggancia all'elenco; scena o dialogo -> "Se ti sei rivisto in questa scena...";
+    frase o riflessione -> si aggancia a quella frase. Prima di chiedere DÀ qualcosa: un'ultima intuizione o una
+    domanda introspettiva precisa. Mai domande generiche tipo "Sei d'accordo?". Niente emoji nella CTA.
+  dove_si_compra: "link in bio"
+
+scuole_di_pensiero:
+  - fonte: Helen Fisher
+    principi: >
+      Dopo una rottura il cervello reagisce come in astinenza: per questo il contatto zero funziona e ogni messaggio all'ex riaccende la dipendenza.
+  - fonte: John Bowlby (teoria dell'attaccamento)
+    principi: >
+      La rottura riattiva le ferite di attaccamento: ansia, ricerca dell'altro, protesta, poi disperazione e infine distacco.
+  - fonte: Guy Winch
+    principi: >
+      Il cuore spezzato va trattato come una ferita: idealizzare l'ex e cercare risposte allunga la guarigione; servono abitudini nuove e sguardo lucido su com'era davvero.
+
+parole_censurate: [sesso, cazzo, cazzi, cazzate, cazzata, incazzato, incazzata, fottuto, fottuta, fottere, fottiti,
+                   merda, puttana, puttane, stronzo, stronza, stronzate, coglione, coglioni, troia, troie, figa,
+                   scopare, scopata]
+
+manuali: []           # DA COMPLETARE quando ci saranno manuali da vendere su questa pagina
+
+watermark:
+  solo_se_presente: true
+  testo: ResetRelazionale
+  posizione: basso-destra
+  larghezza_logo: 0.075
+  stessa_grandezza: true
+  colore_testo: auto
+
+testo_overlay:
+  colore: "#FFFFFF"
+  contorno: "#000000"
+  posizione: centro

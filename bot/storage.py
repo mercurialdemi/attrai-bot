@@ -10,14 +10,16 @@ from pathlib import Path
 from . import config
 
 _lock = threading.Lock()
-_conn: sqlite3.Connection | None = None
+_conns: dict[str, sqlite3.Connection] = {}      # un archivio per pagina (cartella dati della pagina)
 
 
 def _db() -> sqlite3.Connection:
-    global _conn
+    key = str(config.DATA_DIR)
+    _conn = _conns.get(key)
     if _conn is None:
         config.DATA_DIR.mkdir(parents=True, exist_ok=True)
         _conn = sqlite3.connect(config.DATA_DIR / "bot.db", check_same_thread=False)
+        _conns[key] = _conn
         _conn.row_factory = sqlite3.Row
         _conn.executescript(
             """

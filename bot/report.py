@@ -21,7 +21,13 @@ from datetime import datetime, timedelta, timezone
 from . import config, instagram, pipeline, storage, writer
 
 log = logging.getLogger(__name__)
-_running = asyncio.Lock()
+_locks: dict[str, asyncio.Lock] = {}
+
+
+def _lock() -> asyncio.Lock:
+    """Un report alla volta per pagina (pagine diverse possono lavorare insieme)."""
+    from . import pagine
+    return _locks.setdefault(pagine.corrente(), asyncio.Lock())
 
 SELECT_TOOL = {
     "name": "seleziona_post",
@@ -215,12 +221,21 @@ FIT_TOOL = {
 
 
 def pagine_nostre(brand: dict) -> list[dict]:
-    """Le nostre pagine (la principale per prima). Se non sono configurate, solo la pagina principale."""
-    pg = [p for p in brand.get("pagine_nostre") or [] if isinstance(p, dict) and p.get("nome")]
-    if not pg:
-        pg = [{"nome": brand["nome"], "handle": brand.get("handle", ""), "pubblico": "uomini",
-               "temi": brand.get("posizionamento", "")}]
-    return pg
+    """Tutte le nostre pagine (la principale per prima), dalle loro schede: nome, pubblico e temi.
+    Servono a capire a quale pagina va ogni post."""
+    import yaml
+    from . import pagine
+    out = []
+    for slug in pagine.elenco():
+        try:
+            b = yaml.safe_load(pagine.brand_file(slug).read_text(encoding="utf-8")) or {}
+        except Exception:
+            continue
+        if b.get("nome"):
+            out.append({"nome": b["nome"], "handle": b.get("handle", ""), "pubblico": b.get("pubblico", ""),
+                        "temi": b.get("temi_report") or b.get("posizionamento", "")})
+    return out or [{"nome": brand["nome"], "handle": brand.get("handle", ""), "pubblico": "",
+                    "temi": brand.get("posizionamento", "")}]
 
 
 def _nome_pagina(val, pagine: list[dict]) -> str:
@@ -271,8 +286,9 @@ def _fit_filter(cands: list, brand: dict) -> tuple[list, bool]:
             cands[n - 1].motivo = (prima + "\n" if prima else "") + r.get("motivo", "")
             cands[n - 1].natura = r.get("natura", "")
             keep.append(cands[n - 1])
-    ordine = {pg["nome"]: i for i, pg in enumerate(pagine)}
-    keep.sort(key=lambda p: (ordine.get(p.pagina, 99), -p.score))   # prima la pagina principale, poi le altre
+    if len(pagine) > 1:          # ogni pagina ha il suo report: solo i post che vanno su QUESTA pagina
+        keep = [p for p in keep if p.pagina == brand["nome"]]
+    keep.sort(key=lambda p: -p.score)
     return keep, True
 
 
@@ -338,19 +354,14 @@ def _perche(items: list) -> dict:
 
 def _link_lines(items: list, start: int, min_score: float, perche: dict | None = None) -> list[str]:
     perche = perche or {}
-    try:
-        nome_principale = writer.load_brand()["nome"]
-    except Exception:
-        nome_principale = ""
     out = []
     for i, p in enumerate(items, start):
         anteprima = " ".join((p.caption or "").split())[:70]
         nums = f"❤️ {p.likes or 0} · 💬 {p.comments or 0}"
-        principale = getattr(p, "pagina", "") in ("", nome_principale)
+        principale = bool(writer.load_brand().get("manuali"))   # CTA al manuale solo se la pagina ha manuali
         tipo = ({"didattico": "📚 DIDATTICO (CTA manuale)", "virale": "🔥 VIRALE (segui la pagina)"} if principale
                 else {"didattico": "📚 didattico", "virale": "🔥 virale"}).get(p.natura, "")
-        dest = f"➡️ per {p.pagina}" if getattr(p, "pagina", "") else ""
-        testa = " · ".join(x for x in (dest, tipo) if x)
+        testa = tipo
         out.append(f"{i}. " + (f"{testa}\n" if testa else "") + f"@{p.owner} · {p.score:.1f}x la sua media{'' if p.score >= min_score else ' (sotto media)'}"
                    f" · {nums}\n{p.url}" + (f"\n{p.motivo}" if p.motivo else (f"\n“{anteprima}…”" if anteprima else ""))
                    + (f"\n{perche[p.url]}" if perche.get(p.url) else ""))
@@ -404,6 +415,7 @@ def _page_summary(posts: list, handles: list[str], hours: int, min_score: float,
 
 
 async def run_report(bot, chat_ids: list[int]) -> None:
+    _running = _lock()
     if _running.locked():
         await _broadcast(bot, chat_ids, "Il report è già in preparazione, arriva tra poco.")
         return
@@ -475,7 +487,7 @@ async def run_report(bot, chat_ids: list[int]) -> None:
             perche = await asyncio.to_thread(_perche, first)
             await _send_links(
                 bot, chat_ids,
-                f"☀️ Post dei collaboratori andati almeno {st['min_score']:.1f}x sopra la media della loro pagina "
+                f"☀️ {brand['nome']} · post dei collaboratori andati almeno {st['min_score']:.1f}x sopra la media della loro pagina "
                 f"(ultimi {ore // 24} giorni, mai mandati prima)"
                 + (" · oggi pochi post forti, ho guardato anche i giorni prima" if ore > st["ore"] else "") + ".\n"
                 "📚 didattico = da vendere col manuale · 🔥 virale = per far crescere la pagina:"
@@ -504,6 +516,7 @@ async def run_report(bot, chat_ids: list[int]) -> None:
 
 async def run_more(bot, chat_ids: list[int]) -> None:
     """Prepara i successivi post dell'ultima classifica, saltando quelli già lavorati."""
+    _running = _lock()
     if _running.locked():
         await _broadcast(bot, chat_ids, "Sto già preparando dei post, aspetta che finisca.")
         return

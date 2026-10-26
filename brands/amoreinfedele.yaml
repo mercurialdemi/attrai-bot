@@ -1,0 +1,103 @@
+# Scheda della pagina AmoreInfedele: il bot la usa per i post preparati nel gruppo di questa pagina.
+# Modificala liberamente. Le parti segnate DA COMPLETARE aspettano i dati di Gabriele.
+
+nome: AmoreInfedele
+handle: ""                   # DA COMPLETARE: nome Instagram senza @
+
+pubblico: donne
+temi_report: >
+  Psicologia maschile spiegata alle donne, trauma bond, narcisismo, relazioni tossiche, manipolazione,
+  riconoscere i segnali di un uomo che non ti ama davvero, uscire da un legame che fa male.
+
+# Collaboratori di questa pagina (report del mattino): DA COMPLETARE, oppure /aggiungi @pagina dal gruppo
+pagine_monitorate: []
+
+# Pagine da studiare (mai nel report): /studia @pagina dal gruppo
+pagine_studio: []
+
+report:
+  ora: "08:00"           # il report arriva nel gruppo della pagina (se il gruppo non è collegato, non parte)
+  fuso: Europe/Rome
+  finestra_ore: 72
+  candidati: 15
+  quanti_post: 5
+  post_per_pagina: 30
+  punteggio_minimo: 1.5
+  completa_sempre: false
+  prepara_post: false
+
+# Caroselli originali da zero ogni mattina: spenti finché la pagina non è pronta (metti 2 per accenderli)
+crea:
+  al_giorno: 0
+  ora: "08:30"
+
+studio:
+  attivo: true
+  ora: "04:00"
+
+traduzione_slide: fedele
+
+posizionamento: >
+  Aiuta le donne a capire la mente degli uomini, a riconoscere narcisismo, manipolazione e trauma bond,
+  e a uscire dalle relazioni che le consumano.
+
+tono:
+  - Si rivolge a una DONNA, al femminile: diretta, lucida, protettiva ma mai melensa.
+  - Mette a nudo le dinamiche maschili e manipolative senza addolcirle, ancorata a studi e autori reali.
+  - Il tradimento in sé non è il punto: il centro è la dinamica tossica e il legame che la tiene dentro.
+  - "Italiano fluido e naturale, come lo scriverebbe un'italiana: mai una traduzione parola per parola."
+
+regole_formato:
+  - Descrizione massimo 2200 caratteri.
+  - Niente grassetto, niente asterischi, niente trattini lunghi.
+  - Testo delle slide breve e leggibile su telefono, con la stessa divisione in frasi e lo stesso peso dell'originale.
+
+hook:
+  regola: >
+    L'apertura della descrizione non parte di default dalla citazione di un autore o studio.
+    Ruota tra: frase secca, confessione in prima persona, verità brutale, aneddoto di terzi, domanda retorica.
+    Due descrizioni consecutive non aprono mai con la stessa struttura.
+  struttura: >
+    Varia apertura, sviluppo e chiusura rispetto ai post precedenti.
+    Non ripetere gli autori citati di recente: pesca da un insieme ampio e vario.
+
+cta:
+  regola: |
+    Questa pagina per ora non vende manuali: OGNI post chiude con la CTA "segui la pagina".
+    La CTA del post originale va sempre tolta e sostituita con la nostra (anche dentro le slide).
+  stile: |
+    Scritta da copywriter professionista, mai banale. La CTA è la conclusione naturale del post e ne rispetta
+    il formato: post a elenco -> si aggancia all'elenco; scena o dialogo -> "Se ti sei rivisto in questa scena...";
+    frase o riflessione -> si aggancia a quella frase. Prima di chiedere DÀ qualcosa: un'ultima intuizione o una
+    domanda introspettiva precisa. Mai domande generiche tipo "Sei d'accordo?". Niente emoji nella CTA.
+  dove_si_compra: "link in bio"
+
+scuole_di_pensiero:
+  - fonte: Patrick Carnes (trauma bond)
+    principi: >
+      Il legame traumatico nasce dall'alternanza di dolore e ricompensa: più è imprevedibile, più è difficile staccarsi.
+  - fonte: Lundy Bancroft
+    principi: >
+      L'uomo che controlla e svaluta non ha un problema di rabbia ma di mentalità: si sente in diritto; le scuse e le promesse fanno parte del ciclo.
+  - fonte: Ramani Durvasula
+    principi: >
+      Il narcisista non cambia perché tu lo ami di più: idealizzazione, svalutazione e scarto sono un copione, non un incidente.
+
+parole_censurate: [sesso, cazzo, cazzi, cazzate, cazzata, incazzato, incazzata, fottuto, fottuta, fottere, fottiti,
+                   merda, puttana, puttane, stronzo, stronza, stronzate, coglione, coglioni, troia, troie, figa,
+                   scopare, scopata]
+
+manuali: []           # DA COMPLETARE quando ci saranno manuali da vendere su questa pagina
+
+watermark:
+  solo_se_presente: true
+  testo: AmoreInfedele
+  posizione: basso-destra
+  larghezza_logo: 0.075
+  stessa_grandezza: true
+  colore_testo: auto
+
+testo_overlay:
+  colore: "#FFFFFF"
+  contorno: "#000000"
+  posizione: centro

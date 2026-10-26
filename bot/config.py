@@ -71,9 +71,9 @@ SLIDE_ATTEMPTS = int(_env("SLIDE_ATTEMPTS", "2"))   # tentativi Gemini per slide
 SLIDE_TEXT_MODE = _env("SLIDE_TEXT_MODE", "codice").lower()
 
 # --- File e cartelle ---
-DATA_DIR = Path(_env("DATA_DIR", str(ROOT / "data")))
-BRAND_FILE = Path(_env("BRAND_FILE", str(ROOT / "brands" / "attraiseduci.yaml")))
-LOGO_PATH = Path(_env("LOGO_PATH", str(ROOT / "assets" / "logo.png")))
+# DATA_DIR, BRAND_FILE e LOGO_PATH dipendono dalla pagina su cui si sta lavorando (vedi pagine.py):
+# si leggono come sempre (config.DATA_DIR...), ma puntano da soli alla cartella, alla scheda e al logo della
+# pagina corrente. Per AttraiSeduci sono gli stessi di sempre.
 FONT_PATH = Path(_env("FONT_PATH", str(ROOT / "assets" / "font.ttf")))
 
 MAX_PARALLEL_IMAGES = int(_env("MAX_PARALLEL_IMAGES", "2"))
@@ -92,3 +92,28 @@ def missing_keys() -> list[str]:
 # Slide disegnate (fumetti, illustrazioni): si ricostruiscono da zero senza scritte e il testo lo scrive il codice.
 #   gemini (ora) | off (vecchio metodo: si cancellano solo le lettere)
 RICOSTRUISCI_DISEGNI = _env("RICOSTRUISCI_DISEGNI", "off").lower()   # prova del 23/10: Gemini sposta fumetti e personaggi
+
+
+# ---------------------------------------------------------------- percorsi della pagina corrente
+import sys as _sys
+import types as _types
+
+
+class _Config(_types.ModuleType):
+    @property
+    def DATA_DIR(self) -> Path:
+        from . import pagine
+        return pagine.data_dir()
+
+    @property
+    def BRAND_FILE(self) -> Path:
+        from . import pagine
+        return pagine.brand_file()
+
+    @property
+    def LOGO_PATH(self) -> Path:
+        from . import pagine
+        return pagine.logo_path()
+
+
+_sys.modules[__name__].__class__ = _Config

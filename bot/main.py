@@ -9,9 +9,9 @@ from zoneinfo import ZoneInfo
 
 from telegram import Update
 from telegram.constants import ChatAction
-from telegram.ext import (Application, CommandHandler, ContextTypes, MessageHandler, filters)
+from telegram.ext import (Application, CommandHandler, ContextTypes, MessageHandler, TypeHandler, filters)
 
-from . import analysis, config, crea, diagnostica, images, instagram, instagram_api, pipeline, report, storage, writer
+from . import analysis, config, crea, diagnostica, images, instagram, instagram_api, pagine, pipeline, report, storage, writer
 
 logging.basicConfig(format="%(asctime)s %(levelname)s %(name)s: %(message)s", level=logging.INFO)
 logging.getLogger("httpx").setLevel(logging.WARNING)
@@ -47,6 +47,9 @@ COMMANDS = [
         ("diagnosi", "Manda subito a Claude gli errori (di solito non serve)",
          "gli errori e le segnalazioni partono già da soli; usalo solo per mandarli di nuovo"),
         ("id", "Il tuo ID Telegram", "serve per dare accesso al bot a un'altra persona"),
+        ("collega", "Collega questo gruppo a una pagina (es. /collega reset)",
+         "da scrivere dentro il gruppo di una pagina: da lì in poi report, post, logo, tono e CTA sono di quella pagina"),
+        ("pagina", "Su quale pagina stai lavorando", "mostra la pagina di questa chat e le pagine disponibili"),
     ]),
 ]
 
@@ -57,6 +60,11 @@ HELP = (
     "3. Per correggere qualcosa rispondi al post: \"slide 3 più corta\", \"rifai la CTA con la casella\".\n"
     "4. Se una slide è sbagliata: rispondi alla slide con \"segnala: ...\" e Claude la corregge.\n"
     "Tutto il resto (studio della pagina, trend, correzioni) il bot lo fa da solo di notte.\n\n"
+    "PAGINE SEPARATE\n"
+    "Ogni pagina ha il suo gruppo Telegram (crealo, aggiungi il bot come amministratore e scrivi lì "
+    "/collega reset, /collega pensatore, /collega amore, /collega attrai). In quel gruppo report, caroselli, "
+    "studio, collaboratori (/aggiungi), logo, tono e CTA sono solo di quella pagina. Nel gruppo il bot "
+    "risponde solo ai link, ai comandi e a chi risponde a un suo messaggio. /pagina ti dice dove sei.\n\n"
     "COSA PUOI FARE\n\n"
     "• Mandami il link di un post dei collaboratori: te lo restituisco pronto per AttraiSeduci "
     "(slide in italiano, logo, descrizione e CTA). Puoi mandare più link insieme.\n"
@@ -79,12 +87,63 @@ async def _authorized(update: Update) -> bool:
     user = update.effective_user
     if user and user.id in config.ALLOWED_USER_IDS:
         return True
-    if update.effective_message:
+    if update.effective_message and (not update.effective_chat or update.effective_chat.type == "private"):
         await update.effective_message.reply_text(
             f"Questo bot è privato. Il tuo ID Telegram è {user.id if user else '?'}: "
             "aggiungilo alla variabile ALLOWED_USER_IDS su Render per avere accesso."
         )
     return False
+
+
+async def _set_page(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Prima di tutto: la pagina su cui si lavora è quella del gruppo (o AttraiSeduci in chat privata)."""
+    chat = update.effective_chat
+    pagine.imposta(pagine.di_chat(chat.id if chat else None))
+
+
+def _nome(slug: str) -> str:
+    try:
+        import yaml
+        return (yaml.safe_load(pagine.brand_file(slug).read_text(encoding="utf-8")) or {}).get("nome") or slug
+    except Exception:
+        return slug
+
+
+async def cmd_collega(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not await _authorized(update):
+        return
+    chat = update.effective_chat
+    disponibili = ", ".join(_nome(s_) for s_ in pagine.elenco())
+    if chat.type == "private":
+        await update.effective_message.reply_text(
+            "Questo comando va scritto dentro il gruppo della pagina, non qui. La chat privata resta per "
+            f"{_nome(pagine.PRINCIPALE)}.\nPagine disponibili: {disponibili}")
+        return
+    slug = pagine.trova(" ".join(context.args))
+    if not slug:
+        await update.effective_message.reply_text(
+            f"Quale pagina? Scrivi per esempio /collega reset\nPagine disponibili: {disponibili}")
+        return
+    pagine.collega(chat.id, slug)
+    pagine.imposta(slug)
+    b = writer.load_brand()
+    await update.effective_message.reply_text(
+        f"✅ Questo gruppo ora è {b['nome']}.\nQui arrivano il suo report del mattino, i caroselli da zero e lo "
+        f"studio; i link che mandi qui li preparo con logo, tono e CTA di {b['nome']}.\n"
+        f"Collaboratori di {b['nome']}: {', '.join('@' + h for h in b.get('pagine_monitorate') or []) or 'nessuno (aggiungili con /aggiungi @pagina)'}\n\n"
+        "Importante: perché io legga i link che mandate, rendimi amministratore del gruppo.")
+
+
+async def cmd_pagina(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not await _authorized(update):
+        return
+    cur = pagine.corrente()
+    righe = [f"Qui stai lavorando su: {_nome(cur)}", "", "Pagine e gruppi:"]
+    for s_ in pagine.elenco():
+        g = pagine.gruppo_di(s_)
+        righe.append(f"• {_nome(s_)}: " + ("gruppo collegato" if g else
+                                          ("chat privata" if s_ == pagine.PRINCIPALE else "nessun gruppo (crealo e scrivi /collega)")))
+    await update.effective_message.reply_text("\n".join(righe))
 
 
 # ---------------------------------------------------------------- comandi
@@ -691,6 +750,11 @@ async def on_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if msg.reply_to_message:
         jid = storage.job_for_message(update.effective_chat.id, msg.reply_to_message.message_id)
         job = storage.get_job(jid) if jid else None
+    if update.effective_chat.type != "private":
+        # nei gruppi si parla anche tra voi: il bot interviene solo se rispondete a un suo messaggio
+        rep = msg.reply_to_message
+        if not job and not (rep and rep.from_user and rep.from_user.id == context.bot.id):
+            return
     job = job or storage.last_job(update.effective_chat.id)
     if job:
         await process_revision(update, context, job, text)
@@ -700,68 +764,95 @@ async def on_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # ---------------------------------------------------------------- avvio
 
-def _schedule_crea(app: Application):
-    """Ogni mattina N caroselli originali da zero (brand: crea.al_giorno, crea.ora)."""
-    cfg = (writer.load_brand().get("crea") or {})
+def _destinatari(slug: str) -> list[int]:
+    """Dove arrivano report, caroselli e studio di una pagina: il suo gruppo; per la pagina principale senza
+    gruppo, la chat privata come sempre. Si decide al momento, così un gruppo collegato dopo l'avvio vale subito."""
+    g = pagine.gruppo_di(slug)
+    if g:
+        return [g]
+    if slug == pagine.PRINCIPALE:
+        return sorted(config.REPORT_CHAT_IDS or config.ALLOWED_USER_IDS)
+    return []
+
+
+def _brand_di(slug: str) -> dict:
+    pagine.imposta(slug)
+    return writer.load_brand()
+
+
+def _schedule_crea(app: Application, slug: str):
+    """Ogni mattina N caroselli originali da zero (scheda della pagina: crea.al_giorno, crea.ora)."""
+    brand = _brand_di(slug)
+    cfg = (brand.get("crea") or {})
     n = int(cfg.get("al_giorno", 0) or 0)
-    chat_ids = sorted(config.REPORT_CHAT_IDS or config.ALLOWED_USER_IDS)
-    if n <= 0 or not cfg.get("ora") or not chat_ids:
+    if n <= 0 or not cfg.get("ora"):
         return
-    tz = ZoneInfo((writer.load_brand().get("report") or {}).get("fuso", "Europe/Rome"))
+    tz = ZoneInfo((brand.get("report") or {}).get("fuso", "Europe/Rome"))
     at = datetime.strptime(str(cfg["ora"]), "%H:%M").time().replace(tzinfo=tz)
 
     async def job(context: ContextTypes.DEFAULT_TYPE):
+        pagine.imposta(slug)
+        chat_ids = _destinatari(slug)
+        if not chat_ids:
+            return
+        uid = sorted(config.ALLOWED_USER_IDS)[0] if config.ALLOWED_USER_IDS else chat_ids[0]
         for k in range(n):
-            await _crea_one(context.bot, chat_ids[0], chat_ids[0], "", f" ({k + 1} di {n} di oggi)")
+            await _crea_one(context.bot, chat_ids[0], uid if chat_ids[0] < 0 else chat_ids[0], "",
+                            f" ({k + 1} di {n} di oggi)")
 
-    app.job_queue.run_daily(job, time=at, name="crea_mattutino")
-    log.info("Caroselli da zero programmati: %s ogni giorno alle %s", n, cfg["ora"])
+    app.job_queue.run_daily(job, time=at, name=f"crea_mattutino_{slug}")
+    log.info("%s: caroselli da zero programmati, %s ogni giorno alle %s", slug, n, cfg["ora"])
 
 
-def _schedule_report(app: Application):
-    cfg = (writer.load_brand().get("report") or {})
+def _schedule_report(app: Application, slug: str):
+    brand = _brand_di(slug)
+    cfg = (brand.get("report") or {})
     if not cfg.get("ora"):
-        log.info("Report mattutino disattivato (report.ora vuoto).")
-        return
-    chat_ids = sorted(config.REPORT_CHAT_IDS or config.ALLOWED_USER_IDS)
-    if not chat_ids:
-        log.warning("Nessun destinatario per il report: imposta ALLOWED_USER_IDS.")
+        log.info("%s: report mattutino disattivato (report.ora vuoto).", slug)
         return
     tz = ZoneInfo(cfg.get("fuso", "Europe/Rome"))
     at = datetime.strptime(str(cfg["ora"]), "%H:%M").time().replace(tzinfo=tz)
 
     async def job(context: ContextTypes.DEFAULT_TYPE):
-        await report.run_report(context.bot, chat_ids)
+        pagine.imposta(slug)
+        chat_ids = _destinatari(slug)
+        if chat_ids:
+            await report.run_report(context.bot, chat_ids)
 
-    app.job_queue.run_daily(job, time=at, name="report_mattutino")
-    log.info("Report programmato ogni giorno alle %s (%s) per %s", cfg["ora"], tz, chat_ids)
+    app.job_queue.run_daily(job, time=at, name=f"report_mattutino_{slug}")
+    log.info("%s: report programmato ogni giorno alle %s (%s) per %s", slug, cfg["ora"], tz, _destinatari(slug))
 
 
-def _schedule_analysis(app: Application):
+def _schedule_analysis(app: Application, slug: str):
     """Ogni notte rifà da solo lo studio della pagina (guida di stile, CTA migliori, testi delle slide CTA,
     risultati dei post del bot): /analizza non serve più. Il riepilogo arriva solo il lunedì, gli errori sempre.
     Se lo studio non è mai stato fatto, parte subito all'avvio."""
-    cfg = (writer.load_brand().get("studio") or {})
+    brand = _brand_di(slug)
+    cfg = (brand.get("studio") or {})
     if cfg.get("attivo", True) is False:
         return
-    chat_ids = sorted(config.REPORT_CHAT_IDS or config.ALLOWED_USER_IDS)
-    tz = ZoneInfo((writer.load_brand().get("report") or {}).get("fuso", "Europe/Rome"))
+    tz = ZoneInfo((brand.get("report") or {}).get("fuso", "Europe/Rome"))
     at = datetime.strptime(str(cfg.get("ora", "07:30")), "%H:%M").time().replace(tzinfo=tz)
 
     async def job(context: ContextTypes.DEFAULT_TYPE):
+        pagine.imposta(slug)
+        chat_ids = _destinatari(slug)
+        b = writer.load_brand()
+        if slug != pagine.PRINCIPALE and not (b.get("handle") and chat_ids):
+            return                                               # pagina non ancora avviata: niente costi
         try:
-            style = await asyncio.to_thread(analysis.run_analysis, writer.load_brand())
+            style = await asyncio.to_thread(analysis.run_analysis, b)
         except Exception as e:
-            log.exception("Studio della pagina fallito")
+            log.exception("Studio della pagina %s fallito", slug)
             for c in chat_ids:
-                await context.bot.send_message(c, f"Studio settimanale non riuscito: {str(e)[:300]}")
+                await context.bot.send_message(c, f"Studio di {b.get('nome')} non riuscito: {str(e)[:300]}")
             return
         if style.get("studio_virali_nuovo"):                     # ogni 3 giorni: il perché di ogni post studiato
             await _send_studio(context.bot, chat_ids, style.get("studio_virali") or {})
         if datetime.now(tz).weekday() != 0 and not (context.job.data or {}).get("primo"):
             return                                               # niente messaggi tutti i giorni
         fb = style.get("feedback_bot") or {}
-        righe = [f"Studio settimanale aggiornato su {style['post_analizzati']} post."]
+        righe = [f"Studio settimanale di {b.get('nome')} aggiornato su {style['post_analizzati']} post."]
         if fb.get("pubblicati_dal_bot"):
             righe.append(f"Post preparati dal bot e pubblicati: {fb['pubblicati_dal_bot']}, "
                          f"rendimento medio {fb.get('rendimento_medio')}x la media della pagina.")
@@ -775,16 +866,18 @@ def _schedule_analysis(app: Application):
         for c in chat_ids:
             await context.bot.send_message(c, "\n".join(righe))
 
-    app.job_queue.run_daily(job, time=at, name="studio_giornaliero")
-    if "testi_slide_cta" not in writer.load_style():          # mai fatto, o fatto prima che leggesse le slide CTA
+    app.job_queue.run_daily(job, time=at, name=f"studio_giornaliero_{slug}")
+    if slug == pagine.PRINCIPALE and "testi_slide_cta" not in writer.load_style():   # mai fatto
         app.job_queue.run_once(job, when=120, data={"primo": True}, name="primo_studio")
 
-    async def refresh(context: ContextTypes.DEFAULT_TYPE):   # la chiave Instagram dura 60 giorni: la rinnoviamo ogni settimana
-        if instagram_api.enabled():
-            ok = await asyncio.to_thread(instagram_api.refresh_token)
-            log.info("Rinnovo chiave Instagram: %s", "ok" if ok else "non riuscito")
+    if slug == pagine.PRINCIPALE:
+        async def refresh(context: ContextTypes.DEFAULT_TYPE):   # la chiave Instagram dura 60 giorni: la rinnoviamo ogni settimana
+            pagine.imposta(slug)
+            if instagram_api.enabled():
+                ok = await asyncio.to_thread(instagram_api.refresh_token)
+                log.info("Rinnovo chiave Instagram: %s", "ok" if ok else "non riuscito")
 
-    app.job_queue.run_daily(refresh, time=at, days=(3,), name="rinnovo_token_instagram")
+        app.job_queue.run_daily(refresh, time=at, days=(3,), name="rinnovo_token_instagram")
 
 
 def _schedule_diagnostics(app: Application):
@@ -793,6 +886,7 @@ def _schedule_diagnostics(app: Application):
     at = datetime.strptime("02:30", "%H:%M").time().replace(tzinfo=tz)
 
     async def job(context: ContextTypes.DEFAULT_TYPE):
+        pagine.imposta(pagine.PRINCIPALE)
         try:
             res = await asyncio.to_thread(diagnostica.upload_daily)
             log.info(res)
@@ -850,7 +944,10 @@ def main():
 
     app = (Application.builder().token(config.TELEGRAM_BOT_TOKEN).concurrent_updates(True)
            .post_init(_menu).build())
+    app.add_handler(TypeHandler(Update, _set_page), group=-1)     # la pagina del gruppo, prima di ogni altra cosa
     app.add_handler(CommandHandler(["start", "aiuto", "help", "comandi"], cmd_start))
+    app.add_handler(CommandHandler("collega", cmd_collega))
+    app.add_handler(CommandHandler("pagina", cmd_pagina))
     app.add_handler(CommandHandler("id", cmd_id))
     app.add_handler(CommandHandler("regole", cmd_regole))
     app.add_handler(CommandHandler("togli", cmd_togli))
@@ -869,7 +966,11 @@ def main():
     app.add_handler(MessageHandler(filters.PHOTO | filters.Document.IMAGE, on_media))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_text))
     async def notify_restart(context: ContextTypes.DEFAULT_TYPE):
-        for w in storage.pop_unfinished():
+        lavori = []
+        for slug in pagine.elenco():
+            pagine.imposta(slug)
+            lavori += storage.pop_unfinished()
+        for w in lavori:
             try:
                 await context.bot.send_message(
                     w["chat_id"], f"Il bot si è riavviato (aggiornamento o memoria del server piena) mentre lavorava: "
@@ -880,13 +981,21 @@ def main():
     app.job_queue.run_once(notify_restart, when=5, name="avviso_riavvio")
 
     async def cleanup(context: ContextTypes.DEFAULT_TYPE):
-        n = await asyncio.to_thread(_cleanup_old_jobs)
+        n = 0
+        for slug in pagine.elenco():
+            pagine.imposta(slug)
+            n += await asyncio.to_thread(_cleanup_old_jobs)
         if n:
             log.info("Pulizia disco: cancellate %s cartelle di post vecchi", n)
     app.job_queue.run_repeating(cleanup, interval=86400, first=60, name="pulizia_disco")
-    _schedule_report(app)
-    _schedule_crea(app)
-    _schedule_analysis(app)
+    for slug in pagine.elenco():                      # ogni pagina ha il suo report, i suoi caroselli e il suo studio
+        try:
+            _schedule_report(app, slug)
+            _schedule_crea(app, slug)
+            _schedule_analysis(app, slug)
+        except Exception:
+            log.exception("Programmazione della pagina %s non riuscita", slug)
+    pagine.imposta(pagine.PRINCIPALE)
     _schedule_diagnostics(app)
     log.info("Bot avviato.")
     app.run_polling(allowed_updates=Update.ALL_TYPES)

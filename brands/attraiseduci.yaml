@@ -25,36 +25,13 @@ pagine_monitorate:
   - black_thoughtss_
   - manly_pinnacle
 
-# ---------------------------------------------------------------
-# LE NOSTRE PAGINE: il report dice per ogni post a quale pagina va.
-# handle = nome Instagram senza @ (lascia "" se non serve).
-# ---------------------------------------------------------------
-pagine_nostre:
-  - nome: AttraiSeduci
-    handle: attraiseduci
-    pubblico: uomini
-    temi: >
-      Psicologia femminile, seduzione, attrazione, dinamiche di potere nella coppia, test femminili,
-      status e valore maschile. Può toccare l'emotivo, ma non troppo: sempre con un insegnamento o una
-      lettura delle dinamiche.
-  - nome: Il Pensatore
-    handle: ""
-    pubblico: uomini
-    temi: >
-      Relazioni con un taglio più emotivo e riflessivo: sentimenti, mancanza, amore, solitudine, frasi
-      e pensieri che fanno sentire compresi, senza insegnamento pratico di seduzione.
-  - nome: ResetRelazionale
-    handle: ""
-    pubblico: uomini dai 25 ai 55 anni
-    temi: >
-      Rotture e post relazione: superare la fine di una storia, il dolore dopo la rottura, l'ex,
-      il contatto zero, ricostruirsi dopo.
-  - nome: AmoreInfedele
-    handle: ""
-    pubblico: donne
-    temi: >
-      Psicologia maschile spiegata alle donne, trauma bond, narcisismo, relazioni tossiche,
-      tradimento visto dalla parte di lei.
+# Di cosa parla questa pagina: serve al report per tenere solo i post giusti per lei
+# (gli altri vanno alle altre pagine: ResetRelazionale, Il Pensatore, AmoreInfedele).
+pubblico: uomini
+temi_report: >
+  Psicologia femminile, seduzione, attrazione, dinamiche di potere nella coppia, test femminili,
+  status e valore maschile. Può toccare l'emotivo, ma non troppo: sempre con un insegnamento o una
+  lettura delle dinamiche.
 
 # Pagine da cui il bot STUDIA strutture, hook e temi (mai copiare i testi): per i post originali da zero
 pagine_studio:

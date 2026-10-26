@@ -226,11 +226,11 @@ def apply_cta_slide(post: dict, paths: list[Path], failed: list[int], jdir: Path
     if cta_idx and cta_idx[-1] >= len(slides) - 2:          # la CTA originale è in fondo: la sostituiamo
         i = cta_idx[-1]
         paths = paths[:i] + [target] + paths[i + 1:]
-        slides[i] = {**slides[i], "_canva": {"tipo": "immagine"}, "testo": "(slide CTA AttraiSeduci)"}
+        slides[i] = {**slides[i], "_canva": {"tipo": "immagine"}, "testo": "(slide CTA " + writer.load_brand()["nome"] + ")"}
         failed = [n for n in failed if n != i + 1]
     else:
         paths = paths + [target]
-        slides.append({"numero": len(slides) + 1, "testo": "(slide CTA AttraiSeduci)", "testo_originale": "",
+        slides.append({"numero": len(slides) + 1, "testo": "(slide CTA " + writer.load_brand()["nome"] + ")", "testo_originale": "",
                        "watermark_originale": "", "e_cta": True, "da_modificare": False,
                        "_canva": {"tipo": "immagine"}})
     return paths, failed
@@ -276,10 +276,10 @@ async def send_post(bot, chat_id: int, job_id: int, post: dict, paths: list[Path
             if len(chunk) == 1:   # Telegram vuole almeno 2 file in un gruppo
                 n, p = chunk[0]
                 sent.append(await bot.send_document(chat_id, p.read_bytes(),
-                                                    filename=f"AttraiSeduci_{job_id}_slide_{n:02d}.jpg"))
+                                                    filename=f"{_nome_file()}_{job_id}_slide_{n:02d}.jpg"))
             else:
                 sent += await bot.send_media_group(chat_id, [
-                    InputMediaDocument(p.read_bytes(), filename=f"AttraiSeduci_{job_id}_slide_{n:02d}.jpg")
+                    InputMediaDocument(p.read_bytes(), filename=f"{_nome_file()}_{job_id}_slide_{n:02d}.jpg")
                     for n, p in chunk])
     if not only_text and numbers_given is False:
         m = await send_canva(bot, chat_id, job_id, post, paths, failed)
@@ -305,7 +305,7 @@ async def send_canva(bot, chat_id: int, job_id: int, post: dict, paths: list[Pat
     try:
         if not paths or len(failed) >= len(paths):
             return None
-        out = paths[0].parent / f"AttraiSeduci_{job_id}_Canva.pptx"
+        out = paths[0].parent / f"{_nome_file()}_{job_id}_Canva.pptx"
         await asyncio.to_thread(canva.build, post, paths, out, failed)
         return await bot.send_document(
             chat_id, out.read_bytes(), filename=out.name,
@@ -314,3 +314,10 @@ async def send_canva(bot, chat_id: int, job_id: int, post: dict, paths: list[Pat
         import logging
         logging.getLogger(__name__).exception("File Canva non creato")
         return None
+
+
+def _nome_file() -> str:
+    try:
+        return "".join(ch for ch in writer.load_brand()["nome"] if ch.isalnum()) or "Post"
+    except Exception:
+        return "Post"

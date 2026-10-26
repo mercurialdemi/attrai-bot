@@ -199,8 +199,8 @@ TRADUZIONE = {
         "'e tu cosa fai per risolverlo?'; 'la risposta si riduceva a una sola cosa' diventa 'il segreto? Una cosa sola.'"
     ),
     "adattata": (
-        "ADATTATA: stesso significato e stessa forza, ma riscritta nel tono di AttraiSeduci "
-        "(maschile, crudo, diretto, mai romantico), mai parola per parola."
+        "ADATTATA: stesso significato e stessa forza, ma riscritta nel tono della nostra pagina "
+        "(vedi TONO), mai parola per parola."
     ),
 }
 
@@ -512,8 +512,9 @@ def polish_slides(out: dict) -> dict:
     if not items:
         return out
     guida = (load_style().get("guida") or "").strip()
-    system = ("Sei il copywriter italiano che scrive i caroselli di AttraiSeduci (pagina di psicologia maschile, "
-              "tono maschile, crudo, diretto, adulto). Ricevi un carosello tradotto dall'inglese: il tuo lavoro è "
+    _b = load_brand()
+    system = (f"Sei il copywriter italiano che scrive i caroselli di {_b['nome']} "
+              f"({' '.join(str(_b.get('posizionamento', '')).split())} Tono: {' '.join(_b.get('tono', []))}). Ricevi un carosello tradotto dall'inglese: il tuo lavoro è "
               "farlo sembrare SCRITTO in italiano, non tradotto. Il lettore non deve mai percepire l'inglese sotto.\n"
               "COME LAVORI\n"
               "- Leggi tutte le slide di fila come un unico discorso: ogni slide deve agganciarsi alla precedente.\n"
@@ -611,9 +612,9 @@ def _scuole(brand: dict) -> str:
     lines = "\n".join(f"- {s['fonte']}: {' '.join(str(s['principi']).split())}" for s in sc)
     return ("SCUOLE DI PENSIERO (ragiona con la profondità di questi maestri del settore)\n" + lines + "\n"
             "Usali come lente per spiegare il meccanismo del post e per costruire la CTA: scegli il principio che "
-            "colpisce il dolore di questo post e trasformalo in una frase nostra, concreta, nel tono AttraiSeduci. "
+            "colpisce il dolore di questo post e trasformalo in una frase nostra, concreta, nel tono di " + brand["nome"] + ". "
             "Non nominare mai questi autori, non copiare le loro frasi né i loro termini tecnici in inglese "
-            "(niente 'DHV', 'neediness', 'inner game' ecc.): il lettore deve sentire solo la voce di AttraiSeduci.\n")
+            "(niente 'DHV', 'neediness', 'inner game' ecc.): il lettore deve sentire solo la voce di " + brand["nome"] + ".\n")
 
 
 def _caption_system(brand: dict, rules: list[dict], recent: dict) -> str:
@@ -636,7 +637,16 @@ def _caption_system(brand: dict, rules: list[dict], recent: dict) -> str:
         esempi_txt = ("\nESEMPI DI DESCRIZIONI CHE HANNO FUNZIONATO SULLA NOSTRA PAGINA "
                       "(imita la voce, non copiare frasi né struttura):\n"
                       + "\n\n".join(f"<<<\n{e}\n>>>" for e in scelti) + "\n")
-    return f"""Sei il copywriter senior della pagina Instagram italiana {brand['nome']} (@{brand['handle']}).
+    pubblico = str(brand.get("pubblico") or "").strip()
+    priorita = ""
+    if pubblico and brand["nome"] != "AttraiSeduci":
+        priorita = (f"PUBBLICO E TONO DI QUESTA PAGINA (hanno la precedenza su tutte le indicazioni generali qui sotto)\n"
+                    f"Pubblico: {pubblico}. Posizionamento: {' '.join(str(brand.get('posizionamento', '')).split())}\n"
+                    f"Tono: {' '.join(brand.get('tono', []))}\n"
+                    + ("La lettrice è una DONNA: scrivi al femminile, rivolgendoti a lei; dove sotto trovi 'lui', "
+                       "'maschile' o il punto di vista dell'uomo, adattalo a lei.\n" if "donn" in pubblico.lower() else "")
+                    + "\n")
+    return f"""{priorita}Sei il copywriter senior della pagina Instagram italiana {brand['nome']} (@{brand['handle']}).
 Ricevi le slide già tradotte di un post e scrivi la descrizione Instagram con la CTA.
 
 POSIZIONAMENTO
@@ -712,7 +722,7 @@ CTA
 {_feedback_memory(style)}
 Dove si compra: {brand['cta'].get('dove_si_compra', 'link in bio')}.
 Manuali disponibili:
-{manuali}
+{manuali or "NESSUNO: questa pagina oggi non vende manuali. La CTA è SEMPRE 'segui la pagina' (tipo=segui), anche sui post didattici: mai citare manuali, libri o prodotti."}
 
 REGOLE FISSE DATE DA GABRIELE (hanno la precedenza su tutto il resto)
 {_rules_block(rules)}
@@ -723,7 +733,7 @@ REGOLE FISSE DATE DA GABRIELE (hanno la precedenza su tutto il resto)
 def _source_cta_note(slides_out: dict) -> str:
     """Se il post originale chiude vendendo un prodotto (guide, libri, corso), anche il nostro chiude con il manuale."""
     cta_txt = " | ".join((s.get("testo_originale") or "")[:300] for s in slides_out.get("slides", []) if s.get("e_cta"))
-    if not cta_txt.strip():
+    if not cta_txt.strip() or not load_brand().get("manuali"):
         return ""
     return ("\n\nIL POST ORIGINALE CHIUDE CON QUESTA CTA: " + cta_txt + "\n"
             "Se quella CTA vende o regala un prodotto (guida, libro, ebook, corso, 'commenta X e te lo mando'), "
@@ -857,6 +867,8 @@ def create_post(caption: str, owner: str, images: list[bytes], brand: dict,
                 rules: list[dict], recent: dict) -> dict:
     slides_out = translate_slides(caption, owner, images, brand, rules)
     cap = write_caption(slides_out, caption, brand, rules, recent)
+    if not brand.get("manuali") and isinstance(cap.get("cta"), dict):   # pagina senza manuali: sempre "segui"
+        cap["cta"] = {**cap["cta"], "tipo": "segui", "manuale": ""}
     apply_cta_texts(slides_out, cap.pop("slide_cta", None) or [])
     slides_out["_formato_post"] = cap.pop("formato_post", "")
     slides_out["_testo_cta_finale"] = quote_titles(pick_cta_slide_text(clean_text(cap.pop("testo_slide_finale", "") or ""),
@@ -876,7 +888,7 @@ def check_slide(image_jpeg: bytes, expected_text: str, old_watermark: str,
                 original_jpeg: bytes | None = None) -> tuple[bool, str]:
     """Controlla una slide generata (confrontandola con l'originale). Restituisce (ok, problemi)."""
     attese = (f'Testo atteso sulla slide, esattamente:\n"""\n{expected_text}\n"""' if expected_text.strip()
-              else "Sulla slide non deve esserci nessun testo, a parte eventualmente il nostro logo AttraiSeduci.")
+              else "Sulla slide non deve esserci nessun testo, a parte eventualmente il nostro logo " + load_brand()["nome"] + ".")
     content = []
     if original_jpeg:
         content += [{"type": "text", "text": "Slide ORIGINALE:"}, _image_block(original_jpeg, 1024)]
@@ -898,7 +910,7 @@ def check_slide(image_jpeg: bytes, expected_text: str, old_watermark: str,
             "'about.'), testo che esce dalla slide o tocca il bordo sono errori gravi, come anche una parola che esce dalla "
             "nuvoletta di un fumetto o ne tocca il contorno. Anche gli ACCENTI delle maiuscole "
             "(È, À, Ù...) che toccano o entrano nella riga di sopra sono un errore grave.\n"
-            "Il logo circolare con la scritta AttraiSeduci, se presente, è corretto e non è un residuo.\n"
+            "Il logo circolare con la scritta " + load_brand()["nome"] + ", se presente, è corretto e non è un residuo.\n"
             "Controlla la slide con lo strumento esito_controllo. Ignora differenze di a capo e di maiuscole."
         )},
     ]

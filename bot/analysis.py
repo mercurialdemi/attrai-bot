@@ -567,7 +567,7 @@ def study_viral(brand: dict, per_page: int = 40, per_handle: int = 6, max_posts:
         f"I NOSTRI MANUALI E I DOLORI CHE RISOLVONO: {manuali}\n"
         + (f"COME SCRIVIAMO NOI (dai nostri post migliori):\n{guida[:2000]}\n" if guida else "")
         + "Scarta temi e formule che non c'entrano con noi (romantici, motivazionali generici, fuori nicchia) e "
-        "riscrivi hook e strutture con la nostra voce: maschile, diretta, cruda, mai romantica. Privilegia i temi "
+        "riscrivi hook e strutture con la nostra voce (vedi TONO). Privilegia i temi "
         "che portano ai nostri manuali.")
     summ = writer._tool_call(
         system, [{"type": "text", "text": json.dumps([a for a in analyses if (a.get("rendimento") or 0) >= 1.5],
