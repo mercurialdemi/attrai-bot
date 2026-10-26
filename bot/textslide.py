@@ -768,9 +768,24 @@ def erase_local(img: Image.Image, box: tuple[int, int, int, int], bg: tuple,
     else:
         tight = box
     m = _dilate(own, 3)
-    sub[m] = np.array(bg)
+    _fill_like_background(sub, m, ink, bg)
     a[Y0:Y1, X0:X1] = sub.astype(np.uint8)
     return Image.fromarray(a), tight, pitch
+
+
+def _fill_like_background(sub: np.ndarray, m: np.ndarray, ink: np.ndarray, bg: tuple) -> None:
+    """Riempie la zona delle lettere col colore di sfondo. Attorno alle lettere di una foto JPEG resta un alone
+    di pixel quasi-sfondo (sotto la soglia dell'inchiostro): riempiendo solo le lettere si vedeva la loro sagoma
+    più scura. Si copre anche l'alone (vicino alle lettere, solo pixel già molto simili allo sfondo) e il bordo
+    sfuma nello sfondo vero, così non resta nessuna sagoma."""
+    import cv2
+    flat = np.array(bg, dtype=np.float32)
+    near = np.abs(sub - np.array(bg)).max(axis=2) <= 40
+    halo = _dilate(m, 6) & near
+    alpha = cv2.GaussianBlur((m | halo).astype(np.float32), (0, 0), 2.0)
+    alpha[m] = 1.0
+    out = sub.astype(np.float32) * (1 - alpha[..., None]) + flat * alpha[..., None]
+    sub[:] = np.round(out).astype(sub.dtype)
 
 
 def expand_to_ink(img: Image.Image, box: tuple[int, int, int, int], bg: tuple,
