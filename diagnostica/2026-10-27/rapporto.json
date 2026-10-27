@@ -1,0 +1,593 @@
+{
+ "giorno": "2026-10-27",
+ "post_preparati": 4,
+ "slide_totali": 36,
+ "slide_fallite": 0,
+ "lavorazione": {
+  "creato-testo-su-nero": {
+   "totali": 17,
+   "fallite": 0
+  },
+  "cta-creata": {
+   "totali": 2,
+   "fallite": 0
+  },
+  "openai-testo": {
+   "totali": 15,
+   "fallite": 0
+  },
+  "cta-illustrata": {
+   "totali": 1,
+   "fallite": 0
+  },
+  "cta-alone": {
+   "totali": 1,
+   "fallite": 0
+  }
+ },
+ "segnalazioni": [
+  {
+   "job_id": 34,
+   "testo": "Hook non abbastanza forte. Impaginazione migliorabile",
+   "quando": "2026-10-26T14:43:47+00:00"
+  },
+  {
+   "job_id": 33,
+   "testo": "Hook e impaginazione da migliorare",
+   "quando": "2026-10-26T14:44:20+00:00"
+  }
+ ],
+ "post_con_problemi": [
+  {
+   "job_id": 33,
+   "fonte": "creato",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "creato-testo-su-nero",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "LEI: «STASERA C'È ANCHE IL [[MIO EX]].» LUI: «OK. [[DIVERTITI.]]»\n\nDa lì in poi, a non chiudere occhio è stata lei.",
+     "blocchi": [
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      },
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "creato-testo-su-nero",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "SI ASPETTAVA UN INTERROGATORIO\n\n«Chi c'è? A che ora torni? Perché proprio lui?»\nAveva già le risposte pronte.\nLui invece ha continuato a cucinare.\n[[Nessuna domanda.]] E lei è rimasta lì con le risposte in mano.",
+     "blocchi": [
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      },
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "creato-testo-su-nero",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "ALLE 23 ALZA LA POSTA\n\nArriva una foto: lei che ride, l'ex sullo sfondo.\nLa vede e risponde un'ora dopo.\n«Bella serata. Ci vediamo domani.»\nPer lei, [[il messaggio più fastidioso della serata]].",
+     "blocchi": [
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      },
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "creato-testo-su-nero",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "NON VOLEVA FERIRTI. VOLEVA MISURARTI.\n\nDavid Buss, in La passione pericolosa, spiega che la gelosia provocata apposta serve a misurare quanto si conta per l'altro.\nLa domanda vera non è «ti dà fastidio?».\nÈ «[[quanto è facile smuoverti?]]»",
+     "blocchi": [
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      },
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "creato-testo-su-nero",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "ED È QUI CHE MOLTI UOMINI SBAGLIANO\n\nIl broncio. Le domande a raffica. Il messaggio all'una di notte: «Sei ancora lì?»\nCredono di difendere la coppia.\nIn realtà le danno proprio [[la risposta che cercava]].\nOgni reazione le conferma che basta un nome per farti perdere il controllo.",
+     "blocchi": [
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      },
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "creato-testo-su-nero",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "QUESTO NON VUOL DIRE DIVENTARE FREDDO\n\nSe qualcosa non ti va, lo dici. Una volta, con calma, guardandola negli occhi.\nSe diventa un'abitudine, te ne vai.\nMa [[non lotti]] per un posto che dovrebbe già essere tuo.\nE non fai a gara con uno che lei si è già lasciata alle spalle.",
+     "blocchi": [
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      },
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "creato-testo-su-nero",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "L'UNA E MEZZA. LEI RIENTRA.\n\nLui è sul divano, tranquillo.\nÈ lei a chiedere: «Non ti ha dato fastidio?»\n«No. Mi fido di te. E se sbaglio, lo scoprirò presto.»\nSilenzio.\nPer la prima volta, a sentirsi [[insicura]] era lei.",
+     "blocchi": [
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      },
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "creato-testo-su-nero",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Chi [[non fa a gara con l'ex]] è l'unico che l'ex non può battere.",
+     "blocchi": [
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "cta-creata",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se ti sei rivisto in questa scena,\ndalla parte di chi aspettava sveglio\ncon il telefono in mano,\n\nsegui @attraiseduci.\n\nOgni giorno parliamo di relazioni,\nseduzione e psicologia femminile.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Quando lei nomina l'ex o cerca la gelosia, non vuole davvero farti soffrire: vuole misurare quanto conta per te e quanto è facile smuoverti. L'uomo che fa domande, scenate e messaggi alle due di notte le dà proprio la risposta che cercava e perde la sua posizione. Chi resta calmo, dice quello che pensa una volta sola e non lotta per un posto che dovrebbe già essere suo ribalta il gioco: è lei a uscirne inquieta.",
+   "descrizione": "Ogni volta che le chiedi \"perché proprio lui?\", le stai dicendo quanto è facile smuoverti. E lei se lo ricorda.\n\nLei butta lì il nome dell'ex come se niente fosse. A te si chiude lo stomaco, e per il resto della sera il telefono diventa il centro della tua vita: controlli l'ultimo accesso, scrivi un messaggio, lo cancelli, lo riscrivi.\n\nIl prezzo non è una notte insonne. È la posizione in cui ti metti. Ogni domanda in più ti trasforma in quello che deve sorvegliarla per non perderla, e un uomo che sorveglia è un uomo che ha paura. Per questo la scena si ripete: lei ha scoperto che funziona.\n\nGià nel 1980 lo psicologo Gregory White ha studiato chi provoca gelosia di proposito. Ha visto che lo fanno più spesso le donne, e soprattutto quando sentono di essere loro le più coinvolte nel rapporto, quelle con meno potere. Lo fanno per misurare quanto contano e per riequilibrare la bilancia. Quindi quel nome buttato lì a cena non è un segno della sua forza. È un segno della sua insicurezza.\n\nEd è proprio qui che molti uomini sbagliano. Davanti a un test nato dall'insicurezza di lei rispondono con la propria, e la gara diventa a chi cede per primo. Il broncio, le domande, il messaggio all'una di notte le danno la conferma che cercava, e insieme le tolgono un po' di stima per te.\n\nQuesto non significa fare finta di niente o diventare freddo. Se una cosa non ti va, la dici una volta, con calma, guardandola negli occhi. Se diventa un'abitudine, te ne vai. Quello che non fai è lottare per un posto che dovrebbe già essere tuo. La tua calma le dice due cose: che il tuo posto non è in discussione, e che se mai lo diventasse saresti tu a deciderlo.\n\nLei non cercava un rivale per te. Cercava la prova che non ne hai bisogno.\n\nL'ultima volta che ha nominato un altro uomo, le hai dato una risposta o una reazione?\n\nSe ti sei rivisto in questa scena, segui @attraiseduci: qui ogni giorno parliamo di attrazione, gelosia e dinamiche di coppia, per smettere di essere quello che basta un nome a far perdere il controllo.\n\n#gelosia #relazioni #attrazione #psicologiafemminile #coppia",
+   "segnalazioni": [
+    "Hook e impaginazione da migliorare"
+   ]
+  },
+  {
+   "job_id": 34,
+   "fonte": "creato",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "creato-testo-su-nero",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "NON SE N'È [[ANDATA]]. HA SOLO SMESSO DI [[GUARDARMI]].\n\nCi ho messo due anni a capire quando era successo.",
+     "blocchi": [
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      },
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "creato-testo-su-nero",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "DOMENICA SERA\n\nDivano, una serie a caso, tutti e due col telefono in mano.\nLe chiedo: «Pizza?»\nLei: «Come vuoi.»\nNessuna lite. Niente che non andasse.\n[[Ed era proprio questo il problema.]]",
+     "blocchi": [
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      },
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "creato-testo-su-nero",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "ERO DIVENTATO PERFETTO\n\nRispondevo sempre subito. C'ero sempre.\nAvevo mollato il calcetto del giovedì, la palestra, gli amici del sabato. Per stare con lei.\nPensavo di costruire qualcosa.\n[[Invece stavo sparendo.]]",
+     "blocchi": [
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      },
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "creato-testo-su-nero",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "LA SERA IN CUI HO CAPITO\n\nSiamo a cena. Un amico racconta del suo viaggio in moto, da solo, per tre settimane.\nLei lo ascolta con uno sguardo che a me non dava da anni.\nNon le piaceva lui.\nLe piaceva [[un uomo con una vita sua]].",
+     "blocchi": [
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      },
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "creato-testo-su-nero",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "COSA NON AVEVO CAPITO\n\nLo scrive Esther Perel ne L'intelligenza erotica: l'amore cerca vicinanza, [[il desiderio ha bisogno di distanza]].\nSi desidera solo ciò che non si possiede fino in fondo.\nIo le avevo dato tutto di me.\n[[Non le era rimasto niente da scoprire.]]",
+     "blocchi": [
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      },
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "creato-testo-su-nero",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "ED È QUI CHE MOLTI UOMINI SBAGLIANO\n\nSentono che lei si raffredda e le stanno ancora più addosso.\nPiù attenzioni, più messaggi, più «cosa c'è che non va?».\nOgni passo avanti le toglie [[l'aria che le restava]].",
+     "blocchi": [
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      },
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "creato-testo-su-nero",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "NON SIGNIFICA DIVENTARE FREDDO\n\nNon significa sparire, punirla o farla ingelosire.\nSignifica riprenderti quello che hai mollato: le tue passioni, i tuoi amici, i tuoi no.\nUn pezzo di vita [[dove lei non arriva]].\nEd è lì che torna a guardarti.",
+     "blocchi": [
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      },
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "creato-testo-su-nero",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "E TU?\n\nQuand'è stata l'ultima volta che ti ha guardato così mentre parlavi di qualcosa che non c'entrava con lei?\nSe non te lo ricordi, la colpa non è della routine.\n[[È di quello che hai lasciato andare.]]",
+     "blocchi": [
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      },
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "creato-testo-su-nero",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Non ha smesso di amarti.\nHa smesso di [[desiderarti]].\nÈ successo il giorno in cui non avevi più niente da farle scoprire.",
+     "blocchi": [
+      {
+       "x": null,
+       "y": null,
+       "w": null,
+       "h": null,
+       "carattere": null,
+       "colore": null,
+       "colore_evidenziato": null,
+       "allineamento": null
+      }
+     ]
+    },
+    {
+     "numero": 10,
+     "via": "cta-creata",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se questa storia ti suona familiare,\nse anche tu hai mollato pezzi della tua vita\nper stare con lei,\nnon sei finito qui per caso.\n\nHai trovato questa pagina\nper un motivo.\n\nSe ti piacciono questi contenuti,\nseguici prima di dimenticarti di noi.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Lei non se ne va quando finisce l'amore: si spegne quando l'uomo smette di avere una vita sua. Il desiderio ha bisogno di distanza e di mistero, e chi rinuncia a tutto per esserci sempre toglie a lei qualcosa da scoprire. Quando lei si raffredda, l'errore è stringere ancora di più. La via d'uscita è tornare a essere un uomo che lei deve ancora scoprire.",
+   "descrizione": "Non mi ha tradito e non mi ha lasciato. Ha solo smesso di guardarmi, e io per due anni l'ho chiamata serenità.\n\nDomeniche tranquille, nessuna lite, lei che risponde «come vuoi» a qualsiasi domanda. Pensavo fosse pace. Era indifferenza con le buone maniere.\n\nSe ti è successo, sai di cosa parlo. Lei ti vuole ancora bene e te lo dice pure. Ma quando parli non le si accende più niente negli occhi, e tu non capisci dove hai sbagliato, perché hai fatto tutto giusto. Il prezzo è proprio questo: hai dato così tanto da diventare prevedibile. E un uomo prevedibile lo apprezzi, ma non lo desideri.\n\nNel 2002 Dietrich Klusmann, all'Università di Amburgo, ha messo a confronto coppie che stavano insieme da tempi diversi. Nelle donne il desiderio sessuale calava con gli anni di relazione, mentre il bisogno di tenerezza restava intatto. Marta Meana, che studia il desiderio femminile all'Università del Nevada, ha osservato la stessa cosa: per molte donne la familiarità spegne il desiderio più di quanto lo spenga la mancanza d'amore. Quindi lei può volerti bene ogni giorno e non volerti più.\n\nEd è proprio qui che molti uomini sbagliano. Sentono il freddo e aumentano la dose: più presenza, più messaggi, più domande. Ma il desiderio di una donna non si nutre di quanto ci sei per lei. Si nutre di quanto sei qualcuno anche quando lei non c'è. L'amico del viaggio in moto non era più interessante di te. Aveva solo ancora qualcosa di suo.\n\nQuesto non significa diventare freddo o giocare a sparire. Significa rimettere in piedi la parte di te che hai smontato per farle spazio: lo sport, gli amici, i progetti, la libertà di dire no a una serata perché hai altro da fare. Non lo fai per punirla. Lo fai perché una donna continua a guardare solo un uomo che va da qualche parte.\n\nNon hai perso il suo desiderio perché vali poco. L'hai perso quando hai smesso di avere una vita da farle scoprire.\n\nQual è la prima cosa che hai mollato per lei, e da quanto tempo non la fai più?\n\nSe questa storia ti suona familiare, segui @attraiseduci: qui ogni giorno parliamo di desiderio, coppia e psicologia femminile, per smettere di essere quello che c'è sempre e tornare a essere quello che lei guarda.",
+   "segnalazioni": [
+    "Hook non abbastanza forte. Impaginazione migliorabile"
+   ]
+  }
+ ]
+}
