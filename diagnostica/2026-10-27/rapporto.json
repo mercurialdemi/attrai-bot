@@ -1,23 +1,43 @@
 {
  "giorno": "2026-10-27",
- "post_preparati": 4,
- "slide_totali": 36,
+ "post_preparati": 15,
+ "slide_totali": 144,
  "slide_fallite": 0,
  "lavorazione": {
-  "creato-testo-su-nero": {
-   "totali": 17,
-   "fallite": 0
-  },
-  "cta-creata": {
-   "totali": 2,
-   "fallite": 0
-  },
   "openai-testo": {
-   "totali": 15,
+   "totali": 40,
+   "fallite": 0
+  },
+  "blocchi-ricostruzione-codice": {
+   "totali": 3,
    "fallite": 0
   },
   "cta-illustrata": {
+   "totali": 5,
+   "fallite": 0
+  },
+  "testo-su-sfondo-uniforme": {
+   "totali": 32,
+   "fallite": 0
+  },
+  "cta-stile-post": {
+   "totali": 5,
+   "fallite": 0
+  },
+  "blocchi-sfondo-pieno": {
+   "totali": 18,
+   "fallite": 0
+  },
+  "blocchi-pulizia-codice": {
    "totali": 1,
+   "fallite": 0
+  },
+  "creato-testo-su-nero": {
+   "totali": 35,
+   "fallite": 0
+  },
+  "cta-creata": {
+   "totali": 4,
    "fallite": 0
   },
   "cta-alone": {
@@ -26,6 +46,56 @@
   }
  },
  "segnalazioni": [
+  {
+   "job_id": 24,
+   "testo": "testo che esce dal fumetto",
+   "quando": "2026-10-24T17:07:58+00:00"
+  },
+  {
+   "job_id": 25,
+   "testo": "il testo si sovrappone",
+   "quando": "2026-10-24T17:30:59+00:00"
+  },
+  {
+   "job_id": 25,
+   "testo": "la cta non è inerente al tema del post e non è ben collegata",
+   "quando": "2026-10-24T17:31:39+00:00"
+  },
+  {
+   "job_id": 28,
+   "testo": "tono non molto fluido.",
+   "quando": "2026-10-24T20:38:51+00:00"
+  },
+  {
+   "job_id": 28,
+   "testo": "non è fluido",
+   "quando": "2026-10-24T20:40:06+00:00"
+  },
+  {
+   "job_id": 28,
+   "testo": "il libro rimane avanti mentre in realtà si vede che il personaggio sta tenendo in mano il libro",
+   "quando": "2026-10-24T20:41:07+00:00"
+  },
+  {
+   "job_id": 29,
+   "testo": "si vede dietro che ci sarebbe l immagine col libro in mano. O lasciamo l uomo col libro e mettiamo meno scritte, o lasciamo così le scritte ma togliamo il libro dietro",
+   "quando": "2026-10-24T21:12:42+00:00"
+  },
+  {
+   "job_id": 29,
+   "testo": "è quasi perfetta, ma come vedi in basso a sinistra l ultima parola sfora quasi nella vignetta. Errore da niente, ma se migliorabile faccciamolo",
+   "quando": "2026-10-24T21:14:22+00:00"
+  },
+  {
+   "job_id": 31,
+   "testo": "testo che esce dallo sfondo nero",
+   "quando": "2026-10-25T11:50:47+00:00"
+  },
+  {
+   "job_id": 31,
+   "testo": "ancora non è abbastanza fluido il testo",
+   "quando": "2026-10-25T11:51:44+00:00"
+  },
   {
    "job_id": 34,
    "testo": "Hook non abbastanza forte. Impaginazione migliorabile",
@@ -38,6 +108,1828 @@
   }
  ],
  "post_con_problemi": [
+  {
+   "job_id": 24,
+   "fonte": "https://www.instagram.com/p/De4b9RWm_rX/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "I MET\nSOMEONE ELSE...\nGOOD.",
+     "testo": "HO TROVATO\nUN ALTRO...\n\nBENE.",
+     "blocchi": [
+      {
+       "x": 295,
+       "y": 55,
+       "w": 470,
+       "h": 101,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 635,
+       "y": 290,
+       "w": 285,
+       "h": 45,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "GOOD?\nYOU EXPECTED ME\nTO COMPETE FOR\nA WOMAN WHO\nALREADY MADE\nHER CHOICE?",
+     "testo": "BENE?\n\nPENSAVI CHE\nMI METTESSI IN GARA\nPER UNA DONNA\nCHE HA GIÀ\nSCELTO?",
+     "blocchi": [
+      {
+       "x": 52,
+       "y": 160,
+       "w": 245,
+       "h": 45,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 432,
+       "y": 23,
+       "w": 448,
+       "h": 245,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "YOU'RE NOT EVEN\nGOING TO FIGHT\nFOR ME?\nA MAN FIGHTS FOR\nHIS RELATIONSHIP.\nHE DOESN'T AUDITION\nFOR A PLACE\nIN A TRIANGLE.",
+     "testo": "NON LOTTI\nNEMMENO\nPER ME?\n\nUN UOMO LOTTA\nPER LA SUA RELAZIONE.\n\nNON SI METTE IN FILA\nPER UN POSTO\nIN UN TRIANGOLO.",
+     "blocchi": [
+      {
+       "x": 73,
+       "y": 55,
+       "w": 450,
+       "h": 125,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 490,
+       "y": 320,
+       "w": 475,
+       "h": 90,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 520,
+       "y": 538,
+       "w": 455,
+       "h": 122,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "SO I MEANT\nNOTHING TO YOU?\nYOU DID.\nTHAT'S WHY I WON'T\nLET WHAT WE HAD\nTURN ME INTO YOUR\nBACKUP PLAN.",
+     "testo": "QUINDI NON\nCONTAVO NIENTE?\n\nCONTAVI.\n\nPER QUESTO\nNON LASCIO CHE\nLA NOSTRA STORIA\nMI RIDUCA\nA PIANO B.",
+     "blocchi": [
+      {
+       "x": 62,
+       "y": 58,
+       "w": 438,
+       "h": 106,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 650,
+       "y": 31,
+       "w": 245,
+       "h": 47,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 610,
+       "y": 90,
+       "w": 385,
+       "h": 152,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "WHAT IF I MADE\nA MISTAKE?\nTHEN LIVE WITH\nTHE LESSON.\nI WON'T LIVE WITH\nTHE DISRESPECT.",
+     "testo": "E SE AVESSI\nSBAGLIATO?\n\nALLORA TIENITI\nLA LEZIONE.\n\nIO NON MI TENGO\nIL TUO DISPREZZO.",
+     "blocchi": [
+      {
+       "x": 68,
+       "y": 74,
+       "w": 392,
+       "h": 82,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 590,
+       "y": 47,
+       "w": 352,
+       "h": 75,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 557,
+       "y": 160,
+       "w": 412,
+       "h": 82,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "YOU MOVED ON\nTHAT FAST?\nNO.\nI JUST STOPPED\nBEGGING TO STAY\nWHERE I WAS\nALREADY REPLACED.",
+     "testo": "HAI GIÀ\nVOLTATO PAGINA?\n\nNO.\n\nHO SOLO SMESSO\nDI ELEMOSINARE\nUN POSTO DOVE\nMI AVEVI GIÀ\nSOSTITUITO.",
+     "blocchi": [
+      {
+       "x": 333,
+       "y": 31,
+       "w": 333,
+       "h": 102,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 755,
+       "y": 602,
+       "w": 130,
+       "h": 50,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 667,
+       "y": 719,
+       "w": 318,
+       "h": 180,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "THE MOMENT SHE\nCHOOSES ANOTHER MAN,\nSTOP COMPETING.\nA MAN WITH\nSELF-RESPECT\nDOESN'T AUDITION\nFOR A PLACE\nHE ALREADY EARNED.",
+     "testo": "QUANDO LEI\nSCEGLIE UN ALTRO UOMO,\nESCI DALLA GARA.\n\nUN UOMO CHE\nSI RISPETTA\nNON SI RIMETTE IN FILA\nPER UN POSTO\nGIÀ GUADAGNATO.",
+     "blocchi": [
+      {
+       "x": 21,
+       "y": 55,
+       "w": 505,
+       "h": 128,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 620,
+       "y": 707,
+       "w": 365,
+       "h": 215,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "cta-illustrata",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Un libro che entra nel cervello delle donne per mostrarti gli stimoli, i pattern e i segnali a cui ogni donna risponde biologicamente, segnali che generano attrazione e segnali che la spengono.\n\nPerché quando capisci le regole, tutto diventa un gioco...\nse vuoi smettere di essere quello \"sempre buono ma mai scelto davvero\"\n\nti consiglio di dare un'occhiata al link in bio o commenta con \"ATTRAZIONE\" e te lo mando.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Lei gli dice di aver conosciuto un altro e lui risponde \"bene\", senza drammi. Non si mette a fare a gara per una donna che ha già scelto: un uomo lotta per la sua relazione, non per un posto in un triangolo. Non accetta di fare il piano B né di farsi mancare di rispetto, e se ne va con dignità. Il tono è provocatorio e da \"uomo che si rispetta\", con battute secche e sicure.",
+   "descrizione": "Quando lei ti dice \"ho trovato un altro\", ha già deciso. Tu stai solo ricevendo la notizia.\n\nEppure è proprio lì che molti uomini iniziano a lottare.\nChiedono cosa ha lui in più.\nPromettono di cambiare.\nScrivono messaggi lunghi alle due di notte.\n\nE ogni messaggio le conferma che ha fatto bene a scegliere un altro.\n\nNon è debolezza. È chimica.\nNel 2010 l'antropologa Helen Fisher ha fatto la risonanza a persone appena lasciate: davanti alla foto dell'ex si accendevano le aree del cervello legate alla ricompensa e alla dipendenza. Più lei si allontana, più il cervello la vuole.\nNel 2011 Ethan Kross, all'Università del Michigan, ha mostrato che il rifiuto di chi ami attiva zone che si sovrappongono a quelle del dolore fisico.\n\nIn parole semplici: quella voglia di implorare non è amore. È astinenza.\n\nCosa fare quando succede:\n\nRispondi breve. \"Va bene.\" Niente processi, niente domande su di lui. Ogni spiegazione che chiedi è un modo per restare nella stanza.\n\nNon metterti in gara. Una donna che ha già scelto non sta valutando offerte. Se ti proponi, diventi il confronto che la convince di aver fatto bene.\n\nTaglia i contatti. Niente storie guardate, niente \"come stai?\". Il cervello si disintossica solo se smetti di dargli la dose.\n\nSe torna, chiediti se torna per te o perché con lui è andata male. Nel secondo caso sei il piano B.\n\nQuesto non significa fingere che non ti importi. Puoi stare malissimo e uscire comunque a testa alta.\n\nIl dolore passa. Il ricordo di te in ginocchio no. Né per lei, né per te.\n\nPensa all'ultima volta che hai insistito con chi se ne stava già andando: cosa speravi di ottenere davvero?\n\nNel manuale \"Attrai Seduci\" ti spiego perché il desiderio femminile si spegne davanti a chi rincorre e come costruire una presenza che non debba mai mettersi in fila.\n\nLo trovi nel link in bio di @attraiseduci.",
+   "segnalazioni": [
+    "testo che esce dal fumetto"
+   ]
+  },
+  {
+   "job_id": 25,
+   "fonte": "https://www.instagram.com/p/DeXUF3mFuNX/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "MARRIAGE SUCKS FOR\nMEN NOWADAYS AND\nNOBODY TALKS ABOUT\nHOW RIGGED IT IS...",
+     "testo": "OGGI IL MATRIMONIO\nFREGA GLI UOMINI E\nNESSUNO TI DICE\nCHE È UN GIOCO TRUCCATO...",
+     "blocchi": [
+      {
+       "x": 73,
+       "y": 648,
+       "w": 860,
+       "h": 310,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#F25C5C",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "1. The contract carries real risk.\n\nA man can love deeply and still sign\nterms he never studied. Marriage can\nbe sacred while ignorance remains\nexpensive. Know the laws before\nmaking the promise.",
+     "testo": "1. Quel contratto ha rischi veri.\n\nPuoi amarla alla follia e firmare\ncomunque clausole mai lette. Il matrimonio\npuò essere sacro, ma l'ignoranza si\npaga cara. Studia le leggi prima di\nfare quella promessa.",
+     "blocchi": [
+      {
+       "x": 115,
+       "y": 393,
+       "w": 680,
+       "h": 36,
+       "carattere": "normale",
+       "colore": "#F25C5C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 115,
+       "y": 478,
+       "w": 720,
+       "h": 172,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "2. Responsibility without standards\nbecomes exploitation.\n\nMen are still judged by what they\nprovide. Yet asking for loyalty, respect,\nand peace is often treated like an\nunreasonable demand. Never accept\nduty without mutual responsibility.",
+     "testo": "2. Responsabilità senza standard\ndiventa sfruttamento.\n\nUn uomo viene ancora giudicato per\nciò che porta a casa. Ma se chiede lealtà,\nrispetto e pace, passa per uno che\npretende troppo. Non accettare mai\ndoveri senza responsabilità reciproca.",
+     "blocchi": [
+      {
+       "x": 132,
+       "y": 326,
+       "w": 765,
+       "h": 86,
+       "carattere": "normale",
+       "colore": "#F25C5C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 132,
+       "y": 460,
+       "w": 730,
+       "h": 174,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "3. His sacrifice often becomes\ninvisible.\n\nThe long hours. The pressure. The\nsilence. A man may carry the whole\nhouse emotionally and financially—yet\nonly be noticed the moment he can no\nlonger carry it.",
+     "testo": "3. Il suo sacrificio spesso\nnon lo vede nessuno.\n\nLe ore infinite. La pressione. Il\nsilenzio. Un uomo può reggere tutta la\ncasa, sul piano emotivo ed economico,\ne se ne accorgono solo il giorno\nin cui non ce la fa più.",
+     "blocchi": [
+      {
+       "x": 132,
+       "y": 326,
+       "w": 648,
+       "h": 86,
+       "carattere": "normale",
+       "colore": "#F25C5C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 132,
+       "y": 460,
+       "w": 750,
+       "h": 174,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "4. The wrong choice can cost\nyears.\n\nA destructive marriage can threaten his\nhome, peace, finances, reputation, and\nfatherhood. Chemistry is not enough.\nStudy her character under stress before\nyou trust her with your life.",
+     "testo": "4. La scelta sbagliata ti costa\nanni.\n\nUn matrimonio distruttivo può minacciare\ncasa, serenità, soldi, reputazione e\nil tuo ruolo di padre. La chimica non basta.\nGuarda il suo carattere sotto pressione\nprima di affidarle la tua vita.",
+     "blocchi": [
+      {
+       "x": 132,
+       "y": 326,
+       "w": 628,
+       "h": 86,
+       "carattere": "normale",
+       "colore": "#F25C5C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 132,
+       "y": 460,
+       "w": 765,
+       "h": 174,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "5. I'm not saying don't get married.\n\nMarry with your eyes open. Discuss\nmoney, roles, faith, children, and conflict\nbeforehand. The right marriage can\nmultiply a man. The wrong one can\nslowly dismantle him.",
+     "testo": "5. Non ti sto dicendo di non sposarti.\n\nSposati, ma a occhi aperti. Parlate prima\ndi soldi, ruoli, fede, figli e litigi.\nIl matrimonio giusto rende un uomo\npiù forte. Quello sbagliato lo\nsmonta pezzo dopo pezzo.",
+     "blocchi": [
+      {
+       "x": 132,
+       "y": 393,
+       "w": 765,
+       "h": 36,
+       "carattere": "normale",
+       "colore": "#F25C5C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 132,
+       "y": 460,
+       "w": 768,
+       "h": 128,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se ti sei riconosciuto in questa scena e non sapresti cosa fare al mio posto, ti consiglio di commentare “POTERE”.\n\nAvrai i due manuali che ti insegnano a mantenere il tuo frame quando, sia donne che uomini, ti mettono alla prova, senza reagire\ne senza farti calpestare.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Il matrimonio di per sé non è il nemico: il problema è entrarci alla cieca. Un uomo può amare tanto e firmare comunque un contratto di cui non conosce i rischi legali ed economici, accollarsi doveri senza reciprocità, fare sacrifici che nessuno vede e scegliere la donna sbagliata solo per la chimica. Il messaggio non è \"non sposarti\" ma \"sposati a occhi aperti\": parla di soldi, ruoli, fede, figli e conflitti prima e studia il carattere di lei sotto pressione. Il tono è provocatorio nel gancio e serio, quasi da consiglio tra uomini, nel resto.",
+   "descrizione": "Quante ore hai passato a scegliere l'anello? E quante a capire cosa stai firmando?\n\nMolti uomini arrivano all'altare sapendo tutto della location e niente del contratto.\n\nComunione o separazione dei beni. Cosa succede alla casa se finisce. Come funziona l'affidamento dei figli. Sono domande poco romantiche. Proprio per questo nessuno le fa.\n\nIl matrimonio non è il nemico. Il nemico è entrarci alla cieca.\n\nEd è proprio qui che molti uomini sbagliano.\nScambiano la chimica per carattere. Vedono come si comporta lei quando va tutto bene. E danno per scontato che resterà così anche quando arrivano il mutuo, i turni e un figlio che non dorme.\n\nJohn Gottman ha studiato per decenni coppie che litigavano davanti ai ricercatori. Il segnale che anticipava il divorzio meglio di tutti non erano i litigi. Era il disprezzo: il sarcasmo, gli occhi al cielo, il tono di chi si sente superiore.\n\nQuindi, prima di quella promessa:\n\nGuardala sotto pressione. Un ritardo, un tuo no, un problema di soldi. Se ti risponde con disprezzo adesso, con l'anello al dito non migliorerà.\n\nParlate di soldi, ruoli, figli e fede prima, non dopo. Chi evita questi discorsi da fidanzata li eviterà anche da moglie.\n\nFissa i tuoi standard e dilli ad alta voce. Lealtà, rispetto, pace in casa. Se chiederli ti fa passare per uno che pretende troppo, hai già la tua risposta.\n\nQuesto non significa diventare sospettoso o trattarla come una controparte.\nSignifica scegliere da uomo, non da innamorato che chiude gli occhi.\n\nIl matrimonio giusto ti rende più forte. Quello sbagliato ti costa anni, soldi e pace.\n\nE nessun contratto ti proteggerà quanto la capacità di dire no in tempo.\n\nPensaci: lei ti ha mai visto dire un no senza ritirarlo il giorno dopo?\n\nChi non si fa rispettare da fidanzato non verrà rispettato da marito. Rispetto e attrazione seguono le stesse regole, dentro casa e fuori: le trovi nel bundle \"AttraiSeduci\" + \"Potere Sociale\".\n\nLo trovi nel link in bio di @attraiseduci.",
+   "segnalazioni": [
+    "il testo si sovrappone",
+    "la cta non è inerente al tema del post e non è ben collegata"
+   ]
+  },
+  {
+   "job_id": 28,
+   "fonte": "https://www.instagram.com/p/Dek6Mzeji33/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "THERE'S NOT A SINGLE\nF*CKING BENEFIT TO\nBEING SHY AS A MAN.",
+     "testo": "UN UOMO TIMIDO\nNON HA UN SOLO\nCAZZO DI VANTAGGIO.",
+     "blocchi": [
+      {
+       "x": 49,
+       "y": 686,
+       "w": 908,
+       "h": 259,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#FF5A5A",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "THE WORLD WILL BURY\nYOUR POTENTIAL\nAND NEVER ATTEND\nTHE FUNERAL.",
+     "testo": "IL MONDO SEPPELLIRÀ\nIL TUO POTENZIALE\nE AL FUNERALE\nNON CI VERRÀ NEMMENO.",
+     "blocchi": [
+      {
+       "x": 83,
+       "y": 273,
+       "w": 750,
+       "h": 344,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#FF5A5A",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "YOU WANT THE GIRL?\nSOME UGLY BASTARD\nAPPROACHES HER.\nYOU WANT THE PROMOTION?\nSOME LOUDMOUTH ASKS FOR IT.",
+     "testo": "VUOI LA RAGAZZA?\nUN CESSO QUALUNQUE\nCI PROVA CON LEI.\nVUOI LA PROMOZIONE?\nLA CHIEDE UNO SBRUFFONE.",
+     "blocchi": [
+      {
+       "x": 66,
+       "y": 332,
+       "w": 790,
+       "h": 285,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#FF5A5A",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "YOU HAVE A\nMILLION-DOLLAR IDEA?\nSOME MEDIOCRE PRICK\nEXECUTES IT.\nYOU HESITATE.\nTHEY TAKE WHAT YOU WANTED.",
+     "testo": "HAI UN'IDEA\nDA UN MILIONE?\nLA REALIZZA\nUNO STRONZO MEDIOCRE.\nTU ESITI.\nLORO SI PRENDONO QUELLO CHE VOLEVI.",
+     "blocchi": [
+      {
+       "x": 81,
+       "y": 312,
+       "w": 780,
+       "h": 372,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#FF5A5A",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "NOBODY GIVES A F*CK\nHOW SMART YOU ARE\nIF YOU CAN'T\nOPEN YOUR MOUTH.",
+     "testo": "NON FREGA A NESSUNO\nQUANTO SEI INTELLIGENTE\nSE NON RIESCI\nAD APRIRE BOCCA.",
+     "blocchi": [
+      {
+       "x": 81,
+       "y": 312,
+       "w": 645,
+       "h": 286,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#FF5A5A",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "YOUR INTELLIGENCE\nMEANS NOTHING\nWHEN FEAR KEEPS IT\nLOCKED INSIDE YOUR SKULL.",
+     "testo": "LA TUA INTELLIGENZA\nNON VALE NIENTE\nSE LA PAURA LA TIENE\nCHIUSA DENTRO LA TESTA.",
+     "blocchi": [
+      {
+       "x": 81,
+       "y": 312,
+       "w": 815,
+       "h": 290,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#FF5A5A",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "A GENIUS TOO SCARED\nTO SPEAK GETS\nOUTPLAYED BY AN IDIOT\nWITH BALLS.",
+     "testo": "UN IDIOTA CON LE PALLE\nSI MANGIA VIVO\nUN GENIO CHE HA\nPAURA DI PARLARE.",
+     "blocchi": [
+      {
+       "x": 81,
+       "y": 316,
+       "w": 740,
+       "h": 282,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#FF5A5A",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "YOU CALL YOURSELF\nINTROVERTED.\nRESERVED.\nA QUIET OBSERVER.\nBULLSHIT.",
+     "testo": "DICI DI ESSERE\nINTROVERSO.\nRISERVATO.\nUN OSSERVATORE SILENZIOSO.\nSTRONZATE.",
+     "blocchi": [
+      {
+       "x": 86,
+       "y": 316,
+       "w": 655,
+       "h": 379,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#FF5A5A",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "IF YOU'RE SILENT\nBECAUSE YOU'RE TERRIFIED\nOF JUDGMENT, REJECTION\nOR EMBARRASSMENT,\nTHAT'S NOT MYSTERY.",
+     "testo": "SE STAI ZITTO\nPERCHÉ HAI IL TERRORE\nDEL GIUDIZIO, DEL RIFIUTO\nO DELLA FIGURACCIA,\nNON È MISTERO.",
+     "blocchi": [
+      {
+       "x": 86,
+       "y": 320,
+       "w": 758,
+       "h": 317,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#FF5A5A",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 10,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "THAT'S FEAR\nWEARING A\nRESPECTABLE\nOUTFIT.",
+     "testo": "È PAURA\nTRAVESTITA\nDA QUALCOSA\nDI RISPETTABILE.",
+     "blocchi": [
+      {
+       "x": 88,
+       "y": 316,
+       "w": 562,
+       "h": 395,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#FF5A5A",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 11,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "SOME BROKE DUDE IS\nDATING THE GIRL YOU WORSHIP.\nSOME AVERAGE BASTARD\nIS MAKING MORE\nMONEY THAN YOU.",
+     "testo": "UNO SPIANTATO\nESCE CON LA RAGAZZA CHE ADORI.\nUN BASTARDO QUALUNQUE\nGUADAGNA PIÙ\nDI TE.",
+     "blocchi": [
+      {
+       "x": 68,
+       "y": 336,
+       "w": 822,
+       "h": 352,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#FF5A5A",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 12,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "NOBODY'S COMING TO DISCOVER\nYOUR HIDDEN GREATNESS.\nTHE WORLD ISN'T\nF*CKING TALENT SCOUT.",
+     "testo": "NESSUNO VERRÀ A SCOPRIRE\nIL GENIO CHE TIENI NASCOSTO.\nIL MONDO NON È\nUN CAZZO DI TALENT SCOUT.",
+     "blocchi": [
+      {
+       "x": 86,
+       "y": 336,
+       "w": 797,
+       "h": 211,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#FF5A5A",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 13,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "IT DOESN'T REWARD THE MAN\nYOU COULD'VE BECOME.\nIT REWARDS THE BASTARD\nWHO ACTUALLY SHOWS UP.",
+     "testo": "NON PREMIA L'UOMO\nCHE AVRESTI POTUTO DIVENTARE.\nPREMIA IL BASTARDO\nCHE CI METTE LA FACCIA.",
+     "blocchi": [
+      {
+       "x": 101,
+       "y": 336,
+       "w": 727,
+       "h": 273,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#FF5A5A",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 14,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "APPROACH HER.\nMAKE THE CALL.\nDEMAND THE OPPORTUNITY.\nSPEAK YOUR MIND.\nTAKE THE REJECTION.\nGET EMBARRASSED.",
+     "testo": "VAI A PARLARLE.\nFAI QUELLA TELEFONATA.\nPRETENDI L'OCCASIONE.\nDI' QUELLO CHE PENSI.\nINCASSA IL RIFIUTO.\nFAI LA FIGURACCIA.",
+     "blocchi": [
+      {
+       "x": 101,
+       "y": 336,
+       "w": 686,
+       "h": 363,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#FF5A5A",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 15,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "A BRUISED EGO HEALS.\nA WASTED LIFE DOESN'T\nCOME WITH A REFUND.",
+     "testo": "UN EGO FERITO GUARISCE.\nUNA VITA BUTTATA\nNESSUNO TE LA RIMBORSA.",
+     "blocchi": [
+      {
+       "x": 117,
+       "y": 336,
+       "w": 725,
+       "h": 230,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#FF5A5A",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 16,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "IMAGINE REACHING 70 AND\nREALIZING YOU SPENT\nYOUR ENTIRE LIFE AFRAID\nOF CONVERSATIONS\nTHAT WOULD'VE LASTED 30 SEC.",
+     "testo": "IMMAGINA DI ARRIVARE A 70 ANNI\nE CAPIRE DI AVER PASSATO\nTUTTA LA VITA A TEMERE\nCONVERSAZIONI\nDA 30 SECONDI.",
+     "blocchi": [
+      {
+       "x": 66,
+       "y": 336,
+       "w": 800,
+       "h": 293,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#FF5A5A",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 17,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "WOMEN YOU NEVER APPROACHED.\nMONEY YOU NEVER PURSUED.\nCHANCES YOU NEVER TOOK.\nA LIFETIME MURDERED BY\nIMAGINARY EMBARRASSMENT.",
+     "testo": "DONNE CHE NON HAI MAI AVVICINATO.\nSOLDI CHE NON HAI MAI INSEGUITO.\nOCCASIONI MAI COLTE.\nUNA VITA INTERA AMMAZZATA\nDA FIGURACCE IMMAGINARIE.",
+     "blocchi": [
+      {
+       "x": 63,
+       "y": 336,
+       "w": 785,
+       "h": 289,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#FF5A5A",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 18,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "THERE'S NO MEDAL\nFOR THE QUIET GUY WHO\nALMOST BECAME SOMEBODY.\nALMOST RICH.\nALMOST RESPECTED.\nALMOST SUCCESSFUL.\nALMOST LOVED.",
+     "testo": "NESSUNO DÀ MEDAGLIE\nA QUELLO ZITTO CHE\nÈ QUASI DIVENTATO QUALCUNO.\nQUASI RICCO.\nQUASI RISPETTATO.\nQUASI ARRIVATO.\nQUASI AMATO.",
+     "blocchi": [
+      {
+       "x": 78,
+       "y": 336,
+       "w": 732,
+       "h": 418,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#FF5A5A",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 19,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "STOP BEING A SPECTATOR\nIN YOUR OWN F*CKING LIFE.\nOPEN YOUR MOUTH.\nTAKE YOUR SHOT.\nOR WATCH ANOTHER MAN\nTAKE YOUR PLACE.",
+     "testo": "SMETTILA DI FARE LO SPETTATORE\nDELLA TUA CAZZO DI VITA.\nAPRI BOCCA.\nGIOCATI LE TUE CARTE.\nO GUARDA UN ALTRO\nPRENDERSI IL TUO POSTO.",
+     "blocchi": [
+      {
+       "x": 78,
+       "y": 336,
+       "w": 700,
+       "h": 363,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#FF5A5A",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 20,
+     "via": "cta-illustrata",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se queste parole ti hanno colpito,\nsai già cosa succede se continui a stare zitto:\naltri uomini si prenderanno donne, rispetto e opportunità\nche avresti voluto per te.\n\nDevi decidere:\nrestare quello che sa di poter essere di più\no diventare quello che entra in una stanza\ne non deve più convincere nessuno del proprio valore.\n\nScrivi \"BUNDLE\" nei commenti o in DM.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "La timidezza in un uomo non ha nessun lato positivo: mentre tu esiti, uno meno bravo di te si prende la ragazza, la promozione e i soldi. L'intelligenza e il potenziale non valgono niente se la paura ti tiene zitto, e chiamarla introversione o mistero è solo una scusa elegante. Il mondo non viene a cercarti: premia chi si fa avanti. Un ego ferito guarisce, una vita sprecata no, quindi apri bocca e giocati le tue carte. Registro: provocatorio, duro, volgare, motivazionale.",
+   "descrizione": "⚠️ La timidezza non ti protegge. Ti deruba, un'occasione alla volta.\n\nLei è lì, a tre metri. Sai già cosa dirle.\nPoi abbassi lo sguardo sul telefono. E intanto un altro si avvicina.\n\nLo chiami carattere riservato. In realtà è paura del giudizio vestita bene.\nE ti costa caro: donne mai conosciute, aumenti mai chiesti, idee che realizza qualcun altro.\nIl rispetto se ne va un silenzio alla volta. Anche quello per te stesso.\n\nSi ripete perché ogni volta che eviti, il sollievo arriva subito e ti premia.\nCosì la volta dopo eviti di nuovo.\n\nThomas Gilovich e Victoria Medvec, alla Cornell, nel 1995 hanno studiato i rimpianti: sul momento pesano gli errori fatti, ma col passare degli anni si rimpiange soprattutto quello che non si è mai tentato.\nLo stesso Gilovich ha mostrato che sopravvalutiamo quanto gli altri notino le nostre figuracce.\nIl pubblico che temi non ti sta nemmeno guardando.\n\nEd è qui che molti uomini sbagliano: aspettano di sentirsi sicuri per agire.\nFunziona al contrario.\nQuesto non significa diventare lo sbruffone. Significa smettere di lasciargli il campo libero.\n\n1. Una frase al giorno a uno sconosciuto. Anche solo \"Sai se qui fanno un buon caffè?\". La paura cala solo quando ti esponi.\n\n2. In riunione parla nei primi cinque minuti. Più aspetti, più il silenzio diventa il tuo ruolo.\n\n3. Quando ti blocchi chiediti: \"Fra un anno ricorderò questa figuraccia?\". No. Ricorderai solo di non averci provato.\n\nNon ti manca il valore. Ti manca l'abitudine di mostrarlo.\n\nQual è la conversazione da trenta secondi che stai rimandando da mesi?\n\nChi viene rispettato dagli uomini viene desiderato dalle donne. Chi resta zitto nel gruppo perde anche lei.\nNei manuali \"Come diventare l'uomo a cui nessuna sa resistere\" + \"Potere Sociale\" impari a prenderti spazio senza elemosinarlo.\nLi trovi nel link in bio di @attraiseduci.",
+   "segnalazioni": [
+    "tono non molto fluido.",
+    "non è fluido",
+    "il libro rimane avanti mentre in realtà si vede che il personaggio sta tenendo in mano il libro"
+   ]
+  },
+  {
+   "job_id": 29,
+   "fonte": "https://www.instagram.com/p/Dex1ioPjkYr/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "WHY ARE SINGLE GUYS NO LONGER INTERESTED IN RELATIONSHIPS?",
+     "testo": "PERCHÉ GLI UOMINI SINGLE\nNON CERCANO PIÙ\nUNA RELAZIONE?",
+     "blocchi": [
+      {
+       "x": 99,
+       "y": 55,
+       "w": 828,
+       "h": 187,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "WHY ARE SO MANY GOOD MEN CHOOSING TO STAY SINGLE? / BECAUSE PEACE STARTED FEELING BETTER THAN PROVING THEY DESERVE TO BE LOVED.",
+     "testo": "PERCHÉ TANTI\nUOMINI DI VALORE\nSCELGONO DI RESTARE SOLI?\n\nPERCHÉ STARE IN PACE\nORA VALE DI PIÙ\nCHE DOVER DIMOSTRARE\nDI MERITARSI L'AMORE.",
+     "blocchi": [
+      {
+       "x": 78,
+       "y": 31,
+       "w": 651,
+       "h": 129,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 484,
+       "y": 230,
+       "w": 485,
+       "h": 130,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "SO MEN ARE JUST AFRAID OF COMMITMENT NOW? / NO. MANY ARE AFRAID OF COMMITTING TO SOMEONE WHO WANTS THE BENEFITS OF A MAN... WITHOUT RESPECTING THE MAN.",
+     "testo": "QUINDI ADESSO GLI UOMINI\nHANNO PAURA DELL'IMPEGNO?\n\nNO.\n\nMOLTI HANNO PAURA\nDI LEGARSI A CHI\nVUOLE I VANTAGGI\nDI UN UOMO...\nMA NON LO RISPETTA.",
+     "blocchi": [
+      {
+       "x": 47,
+       "y": 100,
+       "w": 562,
+       "h": 60,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 540,
+       "y": 492,
+       "w": 135,
+       "h": 48,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 453,
+       "y": 543,
+       "w": 521,
+       "h": 223,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "BUT DON'T MEN GET LONELY? / OF COURSE. BUT LONELINESS ENDS WHEN YOU MEET SOMEONE. A BAD RELATIONSHIP FOLLOWS YOU HOME EVERY NIGHT.",
+     "testo": "MA GLI UOMINI\nNON SI SENTONO SOLI?\n\nCERTO.\nMA LA SOLITUDINE FINISCE\nQUANDO INCONTRI QUALCUNO.\nUNA RELAZIONE SBAGLIATA\nTE LA RITROVI A CASA\nOGNI SERA.",
+     "blocchi": [
+      {
+       "x": 36,
+       "y": 117,
+       "w": 360,
+       "h": 86,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 448,
+       "y": 31,
+       "w": 547,
+       "h": 258,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "DON'T THEY MISS BEING WANTED? / YES. BUT BEING WANTED ISN'T THE SAME AS BEING VALUED. ATTENTION FEELS GOOD FOR A NIGHT. RESPECT IS WHAT MAKES A MAN STAY.",
+     "testo": "NON GLI MANCA\nESSERE DESIDERATI?\n\nSÌ.\nMA ESSERE DESIDERATI\nNON VUOL DIRE\nESSERE APPREZZATI.\nLE ATTENZIONI TI SCALDANO\nUNA SERA.\nÈ IL RISPETTO\nCHE FA RESTARE UN UOMO.",
+     "blocchi": [
+      {
+       "x": 89,
+       "y": 125,
+       "w": 432,
+       "h": 90,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 583,
+       "y": 27,
+       "w": 396,
+       "h": 293,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "THEN WHY NOT KEEP TRYING? / BECAUSE SOME MEN GOT TIRED OF RELATIONSHIPS THAT FELT LIKE CONSTANT TESTS.",
+     "testo": "E ALLORA PERCHÉ\nNON CI RIPROVANO?\n\nPERCHÉ CERTI UOMINI\nSI SONO STANCATI\nDI RELAZIONI\nDOVE OGNI GIORNO\nERA UN ESAME.",
+     "blocchi": [
+      {
+       "x": 219,
+       "y": 35,
+       "w": 448,
+       "h": 106,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 464,
+       "y": 199,
+       "w": 510,
+       "h": 121,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "SO WHAT DO THEY DO INSTEAD? / THEY BUILD. THEY TRAIN. THEY SAVE. THEY TRAVEL. AND THEY STOP APOLOGIZING FOR ENJOYING THE LIFE THEY CREATED.",
+     "testo": "E INVECE\nCHE FANNO?\n\nCOSTRUISCONO.\nSI ALLENANO.\nRISPARMIANO.\nVIAGGIANO.\nE SMETTONO DI CHIEDERE SCUSA\nSE SI GODONO LA VITA\nCHE SI SONO FATTI.",
+     "blocchi": [
+      {
+       "x": 52,
+       "y": 47,
+       "w": 333,
+       "h": 101,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 531,
+       "y": 55,
+       "w": 438,
+       "h": 207,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "WHAT WOULD MAKE A RELATIONSHIP WORTH IT AGAIN? / A WOMAN WHO ADDS PEACE TO HIS LIFE... WITHOUT ASKING HIM TO SACRIFICE HIS SELF-RESPECT TO KEEP HER.",
+     "testo": "E PER COSA\nVARREBBE ANCORA LA PENA\nSTARE IN COPPIA?\n\nPER UNA DONNA\nCHE GLI PORTA PACE...\nSENZA CHIEDERGLI\nDI SACRIFICARE\nL'AMOR PROPRIO\nPER TENERSELA.",
+     "blocchi": [
+      {
+       "x": 255,
+       "y": 35,
+       "w": 610,
+       "h": 121,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 542,
+       "y": 617,
+       "w": 375,
+       "h": 297,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "A GOOD MAN DOESN'T AVOID LOVE BECAUSE HE HATES WOMEN. HE AVOIDS CHAOS BECAUSE HE FINALLY LEARNED HOW EXPENSIVE THE WRONG WOMAN CAN BE.",
+     "testo": "UN UOMO DI VALORE\nNON EVITA L'AMORE\nPERCHÉ ODIA LE DONNE.\n\nSTA ALLA LARGA DAL CAOS\nPERCHÉ HA CAPITO, FINALMENTE,\nQUANTO SI PAGA CARA\nLA DONNA SBAGLIATA.",
+     "blocchi": [
+      {
+       "x": 146,
+       "y": 31,
+       "w": 703,
+       "h": 90,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 146,
+       "y": 133,
+       "w": 703,
+       "h": 137,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 10,
+     "via": "cta-illustrata",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se ti sei rivisto in questa scena,\nsai cosa vuol dire\ndoversi meritare l'amore ogni giorno.\n\nSe devi continuamente dimostrare quanto vali,\nstai lasciando che sia lei a deciderlo.\n\nHo creato il bundle \"AttraiSeduci\" + \"Potere Sociale\"\nper insegnarti come funzionano attrazione, carisma e rispetto,\ne come smettere di comportarti\nda uomo che cerca continuamente conferme.\n\nLa scelta è tua:\ncontinuare a inseguire l'attenzione\noppure costruire una presenza capace di attirarla.\n\nLink in bio o commenta c",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Una donna chiede perché tanti uomini single, anche quelli di valore, non cercano più una relazione. Lui risponde con calma: non è paura dell'impegno né odio per le donne, è che hanno scoperto che la pace vale più che dover sempre dimostrare di meritare amore, rispetto e attenzioni. Preferiscono costruire, allenarsi, risparmiare e viaggiare piuttosto che vivere relazioni che sembrano esami continui o che costano caro. Una relazione torna a valere la pena solo con una donna che porta pace senza chiedere di sacrificare l'amor proprio. Registro: provocatorio, sicuro, un po' ironico.",
+   "descrizione": "Restare single non vuol dire avere paura dell'impegno. Vuol dire aver già pagato una volta il prezzo della donna sbagliata.\n\nTe la ricordi quella sensazione.\nRientri a casa e controlli il suo umore prima ancora di posare le chiavi.\nPesi ogni parola. Giustifichi ogni uscita. Chiedi scusa per cose che non hai fatto.\n\nOgni giorno un esame. E tu sempre un po' in debito.\n\nQuella relazione non ti costava solo tempo.\nTi costava la stima di te. Un pezzo alla volta, finché non ti riconoscevi più.\n\nEd è proprio qui che molti uomini si raccontano la versione sbagliata: \"Allora sono io che non sono fatto per stare in coppia.\"\nNo.\nHai solo capito che la solitudine passa, mentre una convivenza sbagliata te la ritrovi in casa ogni sera.\n\nNon è una cosa che succede solo a te. Nel 2022 il Pew Research Center ha rilevato che tra gli under 30 gli uomini single sono quasi il doppio delle donne.\n\nMa attento all'estremo opposto.\nStare alla larga dal caos non significa chiuderti e odiare le donne.\nSignifica smettere di scambiare le attenzioni per rispetto.\nIl desiderio ti scalda per una sera. È il rispetto che ti fa restare.\n\nE il rispetto non si chiede. Lo vedi da come ti tratta quando le dici di no.\n\nQuindi mentre gli altri rincorrono, tu costruisci. Ti alleni. Metti da parte. Viaggi.\nNon per ripicca. Una vita piena è l'unico filtro che funziona davvero: chi entra deve portarti pace, non togliertela.\n\nNon sei tu che non sai amare. Hai smesso di farlo a qualunque prezzo.\n\nNella tua ultima relazione, quante volte hai chiesto scusa solo per avere un po' di pace?\n\nRispetto e attrazione seguono le stesse regole: chi non sa farsi rispettare non resta desiderato a lungo. Nel bundle \"AttraiSeduci\" + \"Potere Sociale\" ti spiego come alzare gli standard senza chiuderti.\nLink in bio o commenta \"BUNDLE\".",
+   "segnalazioni": [
+    "si vede dietro che ci sarebbe l immagine col libro in mano. O lasciamo l uomo col libro e mettiamo meno scritte, o lasciamo così le scritte ma togliamo il libro dietro",
+    "è quasi perfetta, ma come vedi in basso a sinistra l ultima parola sfora quasi nella vignetta. Errore da niente, ma se migliorabile faccciamolo"
+   ]
+  },
+  {
+   "job_id": 31,
+   "fonte": "https://www.instagram.com/p/De199tLn7WO/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "blocchi-pulizia-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "MODERN WOMEN TIMELINE:\nFROM H*E TO WIFE.",
+     "testo": "LA PARABOLA DELLA DONNA MODERNA:\nDA FACILE A MOGLIE.",
+     "blocchi": [
+      {
+       "x": 41,
+       "y": 777,
+       "w": 908,
+       "h": 98,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "18–22:\nTHE H*E PHASE.\n\"I'm young.\nI wanna have fun.\"\nBad boys.\nRandom hookups.\nSituationships.\nCommitment? F*ck that.",
+     "testo": "18-22:\n\nLA FASE FACILE.\n\n\"Sono giovane.\nVoglio divertirmi.\"\nBad boy.\nAvventure di una notte.\nStorie senza nome.\n\nImpegnarsi? Col ca**o.",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 209,
+       "w": 195,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 264,
+       "w": 518,
+       "h": 37,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 316,
+       "w": 566,
+       "h": 286,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 631,
+       "w": 737,
+       "h": 42,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "23–25:\nTHE EXPERIMENTAL PHASE.\n\"I'm finding myself.\"\nNew d*ck. New heartbreak.\nNew healing era.\nSame f*cking decisions.",
+     "testo": "23-25:\n\nLA FASE DEGLI\nESPERIMENTI.\n\n\"Sto cercando me stessa.\"\nNuovo letto. Nuovo cuore spezzato.\nNuovo percorso di guarigione.\n\nE sempre le stesse ca**o di scelte.",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 234,
+       "w": 195,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 311,
+       "w": 654,
+       "h": 88,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 410,
+       "w": 820,
+       "h": 172,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 612,
+       "w": 728,
+       "h": 43,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "26–28:\nTHE AWAKENING.\n\"I'm done with toxic men.\"\nTranslation:\nGetting played isn't\ncute anymore.",
+     "testo": "26-28:\n\nIL RISVEGLIO.\n\n\"Ho chiuso con gli uomini tossici.\"\nTraduzione:\n\nFarsi usare ha smesso\ndi essere divertente.",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 258,
+       "w": 195,
+       "h": 41,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 350,
+       "w": 566,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 404,
+       "w": 800,
+       "h": 96,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 522,
+       "w": 586,
+       "h": 107,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Suddenly, the boring guy\nwith a career looks\ninteresting.",
+     "testo": "All'improvviso, il ragazzo noioso\n\ncon un lavoro serio\ncomincia a sembrarle interessante.",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 359,
+       "w": 767,
+       "h": 47,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 418,
+       "w": 576,
+       "h": 113,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "29–31:\nTHE HUSBAND HUNT.\n\"I know my worth.\"\nSix feet. Six figures.\nEmotionally available.\nMust accept everything.",
+     "testo": "29-31:\n\nA CACCIA DI MARITO.\n\n\"So quanto valgo.\"\nAlmeno 1,85. Almeno centomila l'anno.\nEmotivamente disponibile.\nE deve accettare tutto.",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 273,
+       "w": 195,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 363,
+       "w": 693,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 416,
+       "w": 728,
+       "h": 208,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "She wants a premium\nhusband after years of\ntreating commitment\nlike a free trial.",
+     "testo": "Pretende un marito premium\ndopo anni passati a\n\ntrattare l'impegno\ncome una prova gratuita.",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 332,
+       "w": 664,
+       "h": 94,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 461,
+       "w": 640,
+       "h": 90,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "32–35:\nTHE PANIC PHASE.\n\"Why won't men commit?\"\nThe players still\nwant s*x.\nThe serious men want\ncompatibility.",
+     "testo": "32-35:\n\nLA FASE DEL PANICO.\n\n\"Perché nessuno vuole impegnarsi?\"\nI donnaioli vogliono\nancora e solo ses*o.\nGli uomini seri cercano\nla donna giusta.",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 254,
+       "w": 195,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 342,
+       "w": 605,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 395,
+       "w": 684,
+       "h": 254,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "And her dating resume\nreads like a f*cking\ncrime documentary.",
+     "testo": "E il suo passato sentimentale\n\nsembra un ca**o di\ndocumentario di cronaca nera.",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 359,
+       "w": 698,
+       "h": 47,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 418,
+       "w": 615,
+       "h": 113,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 10,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "36+:\nTHE REBRANDING.\n\"I've always wanted\na traditional man.\"\nNow she wants marriage.\nStability.\nA provider.",
+     "testo": "36+:\n\nIL RESTYLING.\n\n\"Ho sempre voluto\nun uomo tradizionale.\"\nOra vuole sposarsi.\nStabilità.\nUno che la mantenga.",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 254,
+       "w": 161,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 342,
+       "w": 605,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 395,
+       "w": 771,
+       "h": 254,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 11,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "FUNNY HOW\nPATRIARCHY\nBECOMES\nATTRACTIVE\nWHEN THE BILLS\nSHOW UP.",
+     "testo": "BUFFO COME IL\nPATRIARCATO\nDIVENTI DI COLPO\nATTRAENTE\nQUANDO ARRIVANO\nLE BOLLETTE.",
+     "blocchi": [
+      {
+       "x": 39,
+       "y": 293,
+       "w": 757,
+       "h": 379,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 12,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "THE IRONY:\nAt 22:\n\"MEN ARE USELESS.\"\nAt 32:\n\"WHY CAN'T I FIND\nA HUSBAND?\"",
+     "testo": "IRONIA DELLA SORTE:\n\nA 22 anni:\n\n\"GLI UOMINI NON SERVONO A NIENTE.\"\n\nA 32 anni:\n\n\"PERCHÉ NON TROVO\nMARITO?\"",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 246,
+       "w": 371,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 328,
+       "w": 161,
+       "h": 33,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 405,
+       "w": 698,
+       "h": 33,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 483,
+       "w": 161,
+       "h": 33,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 556,
+       "w": 605,
+       "h": 70,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 13,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Apparently, independence\ncame with a\nreturn policy.",
+     "testo": "A quanto pare, l'indipendenza\n\nera soddisfatti\no rimborsati.",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 359,
+       "w": 800,
+       "h": 47,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 418,
+       "w": 400,
+       "h": 113,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 14,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "THE BRUTAL TRUTH:\nYou can spend your youth\ntreating commitment\nlike a joke.\nYou can call every\ndecent man boring.",
+     "testo": "LA VERITÀ CHE FA MALE:\n\nPuoi passare la giovinezza\na prendere l'impegno\nper uno scherzo.\n\nPuoi bollare come noioso\nogni uomo per bene.",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 289,
+       "w": 669,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 344,
+       "w": 796,
+       "h": 122,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 522,
+       "w": 600,
+       "h": 99,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 15,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "You can chase chaos\nand call it freedom.",
+     "testo": "Puoi rincorrere il caos\n\ne chiamarlo libertà.",
+     "blocchi": [
+      {
+       "x": 34,
+       "y": 383,
+       "w": 649,
+       "h": 43,
+       "carattere": "normale",
+       "colore": "#8C8C8C",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 34,
+       "y": 461,
+       "w": 576,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 16,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "BUT YOU DON'T\nGET TO DEMAND\nTHAT THE MEN\nYOU REJECTED\nWAIT AROUND\nFOR YOUR\nREBRANDING.",
+     "testo": "MA NON PUOI\nPRETENDERE\nCHE GLI UOMINI\nCHE HAI SCARTATO\nRESTINO LÌ AD ASPETTARE\nIL TUO\nRESTYLING.",
+     "blocchi": [
+      {
+       "x": 39,
+       "y": 328,
+       "w": 757,
+       "h": 371,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 17,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se hai riconosciuto\nanche una sola di queste fasi,\nnon sei finito qui per caso.\n\nSmetti di fare la sala d'attesa\nper il restyling di qualcun altro.\n\nSegui @attraiseduci:\nogni giorno parliamo di relazioni,\nseduzione e psicologia femminile.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Il carosello racconta, fascia d'età per fascia d'età, il percorso della \"donna moderna\": a vent'anni rifiuta l'impegno e corre dietro ai bad boy, poi ripete gli stessi errori chiamandoli crescita, e verso i trent'anni scopre all'improvviso che il ragazzo serio e noioso era quello giusto. A quel punto pretende un marito perfetto, va nel panico e si reinventa come donna tradizionale. La morale: puoi scegliere il caos da giovane, ma non puoi pretendere che gli uomini che hai scartato restino ad aspettarti. Il tono è provocatorio, sarcastico e tagliente.",
+   "descrizione": "Quante volte ti sei sentito dire che eri \"troppo tranquillo\"?\n\nTroppo serio. Troppo prevedibile. Il classico bravo ragazzo con cui \"non scatta niente\".\nE intanto lei usciva con quello che spariva per tre giorni e tornava come se niente fosse.\n\nPoi passano gli anni. E all'improvviso ti riscrive.\nTi trova maturo. Affidabile. \"Diverso dagli altri\".\n\nEd è proprio qui che molti uomini commettono l'errore più caro: lo prendono come una vittoria.\n\nNon lo è.\nNon ti sta scegliendo. Ti sta ripescando.\n\nNel 1972 il biologo Robert Trivers ha spiegato che chi rischia di più in un rapporto è anche più selettivo, e cambia criteri in base a ciò che gli serve in quel momento. Prima vince il brivido. Poi vince la sicurezza.\n\nNel 2004 Roy Baumeister e Kathleen Vohs l'hanno detto in modo ancora più crudo: tra uomini e donne funziona come un mercato, e chi ha più richiesta detta il prezzo.\nFinché lei ha opzioni, le regole le fa lei.\nQuando le opzioni calano, cambiano le regole. E di colpo il requisito diventa \"un uomo tradizionale\".\n\nC'è una parte che nessuno ti racconta.\nIl tuo valore, se lo costruisci, cresce con il tempo. Lavoro, carattere, calma, una vita che regge da sola. A 35 anni sei un uomo molto più solido di quello che eri a 22.\n\nE troppi uomini lo regalano come premio di consolazione a chi li ha scartati quando non conveniva.\n\nQuesto non significa diventare rancoroso o odiare le donne.\nSignifica smettere di fare la sala d'attesa.\nNon sei il piano B da tenere da parte finché la festa non finisce.\n\nCostruisci la tua vita.\nE scegli una donna che ti ha voluto quando non c'era niente da guadagnare, non quando le sei diventato utile.\n\nIl tempo che hai investito su di te non è il rimborso per le scelte di qualcun altro.\n\nIn quale di queste fasi l'hai conosciuta? E in quale ti ha cercato davvero?\n\nSe anche una sola di queste fasi ti ha ricordato qualcuna che conosci, segui @attraiseduci: ogni giorno parliamo di attrazione, valore e dinamiche tra uomo e donna, senza favole.\n\n#attrazione #relazioni #psicologiamaschile #valore #attraiseduci",
+   "segnalazioni": [
+    "testo che esce dallo sfondo nero",
+    "ancora non è abbastanza fluido il testo"
+   ]
+  },
   {
    "job_id": 33,
    "fonte": "creato",
