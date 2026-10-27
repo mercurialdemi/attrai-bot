@@ -82,7 +82,7 @@ IDEA_TOOL = {
             "concetto": {"type": "string", "description": "Il messaggio di tutto il carosello in 3-4 frasi."},
             "slides": {"type": "array", "minItems": 5, "maxItems": 9, "items": {"type": "object", "properties": {
                 "titolo": {"type": "string", "description": (
-                    "Copertina: il gancio, grande, massimo 12-14 parole. Slide interne: un titoletto breve (2-7 "
+                    "Copertina: il gancio, grande, massimo 10 parole (meglio 6-8). Slide interne: un titoletto breve (2-7 "
                     "parole) oppure vuoto. Le parole più forti tra [[ ]] (vengono in rosso).")},
                 "testo": {"type": "string", "description": (
                     "Copertina: un sottotitolo breve che apre la curiosità (una frase) oppure vuoto. Slide interne: "
@@ -163,7 +163,8 @@ SCRITTURA DA COPYWRITER (il carosello deve sembrare scritto da un professionista
 - PORTA IL LETTORE DENTRO (come fanno le pagine migliori): fallo sentire compreso ("ti è mai successo che..."),
   mettilo nella scena, fagli farsi le domande giuste e lascialo arrivare DA SOLO alla soluzione invece di
   dargliela come una lezione. Deve pensare "è esattamente quello che mi succede" e poi "ora ho capito".
-- Copertina: poche parole, scritte GRANDI. Un gancio lungo in piccolo non lo legge nessuno.
+- Copertina: poche parole, scritte GRANDI. Un gancio lungo in piccolo non lo legge nessuno. Niente dialoghi
+  interi in copertina: una sola frase che fa male o incuriosisce, il resto va nelle slide dopo.
 
 REGOLE
 - Si parte sempre dal dolore e dalla dinamica, mai dal manuale.
@@ -274,8 +275,15 @@ def render_slide(text: str, cover: bool, brand: dict, logo: bool, placements: li
         paras = [p for p in text.split("\n\n") if p.strip()]
         if len(paras) > 1:
             tit, body = paras[0].upper(), "\n\n".join(paras[1:])
+    if cta and tit and body and tit.rstrip()[-1:] in ",;":
+        # la frase della CTA continua nel corpo: niente virgola appesa in fondo al titolo, corpo con la maiuscola
+        tit = tit.rstrip().rstrip(",;").rstrip()
+        body = body.lstrip()
+        body = body[:1].upper() + body[1:]
     if not st["maiuscolo"] and tit:
         tit = _sentence(tit)
+    if st["carattere"] == "titolo":
+        tit = _virgolette(tit)
     tfont = {"carattere": st["carattere"], "maiuscolo": st["maiuscolo"]}
     if st["peso"]:
         tfont["peso"] = st["peso"]
@@ -338,9 +346,14 @@ def _sentence(t: str) -> str:
             cap = False
         else:
             out.append(ch)
-        if ch in ".!?\n":
+        if ch in ".!?":                  # un a capo NON è inizio frase: "familiare,\nse anche tu" resta minuscolo
             cap = True
     return _re.sub(r"\[\[(.)", lambda m: "[[" + m.group(1), "".join(out))
+
+
+def _virgolette(t: str) -> str:
+    """Nel carattere stretto dei titoli le « » sembrano due frecce << >>: lì si usano le virgolette alte “ ”."""
+    return (t or "").replace("«", "“").replace("»", "”")
 
 
 def _black(jdir: Path, look: dict | None = None) -> Path:
