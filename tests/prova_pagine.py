@@ -55,10 +55,11 @@ visti = []
 def finto(system, content, tool, **k):
     visti.append(system)
     pag = "ResetRelazionale" if "PAGINA: ResetRelazionale" in system else "AmoreInfedele"
-    return {"post": [   # u1 va bene a entrambe le pagine, u0 solo ad Amore, u2 a nessuna
-        {"numero": 1, "dolore": "d", "adatto": pag == "AmoreInfedele", "natura": "didattico", "motivo": "m"},
-        {"numero": 2, "dolore": "d", "adatto": True, "natura": "virale", "motivo": "rottura"},
-        {"numero": 3, "dolore": "d", "adatto": False, "natura": "virale", "motivo": "auto"}]}
+    return {"post": [   # stesso collaboratore: u0 è un post per Amore, u1 per Reset (adatto a tutte e due, ma meglio
+        # a Reset), u2 per nessuna
+        {"numero": 1, "dolore": "d", "adatto": pag == "AmoreInfedele", "pagina_migliore": "AmoreInfedele", "natura": "didattico", "motivo": "m"},
+        {"numero": 2, "dolore": "d", "adatto": True, "pagina_migliore": "ResetRelazionale", "natura": "virale", "motivo": "rottura"},
+        {"numero": 3, "dolore": "d", "adatto": False, "pagina_migliore": "nessuna", "natura": "virale", "motivo": "auto"}]}
 
 
 writer._tool_call = finto
@@ -69,7 +70,7 @@ pagine.imposta("amoreinfedele")
 cands2 = [instagram.SourcePost(url=f"u{i}", owner="x", caption="c", kind="Sidecar", score=s)
           for i, s in enumerate([5, 3, 2])]
 keep2, _ = report._fit_filter(cands2, writer.load_brand())
-assert [p.url for p in keep2] == ["u0", "u1"], [p.url for p in keep2]   # lo stesso post può andare a due pagine
+assert [p.url for p in keep2] == ["u0"], [p.url for p in keep2]   # post diversi dello stesso collaboratore, pagine diverse
 pagine.imposta("resetrelazionale")
 righe = report._link_lines(keep, 1, 1.5)
 assert "VIRALE" in righe[0] and "segui la pagina" in righe[0], righe[0]   # Reset ora ha il manuale friendzone

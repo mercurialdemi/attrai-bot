@@ -212,10 +212,11 @@ FIT_TOOL = {
                 "numero": {"type": "integer"},
                 "dolore": {"type": "string", "description": "PRIMA di decidere: il dolore o il tema che il post tocca davvero e a chi parla (uomo, donna, entrambi), in poche parole."},
                 "adatto": {"type": "boolean", "description": "true solo se il post parla al PUBBLICO di questa pagina e tocca uno dei SUOI dolori/temi, così che i suoi follower lo sentano scritto per loro."},
+                "pagina_migliore": {"type": "string", "description": "Tra QUESTA pagina e le nostre altre pagine, il NOME di quella a cui il post è più adatto (pubblico e dolore), oppure 'nessuna'."},
                 "natura": {"type": "string", "enum": ["didattico", "virale"],
                            "description": "didattico = INSEGNA qualcosa di concreto: spiega un meccanismo, un trucco, cosa fare o non fare, segnali da riconoscere, errori con la soluzione. virale = punta sull'EMOZIONE più che sull'insegnamento: provoca, polarizza, tocca ego o orgoglio, fa sentire rabbia, rivalsa, riconoscimento o nostalgia (frasi d'impatto, verità scomode, scene, confronti, citazioni). Nel dubbio: se non c'è un insegnamento pratico, è virale."},
                 "motivo": {"type": "string", "description": "Perché va (o non va) su questa pagina, massimo 14 parole."},
-            }, "required": ["numero", "dolore", "adatto", "natura", "motivo"]}},
+            }, "required": ["numero", "dolore", "adatto", "pagina_migliore", "natura", "motivo"]}},
         },
         "required": ["post"],
     },
@@ -256,8 +257,8 @@ def _nome_pagina(val, pagine: list[dict]) -> str:
 
 def _fit_filter(cands: list, brand: dict) -> tuple[list, bool]:
     """Tiene solo i post adatti a QUESTA pagina: stesso pubblico, uno dei suoi dolori, il suo taglio.
-    Lo stesso collaboratore può stare in più pagine: ogni pagina sceglie i post giusti per sé (anche lo stesso post
-    può andare bene a due pagine). Guarda la descrizione e la copertina (molti post hanno poco testo sotto).
+    Lo stesso collaboratore può stare in più pagine: ogni pagina sceglie tra i suoi post quelli giusti per sé, e ogni
+    post va a una sola pagina (quella a cui è più adatto). Guarda la descrizione e la copertina (molti post hanno poco testo sotto).
     Claude Haiku: costa pochissimo. Restituisce (post adatti, filtro riuscito)."""
     if not cands:
         return cands, True
@@ -271,8 +272,9 @@ def _fit_filter(cands: list, brand: dict) -> tuple[list, bool]:
                           for pg in altre)
     system = ("Sei il responsabile contenuti di una pagina Instagram italiana. Scegli quali post dei collaboratori "
               "vanno bene per QUESTA pagina, e solo per lei.\n\n" + profilo + "\n\n"
-              + (("LE NOSTRE ALTRE PAGINE (solo per capire i confini: un post che parla soprattutto al loro pubblico o "
-                  "dei loro temi NON va qui; uno che va bene sia qui sia altrove va bene anche qui):\n" + contrasto + "\n\n")
+              + (("LE NOSTRE ALTRE PAGINE (per capire i confini: lo stesso collaboratore pubblica post diversi, alcuni "
+                  "adatti a noi e altri a un'altra nostra pagina; ogni post va SOLO alla pagina a cui è più adatto):\n"
+                  + contrasto + "\n\n")
                  if contrasto else "")
               + "Regole: conta a CHI parla il post e QUALE dolore tocca. Se il pubblico non è quello della pagina "
               "(es. un post che parla alle donne per una pagina di uomini, o viceversa) non è adatto. Se il tema è "
@@ -302,7 +304,9 @@ def _fit_filter(cands: list, brand: dict) -> tuple[list, bool]:
             continue
         for r in out.get("post", []):
             n = r.get("numero")
-            if isinstance(n, int) and 1 <= n <= len(chunk) and r.get("adatto"):
+            # ogni post va a UNA sola pagina: quella a cui è più adatto (niente doppioni tra le nostre pagine)
+            migliore = _nome_pagina(r.get("pagina_migliore"), pagine_nostre(brand)) or brand["nome"]
+            if isinstance(n, int) and 1 <= n <= len(chunk) and r.get("adatto") and migliore == brand["nome"]:
                 p = chunk[n - 1]
                 p.pagina = brand["nome"]
                 prima = p.motivo if (p.motivo or "").startswith("📈") else ""
