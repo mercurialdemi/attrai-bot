@@ -43,6 +43,7 @@ report:
   fuso: Europe/Rome
   finestra_ore: 72       # considera i post pubblicati negli ultimi 3 giorni (anche quelli partiti piano)
   candidati: 15          # quanti post mettere in classifica
+  post_nel_report: 7     # link nel report del mattino: metà didattici, metà virali (6-7)
   quanti_post: 5         # quanti preparare già pronti
   post_per_pagina: 30    # post letti per pagina per calcolare la sua media
   punteggio_minimo: 1.5  # solo post andati almeno 1,5 volte la media della loro pagina (1.0 = nella media)

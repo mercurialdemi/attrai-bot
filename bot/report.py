@@ -198,6 +198,7 @@ def _settings(brand: dict) -> dict:
         "completa": bool(cfg.get("completa_sempre", True)),
         # False = il report manda solo i link dei migliori post (nessun credito speso per tradurli)
         "prepara": bool(cfg.get("prepara_post", False)),
+        "link": max(1, int(cfg.get("post_nel_report", 7))),   # quanti link nel report (metà didattici, metà virali)
         "perche": int(cfg.get("perche_quanti", 0)),          # 0 = il perché non è nel report (arriva una volta a settimana)
     }
 
@@ -377,16 +378,42 @@ def _perche(items: list) -> dict:
         return {}
 
 
-def _link_lines(items: list, start: int, min_score: float, perche: dict | None = None) -> list[str]:
+def _bilancia(cands: list, n: int) -> list:
+    """I migliori n post, metà didattici e metà virali (se di un tipo ce ne sono pochi, si completa con l'altro)."""
+    did = [p for p in cands if p.natura == "didattico"]
+    vir = [p for p in cands if p.natura != "didattico"]
+    k_did = min(len(did), (n + 1) // 2)
+    k_vir = min(len(vir), n - k_did)
+    k_did = min(len(did), n - k_vir)
+    scelti = did[:k_did] + vir[:k_vir]
+    return sorted(scelti, key=lambda p: (p.natura != "didattico", -p.score))
+
+
+def _sezioni(items: list, min_score: float, perche: dict | None = None, start: int = 1) -> list[str]:
+    """Il report diviso in due blocchi: prima i didattici, poi i virali."""
+    manuali = bool(writer.load_brand().get("manuali"))
+    did = [p for p in items if p.natura == "didattico"]
+    vir = [p for p in items if p.natura != "didattico"]
+    out = []
+    if did:
+        out.append("📚 DIDATTICI" + (" · CTA al manuale" if manuali else "") + f" ({len(did)})")
+        out += _link_lines(did, start, min_score, perche, tipo=False)
+    if vir:
+        out.append(f"🔥 VIRALI · per far crescere la pagina ({len(vir)})")
+        out += _link_lines(vir, start + len(did), min_score, perche, tipo=False)
+    return out
+
+
+def _link_lines(items: list, start: int, min_score: float, perche: dict | None = None, tipo: bool = True) -> list[str]:
     perche = perche or {}
     out = []
     for i, p in enumerate(items, start):
         anteprima = " ".join((p.caption or "").split())[:70]
         nums = f"❤️ {p.likes or 0} · 💬 {p.comments or 0}"
         principale = bool(writer.load_brand().get("manuali"))   # CTA al manuale solo se la pagina ha manuali
-        tipo = ({"didattico": "📚 DIDATTICO (CTA manuale)", "virale": "🔥 VIRALE (segui la pagina)"} if principale
+        tipo_txt = ({"didattico": "📚 DIDATTICO (CTA manuale)", "virale": "🔥 VIRALE (segui la pagina)"} if principale
                 else {"didattico": "📚 didattico", "virale": "🔥 virale"}).get(p.natura, "")
-        testa = tipo
+        testa = tipo_txt if tipo else ""
         out.append(f"{i}. " + (f"{testa}\n" if testa else "") + f"@{p.owner} · {p.score:.1f}x la sua media{'' if p.score >= min_score else ' (sotto media)'}"
                    f" · {nums}\n{p.url}" + (f"\n{p.motivo}" if p.motivo else (f"\n“{anteprima}…”" if anteprima else ""))
                    + (f"\n{perche[p.url]}" if perche.get(p.url) else ""))
@@ -496,7 +523,7 @@ async def run_report(bot, chat_ids: list[int]) -> None:
                          and (st["completa"] or p.score >= st["min_score"])]
                 if cands:
                     cands, filtered = await asyncio.to_thread(_fit_filter, cands, brand)
-                if len(cands) >= st["quanti"]:
+                if len(cands) >= st["link"]:
                     break
             riepilogo = _page_summary(posts, handles, ore, st["min_score"], own)
             if not cands:
@@ -504,8 +531,9 @@ async def run_report(bot, chat_ids: list[int]) -> None:
                                                 f"collaboratori ha superato {st['min_score']:.1f}x la media della "
                                                 "sua pagina. Niente da segnalare oggi.\n\n" + riepilogo)
                 return
+            first = _bilancia(cands, st["link"])
+            cands = first + [p for p in cands if p not in first]      # /altri riparte da dove finisce il report
             storage.save_ranking([_to_dict(p) for p in cands])
-            first = cands[:st["candidati"]]
             _offset_file().write_text(str(len(first)))
             _mark_shown(first)
             perche = {}
@@ -517,11 +545,11 @@ async def run_report(bot, chat_ids: list[int]) -> None:
                 f"☀️ {brand['nome']} · post dei collaboratori andati almeno {st['min_score']:.1f}x sopra la media della loro pagina "
                 f"(ultimi {ore // 24} giorni, mai mandati prima)"
                 + (" · oggi pochi post forti, ho guardato anche i giorni prima" if ore > st["ore"] else "") + ".\n"
-                "📚 didattico = da vendere col manuale · 🔥 virale = per far crescere la pagina:"
+                f"I {len(first)} migliori, metà didattici e metà virali:"
                 + ("" if filtered else "\n(filtro di tema non riuscito: li vedi tutti)"),
-                _link_lines(first, 1, st["min_score"], perche),
+                _sezioni(first, st["min_score"], perche),
                 riepilogo + "\n\nMandami il link di quelli che ti piacciono e li preparo in italiano."
-                + (f"\nScrivi /altri per vederne altri {min(st['candidati'], len(cands) - len(first))}." if len(cands) > len(first) else ""))
+                + (f"\nScrivi /altri per vederne altri {min(st['link'], len(cands) - len(first))}." if len(cands) > len(first) else ""))
             return
         cands = rank_candidates(posts, st["ore"], st["candidati"])
         storage.save_ranking([_to_dict(p) for p in cands])
@@ -559,7 +587,7 @@ async def run_more(bot, chat_ids: list[int]) -> None:
                 shown = int(_offset_file().read_text())
             except Exception:
                 shown = 0
-            nxt = [instagram.SourcePost(**d) for d in ranking[shown:shown + st["candidati"]]]
+            nxt = [instagram.SourcePost(**d) for d in ranking[shown:shown + st["link"]]]
             if not nxt:
                 await _broadcast(bot, chat_ids, "Non ci sono altri post nella classifica di oggi.")
                 return
@@ -568,7 +596,7 @@ async def run_more(bot, chat_ids: list[int]) -> None:
             left = len(ranking) - shown - len(nxt)
             perche = await asyncio.to_thread(_perche, nxt[:st["perche"]]) if st["perche"] > 0 else {}
             await _send_links(bot, chat_ids, "Altri post dalla classifica:",
-                              _link_lines(nxt, shown + 1, st["min_score"], perche),
+                              _sezioni(nxt, st["min_score"], perche, start=shown + 1),
                               "Mandami il link di quelli che ti piacciono." + ("\n/altri per i successivi." if left > 0 else ""))
             return
         done = storage.processed_urls([d["url"] for d in ranking])
