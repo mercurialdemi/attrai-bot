@@ -128,6 +128,11 @@ def run_analysis(brand: dict, n_posts: int = 80) -> dict:
     cta_list.sort(key=cta_key, reverse=True)
     cta_slides = _find_cta_slides([p for p, _ in sorted(scored, key=lambda x: -x[1])], brand)
     feedback = _bot_feedback([(p, e / med) for p, e in scored])
+    try:
+        conversioni = studio_conversioni_cta(brand, posts, stats) if stats else {}
+    except Exception as e:
+        log.warning("Studio delle conversioni delle CTA non riuscito: %s", e)
+        conversioni = {}
 
     esempi = []
     for n in out.get("esempi", []):
@@ -150,6 +155,7 @@ def run_analysis(brand: dict, n_posts: int = 80) -> dict:
         "slide_cta_motivo": cta_slides.get("_motivo", ""),
         "testi_slide_cta": cta_slides.get("_testi", []),
         "feedback_bot": feedback,
+        "cta_conversioni": conversioni or writer.load_style().get("cta_conversioni") or {},
         "post_analizzati": len(scored),
         "creato": datetime.now(timezone.utc).isoformat(timespec="seconds"),
     }
@@ -173,6 +179,114 @@ def run_analysis(brand: dict, n_posts: int = 80) -> dict:
     config.DATA_DIR.mkdir(parents=True, exist_ok=True)
     (config.DATA_DIR / "stile.json").write_text(json.dumps(style, ensure_ascii=False, indent=1), encoding="utf-8")
     return style
+
+
+CTA_CONV_TOOL = {
+    "name": "cta_conversioni",
+    "description": "Studio di quali CTA convertono davvero, perché, e come migliorare le deboli.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "cta": {"type": "array", "items": {"type": "object", "properties": {
+                "numero": {"type": "integer"},
+                "testo": {"type": "string", "description": "La CTA finale della descrizione, parola per parola (di solito l'ultimo paragrafo)."},
+                "tipo": {"type": "string", "enum": ["manuale", "segui", "nessuna"]},
+                "manuale": {"type": "string", "description": "id del manuale se tipo=manuale, altrimenti vuoto."},
+                "leva": {"type": "string", "description": "La leva principale in poche parole (dolore, urgenza, speranza, falsa credenza, domanda introspettiva, parola da commentare...)."},
+                "perche": {"type": "string", "description": "Per le CTA che convertono: perché funziona, concreto e specifico. Per quelle deboli: perché non converte."},
+            }, "required": ["numero", "testo", "tipo", "manuale", "leva", "perche"]}},
+            "regole": {"type": "array", "items": {"type": "string"},
+                       "description": "5-8 regole concrete ricavate dai NUMERI: cosa fanno le CTA che portano clic e follow e cosa sbagliano le altre."},
+            "riscritture": {"type": "array", "items": {"type": "object", "properties": {
+                "numero": {"type": "integer", "description": "Il numero di una CTA debole."},
+                "nuova": {"type": "string", "description": "La stessa CTA riscritta seguendo le regole vincenti, nel nostro tono."},
+            }, "required": ["numero", "nuova"]}, "description": "Le 3 CTA più deboli riscritte meglio."},
+        },
+        "required": ["cta", "regole", "riscritture"],
+    },
+}
+
+
+def studio_conversioni_cta(brand: dict, posts: list, stats: dict, min_reach: int = 800) -> dict:
+    """Con le statistiche vere di Instagram: quali CTA portano davvero clic sul link (manuali) e nuovi follower
+    (segui la pagina), PERCHÉ, e come riscrivere le più deboli. Il risultato entra nelle istruzioni di chi
+    scrive le CTA e nel riepilogo del lunedì."""
+    righe = []
+    for p in posts:
+        st = stats.get(instagram_api.shortcode(p.url)) or {}
+        reach = st.get("reach") or 0
+        if reach < min_reach or len((p.caption or "").strip()) < 80:
+            continue
+        righe.append({"post": p, "reach": reach,
+                      "clic": round(1000 * (st.get("clic_link") or 0) / reach, 2),
+                      "follow": round(1000 * (st.get("follows") or 0) / reach, 2),
+                      "commenti": round(1000 * (st.get("comments") or 0) / reach, 2)})
+    if len(righe) < 8:
+        return {}
+    # le migliori e le peggiori per clic (vendita) e per follow (crescita), senza doppioni
+    scelti: list = []
+    for chiave in ("clic", "follow"):
+        ordinati = sorted(righe, key=lambda r: -r[chiave])
+        for r in ordinati[:6] + ordinati[-4:]:
+            if r not in scelti:
+                scelti.append(r)
+    testo = "\n\n".join(
+        f"{i}. {r['clic']} clic sul link, {r['follow']} nuovi follower, {r['commenti']} commenti ogni 1000 persone "
+        f"raggiunte ({r['reach']} raggiunte)\n<<<\n{r['post'].caption.strip()[-900:]}\n>>>"
+        for i, r in enumerate(scelti, 1))
+    manuali = "; ".join(f"{m['id']}: {m['nome']}" for m in brand.get("manuali", []))
+    system = (f"Sei il copywriter che ottimizza le call to action di {brand['nome']}. Hai i NUMERI VERI di Instagram "
+              "di ogni post: clic sul link in bio (le vendite dei manuali passano da lì), nuovi follower e commenti "
+              "(le CTA con la parola da commentare portano in DM) ogni 1000 persone raggiunte. "
+              "Per ogni descrizione estrai la CTA finale, poi capisci dai numeri cosa fa convertire: una CTA al manuale "
+              "si giudica sui clic (e sui commenti se chiede una parola da commentare), una CTA 'segui' sui nuovi "
+              "follower. Spiega il perché in modo concreto (leva, dolore, urgenza, falsa credenza distrutta, domanda, "
+              "lunghezza, posizione, parola da commentare, aggancio al post). Niente consigli generici: solo ciò che i "
+              f"numeri mostrano. Manuali: {manuali}. Tono della pagina: {' '.join(brand.get('tono') or [])}")
+    out = writer._tool_call(system, [{"type": "text", "text": testo + "\n\nRestituisci lo studio con lo strumento cta_conversioni."}],
+                            CTA_CONV_TOOL, model=config.CAPTION_MODEL, max_tokens=8000)
+    cta = []
+    for c in out.get("cta", []):
+        n = c.get("numero")
+        if isinstance(n, int) and 1 <= n <= len(scelti) and c.get("tipo") != "nessuna" and (c.get("testo") or "").strip():
+            r = scelti[n - 1]
+            cta.append({**{k: c.get(k) for k in ("testo", "tipo", "manuale", "leva", "perche")},
+                        "testo": writer.clean_text(c["testo"]), "clic_ogni_1000": r["clic"],
+                        "follow_ogni_1000": r["follow"], "commenti_ogni_1000": r["commenti"], "url": r["post"].url})
+    metrica = lambda c: c["clic_ogni_1000"] + 0.3 * c["commenti_ogni_1000"] if c["tipo"] == "manuale" else c["follow_ogni_1000"]
+    cta.sort(key=metrica, reverse=True)
+    risc = []
+    for r_ in out.get("riscritture", []):
+        n = r_.get("numero")
+        if isinstance(n, int) and 1 <= n <= len(scelti) and (r_.get("nuova") or "").strip():
+            risc.append({"vecchia": scelti[n - 1]["post"].caption.strip()[-400:], "nuova": writer.clean_text(r_["nuova"])})
+    return {"cta": cta, "regole": out.get("regole") or [], "riscritture": risc[:3], "post_misurati": len(righe),
+            "creato": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+
+
+def report_cta(conv: dict) -> str:
+    """Il riepilogo per Gabriele: cosa converte, perché, regole e CTA deboli riscritte."""
+    if not conv.get("cta"):
+        return ""
+    def riga(c):
+        num = (f"{c['clic_ogni_1000']} clic/1000" + (f", {c['commenti_ogni_1000']} commenti/1000" if c['commenti_ogni_1000'] else "")
+               if c["tipo"] == "manuale" else f"{c['follow_ogni_1000']} follow/1000")
+        return f"• [{c['tipo']}{' ' + c['manuale'] if c.get('manuale') else ''} · {num}] {c['testo'][:220]}\n  ↳ {c['perche']}"
+    man = [c for c in conv["cta"] if c["tipo"] == "manuale"]
+    seg = [c for c in conv["cta"] if c["tipo"] == "segui"]
+    parti = [f"🎯 CTA: COSA CONVERTE DAVVERO (statistiche Instagram su {conv.get('post_misurati')} post)"]
+    if man:
+        parti.append("Manuali, quelle che portano più clic:\n" + "\n".join(riga(c) for c in man[:3])
+                     + ("\nLe più deboli:\n" + "\n".join(riga(c) for c in man[-2:]) if len(man) > 4 else ""))
+    if seg:
+        parti.append("Segui la pagina, quelle che portano più follower:\n" + "\n".join(riga(c) for c in seg[:3])
+                     + ("\nLe più deboli:\n" + "\n".join(riga(c) for c in seg[-2:]) if len(seg) > 4 else ""))
+    if conv.get("regole"):
+        parti.append("Regole che il bot segue da ora:\n" + "\n".join(f"• {r}" for r in conv["regole"]))
+    if conv.get("riscritture"):
+        parti.append("CTA deboli riscritte:\n" + "\n\n".join(f"Prima: …{r['vecchia'][-160:]}\nDopo: {r['nuova']}"
+                                                          for r in conv["riscritture"]))
+    return "\n\n".join(parti)
 
 
 def nicchia_da_rifare(brand: dict) -> bool:

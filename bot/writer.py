@@ -592,7 +592,7 @@ def _cta_memory(style: dict) -> str:
     """CTA che hanno reso di più sulla nostra pagina (da /analizza): circa metà delle volte se ne riusa
     una adattata al post, l'altra metà se ne scrive una nuova costruita sulle stesse leve."""
     best = style.get("cta_migliori") or []
-    if not best and not style.get("testi_slide_cta"):
+    if not best and not style.get("testi_slide_cta") and not (style.get("cta_conversioni") or {}).get("cta"):
         return ""
     def info(c):
         extra = (f", {c['clic_ogni_1000']} clic sul link e {c['follow_ogni_1000']} follow ogni 1000 persone raggiunte"
@@ -608,7 +608,18 @@ def _cta_memory(style: dict) -> str:
                 "senza copiarle.")
     slide_txt = "\n".join(f"- ({t['tipo']}{' ' + t['manuale'] if t.get('manuale') else ''}) {' / '.join(t['testo'].splitlines())}"
                           for t in (style.get("testi_slide_cta") or [])[:15])
-    return ((f"\nTESTI DELLE NOSTRE SLIDE CTA (dai nostri caroselli):\n{slide_txt}\n" if slide_txt else "")
+    conv = style.get("cta_conversioni") or {}
+    conv_txt = ""
+    if conv.get("cta"):
+        top = ([c for c in conv["cta"] if c["tipo"] == "manuale"][:3]
+               + [c for c in conv["cta"] if c["tipo"] == "segui"][:3])
+        conv_txt = ("\nCOSA CONVERTE DAVVERO (statistiche vere di Instagram: clic sul link per i manuali, nuovi follower "
+                    "per 'segui'; ha la precedenza su tutto il resto delle CTA):\n"
+                    + "\n".join(f"- [{c['tipo']}{' ' + c['manuale'] if c.get('manuale') else ''}] {c['testo'][:300]} "
+                                 f"-> funziona perché: {c['perche']}" for c in top)
+                    + ("\nREGOLE RICAVATE DAI NUMERI:\n" + "\n".join(f"- {r}" for r in conv.get("regole") or []))
+                    + "\n")
+    return (conv_txt + (f"\nTESTI DELLE NOSTRE SLIDE CTA (dai nostri caroselli):\n{slide_txt}\n" if slide_txt else "")
             + f"\nCTA CHE HANNO RESO DI PIÙ SULLA NOSTRA PAGINA:\n{lines}\n"
             + (f"Lezioni dallo studio: {style.get('lezioni_cta')}\n" if style.get("lezioni_cta") else "")
             + (f"CTA da NON imitare (post che hanno reso poco):\n{worst}\n" if worst else "")

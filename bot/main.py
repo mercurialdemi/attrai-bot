@@ -35,7 +35,7 @@ COMMANDS = [
     ("Studio della pagina", [
         ("analizza", "Rifai subito lo studio (lo fa già da solo ogni notte)",
          "il bot studia da solo ogni notte i tuoi post, le descrizioni e le slide CTA; usalo solo per averlo subito"),
-        ("stile", "Cosa ha imparato il bot", "guida di stile e testi CTA ricavati da /analizza"),
+        ("stile", "Cosa ha imparato il bot (anche quali CTA convertono)", "guida di stile, testi CTA e quali CTA portano davvero clic e follow, con il perché"),
         ("studio", "Perché i post sono andati", "post per post: perché sono andati i post di competitor, collaboratori e nostri, più temi, hook e strutture vincenti (lo studio della nicchia arriva da solo ogni settimana)"),
         ("statistiche", "Numeri veri degli ultimi post", "copertura, salvataggi, condivisioni, clic (serve Meta)"),
         ("pagine", "Collaboratori e competitor", "le pagine dei collaboratori (report) e dei competitor (studio)"),
@@ -292,6 +292,11 @@ async def cmd_stile(update: Update, context: ContextTypes.DEFAULT_TYPE):
             (f"Come {', '.join('@' + p for p in st.get('pagine') or [])} collegano la CTA al post "
              f"({st.get('post_studiati')} caroselli, {st.get('creato', '')[:10]}):\n\n{st['lezioni']}"
              + (f"\n\nSchemi di aggancio:\n{schemi}" if schemi else ""))[:4000])
+    conv_txt = analysis.report_cta(style.get("cta_conversioni") or {})
+    await update.effective_message.reply_text(
+        conv_txt[:4000] if conv_txt else
+        "Conversioni delle CTA: non ho ancora le statistiche vere di Instagram (clic sul link e follow). "
+        "Appena /statistiche funziona, al prossimo studio te le mostro qui e nel riepilogo del lunedì.")
 
 
 async def _send_studio(bot, chat_ids: list[int], sv: dict) -> None:
@@ -896,8 +901,15 @@ def _schedule_analysis(app: Application, slug: str):
         top = style.get("cta_migliori") or []
         if top:
             righe.append("CTA migliore: " + top[0]["testo"][:200])
+        if not instagram_api.enabled() or style.get("fonte_numeri") != "statistiche Instagram":
+            righe.append("⚠️ Statistiche Instagram non disponibili: le CTA sono valutate solo su like e commenti, "
+                         "non sui clic e sui follow veri. Scrivi /statistiche per vedere l'errore.")
+        conv_txt = analysis.report_cta(style.get("cta_conversioni") or {})
         for c in chat_ids:
             await context.bot.send_message(c, "\n".join(righe))
+            if conv_txt:
+                for k in range(0, len(conv_txt), 3800):
+                    await context.bot.send_message(c, conv_txt[k:k + 3800], disable_web_page_preview=True)
 
     app.job_queue.run_daily(job, time=at, name=f"studio_giornaliero_{slug}")
     if slug == pagine.PRINCIPALE and "testi_slide_cta" not in writer.load_style():   # mai fatto
