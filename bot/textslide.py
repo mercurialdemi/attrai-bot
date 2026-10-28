@@ -465,14 +465,48 @@ def _flow_old(draw, words: list[str], font, max_w: int) -> list[str]:
     return lines
 
 
-def _wrap(draw, text: str, font, max_w: int) -> list[str]:
+_FINE_FRASE = ('.', '!', '?', ':', ';', '…', '"', '»', ')')
+
+
+def _riempi(draw, words: list[str], font, max_w: int) -> list[str]:
+    """A capo come un testo normale (tweet, paragrafo): ogni riga si riempie fino alla larghezza del blocco.
+    L'ultima riga non resta con una parola sola."""
+    lines: list[list[str]] = [[]]
+    for w in words:
+        if lines[-1] and draw.textlength(" ".join(lines[-1] + [w]), font=font) > max_w:
+            lines.append([])
+        lines[-1].append(w)
+    if len(lines) > 1 and len(lines[-1]) == 1 and len(lines[-2]) > 2:
+        lines[-1].insert(0, lines[-2].pop())
+    return [" ".join(l) for l in lines if l]
+
+
+def _soft_groups(rows: list[str]) -> list[str]:
+    """Unisce gli a capo 'a metà frase' (la riga non finisce con un segno di fine frase e la successiva inizia
+    in minuscolo): sono a capo copiati dall'inglese, non voluti. Gli a capo di elenchi e frasi brevi restano."""
+    groups: list[str] = []
+    for r in rows:
+        if groups and not groups[-1].endswith(_FINE_FRASE) and r[:1].islower():
+            groups[-1] += " " + r
+        else:
+            groups.append(r)
+    return groups
+
+
+def _wrap(draw, text: str, font, max_w: int, soft: bool = False) -> list[str]:
     """Mantiene gli a capo dell'originale; se in un paragrafo una riga non ci sta, ridistribuisce
-    tutto il paragrafo in modo uniforme (niente parole rimaste da sole)."""
+    tutto il paragrafo in modo uniforme (niente parole rimaste da sole).
+    soft=True (testo allineato a sinistra): gli a capo a metà frase si tolgono e la frase riempie la larghezza
+    del blocco originale, così il testo non resta stretto con un vuoto a destra."""
     out: list[str] = []
     paragraphs = text.split("\n\n")
     for k, para in enumerate(paragraphs):
         rows = [r.strip() for r in para.split("\n") if r.strip()]
-        if rows and all(draw.textlength(r, font=font) <= max_w for r in rows):
+        groups = _soft_groups(rows) if soft else rows
+        if soft and len(groups) < len(rows):
+            for g in groups:
+                out += [g] if draw.textlength(g, font=font) <= max_w else _riempi(draw, g.split(), font, max_w)
+        elif rows and all(draw.textlength(r, font=font) <= max_w for r in rows):
             out += rows
         elif rows:
             out += _flow(draw, " ".join(rows).split(), font, max_w)
@@ -510,7 +544,7 @@ def render(img: Image.Image, lay: Layout, text: str, placements: list | None = N
     max_h = H * 0.84
     while True:
         font = _font(lay.weight, size)
-        lines = _wrap(draw, text, font, lay.width)
+        lines = _wrap(draw, text, font, lay.width, soft=lay.align != "center")
         line_h = int(size * lay.line_ratio)
         blank_h = int(size * lay.blank_ratio)
         total = sum(blank_h if not ln else line_h for ln in lines)
