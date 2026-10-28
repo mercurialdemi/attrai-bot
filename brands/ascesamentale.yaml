@@ -12,12 +12,8 @@ temi_report: >
   forza mentale e resilienza, paura del fallimento, abitudini, allenamento e routine, obiettivi, responsabilità,
   direzione nella vita, confini personali e indipendenza emotiva, allontanarsi da situazioni dannose.
 
-# Collaboratori di AscesaMentale (report del mattino): DA CONFERMARE, oppure /aggiungi @pagina dal gruppo
-pagine_monitorate: []
-
-# Pagine da studiare (mai nel report): /studia @pagina dal gruppo
-# Pagine faceless simili indicate da Gabriele: per ora solo da STUDIARE (mai nel report) finché non conferma che sono collaboratori
-pagine_studio:
+# Collaboratori di Ascesa Mentale (dal file di Gabriele, confermati il 28/10/2026). Altri: /aggiungi @pagina dal gruppo
+pagine_monitorate:
   - viensi_
   - mindsecret_ita
   - gernucci
@@ -53,13 +49,17 @@ pagine_studio:
   - motivate.caballeros
   - invictos_tm
 
+# Pagine da studiare (mai nel report): /studia @pagina dal gruppo
+# Pagine da studiare (mai nel report): /studia @pagina dal gruppo
+pagine_studio: []
+
 report:
   ora: "08:00"           # il report arriva nel gruppo della pagina (se il gruppo non è collegato, non parte)
   fuso: Europe/Rome
   finestra_ore: 72
   candidati: 15
   quanti_post: 5
-  post_per_pagina: 30
+  post_per_pagina: 12         # molti collaboratori: meno post letti per pagina (costo Apify)
   punteggio_minimo: 1.5
   completa_sempre: false
   prepara_post: false
