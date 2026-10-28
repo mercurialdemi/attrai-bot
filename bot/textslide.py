@@ -231,6 +231,8 @@ def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False) -
                 header_rows.append((y0, y1))
                 continue
             return None
+    # dove inizia tutto il contenuto (anche avatar e nome di un'altra pagina in alto, stile tweet)
+    head_top = min([l[0] for l in lines if l[0] < H * 0.9] or [None]) if has_mark else None
     if header_rows:
         # le righe accanto all'avatar (nome e @handle della pagina) non sono testo da tradurre
         hy0 = min(r[0] for r in header_rows)
@@ -364,6 +366,12 @@ def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False) -
         if head_weight:
             head_weight = head_weight + family
     block_center = (top + bottom) / 2
+    centered_v = abs(block_center - H / 2) < H * 0.03
+    if (head_top is not None and head_top < top - 2 * med_h
+            and abs((head_top + bottom) / 2 - H / 2) < H * 0.05):
+        # stile tweet: avatar + nome + testo erano centrati insieme. Tolta l'intestazione dell'altra pagina,
+        # il testo da solo va centrato (altrimenti resta basso con un vuoto sopra)
+        centered_v = True
     if align == "center":
         width = int(min(W * 0.9, (np.max(rights) - np.min(lefts)) * 1.1))
     else:
@@ -375,7 +383,7 @@ def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False) -
     erase = _dilate(erase, max(2, size // 10))
     return Layout(bg=tuple(int(c) for c in bg), color=color, weight=weight, align=align, left=left,
                   top=int(top), bottom=int(bottom), width=width, size=max(14, size),
-                  centered_v=abs(block_center - H / 2) < H * 0.03, mask=erase,
+                  centered_v=centered_v, mask=erase,
                   line_ratio=line_ratio, blank_ratio=blank_ratio, right=int(np.max(rights)),
                   head_color=head_color, head_weight=head_weight, para_colors=para_colors)
 
@@ -516,8 +524,11 @@ def render(img: Image.Image, lay: Layout, text: str, placements: list | None = N
     left = max(lay.left, int(W * SAFE_X))
     if lay.align != "center" and lay.right and abs((lay.left + lay.right) / 2 - W / 2) < W * 0.02:
         # testo allineato a sinistra ma blocco centrato nella slide: si ricentra il blocco italiano
+        # (largo almeno quanto il blocco originale: se l'italiano va a capo prima, il bordo sinistro resta dov'era
+        # invece di spostarsi verso il centro)
         block_w = max((draw.textlength(ln, font=font) for ln in lines if ln), default=0)
-        left = int((W - block_w) / 2)
+        block_w = max(block_w, lay.right - lay.left)
+        left = max(int(W * SAFE_X), int((W - block_w) / 2))
     in_head = bool(lay.head_color or lay.head_weight)   # titoletto: colore e/o spessore suoi (es. rosso grassetto)
     # colore di ogni paragrafo italiano: si segue la posizione nel testo (prima parte grigia, poi bianca, ecc.)
     seg_of_line = []

@@ -60,6 +60,24 @@ CASI = {
         dict(testo="Puoi amarla alla follia e firmare comunque clausole mai lette. Il matrimonio può essere sacro, ma l'ignoranza si paga cara. Studia le leggi prima di fare quella promessa.", x=60, y=240, w=420, h=90, colore="#DBDBDB", allineamento="left", carattere=S, peso="regular")]),
     "cover_parabola.jpg": ("foto", "MODERN WOMEN TIMELINE:\nFROM H*E TO WIFE.", [
         dict(testo="LA PARABOLA DELLA\nDONNA MODERNA:\nDA FACILE A MOGLIE.", x=41, y=777, w=908, h=98, colore="#FFFFFF", allineamento="left", maiuscolo=True, carattere=S, peso="bold")]),
+    # post del 27/10 (stile tweet, avatar e nome di un'altra pagina in alto): segnalato "posizione non ben centrata"
+    "tweet_02.jpg": ("tinta_unita", 'Not duty s*x.\n\nNot "fine, hurry up"\n\nNot once every three weeks after he practically files an application.\n\nHe wants to feel like.\n\nHIS WOMAN ACTUALLY WANTS HIM.', [
+        dict(testo='Non s*sso per dovere.', x=134, y=320, w=254, h=36, colore="#FFFFFF", allineamento="left", carattere=S, peso="regular"),
+        dict(testo='Non "va bene, ma sbrigati".', x=134, y=422, w=400, h=40, colore="#FFFFFF", allineamento="left", carattere=S, peso="regular"),
+        dict(testo='Non una volta ogni tre settimane, dopo\nuna richiesta quasi in carta bollata.', x=134, y=523, w=714, h=90, colore="#FFFFFF", allineamento="left", carattere=S, peso="regular"),
+        dict(testo='Vuole sentire che', x=134, y=676, w=410, h=40, colore="#FFFFFF", allineamento="left", carattere=S, peso="regular"),
+        dict(testo='LA SUA DONNA LO DESIDERA\nDAVVERO.', x=134, y=781, w=665, h=82, colore="#FFFFFF", allineamento="left", carattere=S, peso="regular")], "Manly Pinnacle @manly_pinnacle"),
+    # post del 27/10 (stile tweet, avatar e nome di un'altra pagina in alto): segnalato "posizione non ben centrata"
+    "tweet_03.jpg": ("tinta_unita", "Men can survive stress.\n\nLong hours.\nBills.\nPressure.\nA brutal week.\n\nBut coming home to a woman who looks at him like she still can't keep her hands off him?\n\nDifferent man.", [
+        dict(testo='Un uomo regge lo stress.', x=134, y=270, w=459, h=36, colore="#FFFFFF", allineamento="left", carattere=S, peso="regular"),
+        dict(testo="Giornate infinite.\nBollette.\nPressione.\nUna settimana d'inferno.", x=134, y=371, w=300, h=188, colore="#FFFFFF", allineamento="left", carattere=S, peso="regular"),
+        dict(testo="Ma tornare a casa da una donna che\nlo guarda come se non vedesse l'ora\ndi mettergli le mani addosso?", x=134, y=629, w=698, h=133, colore="#FFFFFF", allineamento="left", carattere=S, peso="regular"),
+        dict(testo='È un altro uomo.', x=134, y=832, w=290, h=36, colore="#FFFFFF", allineamento="left", carattere=S, peso="regular")], "Manly Pinnacle @manly_pinnacle"),
+    # post del 27/10 (stile tweet, avatar e nome di un'altra pagina in alto): segnalato "posizione non ben centrata"
+    "tweet_05.jpg": ("tinta_unita", "You'd be shocked how little most men actually ask for.\n\nPeace. Respect. Loyalty.\n\nAnd a woman who doesn't make him feel like wanting his own wife is an inconvenience.", [
+        dict(testo='Non hai idea di quanto poco chieda\ndavvero la maggior parte degli uomini.', x=134, y=395, w=742, h=86, colore="#FFFFFF", allineamento="left", carattere=S, peso="regular"),
+        dict(testo='Pace. Rispetto. Lealtà.', x=134, y=547, w=380, h=38, colore="#FFFFFF", allineamento="left", carattere=S, peso="regular"),
+        dict(testo='E una moglie che non lo faccia\nsentire un disturbo solo\nperché la desidera.', x=134, y=652, w=730, h=137, colore="#FFFFFF", allineamento="left", carattere=S, peso="regular")], "Manly Pinnacle @manly_pinnacle"),
 }
 
 
@@ -69,11 +87,11 @@ def main(out_dir: str, salva: bool = False):
     ref = B / "riferimento"
     brand = yaml.safe_load(open(Path(__file__).resolve().parents[1] / "brands" / "attraiseduci.yaml"))
     tiles, report = [], []
-    for name, (sfondo, orig_txt, blocks) in CASI.items():
+    for name, (sfondo, orig_txt, blocks, *marchio) in CASI.items():
         o = Image.open(B / name).convert("RGB")
         b = io.BytesIO(); o.save(b, "JPEG", quality=95)
         sl = {"numero": 2, "testo": "\n\n".join(x["testo"] for x in blocks), "testo_originale": orig_txt,
-              "sfondo": sfondo, "watermark_originale": "", "da_modificare": True, "altri_marchi": [],
+              "sfondo": sfondo, "watermark_originale": (marchio or [""])[0], "da_modificare": True, "altri_marchi": [],
               "watermark_riquadro": NONE, "blocchi": [dict(x) for x in blocks]}
         try:
             img, ok, pr = images.render_slide(b.getvalue(), sl, brand, "codice")
