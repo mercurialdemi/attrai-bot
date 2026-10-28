@@ -49,12 +49,28 @@ pagine.imposta("resetrelazionale")
 b = writer.load_brand()
 cands = [instagram.SourcePost(url=f"u{i}", owner="x", caption="c", kind="Sidecar", score=s)
          for i, s in enumerate([5, 3, 2])]
-writer._tool_call = lambda *a, **k: {"post": [
-    {"numero": 1, "pagina": "AttraiSeduci", "natura": "didattico", "motivo": "test femminili"},
-    {"numero": 2, "pagina": "ResetRelazionale", "natura": "virale", "motivo": "rottura"},
-    {"numero": 3, "pagina": "nessuna", "natura": "virale", "motivo": "auto"}]}
+visti = []
+
+
+def finto(system, content, tool, **k):
+    visti.append(system)
+    pag = "ResetRelazionale" if "PAGINA: ResetRelazionale" in system else "AmoreInfedele"
+    return {"post": [   # u1 va bene a entrambe le pagine, u0 solo ad Amore, u2 a nessuna
+        {"numero": 1, "dolore": "d", "adatto": pag == "AmoreInfedele", "natura": "didattico", "motivo": "m"},
+        {"numero": 2, "dolore": "d", "adatto": True, "natura": "virale", "motivo": "rottura"},
+        {"numero": 3, "dolore": "d", "adatto": False, "natura": "virale", "motivo": "auto"}]}
+
+
+writer._tool_call = finto
 keep, ok = report._fit_filter(cands, b)
 assert [p.url for p in keep] == ["u1"], [p.url for p in keep]
+assert "PUBBLICO: uomini" in visti[-1] and "AmoreInfedele" in visti[-1]   # profilo della pagina + confini con le altre
+pagine.imposta("amoreinfedele")
+cands2 = [instagram.SourcePost(url=f"u{i}", owner="x", caption="c", kind="Sidecar", score=s)
+          for i, s in enumerate([5, 3, 2])]
+keep2, _ = report._fit_filter(cands2, writer.load_brand())
+assert [p.url for p in keep2] == ["u0", "u1"], [p.url for p in keep2]   # lo stesso post può andare a due pagine
+pagine.imposta("resetrelazionale")
 righe = report._link_lines(keep, 1, 1.5)
 assert "VIRALE" in righe[0] and "segui la pagina" in righe[0], righe[0]   # Reset ora ha il manuale friendzone
 print("report Reset:", righe[0].splitlines()[0])
@@ -63,3 +79,12 @@ print("report Reset:", righe[0].splitlines()[0])
 assert pagine.trova("reset") == "resetrelazionale" and pagine.trova("Il Pensatore") == "ilpensatore"
 assert pagine.trova("amore infedele") == "amoreinfedele" and pagine.trova("xyz") is None
 print("pagine ok")
+
+# 6. ogni scheda produce istruzioni valide (tono letto bene anche con "parola: testo")
+from bot import crea
+for s_ in pagine.elenco():
+    pagine.imposta(s_)
+    b_ = writer.load_brand()
+    assert all(isinstance(t, str) for t in b_.get("tono") or []), s_
+    writer._caption_system(b_, [], {}); writer._slides_system(b_, []); crea._system(b_, [])
+print("schede ok")

@@ -204,17 +204,18 @@ def _settings(brand: dict) -> dict:
 
 FIT_TOOL = {
     "name": "post_in_tema",
-    "description": "Quali post sono in tema con la nostra pagina.",
+    "description": "Quali post sono adatti a QUESTA pagina (pubblico, dolori, tono).",
     "input_schema": {
         "type": "object",
         "properties": {
             "post": {"type": "array", "items": {"type": "object", "properties": {
                 "numero": {"type": "integer"},
-                "pagina": {"type": "string", "description": "Il NOME esatto di una delle nostre pagine a cui va questo post, oppure 'nessuna' se non va bene per nessuna."},
+                "dolore": {"type": "string", "description": "PRIMA di decidere: il dolore o il tema che il post tocca davvero e a chi parla (uomo, donna, entrambi), in poche parole."},
+                "adatto": {"type": "boolean", "description": "true solo se il post parla al PUBBLICO di questa pagina e tocca uno dei SUOI dolori/temi, così che i suoi follower lo sentano scritto per loro."},
                 "natura": {"type": "string", "enum": ["didattico", "virale"],
-                           "description": "didattico = INSEGNA qualcosa di concreto: spiega un meccanismo, un trucco, cosa fare o non fare, segnali da riconoscere, errori con la soluzione. Chi lo legge ne esce sapendo fare o capire qualcosa in più -> CTA al manuale. virale = punta sull'EMOZIONE più che sull'insegnamento: provoca, polarizza, tocca l'ego o l'orgoglio, fa sentire rabbia, rivalsa, riconoscimento o nostalgia (frasi d'impatto, verità scomode, scene e dialoghi che fanno dire 'è proprio così', confronti uomo/donna, meme, citazioni). Anche se tocca un tema serio, se non spiega come fare è virale -> CTA segui la pagina. Nel dubbio: se non c'è un insegnamento pratico, è virale."},
-                "motivo": {"type": "string", "description": "Di cosa parla e perché va su quella pagina, massimo 12 parole."},
-            }, "required": ["numero", "pagina", "natura", "motivo"]}},
+                           "description": "didattico = INSEGNA qualcosa di concreto: spiega un meccanismo, un trucco, cosa fare o non fare, segnali da riconoscere, errori con la soluzione. virale = punta sull'EMOZIONE più che sull'insegnamento: provoca, polarizza, tocca ego o orgoglio, fa sentire rabbia, rivalsa, riconoscimento o nostalgia (frasi d'impatto, verità scomode, scene, confronti, citazioni). Nel dubbio: se non c'è un insegnamento pratico, è virale."},
+                "motivo": {"type": "string", "description": "Perché va (o non va) su questa pagina, massimo 14 parole."},
+            }, "required": ["numero", "dolore", "adatto", "natura", "motivo"]}},
         },
         "required": ["post"],
     },
@@ -254,43 +255,62 @@ def _nome_pagina(val, pagine: list[dict]) -> str:
 
 
 def _fit_filter(cands: list, brand: dict) -> tuple[list, bool]:
-    """Tiene solo i post in tema con la nostra nicchia e il nostro tono (Claude Haiku, solo testo: costa pochissimo).
-    Restituisce (post in tema, filtro riuscito)."""
+    """Tiene solo i post adatti a QUESTA pagina: stesso pubblico, uno dei suoi dolori, il suo taglio.
+    Lo stesso collaboratore può stare in più pagine: ogni pagina sceglie i post giusti per sé (anche lo stesso post
+    può andare bene a due pagine). Guarda la descrizione e la copertina (molti post hanno poco testo sotto).
+    Claude Haiku: costa pochissimo. Restituisce (post adatti, filtro riuscito)."""
     if not cands:
         return cands, True
-    elenco = "\n\n".join(f"{i}. @{p.owner}: {' '.join((p.caption or '(nessuna descrizione)').split())[:350]}"
-                          for i, p in enumerate(cands, 1))
-    pagine = pagine_nostre(brand)
-    elenco_pagine = "\n".join(f"- {pg['nome']} (pubblico: {pg.get('pubblico') or '-'}): {' '.join(str(pg.get('temi', '')).split())}"
-                              for pg in pagine)
-    system = (f"Sei il responsabile contenuti di un gruppo di pagine Instagram italiane. Per ogni post decidi a QUALE "
-              f"delle nostre pagine va, guardando di cosa parla davvero e a chi parla:\n{elenco_pagine}\n"
-              f"Se un post va bene per più pagine, scegli quella dove rende di più. Se tocca seduzione, attrazione o "
-              f"psicologia femminile va su {pagine[0]['nome']} anche se è un po' emotivo; se è soprattutto emotivo e "
-              "riflessivo va sulla pagina emotiva; se parla di rottura e post relazione va sulla pagina delle rotture; "
-              "se parla alle donne va sulla pagina femminile. 'nessuna' per: meme senza contenuto, sport, auto, "
-              "pubblicità, notizie, motivazionali generici, giveaway, temi che non c'entrano con nessuna pagina.\n"
-              "Per ogni post dì anche se è DIDATTICO o VIRALE. didattico = INSEGNA qualcosa di concreto: spiega un meccanismo, un trucco, cosa fare o non fare, segnali da riconoscere, errori con la soluzione. Chi lo legge ne esce sapendo fare o capire qualcosa in più -> CTA al manuale. virale = punta sull'EMOZIONE più che sull'insegnamento: provoca, polarizza, tocca l'ego o l'orgoglio, fa sentire rabbia, rivalsa, riconoscimento o nostalgia (frasi d'impatto, verità scomode, scene e dialoghi che fanno dire 'è proprio così', confronti uomo/donna, meme, citazioni). Anche se tocca un tema serio, se non spiega come fare è virale -> CTA segui la pagina. Nel dubbio: se non c'è un insegnamento pratico, è virale.")
-    try:
-        out = writer._tool_call(system, [{"type": "text", "text": elenco}], FIT_TOOL,
-                                model=config.CHECK_MODEL, max_tokens=4000)
-    except Exception as e:
-        log.warning("Filtro di tema non riuscito: %s", e)
-        return cands, False
-    keep = []
-    for r in out.get("post", []):
-        n = r.get("numero")
-        pg = _nome_pagina(r.get("pagina"), pagine)
-        if isinstance(n, int) and 1 <= n <= len(cands) and pg:
-            cands[n - 1].pagina = pg
-            prima = cands[n - 1].motivo if (cands[n - 1].motivo or "").startswith("📈") else ""
-            cands[n - 1].motivo = (prima + "\n" if prima else "") + r.get("motivo", "")
-            cands[n - 1].natura = r.get("natura", "")
-            keep.append(cands[n - 1])
-    if len(pagine) > 1:          # ogni pagina ha il suo report: solo i post che vanno su QUESTA pagina
-        keep = [p for p in keep if p.pagina == brand["nome"]]
+    altre = [pg for pg in pagine_nostre(brand) if pg["nome"] != brand["nome"]]
+    profilo = (f"PAGINA: {brand['nome']} (@{brand.get('handle', '')})\n"
+               f"PUBBLICO: {brand.get('pubblico') or '-'}\n"
+               f"DI COSA PARLA: {' '.join(str(brand.get('temi_report') or '').split())}\n"
+               f"POSIZIONAMENTO: {' '.join(str(brand.get('posizionamento') or '').split())}\n"
+               f"TONO: {' '.join(brand.get('tono') or [])}")
+    contrasto = "\n".join(f"- {pg['nome']} (pubblico: {pg.get('pubblico') or '-'}): {' '.join(str(pg.get('temi', '')).split())[:300]}"
+                          for pg in altre)
+    system = ("Sei il responsabile contenuti di una pagina Instagram italiana. Scegli quali post dei collaboratori "
+              "vanno bene per QUESTA pagina, e solo per lei.\n\n" + profilo + "\n\n"
+              + (("LE NOSTRE ALTRE PAGINE (solo per capire i confini: un post che parla soprattutto al loro pubblico o "
+                  "dei loro temi NON va qui; uno che va bene sia qui sia altrove va bene anche qui):\n" + contrasto + "\n\n")
+                 if contrasto else "")
+              + "Regole: conta a CHI parla il post e QUALE dolore tocca. Se il pubblico non è quello della pagina "
+              "(es. un post che parla alle donne per una pagina di uomini, o viceversa) non è adatto. Se il tema è "
+              "fuori dai temi della pagina non è adatto, anche se il post è virale. Mai adatti: meme senza contenuto, "
+              "sport, auto, pubblicità, notizie, giveaway, motivazionali generici non legati ai temi della pagina.\n"
+              "Per ogni post dì anche se è DIDATTICO o VIRALE.")
+    keep, ok = [], True
+    for start in range(0, len(cands), 12):
+        chunk = cands[start:start + 12]
+        content = []
+        for i, p in enumerate(chunk, 1):
+            content.append({"type": "text", "text": f"{i}. @{p.owner}: "
+                                                    f"{' '.join((p.caption or '(nessuna descrizione)').split())[:400]}"})
+            if p.image_urls:
+                try:
+                    img = instagram.download_images(p.image_urls[:1])[0]
+                    content += [{"type": "text", "text": f"Copertina del post {i}:"}, writer._image_block(img, 512)]
+                except Exception:
+                    pass
+        content.append({"type": "text", "text": "Valuta ogni post con lo strumento post_in_tema."})
+        try:
+            out = writer._tool_call(system, content, FIT_TOOL, model=config.CHECK_MODEL, max_tokens=4000)
+        except Exception as e:
+            log.warning("Filtro di tema non riuscito: %s", e)
+            keep += chunk
+            ok = False
+            continue
+        for r in out.get("post", []):
+            n = r.get("numero")
+            if isinstance(n, int) and 1 <= n <= len(chunk) and r.get("adatto"):
+                p = chunk[n - 1]
+                p.pagina = brand["nome"]
+                prima = p.motivo if (p.motivo or "").startswith("📈") else ""
+                p.motivo = (prima + "\n" if prima else "") + r.get("motivo", "")
+                p.natura = r.get("natura", "")
+                keep.append(p)
     keep.sort(key=lambda p: -p.score)
-    return keep, True
+    return keep, ok
 
 
 def _shown_file():

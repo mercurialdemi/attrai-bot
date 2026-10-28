@@ -234,6 +234,10 @@ def save_page_changes(d: dict) -> None:
 def load_brand() -> dict:
     with open(config.BRAND_FILE, encoding="utf-8") as f:
         brand = yaml.safe_load(f)
+    # una riga di tono scritta con "parola: testo" diventa per YAML un dizionario: la si rimette in testo
+    for k in ("tono", "regole_formato"):
+        if isinstance(brand.get(k), list):
+            brand[k] = [" ".join(f"{a}: {b}" for a, b in x.items()) if isinstance(x, dict) else str(x) for x in brand[k]]
     ch = load_page_changes()
     removed = set(ch.get("rimosse") or [])
     for key, extra in (("pagine_monitorate", "monitorate"), ("pagine_studio", "studio")):
