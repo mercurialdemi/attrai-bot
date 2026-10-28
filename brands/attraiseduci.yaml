@@ -57,8 +57,10 @@ crea:
   ora: "08:30"
 
 # Studio automatico della pagina (stile, CTA, risultati dei post del bot): ogni settimana
-studio:                  # lo studio della pagina si rifà da solo ogni notte (riepilogo il lunedì)
+studio:                  # studio della pagina ogni 3 giorni, studio della nicchia ogni 5 (riepilogo il lunedì)
   attivo: true
+  ogni_giorni: 3
+  nicchia_ogni_giorni: 5
   ora: "04:00"
 
 # Come tradurre il testo delle slide:

@@ -169,26 +169,44 @@ def run_analysis(brand: dict, n_posts: int = 80) -> dict:
         except Exception as e:
             log.warning("Studio CTA delle pagine di riferimento non riuscito: %s", e)
             style["cta_studio"] = prev
-    # studio dei caroselli virali (temi, hook, strutture, trend): una volta a settimana, base per i post da zero
-    pv = writer.load_style().get("studio_virali") or {}
-    try:
-        fresh_v = pv.get("creato") and (datetime.now(timezone.utc) - datetime.fromisoformat(pv["creato"])).days < 7
-    except Exception:
-        fresh_v = False
-    style["studio_virali_nuovo"] = False
-    if fresh_v:
-        style["studio_virali"] = pv
-    else:
-        try:
-            nuovo = study_viral(brand)
-            style["studio_virali"] = nuovo or pv
-            style["studio_virali_nuovo"] = bool(nuovo)
-        except Exception as e:
-            log.warning("Studio dei caroselli virali non riuscito: %s", e)
-            style["studio_virali"] = pv
+    aggiorna_studio_virali(brand, style)
     config.DATA_DIR.mkdir(parents=True, exist_ok=True)
     (config.DATA_DIR / "stile.json").write_text(json.dumps(style, ensure_ascii=False, indent=1), encoding="utf-8")
     return style
+
+
+def nicchia_da_rifare(brand: dict) -> bool:
+    """Lo studio della nicchia si rifà ogni studio.nicchia_ogni_giorni giorni (5 di base)."""
+    giorni = float((brand.get("studio") or {}).get("nicchia_ogni_giorni", 5) or 5)
+    pv = writer.load_style().get("studio_virali") or {}
+    try:
+        eta = (datetime.now(timezone.utc) - datetime.fromisoformat(pv["creato"])).total_seconds() / 86400
+    except Exception:
+        return True
+    return eta >= giorni - 0.2
+
+
+def aggiorna_studio_virali(brand: dict, style: dict) -> dict:
+    """Studio dei caroselli virali (temi, hook, strutture, trend, il perché di ogni post): ogni pochi giorni,
+    base per i post da zero. Aggiorna `style` e lo restituisce."""
+    pv = writer.load_style().get("studio_virali") or {}
+    style["studio_virali_nuovo"] = False
+    if not nicchia_da_rifare(brand):
+        style["studio_virali"] = pv
+        return style
+    try:
+        nuovo = study_viral(brand)
+        style["studio_virali"] = nuovo or pv
+        style["studio_virali_nuovo"] = bool(nuovo)
+    except Exception as e:
+        log.warning("Studio dei caroselli virali non riuscito: %s", e)
+        style["studio_virali"] = pv
+    return style
+
+
+def salva_stile(style: dict) -> None:
+    config.DATA_DIR.mkdir(parents=True, exist_ok=True)
+    (config.DATA_DIR / "stile.json").write_text(json.dumps(style, ensure_ascii=False, indent=1), encoding="utf-8")
 
 
 CTA_SLIDE_TOOL = {
