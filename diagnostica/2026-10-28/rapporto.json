@@ -1,0 +1,388 @@
+{
+ "giorno": "2026-10-28",
+ "post_preparati": 5,
+ "slide_totali": 51,
+ "slide_fallite": 0,
+ "lavorazione": {
+  "creato-testo-su-nero": {
+   "totali": 18,
+   "fallite": 0
+  },
+  "cta-creata": {
+   "totali": 2,
+   "fallite": 0
+  },
+  "openai-testo": {
+   "totali": 6,
+   "fallite": 0
+  },
+  "blocchi-ricostruzione-codice": {
+   "totali": 5,
+   "fallite": 0
+  },
+  "blocchi-sfondo-pieno": {
+   "totali": 10,
+   "fallite": 0
+  },
+  "cta-illustrata": {
+   "totali": 1,
+   "fallite": 0
+  },
+  "blocchi-pulizia-codice": {
+   "totali": 1,
+   "fallite": 0
+  },
+  "cta-alone": {
+   "totali": 1,
+   "fallite": 0
+  },
+  "testo-su-sfondo-uniforme": {
+   "totali": 6,
+   "fallite": 0
+  },
+  "cta-stile-post": {
+   "totali": 1,
+   "fallite": 0
+  }
+ },
+ "segnalazioni": [
+  {
+   "job_id": 41,
+   "testo": "posizione non ben centrata (anche altre slides)",
+   "quando": "2026-10-27T21:22:29+00:00"
+  },
+  {
+   "job_id": 41,
+   "testo": "hook pessimo non collegato alle altre slide",
+   "quando": "2026-10-27T21:23:28+00:00"
+  },
+  {
+   "job_id": 41,
+   "testo": "linguaggio non fluido ( anche le altre slides)",
+   "quando": "2026-10-27T21:24:19+00:00"
+  }
+ ],
+ "post_con_problemi": [
+  {
+   "job_id": 41,
+   "fonte": "https://www.instagram.com/p/Deg6uCWoBKF/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "LITERALLY ALL A MAN NEEDS IS ENTHUSIASTIC S*X FROM THE WOMAN HE LOVES",
+     "testo": "A UN UOMO BASTA UNA\nCOSA SOLA: S*SSO VERO,\nVOLUTO, CON LA DONNA\nCHE AMA",
+     "blocchi": [
+      {
+       "x": 40,
+       "y": 640,
+       "w": 930,
+       "h": 300,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#F5C518",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Not duty s*x.\n\nNot \"fine, hurry up\"\n\nNot once every three weeks after he practically files an application.\n\nHe wants to feel like.\n\nHIS WOMAN ACTUALLY WANTS HIM.",
+     "testo": "Non s*sso per dovere.\n\nNon \"va bene, ma sbrigati\".\n\nNon una volta ogni tre settimane, dopo\nuna richiesta quasi in carta bollata.\n\nVuole sentire che\n\nLA SUA DONNA LO DESIDERA\nDAVVERO.",
+     "blocchi": [
+      {
+       "x": 134,
+       "y": 320,
+       "w": 254,
+       "h": 36,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 134,
+       "y": 422,
+       "w": 400,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 134,
+       "y": 523,
+       "w": 714,
+       "h": 90,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 134,
+       "y": 676,
+       "w": 410,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 134,
+       "y": 781,
+       "w": 665,
+       "h": 82,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Men can survive stress.\n\nLong hours.\nBills.\nPressure.\nA brutal week.\n\nBut coming home to a woman who looks at him like she still can't keep her hands off him?\n\nDifferent man.",
+     "testo": "Un uomo regge lo stress.\n\nGiornate infinite.\nBollette.\nPressione.\nUna settimana d'inferno.\n\nMa tornare a casa da una donna che\nlo guarda come se non vedesse l'ora\ndi mettergli le mani addosso?\n\nÈ un altro uomo.",
+     "blocchi": [
+      {
+       "x": 134,
+       "y": 270,
+       "w": 459,
+       "h": 36,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 134,
+       "y": 371,
+       "w": 300,
+       "h": 188,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 134,
+       "y": 629,
+       "w": 698,
+       "h": 133,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 134,
+       "y": 832,
+       "w": 290,
+       "h": 36,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Because for men, s*x with the woman they love isn't just s*x.\n\nIt's: \"She still desires me.\"\n\nNo speech hits harder.",
+     "testo": "Perché per un uomo il s*sso con la donna\nche ama non è solo s*sso.\n\nÈ: \"Mi desidera ancora.\"\n\nNessun discorso lo tocca così a fondo.",
+     "blocchi": [
+      {
+       "x": 145,
+       "y": 445,
+       "w": 742,
+       "h": 86,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 145,
+       "y": 602,
+       "w": 500,
+       "h": 36,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 145,
+       "y": 703,
+       "w": 445,
+       "h": 36,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "You'd be shocked how little most men actually ask for.\n\nPeace. Respect. Loyalty.\n\nAnd a woman who doesn't make him feel like wanting his own wife is an inconvenience.",
+     "testo": "Non hai idea di quanto poco chieda\ndavvero la maggior parte degli uomini.\n\nPace. Rispetto. Lealtà.\n\nE una moglie che non lo faccia\nsentire un disturbo solo\nperché la desidera.",
+     "blocchi": [
+      {
+       "x": 134,
+       "y": 395,
+       "w": 742,
+       "h": 86,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 134,
+       "y": 547,
+       "w": 380,
+       "h": 38,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 134,
+       "y": 652,
+       "w": 730,
+       "h": 137,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "A man shouldn't have to wonder whether his woman still wants him.\n\nWhen desire becomes obligation, something fundamental has already died.",
+     "testo": "Un uomo non dovrebbe mai chiedersi\nse la sua donna lo vuole ancora.\n\nQuando il desiderio diventa un dovere,\nqualcosa di fondamentale è già\nmorto.",
+     "blocchi": [
+      {
+       "x": 134,
+       "y": 430,
+       "w": 654,
+       "h": 104,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 134,
+       "y": 602,
+       "w": 703,
+       "h": 137,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Men are not complicated.\n\nLove him. Respect him. Want him.\n\nAnd when you touch him, make him feel like you mean it.\n\nThat man will remember it when the rest of the world is beating his a*s.",
+     "testo": "Gli uomini non sono complicati.\n\nAmalo. Rispettalo. Desideralo.\n\nE quando lo tocchi, fagli sentire\nche lo fai perché lo vuoi.\n\nQuell'uomo se ne ricorderà quando il resto\ndel mondo lo prenderà a calci nel c*lo.",
+     "blocchi": [
+      {
+       "x": 134,
+       "y": 371,
+       "w": 510,
+       "h": 36,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 134,
+       "y": 473,
+       "w": 684,
+       "h": 38,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 134,
+       "y": 574,
+       "w": 730,
+       "h": 86,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 134,
+       "y": 727,
+       "w": 735,
+       "h": 90,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se questa frase ti ha colpito,\nse anche tu ti sei sentito\nun disturbo solo perché la desideravi,\n\nsegui @attraiseduci,\nogni giorno parliamo di relazioni,\nseduzione e psicologia femminile.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "A un uomo non serve molto: gli serve sentire che la donna che ama lo desidera davvero. Non il sesso fatto per dovere o concesso dopo settimane di suppliche, ma la voglia vera. Stress, lavoro e bollette li regge, ma tornare a casa da una donna che lo vuole lo trasforma. Quando il desiderio diventa un obbligo, qualcosa di fondamentale è già morto. Il registro è diretto, emotivo, un po' provocatorio, una verità scomoda detta senza giri di parole.",
+   "descrizione": "Il ses*o che lei ti concede non è quello che ti manca. Ti manca sentirti voluto.\n\nSai bene come va. Ci provi, lei sospira e ti dice \"va bene\" con lo stesso tono con cui accetta di portare giù la spazzatura. E dopo, invece di sentirti vicino a lei, ti senti più solo di prima.\n\nPochi uomini lo ammettono ad alta voce, perché sembra una questione di letto. Invece tocca la stima che hai di te. Ogni rifiuto, ogni concessione fatta di malavoglia ti insegna che il tuo desiderio è un disturbo. E un uomo che si sente un disturbo in casa sua, piano piano, smette di proporsi, di guidare, di essere sé stesso.\n\nLe ricerche vanno nella stessa direzione. Nel 2005 Emily Impett, con Letitia Anne Peplau e Shelly Gable, ha studiato i motivi per cui le coppie fanno ses*o. Quando lo si fa per evitare qualcosa, come un litigio, il senso di colpa o la delusione dell'altro, la relazione si logora invece di nutrirsi. Quando invece nasce dal desiderio, la rafforza. Nel 2016 Amy Muise ha mostrato che oltre una certa frequenza la felicità della coppia non cresce più. Il numero di volte conta poco. Conta da dove nasce.\n\nEd è proprio qui che molti uomini sbagliano. Pensano di riaccendere il desiderio di lei chiedendo meglio, insistendo, spiegandole quanto ne hanno bisogno. Ma il desiderio non si negozia. Più lo chiedi come un favore, più diventi quello che lo elemosina. E nessuna donna desidera un uomo che le chiede il permesso di essere desiderato.\n\nQuesto non significa diventare freddo o punirla con il silenzio. Significa smettere di mettere in gioco la tua dignità ogni sera. Torna a essere un uomo con una vita sua, una direzione, una tensione che non dipende dal suo sì. Poi parlale da pari, una volta, con chiarezza: non vuoi una concessione, vuoi sentirti voluto. Se dopo quella conversazione non cambia niente, anche quella è una risposta.\n\nVolere una donna che ti desidera non è pretendere troppo. È il minimo.\n\nDa quanto tempo non ti senti desiderato, e da quanto hai smesso di dirlo?\n\nSe questa frase ti ha colpito, segui @attraiseduci: ogni giorno parliamo di relazioni, seduzione e psicologia femminile.",
+   "segnalazioni": [
+    "posizione non ben centrata (anche altre slides)",
+    "hook pessimo non collegato alle altre slide",
+    "linguaggio non fluido ( anche le altre slides)"
+   ]
+  }
+ ]
+}
