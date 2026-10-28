@@ -840,6 +840,14 @@ def _schedule_analysis(app: Application, slug: str):
         b = writer.load_brand()
         if slug != pagine.PRINCIPALE and not (b.get("handle") and chat_ids):
             return                                               # pagina non ancora avviata: niente costi
+        ogni = float((b.get("studio") or {}).get("ogni_giorni", 3) or 1)
+        try:
+            ultimo = datetime.fromisoformat(str(writer.load_style().get("creato")))
+            if (not (context.job.data or {}).get("primo")
+                    and (datetime.now(ultimo.tzinfo) - ultimo).total_seconds() < (ogni - 0.2) * 86400):
+                return                                           # studio ancora fresco: si risparmia
+        except (TypeError, ValueError):
+            pass
         try:
             style = await asyncio.to_thread(analysis.run_analysis, b)
         except Exception as e:

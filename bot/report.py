@@ -198,6 +198,7 @@ def _settings(brand: dict) -> dict:
         "completa": bool(cfg.get("completa_sempre", True)),
         # False = il report manda solo i link dei migliori post (nessun credito speso per tradurli)
         "prepara": bool(cfg.get("prepara_post", False)),
+        "perche": int(cfg.get("perche_quanti", 5)),          # su quanti post spiegare il perché (immagini = costo)
     }
 
 
@@ -484,7 +485,7 @@ async def run_report(bot, chat_ids: list[int]) -> None:
             _offset_file().write_text(str(len(first)))
             _mark_shown(first)
             await _broadcast(bot, chat_ids, f"Report: ho trovato {len(first)} post forti, ora studio perché sono andati…")
-            perche = await asyncio.to_thread(_perche, first)
+            perche = await asyncio.to_thread(_perche, first[:st.get("perche", 5)])   # solo i migliori: costa immagini
             await _send_links(
                 bot, chat_ids,
                 f"☀️ {brand['nome']} · post dei collaboratori andati almeno {st['min_score']:.1f}x sopra la media della loro pagina "
@@ -539,7 +540,7 @@ async def run_more(bot, chat_ids: list[int]) -> None:
             _offset_file().write_text(str(shown + len(nxt)))
             _mark_shown(nxt)
             left = len(ranking) - shown - len(nxt)
-            perche = await asyncio.to_thread(_perche, nxt)
+            perche = await asyncio.to_thread(_perche, nxt[:st.get("perche", 5)])
             await _send_links(bot, chat_ids, "Altri post dalla classifica:",
                               _link_lines(nxt, shown + 1, st["min_score"], perche),
                               "Mandami il link di quelli che ti piacciono." + ("\n/altri per i successivi." if left > 0 else ""))
