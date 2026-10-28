@@ -36,7 +36,7 @@ COMMANDS = [
         ("analizza", "Rifai subito lo studio (lo fa già da solo ogni notte)",
          "il bot studia da solo ogni notte i tuoi post, le descrizioni e le slide CTA; usalo solo per averlo subito"),
         ("stile", "Cosa ha imparato il bot", "guida di stile e testi CTA ricavati da /analizza"),
-        ("studio", "Perché i post sono andati", "post per post: perché sono andati i post di competitor, collaboratori e nostri, più temi, hook e strutture vincenti (arriva anche da solo ogni 3 giorni)"),
+        ("studio", "Perché i post sono andati", "post per post: perché sono andati i post di competitor, collaboratori e nostri, più temi, hook e strutture vincenti (lo studio della nicchia arriva da solo ogni settimana)"),
         ("statistiche", "Numeri veri degli ultimi post", "copertura, salvataggi, condivisioni, clic (serve Meta)"),
         ("pagine", "Collaboratori e competitor", "le pagine dei collaboratori (report) e dei competitor (studio)"),
         ("aggiungi", "Aggiungi un collaboratore (es. /aggiungi @pagina)", "pagina autorizzata: entra nel report del mattino"),
@@ -56,7 +56,8 @@ COMMANDS = [
 HELP = (
     "GUIDA RAPIDA (quello che ti serve ogni giorno)\n"
     "1. Alle 8 ti arriva il report con i post migliori dei collaboratori: mandami i link che ti piacciono.\n"
-    "2. Alle 8:30 ti arrivano 2 caroselli creati da zero.\n"
+    "2. La domenica alle 10 arriva il perché della settimana: i 5 post migliori dei collaboratori e cosa li ha spinti.\n"
+    "   I caroselli da zero li fa solo quando li chiedi con /crea.\n"
     "3. Per correggere qualcosa rispondi al post: \"slide 3 più corta\", \"rifai la CTA con la casella\".\n"
     "4. Se una slide è sbagliata: rispondi alla slide con \"segnala: ...\" e Claude la corregge.\n"
     "Tutto il resto (studio della pagina, trend, correzioni) il bot lo fa da solo di notte.\n\n"
@@ -820,6 +821,19 @@ def _schedule_report(app: Application, slug: str):
             await report.run_report(context.bot, chat_ids)
 
     app.job_queue.run_daily(job, time=at, name=f"report_mattutino_{slug}")
+
+    # il perché dei post migliori: una volta a settimana (report.perche_giorno, 0 = domenica ... 6 = sabato,
+    # come conta Telegram)
+    giorno = int(cfg.get("perche_giorno", 0))
+    at_p = datetime.strptime(str(cfg.get("perche_ora", "10:00")), "%H:%M").time().replace(tzinfo=tz)
+
+    async def job_perche(context: ContextTypes.DEFAULT_TYPE):
+        pagine.imposta(slug)
+        chat_ids = _destinatari(slug)
+        if chat_ids:
+            await report.run_perche_settimanale(context.bot, chat_ids, int(cfg.get("perche_quanti_settimana", 5)))
+
+    app.job_queue.run_daily(job_perche, time=at_p, days=(giorno,), name=f"perche_settimanale_{slug}")
     log.info("%s: report programmato ogni giorno alle %s (%s) per %s", slug, cfg["ora"], tz, _destinatari(slug))
 
 
@@ -855,7 +869,7 @@ def _schedule_analysis(app: Application, slug: str):
             for c in chat_ids:
                 await context.bot.send_message(c, f"Studio di {b.get('nome')} non riuscito: {str(e)[:300]}")
             return
-        if style.get("studio_virali_nuovo"):                     # ogni 3 giorni: il perché di ogni post studiato
+        if style.get("studio_virali_nuovo"):                     # ogni settimana: il perché di ogni post studiato
             await _send_studio(context.bot, chat_ids, style.get("studio_virali") or {})
         if datetime.now(tz).weekday() != 0 and not (context.job.data or {}).get("primo"):
             return                                               # niente messaggi tutti i giorni

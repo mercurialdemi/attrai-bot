@@ -198,7 +198,7 @@ def _settings(brand: dict) -> dict:
         "completa": bool(cfg.get("completa_sempre", True)),
         # False = il report manda solo i link dei migliori post (nessun credito speso per tradurli)
         "prepara": bool(cfg.get("prepara_post", False)),
-        "perche": int(cfg.get("perche_quanti", 5)),          # su quanti post spiegare il perché (immagini = costo)
+        "perche": int(cfg.get("perche_quanti", 0)),          # 0 = il perché non è nel report (arriva una volta a settimana)
     }
 
 
@@ -484,8 +484,10 @@ async def run_report(bot, chat_ids: list[int]) -> None:
             first = cands[:st["candidati"]]
             _offset_file().write_text(str(len(first)))
             _mark_shown(first)
-            await _broadcast(bot, chat_ids, f"Report: ho trovato {len(first)} post forti, ora studio perché sono andati…")
-            perche = await asyncio.to_thread(_perche, first[:st.get("perche", 5)])   # solo i migliori: costa immagini
+            perche = {}
+            if st["perche"] > 0:
+                await _broadcast(bot, chat_ids, f"Report: ho trovato {len(first)} post forti, ora studio perché sono andati…")
+                perche = await asyncio.to_thread(_perche, first[:st["perche"]])   # solo i migliori: costa immagini
             await _send_links(
                 bot, chat_ids,
                 f"☀️ {brand['nome']} · post dei collaboratori andati almeno {st['min_score']:.1f}x sopra la media della loro pagina "
@@ -540,7 +542,7 @@ async def run_more(bot, chat_ids: list[int]) -> None:
             _offset_file().write_text(str(shown + len(nxt)))
             _mark_shown(nxt)
             left = len(ranking) - shown - len(nxt)
-            perche = await asyncio.to_thread(_perche, nxt[:st.get("perche", 5)])
+            perche = await asyncio.to_thread(_perche, nxt[:st["perche"]]) if st["perche"] > 0 else {}
             await _send_links(bot, chat_ids, "Altri post dalla classifica:",
                               _link_lines(nxt, shown + 1, st["min_score"], perche),
                               "Mandami il link di quelli che ti piacciono." + ("\n/altri per i successivi." if left > 0 else ""))
@@ -555,3 +557,41 @@ async def run_more(bot, chat_ids: list[int]) -> None:
         await _broadcast(bot, chat_ids, f"Preparo altri {len(chosen)} post dalla classifica (ne restano {len(rest) - len(chosen)})…")
         await _produce(bot, chat_ids, brand, chosen, st["min_score"], "extra")
         await _broadcast(bot, chat_ids, "Fatto.")
+
+
+async def run_perche_settimanale(bot, chat_ids: list[int], quanti: int = 5) -> None:
+    """Una volta a settimana: i migliori `quanti` post dei collaboratori degli ultimi 7 giorni (in tema con questa
+    pagina) e PERCHÉ sono andati: gancio, struttura, formato, dolore, fattore, cosa ci portiamo a casa.
+    Le analisi finiscono anche nella memoria dei contenuti (servono a /crea e allo studio)."""
+    from . import analysis
+    brand = writer.load_brand()
+    handles = [h.lower().lstrip("@") for h in brand.get("pagine_monitorate") or [] if h]
+    own = {(brand.get("handle") or "").lower()}
+    handles = [h for h in handles if h not in own]
+    if not handles or not chat_ids:
+        return
+    st = _settings(brand)
+    try:
+        posts = await asyncio.to_thread(instagram.fetch_profiles, handles, st["per_pagina"])
+    except Exception:
+        log.exception("Perché della settimana: lettura pagine fallita")
+        return
+    posts = [p for p in posts if p.owner not in own]
+    cands = [p for p in rank_candidates(posts, 168, quanti * 4) if p.image_urls and not p.is_video
+             and p.score >= st["min_score"]]
+    if cands:
+        cands, _ = await asyncio.to_thread(_fit_filter, cands, brand)
+    cands = cands[:quanti]
+    if not cands:
+        await _broadcast(bot, chat_ids, f"Il perché della settimana ({brand['nome']}): nessun post dei collaboratori "
+                                        f"è andato almeno {st['min_score']:.1f}x sopra la media questa settimana.")
+        return
+    analisi = await asyncio.to_thread(analysis.analizza_post,
+                                      [(p, float(p.score or 0), "collaboratore") for p in cands], 6)
+    if not analisi:
+        return
+    righe = [analysis.scheda(a, i) for i, a in enumerate(sorted(analisi, key=lambda a: -(a.get("rendimento") or 0)), 1)]
+    await _send_links(bot, chat_ids,
+                      f"🧠 {brand['nome']} · il perché della settimana: i {len(righe)} post dei collaboratori andati "
+                      "meglio negli ultimi 7 giorni e cosa li ha spinti.",
+                      righe, "Mandami il link di quelli che vuoi preparare in italiano.")

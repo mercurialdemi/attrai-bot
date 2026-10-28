@@ -50,10 +50,10 @@ report:
   prepara_post: false    # false = il report manda solo i link dei migliori post (non spende crediti);
                          # true  = li manda già tradotti e pronti (quanti_post ogni mattina)
 
-# Caroselli ORIGINALI creati da zero ogni mattina (testo su nero, nello stile della pagina).
+# Caroselli ORIGINALI creati da zero (testo su nero, nello stile della pagina).
 # al_giorno: 0 per spegnerli. Si possono anche chiedere a mano con /crea.
 crea:
-  al_giorno: 2
+  al_giorno: 0           # 0 = solo quando li chiedi con /crea (deciso da Gabriele il 28/10/2026)
   ora: "08:30"
 
 # Studio automatico della pagina (stile, CTA, risultati dei post del bot): ogni settimana

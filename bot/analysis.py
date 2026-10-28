@@ -169,10 +169,10 @@ def run_analysis(brand: dict, n_posts: int = 80) -> dict:
         except Exception as e:
             log.warning("Studio CTA delle pagine di riferimento non riuscito: %s", e)
             style["cta_studio"] = prev
-    # studio dei caroselli virali (temi, hook, strutture, trend): ogni 3 giorni, base per i post da zero
+    # studio dei caroselli virali (temi, hook, strutture, trend): una volta a settimana, base per i post da zero
     pv = writer.load_style().get("studio_virali") or {}
     try:
-        fresh_v = pv.get("creato") and (datetime.now(timezone.utc) - datetime.fromisoformat(pv["creato"])).days < 3
+        fresh_v = pv.get("creato") and (datetime.now(timezone.utc) - datetime.fromisoformat(pv["creato"])).days < 7
     except Exception:
         fresh_v = False
     style["studio_virali_nuovo"] = False
