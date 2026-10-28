@@ -29,7 +29,6 @@ pagine_monitorate:
   - jotatsu.mindset
   - rivoluzione.della.mente
   - kaizen.ita
-  - convincimii
   - rieducazione
   - il.tuozen
   - mentality
@@ -51,7 +50,8 @@ pagine_monitorate:
 
 # Pagine da studiare (mai nel report): /studia @pagina dal gruppo
 # Pagine da studiare (mai nel report): /studia @pagina dal gruppo
-pagine_studio: []
+pagine_studio:
+  - convincimii          # solo da studiare: i suoi post non si pubblicano
 
 report:
   ora: "08:00"           # il report arriva nel gruppo della pagina (se il gruppo non è collegato, non parte)
