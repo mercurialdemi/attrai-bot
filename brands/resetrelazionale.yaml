@@ -2,15 +2,31 @@
 # Modificala liberamente. Le parti segnate DA COMPLETARE aspettano i dati di Gabriele.
 
 nome: ResetRelazionale
-handle: ""                   # DA COMPLETARE: nome Instagram senza @
+handle: resetrelazionale
 
 pubblico: uomini dai 25 ai 55 anni
 temi_report: >
-  Rotture e post relazione per uomini: superare la fine di una storia, il dolore dopo la rottura, l'ex,
-  il contatto zero, la tentazione di scriverle, vederla con un altro, ricostruirsi dopo, tornare a stare bene da soli.
+  Fine di una relazione vista dall'uomo: rotture, distacco emotivo, dipendenza affettiva, non riuscire a
+  dimenticare lei, cercare risposte su cosa è successo, sentirsi persi dopo la separazione, vivere in funzione
+  dell'ex, autostima e ricostruzione di sé. Non la riconquista dell'ex.
 
-# Collaboratori di questa pagina (report del mattino): DA COMPLETARE, oppure /aggiungi @pagina dal gruppo
-pagine_monitorate: []
+# Collaboratori di ResetRelazionale (dal file di Gabriele, 28/10/2026). Altri: /aggiungi @pagina dal gruppo
+pagine_monitorate:
+  - maskulinemind
+  - thementalpower
+  - alexaubreypoetry
+  - romances
+  - scratch.diary_
+  - thought.minds
+  - mental.aspect
+  - masculineisriot
+  - miralaurona
+  - poetsarticle
+  - be.poets
+  - the_deep_thinker
+  - softenthought
+  - yourpoets
+  - emotionally.perfect
 
 # Pagine da studiare (mai nel report): /studia @pagina dal gruppo
 pagine_studio: []
@@ -21,7 +37,7 @@ report:
   finestra_ore: 72
   candidati: 15
   quanti_post: 5
-  post_per_pagina: 30
+  post_per_pagina: 20         # molti collaboratori: meno post letti per pagina (costo Apify)
   punteggio_minimo: 1.5
   completa_sempre: false
   prepara_post: false
@@ -38,12 +54,16 @@ studio:
 traduzione_slide: fedele
 
 posizionamento: >
-  Il punto di riferimento italiano per l'uomo che sta attraversando una rottura: capire cosa è successo,
-  smettere di soffrire per lei e ricostruirsi più forte.
+  Pagina per uomini che stanno affrontando la fine di una relazione e vogliono ritrovare se stessi.
+  Contenuti psicologici, riflessioni e consigli pratici per capire le dinamiche relazionali, recuperare
+  lucidità emotiva, ricostruire la propria identità e diventare indipendenti affettivamente.
+  Il nostro obiettivo non è insegnare a riconquistare una donna, ma aiutare un uomo a riconquistare se stesso:
+  la fine di una relazione non è la fine della propria identità, può essere il punto di partenza.
 
 tono:
-  - Maschile, diretto, crudo ma mai cinico: parla a un uomo ferito come un fratello maggiore che ci è già passato.
-  - Niente vittimismo e niente romanticismo: si riconosce il dolore e si spinge all'azione.
+  - Maschile, diretto, lucido: parla a un uomo ferito come un fratello maggiore che ci è già passato. Mai cinico verso di lui.
+  - Riconosce il dolore e poi spinge a riprendersi in mano la vita. Niente vittimismo, niente romanticismo.
+  - Mai consigli per riconquistarla: il centro è lui, la sua identità, la sua lucidità.
   - "Italiano fluido e naturale, come lo scriverebbe un italiano: mai una traduzione parola per parola."
   - "Niente slang giovanile o da strada (fra, bro, zio, raga): tono adulto e sicuro."
 
@@ -63,13 +83,17 @@ hook:
 
 cta:
   regola: |
-    Questa pagina per ora non vende manuali: OGNI post chiude con la CTA "segui la pagina".
+    Post DIDATTICO o che apre un dolore preciso legato al manuale -> CTA al manuale giusto (vedi manuali).
+    Post VIRALE, emotivo, di riflessione, o non collegabile al manuale -> CTA segui la pagina.
+    Post a immagine singola -> CTA segui la pagina.
     La CTA del post originale va sempre tolta e sostituita con la nostra (anche dentro le slide).
   stile: |
-    Scritta da copywriter professionista, mai banale. La CTA è la conclusione naturale del post e ne rispetta
-    il formato: post a elenco -> si aggancia all'elenco; scena o dialogo -> "Se ti sei rivisto in questa scena...";
-    frase o riflessione -> si aggancia a quella frase. Prima di chiedere DÀ qualcosa: un'ultima intuizione o una
-    domanda introspettiva precisa. Mai domande generiche tipo "Sei d'accordo?". Niente emoji nella CTA.
+    Scritta da copywriter professionista, mai banale. Parte dal dolore del post, mai dal manuale; il manuale
+    arriva solo alla fine in una riga ("Ho scritto un manuale che..."). Tocca il dolore, crea urgenza, mostra
+    uno spiraglio di speranza, distrugge una falsa credenza. Non promette che lei tornerà.
+    La CTA rispetta il formato del post: elenco -> si aggancia all'elenco; scena -> "Se ti sei rivisto in questa
+    scena..."; frase o riflessione -> si aggancia a quella frase. Prima di chiedere DÀ qualcosa: un'ultima
+    intuizione o una domanda introspettiva precisa. Niente emoji. Titolo del manuale sempre tra virgolette.
   dove_si_compra: "link in bio"
 
 scuole_di_pensiero:
@@ -87,7 +111,21 @@ parole_censurate: [sesso, cazzo, cazzi, cazzate, cazzata, incazzato, incazzata, 
                    merda, puttana, puttane, stronzo, stronza, stronzate, coglione, coglioni, troia, troie, figa,
                    scopare, scopata]
 
-manuali: []           # DA COMPLETARE quando ci saranno manuali da vendere su questa pagina
+manuali:
+  - id: friendzone
+    nome: "Come uscire dalla friendzone"
+    titoli: ["Come uscire dalla friendzone", "Come uscire dalla friend-zone"]
+    vendita: >
+      Si propone SOLO quando il post tocca il dolore di essere stato vicino a lei ma non scelto: il confidente,
+      l'amico, quello che c'era sempre e non è mai stato desiderato, anche dopo la fine di una storia.
+      Per i post sulla rottura in generale la CTA resta "segui la pagina".
+    dolori: >
+      Per l'uomo che per lei è importante ma non desiderato: lo cerca, si confida, gli racconta degli altri,
+      e non prova nessuna attrazione. Resta in un limbo: vicino ma mai scelto. Disponibilità eccessiva,
+      idealizzazione, rinuncia alle proprie priorità e paura di perderla. Non capisce perché gentilezza e
+      presenza costante non bastano e perché lei sceglie un altro. Differenza tra essere apprezzato ed essere
+      desiderato, dipendenza emotiva, come smettere di aspettare di essere scelto.
+      Non promette che lei si innamorerà.
 
 watermark:
   solo_se_presente: true

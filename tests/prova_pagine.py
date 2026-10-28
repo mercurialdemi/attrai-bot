@@ -56,7 +56,7 @@ writer._tool_call = lambda *a, **k: {"post": [
 keep, ok = report._fit_filter(cands, b)
 assert [p.url for p in keep] == ["u1"], [p.url for p in keep]
 righe = report._link_lines(keep, 1, 1.5)
-assert "CTA manuale" not in righe[0] and "virale" in righe[0], righe[0]   # Reset non ha manuali
+assert "VIRALE" in righe[0] and "segui la pagina" in righe[0], righe[0]   # Reset ora ha il manuale friendzone
 print("report Reset:", righe[0].splitlines()[0])
 
 # 5. riconoscere la pagina da come la scrivi

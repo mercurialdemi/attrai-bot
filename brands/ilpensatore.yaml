@@ -2,18 +2,63 @@
 # Modificala liberamente. Le parti segnate DA COMPLETARE aspettano i dati di Gabriele.
 
 nome: Il Pensatore
-handle: ""                   # DA COMPLETARE: nome Instagram senza @
+handle: ilpensatore
 
-pubblico: uomini
+pubblico: adulti, soprattutto uomini ma anche donne (contenuti trasversali)
+
 temi_report: >
-  Relazioni con un taglio emotivo e riflessivo: sentimenti, mancanza, amore, solitudine, maturità emotiva,
-  frasi e pensieri che fanno sentire compresi, senza insegnamento pratico di seduzione.
+  Relazioni uomo-donna in senso ampio e introspettivo: psicologia dell'amore, dipendenza affettiva e perdita
+  di identità, perché una persona diventa distante, schemi relazionali che si ripetono, autostima e paura del
+  rifiuto, rotture e distacco raccontati in modo riflessivo, nostalgia, frasi e scene in cui uomini e donne si
+  riconoscono. Non seduzione pratica e non motivazionale generico.
 
-# Collaboratori di questa pagina (report del mattino): DA COMPLETARE, oppure /aggiungi @pagina dal gruppo
-pagine_monitorate: []
+# Collaboratori di Il Pensatore (dal file di Gabriele, 28/10/2026). Altri: /aggiungi @pagina dal gruppo
+pagine_monitorate:
+  - maskulinemind
+  - thementalpower
+  - alexaubreypoetry
+  - romances
+  - scratch.diary_
+  - thought.minds
+  - mental.aspect
+  - masculineisriot
+  - miralaurona
+  - poetsarticle
+  - be.poets
+  - the_deep_thinker
+  - softenthought
+  - yourpoets
+  - emotionally.perfect
+  - pointless_existence._
+  - the.move.mentor
+  - traditional.male
+  - badboyscode
+  - menspittingfacts
+  - masculineprint
+  - readthisdeeply
+  - aroundgrowth
+  - blackthoughts
+  - mepoets
+  - victorianpoetry
+  - poetstribe
+  - poets.title
+  - poets
+  - theunsharedfeelings_
+  - thescatteredfeelings
+  - successverse_
+  - philosophaire_
+  - inspiring.poet
+  - happycouplesconnect
+  - azure_writes_
+  - poetsandquotes
+  - poetsphere
+  - bittercodes
+  - optiimusmind
+  - 7.hrs
 
 # Pagine da studiare (mai nel report): /studia @pagina dal gruppo
-pagine_studio: []
+pagine_studio:
+  - convincimii
 
 report:
   ora: "08:00"           # il report arriva nel gruppo della pagina (se il gruppo non è collegato, non parte)
@@ -21,7 +66,7 @@ report:
   finestra_ore: 72
   candidati: 15
   quanti_post: 5
-  post_per_pagina: 30
+  post_per_pagina: 12         # molti collaboratori: meno post letti per pagina (costo Apify)
   punteggio_minimo: 1.5
   completa_sempre: false
   prepara_post: false
@@ -38,14 +83,19 @@ studio:
 traduzione_slide: fedele
 
 posizionamento: >
-  Pensieri e riflessioni sulle relazioni e sulla vita emotiva di un uomo: fanno fermare, riflettere e
-  sentirsi compresi.
+  Pagina verticale sulle relazioni tra uomo e donna: psicologia dell'amore, dinamiche emotive e
+  comportamentali della coppia, ciò che accade prima, durante e dopo una relazione. Unisce identificazione
+  emotiva (raccontare ciò che le persone vivono e non riescono a dire), comprensione psicologica (spiegare
+  perché ci si attrae, ci si lega e ci si allontana) e consapevolezza personale (riconoscere i propri schemi).
+  Modello di riferimento: Convincimi. Non pagina motivazionale generica, non solo riconquista o seduzione.
 
 tono:
-  - Riflessivo, profondo, maschile. Emotivo ma mai sdolcinato o melenso.
-  - Frasi che restano in testa: poche parole, peso alto.
-  - "Italiano fluido e naturale, come lo scriverebbe un italiano: mai una traduzione parola per parola."
-  - "Niente slang giovanile o da strada: tono adulto."
+  - Maturo, diretto, introspettivo, psicologico e, quando serve, provocatorio. Profondo ma mai artificiosamente complicato.
+  - Trasversale: soprattutto per uomini, ma deve coinvolgere anche le donne. Sceglie consapevolmente quando parlare a lui, a lei o a "una persona" ("perché una persona smette di cercarti, pur dicendo di amarti").
+  - Mai scontro tra uomini e donne, mai provocazione fine a se stessa, mai diagnosi improvvisate né generalizzazioni assolute sui sessi.
+  - Deve far fermare il lettore e fargli dire "è esattamente quello che ho vissuto". A volte basta farlo sentire compreso, senza soluzione.
+  - Didattico senza essere paternalistico, niente linguaggio accademico.
+  - "Italiano fluido e naturale: mai una traduzione parola per parola."
 
 regole_formato:
   - Descrizione massimo 2200 caratteri.

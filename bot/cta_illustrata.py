@@ -27,6 +27,7 @@ BOOKS = {
     "attraiseduci": ["attraiseduci"],
     "potere-sociale": ["attraiseduci", "potere-sociale"],     # il bundle: si vedono tutti e due
     "friendzone": ["friendzone"],
+    "abitudini": ["abitudini"],
 }
 
 PROMPT = (

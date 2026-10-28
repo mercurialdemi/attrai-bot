@@ -652,7 +652,9 @@ def _caption_system(brand: dict, rules: list[dict], recent: dict) -> str:
                     f"Pubblico: {pubblico}. Posizionamento: {' '.join(str(brand.get('posizionamento', '')).split())}\n"
                     f"Tono: {' '.join(brand.get('tono', []))}\n"
                     + ("La lettrice è una DONNA: scrivi al femminile, rivolgendoti a lei; dove sotto trovi 'lui', "
-                       "'maschile' o il punto di vista dell'uomo, adattalo a lei.\n" if "donn" in pubblico.lower() else "")
+                       "'maschile' o il punto di vista dell'uomo, adattalo a lei.\n" if pubblico.lower().startswith("donne") else
+                       "Pubblico misto: scegli per ogni post se parlare a lui, a lei o a 'una persona'; dove sotto trovi "
+                       "indicazioni solo maschili, adattale.\n" if "donne" in pubblico.lower() else "")
                     + "\n")
     return f"""{priorita}Sei il copywriter senior della pagina Instagram italiana {brand['nome']} (@{brand['handle']}).
 Ricevi le slide già tradotte di un post e scrivi la descrizione Instagram con la CTA.

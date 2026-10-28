@@ -62,7 +62,7 @@ HELP = (
     "Tutto il resto (studio della pagina, trend, correzioni) il bot lo fa da solo di notte.\n\n"
     "PAGINE SEPARATE\n"
     "Ogni pagina ha il suo gruppo Telegram (crealo, aggiungi il bot come amministratore e scrivi lì "
-    "/collega reset, /collega pensatore, /collega amore, /collega attrai). In quel gruppo report, caroselli, "
+    "/collega reset, /collega pensatore, /collega amore, /collega ascesa, /collega attrai). In quel gruppo report, caroselli, "
     "studio, collaboratori (/aggiungi), logo, tono e CTA sono solo di quella pagina. Nel gruppo il bot "
     "risponde solo ai link, ai comandi e a chi risponde a un suo messaggio. /pagina ti dice dove sei.\n\n"
     "COSA PUOI FARE\n\n"

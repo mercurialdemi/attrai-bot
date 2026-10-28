@@ -2,15 +2,90 @@
 # Modificala liberamente. Le parti segnate DA COMPLETARE aspettano i dati di Gabriele.
 
 nome: AmoreInfedele
-handle: ""                   # DA COMPLETARE: nome Instagram senza @
+handle: amoreinfedele
 
-pubblico: donne
+pubblico: donne adulte (pubblico intenzionalmente femminile)
+
 temi_report: >
-  Psicologia maschile spiegata alle donne, trauma bond, narcisismo, relazioni tossiche, manipolazione,
-  riconoscere i segnali di un uomo che non ti ama davvero, uscire da un legame che fa male.
+  Relazioni dolorose viste dalla donna: tradimento e crollo della fiducia, cosa succede dopo, dipendenza
+  affettiva, trauma bond, amare chi ti ha fatto male, confronto con l'altra donna, bisogno di spiegazioni,
+  paura di essere tradita di nuovo, controllo dei social, perdono, manipolazione e gaslighting, nostalgia
+  dell'ex, perdita di identità, confini, autostima dopo una delusione. Contenuti che parlano a una donna.
 
-# Collaboratori di questa pagina (report del mattino): DA COMPLETARE, oppure /aggiungi @pagina dal gruppo
-pagine_monitorate: []
+# Collaboratori di AmoreInfedele (dal file di Gabriele, 28/10/2026; trulylovedose segnata come forte). Altri: /aggiungi @pagina
+pagine_monitorate:
+  - womeninnerpower
+  - black_thoughtss_
+  - volatvio
+  - poetsandquotes_
+  - pointless_existence._
+  - romances
+  - womantainment
+  - spiritualgoal
+  - womenwithlegacy.co
+  - selfcareforheart
+  - femme_infopreneurs
+  - empoweredqueenss
+  - thefemalehustlers
+  - shemotivate_
+  - victorianpoetry
+  - remindersperfect
+  - lostownthoughts
+  - thinkingmindspage
+  - maskulinemind
+  - thementalpower
+  - alexaubreypoetry
+  - scratch.diary_
+  - thought.minds
+  - mental.aspect
+  - masculineisriot
+  - miralaurona
+  - poetsarticle
+  - be.poets
+  - the_deep_thinker
+  - softenthought
+  - yourpoets
+  - emotionally.perfect
+  - the.move.mentor
+  - traditional.male
+  - badboyscode
+  - menspittingfacts
+  - masculineprint
+  - readthisdeeply
+  - aroundgrowth
+  - mepoets
+  - poetstribe
+  - poets.title
+  - poets
+  - theunsharedfeelings_
+  - thescatteredfeelings
+  - successverse_
+  - philosophaire_
+  - inspiring.poet
+  - happycouplesconnect
+  - azure_writes_
+  - poetsandquotes
+  - poetsphere
+  - bittercodes
+  - optiimusmind
+  - 7.hrs
+  - kleyartsies
+  - justgirlstherapy
+  - selfcareforhealth
+  - mycuteanimestory
+  - trulylovedose
+  - narcissistic_hangover
+  - awakened_goddesses
+  - psychologyposts_
+  - skillofmanifestation
+  - psychologypeers
+  - subconsciousthinkers
+  - strongwomenquotes
+  - girlsbuildingempires
+  - ivanamukherjeeray
+  - beyond.toxiclove
+  - her.worth.journey
+  - your_mental_healness
 
 # Pagine da studiare (mai nel report): /studia @pagina dal gruppo
 pagine_studio: []
@@ -21,7 +96,7 @@ report:
   finestra_ore: 72
   candidati: 15
   quanti_post: 5
-  post_per_pagina: 30
+  post_per_pagina: 12         # molti collaboratori: meno post letti per pagina (costo Apify)
   punteggio_minimo: 1.5
   completa_sempre: false
   prepara_post: false
@@ -38,13 +113,20 @@ studio:
 traduzione_slide: fedele
 
 posizionamento: >
-  Aiuta le donne a capire la mente degli uomini, a riconoscere narcisismo, manipolazione e trauma bond,
-  e a uscire dalle relazioni che le consumano.
+  Pagina sulle relazioni sentimentali vissute dalle donne, con focus su tradimento, perdita della fiducia,
+  dipendenza affettiva e conseguenze emotive delle relazioni dolorose. Racconta cosa succede nella mente e nel
+  cuore di una donna quando la persona di cui si fidava diventa quella che la fa soffrire, e soprattutto cosa
+  viene dopo. Unisce contenuti emotivi, introspettivi, spiegazioni psicologiche e approfondimenti pratici per
+  aiutarla a capire ciò che ha vissuto e recuperare consapevolezza, fiducia e autonomia emotiva.
+  Non è una pagina generica sull'amore e non è una pagina contro gli uomini.
 
 tono:
-  - Si rivolge a una DONNA, al femminile: diretta, lucida, protettiva ma mai melensa.
-  - Mette a nudo le dinamiche maschili e manipolative senza addolcirle, ancorata a studi e autori reali.
-  - Il tradimento in sé non è il punto: il centro è la dinamica tossica e il legame che la tiene dentro.
+  - Si rivolge a una DONNA, al femminile. Deve farle pensare "è esattamente quello che provo", "pensavo di essere l'unica".
+  - Emotiva per creare identificazione, psicologica per trasformarla in comprensione. Lucida, mai melensa.
+  - Tratta i paradossi (amare chi ti ha ferita, voler perdonare e controllare) come complessità dell'attaccamento, mai come debolezze o colpe di lei.
+  - Precisa con i termini: non ogni relazione difficile è trauma bond, non ogni bugia è gaslighting, niente diagnosi improvvisate.
+  - Non convince automaticamente a lasciarlo: aiuta a guardare la relazione con lucidità senza giustificare comportamenti dannosi.
+  - Vietate le frasi da social generiche ("meriti di meglio", "chi ti ama non ti tradisce").
   - "Italiano fluido e naturale, come lo scriverebbe un'italiana: mai una traduzione parola per parola."
 
 regole_formato:

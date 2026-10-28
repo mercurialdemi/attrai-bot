@@ -1,0 +1,166 @@
+# Scheda della pagina Ascesa Mentale: il bot la usa per i post preparati nel gruppo di questa pagina.
+# Modificala liberamente. Le parti segnate DA COMPLETARE aspettano i dati di Gabriele.
+
+nome: Ascesa Mentale
+
+handle: ascesamentale
+
+pubblico: uomini tra i 20 e i 40 anni
+
+temi_report: >
+  Crescita personale maschile: disciplina e autocontrollo, procrastinazione, costanza, gestione degli impulsi,
+  forza mentale e resilienza, paura del fallimento, abitudini, allenamento e routine, obiettivi, responsabilità,
+  direzione nella vita, confini personali e indipendenza emotiva, allontanarsi da situazioni dannose.
+
+# Collaboratori di AscesaMentale (report del mattino): DA CONFERMARE, oppure /aggiungi @pagina dal gruppo
+pagine_monitorate: []
+
+# Pagine da studiare (mai nel report): /studia @pagina dal gruppo
+# Pagine faceless simili indicate da Gabriele: per ora solo da STUDIARE (mai nel report) finché non conferma che sono collaboratori
+pagine_studio:
+  - viensi_
+  - mindsecret_ita
+  - gernucci
+  - mind.revolve
+  - uomoautentico
+  - mentalita.invictus
+  - disciplina.elite
+  - stoicismo.it
+  - stoici.it
+  - mindsetdelguerriero
+  - ambitionality
+  - motivovincente
+  - jotatsu.mindset
+  - rivoluzione.della.mente
+  - kaizen.ita
+  - convincimii
+  - rieducazione
+  - il.tuozen
+  - mentality
+  - newmentalities
+  - rarementalities
+  - vigilantmiinds
+  - motivationmafia
+  - mindset.therapy
+  - dailystoic
+  - goodmindsquote
+  - thefearlessimpact
+  - successskill
+  - motiversity
+  - thegoodquote
+  - valueanimate
+  - mental.fitness.gym
+  - motivate.caballeros
+  - invictos_tm
+
+report:
+  ora: "08:00"           # il report arriva nel gruppo della pagina (se il gruppo non è collegato, non parte)
+  fuso: Europe/Rome
+  finestra_ore: 72
+  candidati: 15
+  quanti_post: 5
+  post_per_pagina: 30
+  punteggio_minimo: 1.5
+  completa_sempre: false
+  prepara_post: false
+
+# Caroselli originali da zero ogni mattina: spenti finché la pagina non è pronta (metti 2 per accenderli)
+crea:
+  al_giorno: 0
+  ora: "08:30"
+
+studio:
+  attivo: true
+  ora: "04:00"
+
+traduzione_slide: fedele
+
+posizionamento: >
+  Pagina per uomini che sentono la distanza tra chi sono oggi e chi vorrebbero diventare: hanno ambizioni ma
+  faticano a trasformarle in azioni, combattono procrastinazione, distrazioni e mancanza di costanza, vogliono
+  migliorare fisico, mentalità e abitudini, cercano sicurezza, autocontrollo e direzione. Parla soprattutto a
+  chi sente di poter diventare molto più di ciò che è, ma fatica a dimostrarlo con le azioni.
+
+tono:
+  - Maschile, diretto, essenziale, da mentore che ha già fatto il percorso: niente motivazione vuota ("credici", "sii la versione migliore di te").
+  - La disciplina non è un tratto morale ma una struttura: si spiega il meccanismo (abitudini, ambiente, identità) e si dà un passo concreto.
+  - Fa sentire il peso dell'incoerenza tra chi sei e chi vuoi essere, poi mostra la via d'uscita.
+  - Ancorato a studi ed esperimenti reali di psicologia comportamentale, raccontati in modo semplice.
+  - "Italiano fluido e naturale: mai una traduzione parola per parola."
+  - "Niente slang giovanile o da strada: tono adulto e sicuro."
+
+regole_formato:
+  - Descrizione massimo 2200 caratteri.
+  - Niente grassetto, niente asterischi, niente trattini lunghi.
+  - Testo delle slide breve e leggibile su telefono, con la stessa divisione in frasi e lo stesso peso dell'originale.
+
+hook:
+  regola: >
+    L'apertura della descrizione non parte di default dalla citazione di un autore o studio.
+    Ruota tra: frase secca, confessione in prima persona, verità brutale, aneddoto di terzi, domanda retorica.
+    Due descrizioni consecutive non aprono mai con la stessa struttura.
+  struttura: >
+    Varia apertura, sviluppo e chiusura rispetto ai post precedenti.
+    Non ripetere gli autori citati di recente: pesca da un insieme ampio e vario.
+
+cta:
+  regola: |
+    Post DIDATTICO o che apre un dolore legato a disciplina, abitudini, costanza, procrastinazione -> CTA al manuale "Abitudini".
+    Post VIRALE, motivazionale/emotivo senza insegnamento pratico, o a immagine singola -> CTA segui la pagina.
+    La CTA del post originale va sempre tolta e sostituita con la nostra (anche dentro le slide).
+  stile: |
+    Scritta da copywriter professionista. Parte dal dolore (sai cosa fare ma non riesci a farlo con
+    continuità; parti forte e poi crolla tutto), mai dal manuale; il manuale arriva alla fine in una riga.
+    Distrugge la falsa credenza ("non ti manca la motivazione, ti manca la struttura"), crea urgenza, mostra
+    speranza. Niente promesse di trasformazioni rapide. Rispetta il formato del post. Niente emoji.
+    Titolo del manuale sempre tra virgolette.
+  dove_si_compra: "link in bio"
+
+scuole_di_pensiero:
+  - fonte: Stoicismo (Seneca, Marco Aurelio, Epitteto)
+    principi: >
+      Distingui ciò che dipende da te da ciò che non dipende da te; la disciplina è scegliere ogni giorno
+      l'azione giusta anche quando non ne hai voglia.
+  - fonte: James Clear e Wendy Wood (abitudini)
+    principi: >
+      Buona parte delle azioni quotidiane è automatica: le abitudini si costruiscono progettando l'ambiente e
+      l'identità, non contando sulla motivazione.
+  - fonte: Wolfram Schultz (dopamina)
+    principi: >
+      La dopamina è l'ormone dell'aspettativa, non del piacere: chi capisce il calo dopo l'entusiasmo iniziale
+      smette di mollare al primo giorno storto.
+  - fonte: Walter Mischel (esperimento del marshmallow)
+    principi: >
+      Saper rimandare la gratificazione è una capacità che si allena con strategie e ambiente, non un dono.
+
+parole_censurate: [sesso, cazzo, cazzi, cazzate, cazzata, incazzato, incazzata, fottuto, fottuta, fottere, fottiti,
+                   merda, puttana, puttane, stronzo, stronza, stronzate, coglione, coglioni, troia, troie, figa,
+                   scopare, scopata]
+
+manuali:
+  - id: abitudini
+    nome: "Abitudini - costruisci la persona che vuoi diventare"
+    titoli: ["Abitudini", "Abitudini: costruisci la persona che vuoi diventare"]
+    dolori: >
+      Per l'uomo che sa esattamente cosa dovrebbe fare e non riesce a farlo con continuità: parte forte, regge
+      qualche giorno o settimana, poi una giornata storta fa crollare tutto e riparte ogni volta da zero. Non si
+      sente incapace ma incoerente, come se dentro convivessero chi vuole migliorare e chi si autosabota.
+      Il manuale spiega che non è indisciplinato ma automatico (automaticità comportamentale), la chimica della
+      ripetizione e il calo della dopamina dopo l'entusiasmo, come l'ambiente decide più della volontà
+      (progettazione ambientale in 5 fasi, attrito), l'identità operativa e le poche abitudini chiave, il periodo
+      critico dei primi 30 giorni, il ritardo della gratificazione e le regole non negoziabili.
+      Tesi: se il tuo sistema regge solo quando sei al massimo non è un sistema, è una speranza. Niente
+      motivazione né formule miracolose: una struttura che regge anche nei giorni mediocri.
+
+watermark:
+  solo_se_presente: true
+  testo: AscesaMentale
+  posizione: basso-destra
+  larghezza_logo: 0.075
+  stessa_grandezza: true
+  colore_testo: auto
+
+testo_overlay:
+  colore: "#FFFFFF"
+  contorno: "#000000"
+  posizione: centro
