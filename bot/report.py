@@ -186,6 +186,23 @@ async def _produce(bot, chat_ids: list[int], brand: dict, chosen: list[instagram
     await asyncio.gather(*(one(i, p) for i, p in enumerate(chosen, 1)))
 
 
+def _post_per_pagina(massimo: int = 4) -> int:
+    """Quanti post leggere per pagina ogni mattina restando nel tetto mensile di Apify: il budget del giorno diviso
+    le pagine collaboratrici di TUTTE le nostre pagine (quelle in comune contano una volta). Meno pagine = più post."""
+    import yaml
+    from . import pagine
+    uniche: set = set()
+    cur = pagine.corrente()
+    try:
+        for slug in pagine.elenco():
+            pagine.imposta(slug)
+            uniche |= {h.lower() for h in writer.load_brand().get("pagine_monitorate") or []}
+    finally:
+        pagine.imposta(cur)
+    al_giorno = instagram.tetto_mese() / 31
+    return max(1, min(massimo, int(al_giorno // max(1, len(uniche)))))
+
+
 def _settings(brand: dict) -> dict:
     cfg = brand.get("report") or {}
     quanti = int(cfg.get("quanti_post", 5))
@@ -193,7 +210,7 @@ def _settings(brand: dict) -> dict:
         "quanti": quanti,
         "candidati": max(quanti, int(cfg.get("candidati", 15))),
         "ore": int(cfg.get("finestra_ore", 48)),
-        "per_pagina": min(int(cfg.get("post_per_pagina", 2)), 2),   # Apify fa pagare ogni post letto: max 2, ultimi 2 giorni
+        "per_pagina": _post_per_pagina(int(cfg.get("post_per_pagina", 4))),   # dentro il tetto mensile di Apify
         "min_score": float(cfg.get("punteggio_minimo", 1.0)),
         "completa": bool(cfg.get("completa_sempre", True)),
         # False = il report manda solo i link dei migliori post (nessun credito speso per tradurli)

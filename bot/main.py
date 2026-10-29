@@ -42,6 +42,8 @@ COMMANDS = [
         ("aggiungi", "Aggiungi un collaboratore (es. /aggiungi @pagina)", "pagina autorizzata: entra nel report del mattino"),
         ("studia", "Aggiungi un competitor da studiare", "solo per imparare temi, hook, strutture e CTA: mai nel report"),
         ("rimuovi", "Togli una pagina", "la toglie sia dai collaboratori sia dai competitor"),
+        ("migliori", "Classifica dei collaboratori (es. /migliori 15)",
+         "classifica i collaboratori di questa pagina in base ai post già letti; /migliori 15 tiene solo i 15 migliori"),
     ]),
     ("Controllo", [
         ("diagnosi", "Manda subito a Claude gli errori (di solito non serve)",
@@ -227,6 +229,59 @@ async def _change_pages(update, context, kind: str):
                      "(temi, hook, strutture, CTA); i loro post non finiscono mai nel report.",
            "rimosse": f"Tolti: {nomi}."}[kind]
     await update.effective_message.reply_text(msg)
+
+
+def _classifica_collaboratori(brand: dict) -> list[tuple[str, float, int]]:
+    """Collaboratori della pagina in ordine di forza: rendimento tipico (mediana di like + commenti) dei post già
+    letti da tutti i report, di tutte le nostre pagine (un collaboratore in comune conta gli stessi post)."""
+    import statistics
+    tutti: dict = {}
+    cur = pagine.corrente()
+    for slug in pagine.elenco():
+        pagine.imposta(slug)
+        for o, vals in storage.owner_stats().items():
+            tutti.setdefault(o, []).extend(vals)
+    pagine.imposta(cur)
+    own = (brand.get("handle") or "").lower()
+    out = []
+    for h in brand.get("pagine_monitorate") or []:
+        h = h.lower()
+        if h == own:
+            continue
+        vals = tutti.get(h) or []
+        out.append((h, statistics.median(vals) if vals else -1.0, len(vals)))
+    return sorted(out, key=lambda r: -r[1])
+
+
+async def cmd_migliori(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """/migliori -> classifica dei collaboratori di questa pagina; /migliori 15 -> tiene solo i primi 15."""
+    if not await _authorized(update):
+        return
+    brand = writer.load_brand()
+    cl = _classifica_collaboratori(brand)
+    n = next((int(a) for a in context.args or [] if a.isdigit()), 0)
+    if not cl:
+        await update.effective_message.reply_text("Questa pagina non ha collaboratori.")
+        return
+    if n <= 0:
+        righe = [f"{i}. @{h} · " + (f"{med:,.0f} interazioni tipiche ({k} post letti)".replace(",", ".") if k else "nessun dato")
+                 for i, (h, med, k) in enumerate(cl, 1)]
+        testo = (f"Collaboratori di {brand['nome']} dal più forte ({len(cl)}):\n" + "\n".join(righe)
+                 + "\n\nPer tenere solo i migliori scrivi per esempio /migliori 15 (gli altri si tolgono dal report; "
+                   "puoi rimetterli con /aggiungi).")
+        for k in range(0, len(testo), 3800):
+            await update.effective_message.reply_text(testo[k:k + 3800])
+        return
+    via = [h for h, _, _ in cl[n:]]
+    ch = writer.load_page_changes()
+    ch["monitorate"] = [h for h in ch.get("monitorate") or [] if h not in via]
+    ch["rimosse"] = list(dict.fromkeys((ch.get("rimosse") or []) + via))
+    writer.save_page_changes(ch)
+    senza = [h for h, _, k in cl[:n] if not k]
+    await update.effective_message.reply_text(
+        f"Fatto: {brand['nome']} ora tiene i {min(n, len(cl))} collaboratori più forti: "
+        + ", ".join("@" + h for h, _, _ in cl[:n]) + f".\nTolti dal report: {len(via)}."
+        + (f"\nAttenzione: di {', '.join('@' + h for h in senza)} non ho ancora numeri." if senza else ""))
 
 
 async def cmd_aggiungi(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -1000,6 +1055,7 @@ def main():
     app.add_handler(CommandHandler("aggiungi", cmd_aggiungi))
     app.add_handler(CommandHandler("studia", cmd_studia))
     app.add_handler(CommandHandler("rimuovi", cmd_rimuovi))
+    app.add_handler(CommandHandler("migliori", cmd_migliori))
     app.add_handler(CommandHandler("report", cmd_report))
     app.add_handler(CommandHandler("diagnosi", cmd_diagnosi))
     app.add_handler(CommandHandler("altri", cmd_altri))

@@ -208,6 +208,16 @@ def page_engagements(owner: str, since_iso: str, exclude_after_iso: str) -> list
     return [r["engagement"] for r in rows]
 
 
+def owner_stats() -> dict[str, list[float]]:
+    """{pagina: [rendimento di ogni post letto]} da tutti i post già letti (archivio della pagina corrente)."""
+    with _lock:
+        rows = _db().execute("SELECT owner, engagement FROM post_stats").fetchall()
+    out: dict = {}
+    for r in rows:
+        out.setdefault((r["owner"] or "").lower(), []).append(float(r["engagement"] or 0))
+    return out
+
+
 def save_ranking(items: list[dict]) -> None:
     with _lock:
         _db().execute("INSERT INTO rankings (created_at, data) VALUES (?,?)",
