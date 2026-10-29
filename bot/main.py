@@ -58,7 +58,7 @@ COMMANDS = [
 HELP = (
     "GUIDA RAPIDA (quello che ti serve ogni giorno)\n"
     "1. Alle 8 ti arriva il report con i post migliori dei collaboratori: mandami i link che ti piacciono.\n"
-    "2. La domenica alle 10 arriva il perché della settimana: i 5 post migliori dei collaboratori e cosa li ha spinti.\n"
+    "2. La domenica alle 10 arriva il perché della settimana: i 3 post migliori dei collaboratori e cosa li ha spinti.\n"
     "   I caroselli da zero li fa solo quando li chiedi con /crea.\n"
     "3. Per correggere qualcosa rispondi al post: \"slide 3 più corta\", \"rifai la CTA con la casella\".\n"
     "4. Se una slide è sbagliata: rispondi alla slide con \"segnala: ...\" e Claude la corregge.\n"
@@ -893,7 +893,7 @@ def _schedule_report(app: Application, slug: str):
         pagine.imposta(slug)
         chat_ids = _destinatari(slug)
         if chat_ids:
-            await report.run_perche_settimanale(context.bot, chat_ids, int(cfg.get("perche_quanti_settimana", 5)))
+            await report.run_perche_settimanale(context.bot, chat_ids, int(cfg.get("perche_quanti_settimana", 3)))
 
     app.job_queue.run_daily(job_perche, time=at_p, days=(giorno,), name=f"perche_settimanale_{slug}")
     log.info("%s: report programmato ogni giorno alle %s (%s) per %s", slug, cfg["ora"], tz, _destinatari(slug))
@@ -942,8 +942,7 @@ def _schedule_analysis(app: Application, slug: str):
                 await context.bot.send_message(c, f"Studio di {b.get('nome')} non riuscito: {str(e)[:300]}")
             return
         # lo studio della nicchia NON si manda da solo (Gabriele: niente messaggi lunghi): si legge con /studio
-        if datetime.now(tz).weekday() != 0 and not (context.job.data or {}).get("primo"):
-            return                                               # niente messaggi tutti i giorni
+        # lo studio si fa una volta a settimana: il riepilogo (con l'analisi delle CTA) arriva subito dopo
         fb = style.get("feedback_bot") or {}
         righe = [f"Studio settimanale di {b.get('nome')} aggiornato su {style['post_analizzati']} post."]
         if fb.get("pubblicati_dal_bot"):
