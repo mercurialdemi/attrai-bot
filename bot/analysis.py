@@ -161,6 +161,12 @@ def run_analysis(brand: dict, n_posts: int = 80) -> dict:
     }
     # studio delle CTA delle pagine di riferimento: una volta a settimana (costa una lettura in più)
     prev = writer.load_style().get("cta_studio") or {}
+    if not (brand.get("studio") or {}).get("cta_pagine_studio", False):   # spento per risparmiare crediti
+        style["cta_studio"] = prev
+        aggiorna_studio_virali(brand, style)
+        config.DATA_DIR.mkdir(parents=True, exist_ok=True)
+        (config.DATA_DIR / "stile.json").write_text(json.dumps(style, ensure_ascii=False, indent=1), encoding="utf-8")
+        return style
     try:
         fresh = prev.get("creato") and (datetime.now(timezone.utc)
                                         - datetime.fromisoformat(prev["creato"])).days < 7 \
@@ -291,6 +297,8 @@ def report_cta(conv: dict) -> str:
 
 def nicchia_da_rifare(brand: dict) -> bool:
     """Lo studio della nicchia si rifà ogni studio.nicchia_ogni_giorni giorni (5 di base)."""
+    if not (brand.get("studio") or {}).get("nicchia", False):        # spento: costa letture Apify e immagini
+        return False
     giorni = float((brand.get("studio") or {}).get("nicchia_ogni_giorni", 5) or 5)
     pv = writer.load_style().get("studio_virali") or {}
     try:

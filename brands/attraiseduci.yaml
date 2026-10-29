@@ -58,10 +58,11 @@ crea:
   ora: "08:30"
 
 # Studio automatico della pagina (stile, CTA, risultati dei post del bot): ogni settimana
-studio:                  # studio della pagina ogni 3 giorni, studio della nicchia ogni 5 (riepilogo il lunedì)
+studio:                  # SOLO AttraiSeduci: una volta a settimana studia i suoi post e QUANTO CONVERTONO le CTA
   attivo: true
-  ogni_giorni: 3
-  nicchia_ogni_giorni: 5
+  ogni_giorni: 7
+  nicchia: false         # studio della nicchia spento (crediti)
+  cta_pagine_studio: false   # studio delle CTA di convincimi spento (crediti)
   ora: "04:00"
 
 # Come tradurre il testo delle slide:

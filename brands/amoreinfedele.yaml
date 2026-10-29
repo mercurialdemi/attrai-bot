@@ -106,8 +106,8 @@ crea:
   al_giorno: 0
   ora: "08:30"
 
-studio:
-  attivo: true
+studio:                  # spento per risparmiare crediti: per questa pagina solo report e perché della domenica
+  attivo: false
   ora: "04:00"
 
 traduzione_slide: fedele
