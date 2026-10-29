@@ -1090,6 +1090,9 @@ def main():
             log.info("Pulizia disco: cancellate %s cartelle di post vecchi", n)
     app.job_queue.run_repeating(cleanup, interval=86400, first=60, name="pulizia_disco")
     for slug in pagine.elenco():                      # ogni pagina ha il suo report, i suoi caroselli e il suo studio
+        if _brand_di(slug).get("in_pausa"):
+            log.info("%s: in pausa, niente report né studio", slug)
+            continue
         try:
             _schedule_report(app, slug)
             _schedule_crea(app, slug)

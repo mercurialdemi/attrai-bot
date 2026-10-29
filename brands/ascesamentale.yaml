@@ -2,6 +2,7 @@
 # Modificala liberamente. Le parti segnate DA COMPLETARE aspettano i dati di Gabriele.
 
 nome: Ascesa Mentale
+in_pausa: true               # ferma dal 29/10/2026 su richiesta di Gabriele: niente report, niente letture Apify
 
 handle: ascesamentale
 

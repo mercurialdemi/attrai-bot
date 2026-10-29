@@ -196,7 +196,9 @@ def _post_per_pagina(massimo: int = 4) -> int:
     try:
         for slug in pagine.elenco():
             pagine.imposta(slug)
-            uniche |= {h.lower() for h in writer.load_brand().get("pagine_monitorate") or []}
+            b_ = writer.load_brand()
+            if not b_.get("in_pausa"):
+                uniche |= {h.lower() for h in b_.get("pagine_monitorate") or []}
     finally:
         pagine.imposta(cur)
     al_giorno = instagram.tetto_mese() / 31
