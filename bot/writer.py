@@ -239,6 +239,14 @@ def load_brand() -> dict:
         if isinstance(brand.get(k), list):
             brand[k] = [" ".join(f"{a}: {b}" for a, b in x.items()) if isinstance(x, dict) else str(x) for x in brand[k]]
     ch = load_page_changes()
+    ver = str(brand.get("collaboratori_versione") or "")
+    if ver and ch.get("_versione") != ver:
+        # la lista dei collaboratori è stata riscritta: le vecchie aggiunte/rimozioni dal gruppo non valgono più
+        ch = {"_versione": ver}
+        try:
+            save_page_changes(ch)
+        except OSError:
+            pass
     removed = set(ch.get("rimosse") or [])
     for key, extra in (("pagine_monitorate", "monitorate"), ("pagine_studio", "studio")):
         base = [h.lower().lstrip("@") for h in brand.get(key) or [] if h]
