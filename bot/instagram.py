@@ -1,6 +1,8 @@
 """Lettura dei post Instagram tramite Apify e download delle slide."""
 from __future__ import annotations
 
+import os
+
 import logging
 import re
 from dataclasses import dataclass, field
@@ -224,6 +226,37 @@ def fetch_profiles_giorno(handles: list[str], per_page: int, giorni: int) -> lis
         return out
 
 
+def _contatore_file():
+    from . import pagine
+    return pagine._base_data() / "apify_mese.json"
+
+
+def _letture_mese() -> tuple[str, int]:
+    import json
+    from datetime import date
+    mese = date.today().strftime("%Y-%m")
+    try:
+        d = json.loads(_contatore_file().read_text())
+    except Exception:
+        d = {}
+    return mese, int(d.get(mese, 0))
+
+
+def _conta_letture(n: int) -> None:
+    import json
+    mese, tot = _letture_mese()
+    try:
+        _contatore_file().parent.mkdir(parents=True, exist_ok=True)
+        _contatore_file().write_text(json.dumps({mese: tot + n}))
+    except OSError:
+        pass
+
+
+def tetto_mese() -> int:
+    """Quanti post al mese si possono leggere con Apify (abbonamento da 19: circa 8000 a 2,30 $ ogni 1000)."""
+    return int(os.getenv("APIFY_POST_AL_MESE", "7000") or 7000)
+
+
 def fetch_profiles(handles: list[str], per_page: int = 30, giorni: int | None = None) -> list[SourcePost]:
     """Ultimi post di più pagine in una sola esecuzione Apify (più veloce ed economico).
     giorni: solo i post degli ultimi N giorni (Apify fa pagare ogni post letto)."""
@@ -237,11 +270,18 @@ def fetch_profiles(handles: list[str], per_page: int = 30, giorni: int | None = 
     }
     if giorni:
         run_input["onlyPostsNewerThan"] = (datetime.now(timezone.utc) - timedelta(days=giorni)).strftime("%Y-%m-%d")
+    _, letti = _letture_mese()
+    stima = len(handles) * per_page
+    if letti + stima > tetto_mese():
+        raise InstagramError(f"Tetto mensile di Apify raggiunto ({letti} post letti su {tetto_mese()}): "
+                             "per non superare l'abbonamento non leggo altre pagine fino al mese prossimo.")
     run = client.actor(config.APIFY_ACTOR).call(run_input=run_input, timeout_secs=900)
     if not run:
         raise InstagramError("Apify non ha risposto durante il report.")
     out: list[SourcePost] = []
-    for it in client.dataset(run["defaultDatasetId"]).iterate_items():
+    items = list(client.dataset(run["defaultDatasetId"]).iterate_items())
+    _conta_letture(len(items))
+    for it in items:
         if it.get("error"):
             continue
         url = find_post_url(it.get("url") or "") or (

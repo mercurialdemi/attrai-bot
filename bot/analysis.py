@@ -59,7 +59,7 @@ def _engagement(p: instagram.SourcePost) -> float | None:
     return (likes or 0) + 3 * (comments or 0)
 
 
-def run_analysis(brand: dict, n_posts: int = 80) -> dict:
+def run_analysis(brand: dict, n_posts: int = 40) -> dict:
     handle = brand["handle"].lower().lstrip("@")
     posts = instagram.fetch_profiles([handle], n_posts)
     stats: dict = {}

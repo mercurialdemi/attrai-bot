@@ -193,7 +193,7 @@ def _settings(brand: dict) -> dict:
         "quanti": quanti,
         "candidati": max(quanti, int(cfg.get("candidati", 15))),
         "ore": int(cfg.get("finestra_ore", 48)),
-        "per_pagina": min(int(cfg.get("post_per_pagina", 8)), 8),   # Apify fa pagare ogni post letto
+        "per_pagina": min(int(cfg.get("post_per_pagina", 2)), 2),   # Apify fa pagare ogni post letto: max 2, ultimi 2 giorni
         "min_score": float(cfg.get("punteggio_minimo", 1.0)),
         "completa": bool(cfg.get("completa_sempre", True)),
         # False = il report manda solo i link dei migliori post (nessun credito speso per tradurli)
@@ -487,10 +487,12 @@ async def run_report(bot, chat_ids: list[int]) -> None:
 
         await _broadcast(bot, chat_ids, f"Report: leggo le pagine monitorate ({len(handles)}), ultime {st['ore']} ore…")
         try:
-            posts = await asyncio.to_thread(instagram.fetch_profiles_giorno, handles, st["per_pagina"], 7)
+            posts = await asyncio.to_thread(instagram.fetch_profiles_giorno, handles, st["per_pagina"], 2)
         except Exception as e:
             log.exception("Report: lettura pagine fallita")
-            if "limit" in str(e).lower() and ("usage" in str(e).lower() or "monthly" in str(e).lower()):
+            if "Tetto mensile" in str(e):
+                await _broadcast(bot, chat_ids, f"Report: {e}")
+            elif "limit" in str(e).lower() and ("usage" in str(e).lower() or "monthly" in str(e).lower()):
                 await _broadcast(bot, chat_ids, "Report: Apify ha finito il credito del mese, per questo non legge le "
                                                 "pagine. Su apify.com → Billing → Limits alza il limite mensile (o "
                                                 "passa al piano a pagamento), poi riprova con /report.")
@@ -537,6 +539,7 @@ async def run_report(bot, chat_ids: list[int]) -> None:
                                                 f"collaboratori ha superato {st['min_score']:.1f}x la media della "
                                                 "sua pagina. Niente da segnalare oggi.\n\n" + riepilogo)
                 return
+            _salva_settimana(cands)                                     # il perché della domenica li riusa: zero Apify
             first = _bilancia(cands, st["link"])
             cands = first + [p for p in cands if p not in first]      # /altri riparte da dove finisce il report
             storage.save_ranking([_to_dict(p) for p in cands])
@@ -617,6 +620,31 @@ async def run_more(bot, chat_ids: list[int]) -> None:
         await _broadcast(bot, chat_ids, "Fatto.")
 
 
+def _settimana_file():
+    return config.DATA_DIR / "post_settimana.json"
+
+
+def _salva_settimana(cands: list) -> None:
+    """Tiene i post forti (già in tema con la pagina) visti nei report degli ultimi 8 giorni."""
+    import json
+    try:
+        d = json.loads(_settimana_file().read_text())
+    except Exception:
+        d = {}
+    limite = (datetime.now(timezone.utc) - timedelta(days=8)).isoformat()
+    d = {u: v for u, v in d.items() if v.get("visto", "") >= limite}
+    ora = datetime.now(timezone.utc).isoformat()
+    for p in cands:
+        old = d.get(p.url)
+        if not old or (p.score or 0) >= (old.get("score") or 0):
+            d[p.url] = {**_to_dict(p), "visto": ora}
+    try:
+        config.DATA_DIR.mkdir(parents=True, exist_ok=True)
+        _settimana_file().write_text(json.dumps(d))
+    except OSError:
+        pass
+
+
 async def run_perche_settimanale(bot, chat_ids: list[int], quanti: int = 5) -> None:
     """Una volta a settimana: i migliori `quanti` post dei collaboratori degli ultimi 7 giorni (in tema con questa
     pagina) e PERCHÉ sono andati: gancio, struttura, formato, dolore, fattore, cosa ci portiamo a casa.
@@ -629,16 +657,21 @@ async def run_perche_settimanale(bot, chat_ids: list[int], quanti: int = 5) -> N
     if not handles or not chat_ids:
         return
     st = _settings(brand)
+    # nessuna nuova lettura Apify: si usano i post forti già trovati dai report della settimana
+    import json
     try:
-        posts = await asyncio.to_thread(instagram.fetch_profiles_giorno, handles, st["per_pagina"], 7)
+        d = json.loads(_settimana_file().read_text())
     except Exception:
-        log.exception("Perché della settimana: lettura pagine fallita")
-        return
-    posts = [p for p in posts if p.owner not in own]
-    cands = [p for p in rank_candidates(posts, 168, quanti * 4) if p.image_urls and not p.is_video
-             and p.score >= st["min_score"]]
-    if cands:
-        cands, _ = await asyncio.to_thread(_fit_filter, cands, brand)
+        d = {}
+    limite = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
+    cands = []
+    for v in d.values():
+        if v.get("visto", "") >= limite:
+            v = {k: v[k] for k in ("url", "owner", "caption", "kind", "image_urls", "likes", "comments", "timestamp",
+                                   "score", "motivo", "natura", "pagina") if k in v}
+            cands.append(instagram.SourcePost(**v))
+    cands = sorted([p for p in cands if p.image_urls and not p.is_video and p.score >= st["min_score"]],
+                   key=lambda p: -p.score)
     cands = cands[:quanti]
     if not cands:
         await _broadcast(bot, chat_ids, f"Il perché della settimana ({brand['nome']}): nessun post dei collaboratori "
