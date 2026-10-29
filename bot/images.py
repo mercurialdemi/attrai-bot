@@ -60,6 +60,100 @@ def output_size(original: Image.Image) -> tuple[int, int]:
     return original.size
 
 
+def ritaglia_schermata(img: Image.Image) -> Image.Image:
+    """Schermata del telefono (barra in alto, intestazione, icone e didascalia di Instagram attorno al post):
+    si tiene solo il post (riquadro 4:5, 1:1 o 3:4 largo quanto lo schermo). Se il post ha lo sfondo a tinta
+    unita, si tolgono anche le scritte di Instagram sovrapposte (nome della pagina, "3/16", cuore e numeri).
+    Un'immagine che non è una schermata torna identica."""
+    import numpy as np
+    W, H = img.size
+    if H / W < 1.6:
+        return img
+    a = np.asarray(img.convert("RGB")).astype(np.int16)
+    edge = np.median(np.concatenate([a[:, 1:7], a[:, W - 7:W - 1]], axis=1), axis=1)   # bordi, riga per riga
+    app = np.median(edge[:max(8, int(H * 0.03))], axis=0)                             # sfondo dell'app
+    diff = np.abs(edge - app).max(axis=1) > 7
+    best, s, e, gap = (0, -1), None, 0, 0
+    for y, f in enumerate(diff):
+        if f:
+            s = y if s is None else s
+            e, gap = y, 0
+        elif s is not None:
+            gap += 1
+            if gap > 3:
+                best = max(best, (s, e), key=lambda r: r[1] - r[0])
+                s = None
+    if s is not None:
+        best = max(best, (s, e), key=lambda r: r[1] - r[0])
+    y0, y1 = best
+    ratio = next((r for r in (1.25, 1.0, 4 / 3) if abs((y1 - y0 + 1) / W - r) < 0.03), None)
+    if ratio is None:
+        return img
+    y0 = max(0, y1 + 1 - round(W * ratio))
+    post = img.convert("RGB").crop((0, y0, W, y1 + 1))
+    try:
+        post = _togli_interfaccia(post, a[y1 + 1:], W)
+    except Exception as ex:                       # la pulizia è un di più: il ritaglio resta comunque
+        log.warning("Schermata: interfaccia non tolta (%s)", ex)
+    log.info("Schermata del telefono: tenuto solo il post (%dx%d)", post.width, post.height)
+    return post
+
+
+def _togli_interfaccia(post: Image.Image, below, W: int) -> Image.Image:
+    """Su un post a tinta unita copre col colore dello sfondo le scritte di Instagram sovrapposte: intestazione
+    in alto, contatore "3/16" in alto a destra, colonna di icone e numeri a destra (che continua sotto il post)."""
+    import cv2
+    import numpy as np
+    a = np.asarray(post).astype(np.int16)
+    h, w, _ = a.shape
+    border = np.concatenate([a[:, :4].reshape(-1, 3), a[:, -4:].reshape(-1, 3), a[-4:].reshape(-1, 3)])
+    bg = np.median(border, axis=0)
+    dist = np.abs(a - bg).max(axis=2)
+    if (dist < 30).mean() < 0.78:                 # foto o illustrazione: non si tocca
+        return post
+    # colonna delle icone: dove c'è inchiostro subito sotto il post, nel quarto destro dello schermo
+    col = None
+    if below is not None and len(below):
+        bl = below[:max(1, int(h * 0.4)), int(W * 0.75):]
+        bd = np.abs(bl - np.median(bl.reshape(-1, 3), axis=0)).max(axis=2) > 60
+        xs = np.where(bd.any(axis=0))[0]
+        if len(xs):
+            col = (int(W * 0.75) + xs.min(), int(W * 0.75) + xs.max())
+    ink = (dist > 60).astype(np.uint8)
+    # lettere vicine (anche tra parole) = un solo pezzo: una riga di testo non si spezza
+    joined = cv2.dilate(ink, np.ones((5, max(9, w // 40)), np.uint8))
+    n, _, stats, _ = cv2.connectedComponentsWithStats(joined)
+    out = np.asarray(post).copy()
+    fill = tuple(int(c) for c in bg)
+    for i in range(1, n):
+        x, y, bw, bh, _area = stats[i]
+        x1, y1 = x + bw, y + bh
+        cx = x + bw / 2
+        header = y1 < h * 0.115
+        counter = y1 < h * 0.23 and x > w * 0.75
+        action = (col is not None and x >= col[0] - 8 and x1 <= col[1] + 8 and y > h * 0.4
+                  and abs(cx - (col[0] + col[1]) / 2) < w * 0.06)
+        if header or counter or action:
+            out[max(0, y - 3):min(h, y1 + 3), max(0, x - 3):min(w, x1 + 3)] = fill
+            if counter:
+                # anche la pillola grigio scuro attorno al contatore (troppo tenue per la soglia del testo)
+                zy, zx = int(h * 0.23), int(w * 0.75)
+                ys, xs = np.where(dist[:zy, zx:] > 12)
+                if len(xs):
+                    out[max(0, ys.min() - 3):min(h, ys.max() + 4), max(0, zx + xs.min() - 3):min(w, zx + xs.max() + 4)] = fill
+    return Image.fromarray(out)
+
+
+def ritaglia_schermata_bytes(data: bytes) -> bytes:
+    img = Image.open(io.BytesIO(data))
+    out = ritaglia_schermata(img)
+    if out is img:
+        return data
+    b = io.BytesIO()
+    out.save(b, "JPEG", quality=95, subsampling=0)
+    return b.getvalue()
+
+
 def _wm_bands(slide: dict, W: int, H: int) -> list[tuple[int, int, int, int]]:
     pos = (slide.get("watermark_originale") or "").lower()
     if not pos.strip():

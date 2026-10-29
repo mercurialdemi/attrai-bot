@@ -684,6 +684,8 @@ async def process_album(update: Update, context: ContextTypes.DEFAULT_TYPE, albu
         for _, file_id, _is_photo in items:
             f = await context.bot.get_file(file_id)
             originals.append(bytes(await f.download_as_bytearray()))
+        # schermate del telefono: si tiene solo il post (senza barra, icone e didascalia di Instagram)
+        originals = [await asyncio.to_thread(images.ritaglia_schermata_bytes, o) for o in originals]
         if any(is_photo for *_, is_photo in items):
             await first.reply_text("Consiglio: la prossima volta inviale come File (graffetta → File), "
                                    "così Telegram non le comprime e le slide restano in alta qualità.")

@@ -78,6 +78,19 @@ CASI = {
         dict(testo='Non hai idea di quanto poco chieda\ndavvero la maggior parte degli uomini.', x=134, y=395, w=742, h=86, colore="#FFFFFF", allineamento="left", carattere=S, peso="regular"),
         dict(testo='Pace. Rispetto. Lealtà.', x=134, y=547, w=380, h=38, colore="#FFFFFF", allineamento="left", carattere=S, peso="regular"),
         dict(testo='E una moglie che non lo faccia\nsentire un disturbo solo\nperché la desidera.', x=134, y=652, w=730, h=137, colore="#FFFFFF", allineamento="left", carattere=S, peso="regular")], "Manly Pinnacle @manly_pinnacle"),
+    # post del 28/10 (post 45): Gabriele ha mandato le SCHERMATE del telefono (barra, intestazione, icone di
+    # Instagram attorno al post). Segnalato: "quando c'è il punto devi andare a capo, guarda com'è disposto il testo"
+    "schermata_fasi.jpg": ("tinta_unita", "23–25:\nTHE EXPERIMENTAL PHASE.\n“I'm finding myself.”\nNew d*ck. New heartbreak.\nNew healing era.\nSame f*cking decisions.", [
+        dict(testo="23-25:", x=35, y=187, w=200, h=28, colore="#8C8C8C", allineamento="left", carattere=S),
+        dict(testo="LA FASE DEGLI\nESPERIMENTI.", x=35, y=230, w=655, h=53, colore="#FFFFFF", allineamento="left", carattere=S),
+        dict(testo="“Sto cercando me stessa.”\nNuovo letto. Nuovo cuore spezzato.\nNuova rinascita.", x=35, y=297, w=700, h=64, colore="#8C8C8C", allineamento="left", carattere=S),
+        dict(testo="E sempre le stesse ca**o di scelte.", x=35, y=397, w=735, h=30, colore="#FFFFFF", allineamento="left", carattere=S)], "@thementalpower in basso"),
+    "schermata_marito.jpg": ("tinta_unita", "29–31:\nTHE HUSBAND HUNT.\n“I know my worth.”\nSix feet. Six figures.\nEmotionally available.\nMust accept everything.", [
+        dict(testo="29-31:", x=35, y=209, w=195, h=27, colore="#8C8C8C", allineamento="left", carattere=S),
+        dict(testo="LA CACCIA AL MARITO.", x=35, y=250, w=690, h=27, colore="#FFFFFF", allineamento="left", carattere=S),
+        dict(testo="“So quanto valgo.”\nAlto almeno 1,80. Ricco.\nEmotivamente disponibile.\nE deve accettare tutto.", x=35, y=293, w=727, h=113, colore="#8C8C8C", allineamento="left", carattere=S)], "@thementalpower in basso"),
+    "schermata_titolo.jpg": ("tinta_unita", "FUNNY HOW PATRIARCHY BECOMES ATTRACTIVE WHEN THE BILLS SHOW UP.", [
+        dict(testo="CURIOSO:\nIL PATRIARCATO\nDIVENTA\nATTRAENTE\nAPPENA ARRIVANO\nLE BOLLETTE.", x=35, y=223, w=765, h=211, colore="#FFFFFF", allineamento="left", carattere=S)], "@thementalpower in basso"),
 }
 
 
@@ -88,7 +101,7 @@ def main(out_dir: str, salva: bool = False):
     brand = yaml.safe_load(open(Path(__file__).resolve().parents[1] / "brands" / "attraiseduci.yaml"))
     tiles, report = [], []
     for name, (sfondo, orig_txt, blocks, *marchio) in CASI.items():
-        o = Image.open(B / name).convert("RGB")
+        o = images.ritaglia_schermata(Image.open(B / name)).convert("RGB")   # schermate: solo il post
         b = io.BytesIO(); o.save(b, "JPEG", quality=95)
         sl = {"numero": 2, "testo": "\n\n".join(x["testo"] for x in blocks), "testo_originale": orig_txt,
               "sfondo": sfondo, "watermark_originale": (marchio or [""])[0], "da_modificare": True, "altri_marchi": [],

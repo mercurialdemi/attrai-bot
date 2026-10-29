@@ -465,7 +465,7 @@ def _flow_old(draw, words: list[str], font, max_w: int) -> list[str]:
     return lines
 
 
-_FINE_FRASE = ('.', '!', '?', ':', ';', '…', '"', '»', ')')
+_FINE_FRASE = ('.', '!', '?', ':', ';', '…', '"', '»', ')', '”')
 
 
 def _riempi(draw, words: list[str], font, max_w: int) -> list[str]:
@@ -509,7 +509,18 @@ def _wrap(draw, text: str, font, max_w: int, soft: bool = False) -> list[str]:
         elif rows and all(draw.textlength(r, font=font) <= max_w for r in rows):
             out += rows
         elif rows:
-            out += _flow(draw, " ".join(rows).split(), font, max_w)
+            # una riga non ci sta: si ridistribuisce solo la frase che la contiene. Dove una frase finisce
+            # (punto, punto di domanda, virgolette chiuse...) si va sempre a capo, come nell'originale
+            sent: list[list[str]] = [[]]
+            for r in rows:
+                sent[-1].append(r)
+                if r.endswith(_FINE_FRASE):
+                    sent.append([])
+            for g in (x for x in sent if x):
+                if all(draw.textlength(r, font=font) <= max_w for r in g):
+                    out += g
+                else:
+                    out += _flow(draw, " ".join(g).split(), font, max_w)
         if k < len(paragraphs) - 1:
             out.append("")
     return out
@@ -587,6 +598,10 @@ def render(img: Image.Image, lay: Layout, text: str, placements: list | None = N
         for st in para_start:
             frac = (st + 0.5) / tot_i
             para_seg.append(next((i for i, b_ in enumerate(bounds) if frac <= b_), len(bounds) - 1))
+        if len(para_start) == len(lay.para_colors):
+            # tanti paragrafi italiani quante parti colorate dell'originale: ognuno prende il colore della sua
+            # parte (la traduzione può avere righe in più o in meno e la proporzione sbaglierebbe colore)
+            para_seg = list(range(len(para_start)))
     para = 0
     for ln in lines:
         if not ln:
