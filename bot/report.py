@@ -193,7 +193,7 @@ def _settings(brand: dict) -> dict:
         "quanti": quanti,
         "candidati": max(quanti, int(cfg.get("candidati", 15))),
         "ore": int(cfg.get("finestra_ore", 48)),
-        "per_pagina": int(cfg.get("post_per_pagina", 30)),
+        "per_pagina": min(int(cfg.get("post_per_pagina", 8)), 8),   # Apify fa pagare ogni post letto
         "min_score": float(cfg.get("punteggio_minimo", 1.0)),
         "completa": bool(cfg.get("completa_sempre", True)),
         # False = il report manda solo i link dei migliori post (nessun credito speso per tradurli)
@@ -428,7 +428,13 @@ async def _send_links(bot, chat_ids: list[int], header: str, lines: list[str], f
             chunks.append(cur)
             cur = ""
         cur += ("\n\n" if cur else "") + ln
-    chunks.append(cur + "\n\n" + footer)
+    for ln in [footer]:                       # anche il riepilogo in fondo rispetta il limite di Telegram
+        for pezzo in [ln[k:k + 3500] for k in range(0, len(ln), 3500)] or [""]:
+            if len(cur) + len(pezzo) + 2 > 3800:
+                chunks.append(cur)
+                cur = ""
+            cur += ("\n\n" if cur else "") + pezzo
+    chunks.append(cur)
     for c in chat_ids:
         for text in chunks:
             try:
@@ -481,7 +487,7 @@ async def run_report(bot, chat_ids: list[int]) -> None:
 
         await _broadcast(bot, chat_ids, f"Report: leggo le pagine monitorate ({len(handles)}), ultime {st['ore']} ore…")
         try:
-            posts = await asyncio.to_thread(instagram.fetch_profiles, handles, st["per_pagina"])
+            posts = await asyncio.to_thread(instagram.fetch_profiles_giorno, handles, st["per_pagina"], 7)
         except Exception as e:
             log.exception("Report: lettura pagine fallita")
             if "limit" in str(e).lower() and ("usage" in str(e).lower() or "monthly" in str(e).lower()):
@@ -624,7 +630,7 @@ async def run_perche_settimanale(bot, chat_ids: list[int], quanti: int = 5) -> N
         return
     st = _settings(brand)
     try:
-        posts = await asyncio.to_thread(instagram.fetch_profiles, handles, st["per_pagina"])
+        posts = await asyncio.to_thread(instagram.fetch_profiles_giorno, handles, st["per_pagina"], 7)
     except Exception:
         log.exception("Perché della settimana: lettura pagine fallita")
         return

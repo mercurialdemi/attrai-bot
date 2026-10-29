@@ -192,18 +192,52 @@ def download_images(urls: list[str]) -> list[bytes]:
     return out
 
 
-def fetch_profiles(handles: list[str], per_page: int = 30) -> list[SourcePost]:
-    """Ultimi post di più pagine in una sola esecuzione Apify (più veloce ed economico)."""
+_cache_lock = __import__("threading").Lock()
+_cache: dict = {}          # {pagina: (giorno, per_page, giorni, [post])}: una lettura al giorno per pagina
+
+
+def fetch_profiles_giorno(handles: list[str], per_page: int, giorni: int) -> list[SourcePost]:
+    """Come fetch_profiles, ma ogni pagina si legge UNA volta al giorno anche se sta tra i collaboratori di più
+    nostre pagine (report di Reset, Amore, Pensatore... alle 8 condividono la stessa lettura): costa molto meno."""
+    from datetime import date
+    oggi = date.today().isoformat()
+    handles = list(dict.fromkeys(h.lower().lstrip("@") for h in handles if h))
+    with _cache_lock:
+        mancanti = [h for h in handles if not (h in _cache and _cache[h][0] == oggi
+                                               and _cache[h][1] >= per_page and _cache[h][2] >= giorni)]
+        extra = []
+        if mancanti:
+            nuovi = fetch_profiles(mancanti, per_page, giorni)
+            per_h: dict = {h: [] for h in mancanti}
+            for p in nuovi:
+                o = (p.owner or "").lower()
+                if o in per_h:
+                    per_h[o].append(p)
+                else:
+                    extra.append(p)                  # nome della pagina diverso da come l'abbiamo scritto
+            for h, ps in per_h.items():
+                _cache[h] = (oggi, per_page, giorni, ps)
+        out = list(extra)
+        for h in handles:
+            if h in _cache:
+                out += [SourcePost(**{**p.__dict__}) for p in _cache[h][3]]   # copie: ogni pagina scrive i suoi motivi
+        return out
+
+
+def fetch_profiles(handles: list[str], per_page: int = 30, giorni: int | None = None) -> list[SourcePost]:
+    """Ultimi post di più pagine in una sola esecuzione Apify (più veloce ed economico).
+    giorni: solo i post degli ultimi N giorni (Apify fa pagare ogni post letto)."""
+    from datetime import datetime, timedelta, timezone
     client = ApifyClient(config.APIFY_TOKEN)
-    run = client.actor(config.APIFY_ACTOR).call(
-        run_input={
-            "directUrls": [f"https://www.instagram.com/{h}/" for h in handles],
-            "resultsType": "posts",
-            "resultsLimit": per_page,
-            "addParentData": False,
-        },
-        timeout_secs=900,
-    )
+    run_input = {
+        "directUrls": [f"https://www.instagram.com/{h}/" for h in handles],
+        "resultsType": "posts",
+        "resultsLimit": per_page,
+        "addParentData": False,
+    }
+    if giorni:
+        run_input["onlyPostsNewerThan"] = (datetime.now(timezone.utc) - timedelta(days=giorni)).strftime("%Y-%m-%d")
+    run = client.actor(config.APIFY_ACTOR).call(run_input=run_input, timeout_secs=900)
     if not run:
         raise InstagramError("Apify non ha risposto durante il report.")
     out: list[SourcePost] = []

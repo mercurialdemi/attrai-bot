@@ -439,7 +439,7 @@ STUDY_TOOL = {
 }
 
 
-def study_reference_ctas(brand: dict, per_page: int = 40, top: int = 8) -> dict:
+def study_reference_ctas(brand: dict, per_page: int = 20, top: int = 8) -> dict:
     """Studia le CTA finali delle pagine di riferimento (pagine_studio, es. convincimii): penultima e ultima
     slide dei caroselli migliori, per capire COME collegano la CTA al post. Si salvano solo regole e schemi
     scritti con parole nostre, mai i loro testi. Queste pagine non entrano nel report."""
@@ -644,7 +644,8 @@ def schede_studio(sv: dict) -> list[str]:
     return out
 
 
-def study_viral(brand: dict, per_page: int = 40, per_handle: int = 6, max_posts: int = 16) -> dict:
+def study_viral(brand: dict, per_page: int = 12, per_handle: int = 3, max_posts: int = 10,
+                max_pagine: int = 12) -> dict:
     """Studio dei caroselli VIRALI delle pagine di riferimento e dei collaboratori: temi, dolori, hook,
     strutture e formati che rendono di più. È la base per creare caroselli da zero (mai copiare: si salvano
     solo schemi e regole con parole nostre). Virale = almeno 2 volte la mediana della sua pagina."""
@@ -652,7 +653,7 @@ def study_viral(brand: dict, per_page: int = 40, per_handle: int = 6, max_posts:
         [h.lower().lstrip("@") for h in brand.get("pagine_studio") or [] if h]
         + [h.lower().lstrip("@") for h in brand.get("pagine_monitorate") or [] if h]))
     own = (brand.get("handle") or "").lower()
-    handles = [h for h in handles if h != own]
+    handles = [h for h in handles if h != own][:max_pagine]     # costo Apify: poche pagine, pochi post
     if not handles:
         return {}
     posts = instagram.fetch_profiles(handles, per_page)
@@ -671,7 +672,7 @@ def study_viral(brand: dict, per_page: int = 40, per_handle: int = 6, max_posts:
     chosen = [(x, sc, "competitor" if x.owner in study_first else "collaboratore") for x, sc in chosen[:max_posts]]
     # i NOSTRI post: i migliori (perché hanno funzionato) e i più deboli (perché no)
     try:
-        mine = [p for p in instagram.fetch_profiles([own], per_page) if _engagement(p) is not None
+        mine = [p for p in instagram.fetch_profiles([own], 30) if _engagement(p) is not None
                 and p.kind.lower() == "sidecar" and len(p.image_urls) >= 3] if own else []
     except Exception as e:
         log.warning("Studio virali: post nostri non letti: %s", e)

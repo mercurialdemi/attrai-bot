@@ -875,8 +875,7 @@ def _schedule_analysis(app: Application, slug: str):
                 try:
                     style = await asyncio.to_thread(analysis.aggiorna_studio_virali, b, writer.load_style())
                     await asyncio.to_thread(analysis.salva_stile, style)
-                    if style.get("studio_virali_nuovo"):
-                        await _send_studio(context.bot, chat_ids, style.get("studio_virali") or {})
+                    pass                                         # lo studio si legge con /studio, niente messaggi lunghi
                 except Exception:
                     log.exception("Studio della nicchia di %s fallito", slug)
             return
@@ -887,8 +886,7 @@ def _schedule_analysis(app: Application, slug: str):
             for c in chat_ids:
                 await context.bot.send_message(c, f"Studio di {b.get('nome')} non riuscito: {str(e)[:300]}")
             return
-        if style.get("studio_virali_nuovo"):                     # ogni settimana: il perché di ogni post studiato
-            await _send_studio(context.bot, chat_ids, style.get("studio_virali") or {})
+        # lo studio della nicchia NON si manda da solo (Gabriele: niente messaggi lunghi): si legge con /studio
         if datetime.now(tz).weekday() != 0 and not (context.job.data or {}).get("primo"):
             return                                               # niente messaggi tutti i giorni
         fb = style.get("feedback_bot") or {}

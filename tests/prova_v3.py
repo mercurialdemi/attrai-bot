@@ -36,7 +36,7 @@ now=datetime.now(timezone.utc)
 def P(owner, code, likes, comments, hours, cap="x"*200, video=False):
     return instagram.SourcePost(url=f"https://www.instagram.com/p/{code}/", owner=owner, caption=cap, kind="Video" if video else "Sidecar",
         image_urls=["u"], likes=likes, comments=comments, timestamp=(now-timedelta(hours=hours)).isoformat())
-instagram.fetch_profiles=lambda h,n: [P("attraiseduci",f"a{i}",100*i,i,500+i, cap=f"Didascalia numero {i} "+"y"*150) for i in range(30)]
+instagram.fetch_profiles=lambda h,n,*_a: [P("attraiseduci",f"a{i}",100*i,i,500+i, cap=f"Didascalia numero {i} "+"y"*150) for i in range(30)]
 st=analysis.run_analysis(brand); print("analisi:", st["post_analizzati"], len(st["esempi"]), st["guida"].splitlines()[0])
 
 # ---- create_post: due chiamate separate
@@ -75,7 +75,7 @@ c=report.rank_candidates(posts,48,15); print("candidati:",[(x.url.split('/')[-2]
 storage.save_post_stats([(f"h{i}","big",2000.0,(now-timedelta(days=10+i)).isoformat()) for i in range(10)])
 c=report.rank_candidates(posts,48,15); print("con storico:",[(x.url.split('/')[-2],round(x.score,2)) for x in c])
 sent.clear()
-instagram.fetch_profiles=lambda h,n: posts
+instagram.fetch_profiles=lambda h,n,*_a: posts
 async def fb(src,brand,suffix,on_status=None): return {"descrizione":"d","cta":{},"slides":[]},[p1],[]
 pipeline.build_post=fb
 async def fs(bot,c,job_id,post,paths,failed,only_text=False,header="",numbers=None):
@@ -85,12 +85,12 @@ import yaml
 asyncio.run(report.run_report(Bot(),[1]))
 print("solo link:", [x[1] for x in sent])
 assert any("bNEW2" in str(x) or "sopra la media" in str(x) or "post dei collaboratori" in str(x) for x in sent), "report solo link vuoto"
-sent.clear()
+sent.clear(); instagram._cache.clear()   # i post finti hanno un proprietario fuori elenco: niente lettura del giorno
 asyncio.run(report.run_report(Bot(),[1]))                 # stesso giorno: niente post già mandati
 assert not any(("sopra la media" in str(x) or "post dei collaboratori" in str(x)) for x in sent), "il report ripropone post già mandati"
 import json as _j                                         # se nel frattempo raddoppia, torna come "in crescita"
 _d=_j.loads(report._shown_file().read_text()); _d={u:[v[0],0.5] for u,v in _d.items()}; report._shown_file().write_text(_j.dumps(_d))
-sent.clear(); asyncio.run(report.run_report(Bot(),[1]))
+sent.clear(); instagram._cache.clear(); asyncio.run(report.run_report(Bot(),[1]))
 assert any(("sopra la media" in str(x) or "post dei collaboratori" in str(x)) for x in sent), "post esploso dopo non ripreso"
 report._shown_file().unlink()
 sent.clear()
