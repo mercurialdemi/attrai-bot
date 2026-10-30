@@ -208,6 +208,17 @@ def page_engagements(owner: str, since_iso: str, exclude_after_iso: str) -> list
     return [r["engagement"] for r in rows]
 
 
+def page_engagements_giovani(owner: str, since_iso: str, max_ore: float = 72) -> list[tuple[float, float]]:
+    """(rendimento, età del post in ore quando è stato letto) dei post di una pagina letti quando erano ancora
+    giovani: servono a confrontare un post nuovo con post della stessa età, non con post già maturi."""
+    with _lock:
+        rows = _db().execute(
+            "SELECT engagement, (julianday(updated_at) - julianday(published_at)) * 24 AS eta FROM post_stats "
+            "WHERE owner=? AND published_at>=?", (owner, since_iso)).fetchall()
+    return [(float(r["engagement"]), float(r["eta"])) for r in rows
+            if r["eta"] is not None and 0.5 <= float(r["eta"]) <= max_ore]
+
+
 def owner_stats() -> dict[str, list[float]]:
     """{pagina: [rendimento di ogni post letto]} da tutti i post già letti (archivio della pagina corrente)."""
     with _lock:

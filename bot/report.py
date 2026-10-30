@@ -67,19 +67,36 @@ def _parse_ts(ts: str) -> datetime | None:
         return None
 
 
+def _quota_eta(ore: float) -> float:
+    """Che parte delle interazioni finali un post ha già raccolto dopo `ore` ore (curva tipica di Instagram:
+    circa 3/4 nel primo giorno, quasi tutto entro il secondo). Serve a confrontare post di età diverse."""
+    import math
+    return max(0.15, 1 - math.exp(-max(ore, 0.5) / 18))
+
+
+def _eta_ore(p) -> float | None:
+    ts = _parse_ts(p.timestamp)
+    return (datetime.now(timezone.utc) - ts).total_seconds() / 3600 if ts else None
+
+
+def _normalizzato(e: float, ore: float | None) -> float:
+    return e / _quota_eta(ore if ore is not None else 72)
+
+
 def _baselines(posts: list[instagram.SourcePost]) -> dict[str, float]:
+    """Rendimento tipico di ogni pagina, a parità di età: si confrontano i post di oggi con i post della stessa
+    pagina letti quando avevano 0-3 giorni (non con post vecchi che hanno già raccolto tutto)."""
     now = datetime.now(timezone.utc)
-    since = (now - timedelta(days=90)).isoformat()
-    mature = (now - timedelta(days=3)).isoformat()
+    since = (now - timedelta(days=60)).isoformat()
     fetched: dict[str, list[float]] = {}
     for p in posts:
         e = _engagement(p)
         if e is not None and not p.is_video:
-            fetched.setdefault(p.owner, []).append(e)
+            fetched.setdefault(p.owner, []).append(_normalizzato(e, _eta_ore(p)))
     out = {}
     for owner, values in fetched.items():
-        hist = storage.page_engagements(owner, since, mature)
-        base = hist if len(hist) >= 8 else values
+        storici = [_normalizzato(e, ore) for e, ore in storage.page_engagements_giovani(owner, since)]
+        base = storici if len(storici) >= 6 else values
         out[owner] = max(statistics.median(base), 1.0)
     return out
 
@@ -102,7 +119,9 @@ def rank_candidates(posts: list[instagram.SourcePost], hours: int, limit: int) -
         e = _engagement(p)
         if p.is_video or not p.image_urls or e is None or not ts or ts < since:
             continue
-        p.score = e / baseline.get(p.owner, max(e, 1.0))
+        if (_eta_ore(p) or 0) < 6:      # troppo giovane per giudicarlo: lo si rilegge domani (finestra di 2 giorni)
+            continue
+        p.score = _normalizzato(e, _eta_ore(p)) / baseline.get(p.owner, max(e, 1.0))   # a parità di età
         recent.append(p)
     done = storage.processed_urls([p.url for p in recent])
     recent = [p for p in recent if p.url not in done]
