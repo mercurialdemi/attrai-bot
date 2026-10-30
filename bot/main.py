@@ -26,7 +26,7 @@ COMMANDS = [
         ("crea", "Carosello originale da zero (es. /crea 2 friendzone)",
          "crea caroselli nuovi nello stile AttraiSeduci: /crea, /crea 3, /crea segnali di disinteresse"),
         ("storie", "Storie: temi proposti o su un tema (es. /storie vendita gelosia)",
-         "/storie propone 6 temi; /storie 3 crea il tema 3; /storie <tema> o /storie didattica|vendita|connessione|virale <tema>"),
+         "/storie propone 6 temi; /storie 3 crea il tema 3; /storie <tema> o /storie didattica|vendita|connessione|virale|lancio <tema>"),
         ("risposta", "Risposta a un box domanda (o manda la foto con scritto risposta)",
          "/risposta <domanda>, oppure manda lo screenshot della domanda con didascalia \"risposta\""),
         ("report", "Post migliori dei collaboratori, adesso",
@@ -534,8 +534,10 @@ async def _rispondi_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, 
             out, paths, cv = await asyncio.to_thread(storie.rispondi, brand, slug, storage.list_rules(), jdir, foto, domanda)
             await status.delete()
             await _manda_storie(context.bot, chat_id, paths, cv,
-                                f"Risposta a: \"{out.get('domanda', '')}\"\nNell'ultima storia puoi rimettere lo sticker DOMANDA "
-                                "per raccoglierne altre. Il file Canva ha i testi modificabili.")
+                                f"Risposta a: \"{out.get('domanda', '')}\"\nSu Instagram rispondi alla domanda dal box e usa questa "
+                                "immagine come sfondo: lo spazio in alto è lasciato libero per lo sticker con la domanda. "
+                                "Nell'ultima storia puoi rimettere il box DOMANDA per raccoglierne altre. "
+                                "Il file Canva ha i testi modificabili.")
         except Exception:
             log.exception("Risposta alla domanda non creata")
             await status.edit_text("Non sono riuscito a preparare la risposta. Riprova tra poco.")

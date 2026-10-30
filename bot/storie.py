@@ -29,9 +29,10 @@ log = logging.getLogger(__name__)
 
 W, H = 1080, 1920
 TOP_SAFE, BOTTOM_SAFE = 270, 420          # zone coperte dall'interfaccia di Instagram (nome in alto, risposte in basso)
-TIPI = ["didattica", "vendita", "connessione", "virale"]
+TIPI = ["didattica", "vendita", "connessione", "virale", "lancio"]
 SINONIMI = {"didattico": "didattica", "didattiche": "didattica", "marketing": "vendita", "manuale": "vendita",
-            "vendite": "vendita", "interazione": "connessione", "sondaggio": "connessione", "virali": "virale"}
+            "vendite": "vendita", "interazione": "connessione", "sondaggio": "connessione", "virali": "virale",
+            "lanci": "lancio"}
 
 # colori per pagina (sfondo a tinta unita, accento per i titoli)
 PALETTE_PAGINA = {
@@ -136,7 +137,7 @@ STORIE_TOOL = {
         "struttura": {"type": "string", "description": "L'id della struttura usata (tra quelle date)."},
         "storie": {"type": "array", "items": {"type": "object", "properties": {
             "titolo": {"type": "string", "description": "Frase breve e forte in alto (max 8 parole), oppure vuoto."},
-            "testo": {"type": "string", "description": "Il testo della storia: frasi brevi, si legge in 3-5 secondi (max 40 parole)."},
+            "testo": {"type": "string", "description": "Il testo della storia: frasi brevi, si legge in 3-4 secondi (max 30 parole)."},
             "sticker": {"type": "string", "enum": ["nessuno", "sondaggio", "domanda", "quiz", "link", "slider"]},
             "sticker_testo": {"type": "string", "description": "Cosa scrivere nello sticker: domanda e risposte del sondaggio/quiz, testo del box domanda, testo del link. Vuoto se nessuno."},
         }, "required": ["titolo", "testo", "sticker", "sticker_testo"]}},
@@ -146,7 +147,7 @@ STORIE_TOOL = {
 
 def scrivi(brand: dict, tema: str, tipo: str | None, rules: list[dict]) -> dict:
     st = strutture()
-    tipi = [tipo] if tipo else [t for t in TIPI if t != "vendita" or brand.get("manuali")]
+    tipi = [tipo] if tipo else [t for t in TIPI if t not in ("vendita", "lancio") or (brand.get("manuali") and t != "lancio")]
     usate = [s.get("struttura") for s in _storico()[-6:]]
     blocchi = []
     for t in tipi:
@@ -154,7 +155,8 @@ def scrivi(brand: dict, tema: str, tipo: str | None, rules: list[dict]) -> dict:
         righe = []
         for s in cat.get("strutture") or []:
             flag = " (usata di recente: evitala se puoi)" if s["id"] in usate else ""
-            righe.append(f"  - id {s['id']}: {s['nome']}{flag}\n" + "\n".join(f"      {i}. {r}" for i, r in enumerate(s['storie'], 1)))
+            righe.append(f"  - id {s['id']}: {s['nome']}{flag}" + (f" (quando: {s['quando']})" if s.get("quando") else "")
+                         + "\n" + "\n".join(f"      {i}. {r}" for i, r in enumerate(s['storie'], 1)))
         blocchi.append(f"TIPO {t.upper()}: {cat.get('descrizione', '')}\n" + "\n".join(righe))
     system = ("Sei il copywriter delle storie Instagram di una pagina italiana. Scrivi storie brevi, dirette, che si "
               "leggono in pochi secondi e fanno passare alla storia dopo.\n" + _profilo(brand) + "\n\n"
@@ -163,7 +165,9 @@ def scrivi(brand: dict, tema: str, tipo: str | None, rules: list[dict]) -> dict:
               "trattini lunghi. Italiano parlato, non tradotto. Mai partire dal manuale: si parte dal dolore. Il titolo "
               "di un manuale va tra virgolette. Dove la struttura prevede uno sticker, scegli il tipo e scrivi il suo "
               "testo.\nREGOLE FISSE DI GABRIELE:\n" + "\n".join(f"- {r['text']}" for r in rules) + "\n\n"
-              "STRUTTURE DISPONIBILI:\n" + "\n\n".join(blocchi))
+              "REGOLE DELLE STORIE CHE FUNZIONANO (valgono sempre):\n"
+              + "\n".join(f"- {r}" for r in st.get("regole_generali") or []) + "\n\n"
+              "STRUTTURE DISPONIBILI (scegli la più adatta al tema, guardando 'quando'):\n" + "\n\n".join(blocchi))
     out = writer._tool_call(system, [{"type": "text", "text": f"Tema: {tema}\nScrivi la serie con lo strumento serie_storie."}],
                             STORIE_TOOL, model=config.CAPTION_MODEL, max_tokens=4000)
     _pulisci(out, brand)
@@ -213,20 +217,10 @@ def disegna(storia: dict, brand: dict, stile: str, slug: str, placements: list |
     sticker = storia.get("sticker") not in (None, "", "nessuno")
     zona_bassa = BOTTOM_SAFE + (330 if sticker else 0)            # spazio libero per lo sticker
     top_extra = 0
-    if domanda:                      # risposta a un box domanda: la domanda in un riquadro bianco in alto
-        qf = textslide._font("semibold_poppins", 46)
-        q_lines = _wrap(draw, domanda, qf, max_w - 100)[:6]
-        q_h = 70 + len(q_lines) * 62 + 40
-        qx0, qy0 = margine, TOP_SAFE
-        for d in (draw,):
-            d.rounded_rectangle((qx0, qy0, W - margine, qy0 + q_h), radius=36, fill=(255, 255, 255))
-            lf = textslide._font("bold_poppins", 28)
-            d.text((qx0 + 50, qy0 + 26), "LA TUA DOMANDA", font=lf, fill=_hex(pal["accento"]) if pal["bg"][0] < 128 else (60, 60, 60))
-        yq = qy0 + 70
-        for r in q_lines:
-            draw.text(((W - draw.textlength(r, font=qf)) / 2, yq), r, font=qf, fill=(20, 20, 20))
-            yq += 62
-        top_extra = q_h + 60
+    if domanda:
+        # risposta a un box domanda: lo sticker con la domanda lo mette Instagram quando rispondi. Qui resta
+        # solo lo spazio libero in alto dove andrà, la risposta sta sotto.
+        top_extra = 560
     disponibile = H - TOP_SAFE - top_extra - zona_bassa
     t_size, b_size = 92, 54
     while True:
@@ -240,7 +234,7 @@ def disegna(storia: dict, brand: dict, stile: str, slug: str, placements: list |
         if alto <= disponibile - 80 or b_size <= 34:
             break
         t_size, b_size = t_size - 6, b_size - 3
-    scuro = sum(pal["bg"]) / 3 < 60                 # sfondo quasi nero: riquadri e strisce bianchi, testo nero
+    scuro = sum(pal["bg"]) / 3 < 30                 # sfondo quasi nero: riquadri e strisce bianchi, testo nero
     fondo_testo = (255, 255, 255) if scuro else (0, 0, 0)
     col_testo = (15, 15, 15) if scuro else (255, 255, 255)
     y0 = TOP_SAFE + top_extra + max(0, (disponibile - alto) // 2)
@@ -322,6 +316,11 @@ def istruzioni(serie: dict) -> str:
     for i, s in enumerate(serie.get("storie") or [], 1):
         if s.get("sticker") not in (None, "", "nessuno"):
             righe.append(f"Storia {i}: aggiungi lo sticker {s['sticker'].upper()} nello spazio libero in basso → {s.get('sticker_testo', '')}")
+    if serie.get("tipo") == "lancio":
+        n = len(serie.get("storie") or [])
+        terzo = max(1, round(n / 3))
+        righe.append(f"Lancio in 3 giorni: storie 1-{terzo} il primo giorno, {terzo + 1}-{2 * terzo} il secondo, "
+                     f"{2 * terzo + 1}-{n} il terzo.")
     righe.append("Il file Canva ha i testi modificabili.")
     return "\n".join(righe)
 
@@ -333,7 +332,7 @@ RISPOSTA_TOOL = {
     "description": "Risposta a una domanda arrivata dal box domande delle storie.",
     "input_schema": {"type": "object", "properties": {
         "domanda": {"type": "string", "description": "La domanda trascritta parola per parola (corretta solo negli errori di battitura evidenti)."},
-        "storie": {"type": "array", "description": "1-3 storie: la prima mostra la domanda e apre la risposta.", "items": {"type": "object", "properties": {
+        "storie": {"type": "array", "description": "1-3 storie: sulla prima Instagram mette lo sticker con la domanda in alto, sotto la risposta.", "items": {"type": "object", "properties": {
             "titolo": {"type": "string", "description": "Breve e forte, oppure vuoto."},
             "testo": {"type": "string", "description": "La risposta: diretta, concreta, frasi corte (max 45 parole per storia)."},
         }, "required": ["titolo", "testo"]}},
@@ -344,7 +343,7 @@ RISPOSTA_TOOL = {
 def rispondi(brand: dict, slug: str, rules: list[dict], jdir: Path, foto: bytes | None = None,
              domanda: str = "") -> tuple[dict, list[Path], Path | None]:
     """Legge la domanda (dalla foto del box domande o dal testo) e prepara 1-3 storie di risposta nello stile
-    della pagina: la domanda in un riquadro bianco in alto, la risposta sotto. Più file Canva."""
+    della pagina: in alto lo spazio libero per lo sticker della domanda (lo mette Instagram), la risposta sotto."""
     content = []
     if foto:
         content += [{"type": "text", "text": "Screenshot della domanda arrivata nel box domande:"}, writer._image_block(foto, 1024)]
@@ -373,7 +372,7 @@ def rispondi(brand: dict, slug: str, rules: list[dict], jdir: Path, foto: bytes 
         bg = jdir / f"risposta_{i:02d}_sfondo.jpg"
         sfondo.save(bg, quality=95)
         paths.append(p)
-        slides.append({"_canva": {"tipo": "immagine" if i == 1 else "testo", "righe": pl, "sfondo": str(bg)}})
+        slides.append({"_canva": {"tipo": "testo", "righe": pl, "sfondo": str(bg)}})
     canva_path = None
     try:
         from . import canva

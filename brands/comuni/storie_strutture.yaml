@@ -1,105 +1,156 @@
-# Strutture delle STORIE Instagram (valgono per tutte le pagine; il tono e i dolori vengono dalla scheda della pagina).
-# Ogni categoria ha 3 strutture. Ogni struttura è una sequenza di storie: il ruolo di ognuna in ordine.
-# Modificale liberamente: il bot le legge ogni volta che crea una serie di storie.
+# STRUTTURE DELLE STORIE INSTAGRAM (valgono per tutte le pagine: tono, pubblico e dolori vengono dalla scheda della pagina)
+# Il bot ne sceglie una per serie, segue i ruoli storia per storia e non ripete la stessa di recente.
+# Modificabili: ogni struttura = nome, quando usarla, storie in ordine (ruolo + cosa deve fare).
+
+regole_generali:
+  - "STORIA 1 = GANCIO. Si decide lì se guardano il resto: una frase che interrompe lo scorrimento (verità scomoda, numero preciso, domanda che brucia, scena riconoscibile). Mai saluti, mai 'oggi parliamo di'."
+  - "Un'idea sola per storia. Massimo 25-30 parole: si deve leggere in 3-4 secondi. Se serve più testo, dividi in due storie."
+  - "Apri un cerchio e chiudilo alla fine (open loop): la storia 1 promette qualcosa che arriva solo nelle ultime. Chi vuole la risposta continua a toccare."
+  - "Ogni storia deve far toccare la successiva: finisci con una frase sospesa, una domanda o un 'ma' quando serve."
+  - "Uno sticker presto (sondaggio o quiz entro la storia 2-3): è un piccolo sì che tiene dentro e fa salire la serie nel feed delle storie. Chi ha già risposto sì è più propenso a dire sì anche dopo."
+  - "La richiesta finale segue quello che hanno risposto prima (es. hanno votato 'sì, mi succede' → 'allora questo è per te')."
+  - "Vendita: si parte SEMPRE dal dolore, il manuale arriva solo alla fine in una riga (titolo tra virgolette). Il modo più forte di chiedere è la parola da scrivere in DM (es. 'Scrivimi ATTRAZIONE'), poi il link in bio."
+  - "Mai inventare testimonianze, numeri di vendita o scadenze false. Prove sociali solo se Gabriele le fornisce: altrimenti si usa il ragionamento e la scena."
+  - "Linguaggio parlato, come un messaggio a un amico/amica: niente frasi da libro, niente emoji, niente hashtag."
+  - "4-6 storie per serie (connessione e virali anche 3). Più lunga solo se ogni storia aggiunge qualcosa."
 
 didattica:
-  descrizione: Insegna una cosa concreta in poche storie. Chi la guarda ne esce sapendo capire o fare qualcosa.
+  descrizione: "Insegna UNA cosa concreta. Chi guarda ne esce sapendo riconoscere o fare qualcosa: costruisce autorevolezza e fa salvare/condividere."
   strutture:
     - id: errore-meccanismo-soluzione
-      nome: Errore → meccanismo → soluzione
+      nome: "L'errore che fanno tutti"
+      quando: "Quando c'è un comportamento sbagliato e diffuso con una spiegazione psicologica chiara."
       storie:
-        - "GANCIO: l'errore che quasi tutti fanno, detto in una frase che colpisce"
-        - "SCENA: come si presenta l'errore nella vita reale (situazione riconoscibile)"
-        - "MECCANISMO: perché succede, la psicologia sotto (uno studio o un principio, semplice)"
-        - "SOLUZIONE: cosa fare invece, concreto"
-        - "CHIUSURA: la frase che fissa il concetto + domanda (sticker DOMANDA o SONDAGGIO)"
+        - "GANCIO: 'L'errore che fa il 90% degli uomini quando...' (o la scena dell'errore in una frase). Apre il cerchio: 'alla fine ti dico cosa fare'."
+        - "SONDAGGIO DI RICONOSCIMENTO: 'Lo hai mai fatto?' Sì, troppe volte / No (sticker SONDAGGIO)."
+        - "MECCANISMO: perché succede, la psicologia sotto in 2 frasi (un principio o uno studio vero, detto semplice)."
+        - "IL COSTO: cosa ti sta facendo perdere ogni volta che lo fai (concreto)."
+        - "SOLUZIONE: cosa fare invece, un'azione precisa da provare oggi. Chiude il cerchio."
+        - "CHIUSURA: frase da screenshot + 'Mandala a chi ne ha bisogno' oppure box DOMANDA 'Qual è la tua situazione?'."
     - id: segnali
-      nome: 3 segnali da riconoscere
+      nome: "I segnali da riconoscere"
+      quando: "Quando il tema si presta a 'come capire se...' (interesse, disinteresse, manipolazione, test)."
       storie:
-        - "GANCIO: 'Se fa queste 3 cose, ...' (promessa chiara)"
-        - "SEGNALE 1: cosa vedi + cosa significa"
-        - "SEGNALE 2: cosa vedi + cosa significa"
-        - "SEGNALE 3: il più sottile, cosa significa"
-        - "CHIUSURA: cosa fare se li riconosci + sticker SONDAGGIO ('Ti è successo?' sì/no)"
+        - "GANCIO: 'Se fa queste 3 cose, [conseguenza forte]'. Promessa chiara."
+        - "SEGNALE 1: cosa vedi (scena) + cosa significa davvero."
+        - "SEGNALE 2: cosa vedi + cosa significa. Chiudi con 'ma il terzo è quello che nessuno nota'."
+        - "SEGNALE 3: il più sottile e il più importante."
+        - "SONDAGGIO: 'Quanti ne riconosci?' 0-1 / 2-3 (sticker SONDAGGIO) oppure QUIZ su quale è il più grave."
+        - "COSA FARE: se li riconosci, la mossa giusta in una frase."
     - id: mito-verita
-      nome: Mito contro verità
+      nome: "Mito contro verità"
+      quando: "Quando esiste una falsa credenza forte che il pubblico ripete (es. 'essere gentili basta')."
       storie:
-        - "GANCIO: la falsa credenza che tutti ripetono"
-        - "MITO: perché ci crediamo (cosa sembra vero)"
-        - "VERITÀ: cosa succede davvero, con un esempio o uno studio"
-        - "CONSEGUENZA: cosa cambia per chi lo capisce"
-        - "CHIUSURA: domanda introspettiva (sticker DOMANDA)"
+        - "GANCIO: la frase che tutti ripetono, tra virgolette, + 'È falso. E ti sta costando caro.'"
+        - "QUIZ: 'Vero o falso?' con la credenza (sticker QUIZ, risposta giusta: falso)."
+        - "PERCHÉ CI CREDIAMO: cosa la fa sembrare vera."
+        - "LA VERITÀ: cosa succede davvero, con un esempio o uno studio vero."
+        - "COSA CAMBIA: come cambia il comportamento di chi lo capisce."
+        - "CHIUSURA: domanda introspettiva precisa (box DOMANDA)."
 
 vendita:
-  descrizione: Porta al manuale giusto partendo dal dolore, mai dal prodotto. Il manuale arriva solo alla fine.
+  descrizione: "Porta al manuale giusto. Si vende il cambiamento, non il libro: dolore → presa di coscienza → spiraglio → manuale in una riga → azione semplice."
   strutture:
-    - id: dolore-falsa-credenza-manuale
-      nome: Dolore → falsa credenza → spiraglio → manuale
+    - id: pas-parola-dm
+      nome: "Problema → peggioramento → soluzione (parola in DM)"
+      quando: "La più diretta: un dolore preciso collegato a un manuale."
       storie:
-        - "DOLORE: la situazione che fa male, raccontata come la vive lui/lei"
-        - "FALSA CREDENZA: cosa pensa di dover fare (e perché non funziona)"
-        - "SPIRAGLIO: la verità che cambia la prospettiva, speranza concreta"
-        - "MANUALE: una sola riga su cosa trova nel manuale (titolo tra virgolette), mai l'indice"
-        - "AZIONE: link in bio o parola da commentare/scrivere in DM (sticker LINK se c'è)"
-    - id: prima-dopo
-      nome: Prima → dopo
-      storie:
-        - "PRIMA: com'è la sua vita adesso con questo problema (scena precisa)"
-        - "IL COSTO: cosa gli sta facendo perdere, urgenza"
-        - "DOPO: com'è quando ha capito come funziona"
-        - "IL PONTE: il manuale come passaggio tra prima e dopo, in una riga"
-        - "AZIONE: link in bio / parola in DM (sticker LINK)"
+        - "PROBLEMA: il dolore detto come lo vive lui/lei, una scena precisa. + SONDAGGIO 'Ti è successo?' Sì / No."
+        - "PEGGIORAMENTO: cosa succede se continua così (tempo, valore, occasioni perse). Urgenza vera, non inventata."
+        - "FALSA CREDENZA: quello che pensa di dover fare e perché lo peggiora."
+        - "SPIRAGLIO: la verità che cambia la prospettiva. Speranza concreta."
+        - "MANUALE: 'Per questo ho scritto \"[titolo]\"': una riga su cosa capirà, mai l'indice."
+        - "AZIONE: 'Scrivimi [PAROLA] in DM e te lo mando' (o sticker LINK). Ripeti la parola in grande."
     - id: domande-qualifica
-      nome: Domande che qualificano
+      nome: "Due sì e poi la proposta"
+      quando: "Quando il dolore si può spezzare in due sintomi riconoscibili: i due sì preparano il terzo."
       storie:
-        - "DOMANDA 1: 'Ti è mai successo che...?' (sticker SONDAGGIO sì/no)"
-        - "DOMANDA 2: un secondo sintomo dello stesso dolore (sticker SONDAGGIO)"
-        - "RISPOSTA: se hai risposto sì, ecco cosa sta succedendo davvero"
-        - "MANUALE: per questo ho scritto... (una riga, titolo tra virgolette)"
-        - "AZIONE: scrivimi la parola in DM o link in bio (sticker LINK)"
+        - "SINTOMO 1: 'Ti capita che...?' (sticker SONDAGGIO sì/no)."
+        - "SINTOMO 2: un secondo segnale dello stesso dolore (sticker SONDAGGIO)."
+        - "LA DIAGNOSI: 'Se hai risposto sì almeno una volta, ecco cosa sta succedendo davvero'."
+        - "IL PERCHÉ: il meccanismo in due frasi, senza colpevolizzare."
+        - "MANUALE: una riga, titolo tra virgolette, e cosa cambia dopo averlo letto."
+        - "AZIONE: parola in DM o link in bio. 'Se hai votato sì, questo è per te.'"
+    - id: prima-dopo
+      nome: "Prima e dopo"
+      quando: "Quando si può mostrare bene la differenza tra chi non ha capito e chi ha capito."
+      storie:
+        - "PRIMA: com'è oggi la sua vita con questo problema, una scena quotidiana."
+        - "IL MOMENTO DI SVOLTA: cosa ha capito chi ne è uscito (senza svelare tutto: cerchio aperto)."
+        - "DOPO: com'è adesso la stessa scena, rovesciata."
+        - "SONDAGGIO: 'Tu dove sei adesso?' Prima / Dopo."
+        - "IL PONTE: il manuale come passaggio tra prima e dopo, una riga."
+        - "AZIONE: parola in DM o link in bio."
 
 connessione:
-  descrizione: Fa interagire e sentire compresi. Serve a far salire le risposte e la vicinanza con il pubblico.
+  descrizione: "Fa rispondere e sentire capiti. Le risposte e i voti fanno salire le storie e danno idee per i prossimi contenuti."
   strutture:
-    - id: sondaggio-opinione
-      nome: Sondaggio di opinione
+    - id: questo-o-quello
+      nome: "Questo o quello"
+      quando: "Temi su cui il pubblico si divide: fa votare tutti e discutere."
       storie:
-        - "DOMANDA POLARIZZANTE sul tema (sticker SONDAGGIO con due risposte nette)"
-        - "LA MIA RISPOSTA: cosa ne penso e perché, in modo diretto"
-        - "DOMANDA APERTA: 'E tu cosa ne pensi?' (sticker DOMANDA)"
+        - "DILEMMA: due scelte nette sul tema (sticker SONDAGGIO con le due risposte)."
+        - "SECONDO DILEMMA: un'altra scelta collegata (sticker SONDAGGIO)."
+        - "LA MIA RISPOSTA: cosa ne penso e perché, diretto, anche contro la maggioranza."
+        - "DOMANDA APERTA: 'Tu cosa avresti fatto?' (box DOMANDA)."
     - id: ti-e-mai-successo
-      nome: Ti è mai successo?
+      nome: "Ti è mai successo?"
+      quando: "Una scena che il pubblico vive spesso ma di cui non parla."
       storie:
-        - "SCENA: una situazione precisa che il pubblico vive spesso"
-        - "SONDAGGIO: 'Ti è mai successo?' (sticker SONDAGGIO)"
-        - "SIGNIFICATO: cosa vuol dire quando succede"
-        - "DOMANDA: 'Raccontami com'è andata' (sticker DOMANDA)"
-    - id: quiz
-      nome: Quiz
+        - "SCENA: la situazione precisa, raccontata in seconda persona."
+        - "SONDAGGIO: 'Ti è mai successo?' Sì / Più di una volta."
+        - "COSA SIGNIFICA: il significato nascosto, in due frasi."
+        - "BOX DOMANDA: 'Raccontami com'è andata' (le risposte diventano contenuti)."
+    - id: quiz-sfida
+      nome: "Quiz sfida"
+      quando: "Per testare quanto ne sanno: il quiz fa toccare e fa tornare per la risposta."
       storie:
-        - "QUIZ: domanda sul tema con 3-4 risposte (sticker QUIZ, risposta giusta indicata)"
-        - "RISPOSTA: qual era quella giusta e perché, breve"
-        - "CHIUSURA: una frase che fa riflettere + sticker DOMANDA"
+        - "GANCIO: 'Solo 1 su 10 risponde giusto'."
+        - "QUIZ: domanda con 3-4 risposte credibili (sticker QUIZ con la giusta indicata)."
+        - "LA RISPOSTA: qual è e perché le altre sono sbagliate, breve."
+        - "CHIUSURA: una frase che fa riflettere + box DOMANDA."
 
 virale:
-  descrizione: Punta sull'emozione e sulla condivisione (verità scomode, frasi che fanno dire 'è proprio così').
+  descrizione: "Emozione e condivisione: verità che fanno dire 'è proprio così' e che si mandano a un amico/amica."
   strutture:
     - id: verita-scomoda
-      nome: Verità scomoda
+      nome: "Verità scomoda"
+      quando: "Una verità che il pubblico sente ma che nessuno dice."
       storie:
-        - "GANCIO: la verità scomoda detta senza filtri"
-        - "SVILUPPO: perché è così (2-3 frasi che pungono)"
-        - "FRASE FINALE: da screenshot, da mandare a un amico/amica"
+        - "GANCIO: la verità scomoda, secca, senza giri."
+        - "SVILUPPO: perché è così, 2-3 frasi che pungono."
+        - "IL COLPO FINALE: la frase da screenshot."
+        - "SONDAGGIO: 'D'accordo?' Sì / No, ma... (fa discutere)."
     - id: confessione
-      nome: Confessione in prima persona
+      nome: "Confessione"
+      quando: "Una lezione raccontata in prima persona: crea vicinanza e fiducia."
       storie:
-        - "CONFESSIONE: 'Per anni ho creduto che...'"
-        - "IL MOMENTO: quando ho capito che non era così (scena)"
-        - "LA LEZIONE: cosa ho imparato, una frase forte"
-        - "DOMANDA: 'Anche tu?' (sticker SONDAGGIO)"
+        - "CONFESSIONE: 'Per anni ho creduto che...'."
+        - "IL MOMENTO: quando ho capito che era sbagliato (scena precisa)."
+        - "LA LEZIONE: cosa ho imparato, una frase forte."
+        - "SONDAGGIO: 'Anche tu ci sei passato/a?' Sì / Ci sono dentro ora."
     - id: lista-secca
-      nome: Lista secca
+      nome: "Lista secca"
+      quando: "3-5 punti brevi e forti, facili da salvare."
       storie:
-        - "GANCIO: 'Le X cose che ...'"
-        - "PUNTI: 3-4 punti brevi, uno per storia o tutti in una"
-        - "FRASE FINALE: chiusura d'impatto + invito a condividere"
+        - "GANCIO: 'Le X cose che...' con promessa forte."
+        - "PUNTO 1 e 2: brevi, un punto per riga."
+        - "PUNTO 3 (e 4): il più forte per ultimo."
+        - "CHIUSURA: frase d'impatto + 'Salvala' o 'Mandala a chi ne ha bisogno'."
+
+lancio:
+  descrizione: "Sequenza di 3 giorni per spingere un manuale (da usare quando si vuole vendere con più forza). Ogni giorno 3-4 storie."
+  strutture:
+    - id: tre-giorni
+      nome: "Lancio in 3 giorni: connessione → attesa → vendita"
+      quando: "Quando Gabriele vuole un periodo di vendita di un manuale."
+      storie:
+        - "GIORNO 1 · GANCIO: il dolore principale del manuale in una scena + SONDAGGIO 'Ti succede?'."
+        - "GIORNO 1 · VALIDAZIONE: 'Non sei l'unico/a': perché è così comune e non è colpa sua."
+        - "GIORNO 1 · SPIRAGLIO: 'Domani ti spiego cosa cambia tutto' (cerchio aperto per il giorno dopo)."
+        - "GIORNO 2 · LA SCOPERTA: il meccanismo chiave, la verità che spiega il problema."
+        - "GIORNO 2 · L'OBIEZIONE: la scusa più comune ('non fa per me', 'è tardi') e perché non regge."
+        - "GIORNO 2 · ANTICIPAZIONE: 'Domani ti dico dove trovi tutto il metodo' + box DOMANDA 'Cosa vuoi sapere?'."
+        - "GIORNO 3 · IL MANUALE: titolo tra virgolette e cosa cambia dopo averlo letto (una riga)."
+        - "GIORNO 3 · PER CHI È: 'È per te se...' (3 frasi) e per chi non è (aumenta la fiducia)."
+        - "GIORNO 3 · AZIONE: parola in DM / link in bio, ripetuta in grande."
