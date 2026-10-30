@@ -5,13 +5,14 @@ import asyncio
 import logging
 import re
 from datetime import datetime
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from telegram import Update
 from telegram.constants import ChatAction
 from telegram.ext import (Application, CommandHandler, ContextTypes, MessageHandler, TypeHandler, filters)
 
-from . import analysis, config, crea, diagnostica, images, instagram, instagram_api, pagine, pipeline, report, storage, writer
+from . import analysis, config, crea, diagnostica, images, instagram, instagram_api, pagine, pipeline, report, storage, storie, writer
 
 logging.basicConfig(format="%(asctime)s %(levelname)s %(name)s: %(message)s", level=logging.INFO)
 logging.getLogger("httpx").setLevel(logging.WARNING)
@@ -24,6 +25,10 @@ COMMANDS = [
         ("comandi", "Guida a tutti i comandi", "questa guida"),
         ("crea", "Carosello originale da zero (es. /crea 2 friendzone)",
          "crea caroselli nuovi nello stile AttraiSeduci: /crea, /crea 3, /crea segnali di disinteresse"),
+        ("storie", "Storie: temi proposti o su un tema (es. /storie vendita gelosia)",
+         "/storie propone 6 temi; /storie 3 crea il tema 3; /storie <tema> o /storie didattica|vendita|connessione|virale <tema>"),
+        ("risposta", "Risposta a un box domanda (o manda la foto con scritto risposta)",
+         "/risposta <domanda>, oppure manda lo screenshot della domanda con didascalia \"risposta\""),
         ("report", "Post migliori dei collaboratori, adesso",
          "lancia subito il report del mattino con i post che stanno andando meglio"),
         ("altri", "Altri post dalla classifica", "i post successivi del report, se vuoi sceglierne altri"),
@@ -467,6 +472,88 @@ async def _crea_one(bot, chat_id: int, user_id: int, hint: str, label: str = "")
         storage.end_work(work)
 
 
+async def _manda_storie(bot, chat_id: int, paths: list, canva_path, testo: str) -> None:
+    from telegram import InputMediaDocument
+    for k in range(0, len(paths), 10):
+        gruppo = [InputMediaDocument(p.read_bytes(), filename=p.name) for p in paths[k:k + 10]]
+        await bot.send_media_group(chat_id, gruppo)
+    if canva_path and Path(canva_path).exists():
+        await bot.send_document(chat_id, Path(canva_path).read_bytes(), filename=Path(canva_path).name)
+    await bot.send_message(chat_id, testo)
+
+
+async def cmd_storie(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not await _authorized(update):
+        return
+    msg, chat_id = update.effective_message, update.effective_chat.id
+    arg = " ".join(context.args or []).strip()
+    brand, slug = writer.load_brand(), pagine.corrente()
+
+    async def go():
+        try:
+            if not arg:
+                status = await msg.reply_text("Cerco 6 temi per le storie…")
+                temi = await asyncio.to_thread(storie.proponi_temi, brand)
+                righe = [f"{i}. [{t['tipo']}] {t['tema']}\n   ↳ {t['perche']}" for i, t in enumerate(temi, 1)]
+                await status.edit_text(f"Temi per le storie di {brand['nome']}:\n\n" + "\n\n".join(righe)
+                                       + "\n\nScrivi /storie 3 per creare il tema 3, oppure /storie <tuo tema>.")
+                return
+            if arg.isdigit():
+                p = storie.proposta(int(arg))
+                if not p:
+                    await msg.reply_text("Non trovo quel tema: scrivi /storie per vedere le proposte.")
+                    return
+                tipo, tema = p["tipo"], p["tema"]
+            else:
+                tipo, tema = storie.capisci_richiesta(arg)
+                if not tema:
+                    await msg.reply_text("Scrivi anche il tema, es. /storie vendita gelosia dopo la rottura")
+                    return
+            if tipo == "vendita" and not brand.get("manuali"):
+                await msg.reply_text(f"{brand['nome']} non ha manuali da vendere: faccio una serie didattica.")
+                tipo = "didattica"
+            status = await msg.reply_text(f"Creo le storie: {tema}…")
+            jdir = config.DATA_DIR / "jobs" / f"storie_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            serie, paths, cv = await asyncio.to_thread(storie.crea, brand, slug, tema, tipo, storage.list_rules(), jdir)
+            await status.delete()
+            await _manda_storie(context.bot, chat_id, paths, cv, storie.istruzioni(serie))
+        except Exception:
+            log.exception("Storie non create")
+            await msg.reply_text("Non sono riuscito a creare le storie. Riprova tra poco.")
+    context.application.create_task(go())
+
+
+async def _rispondi_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, foto: bytes | None, domanda: str):
+    msg, chat_id = update.effective_message, update.effective_chat.id
+    brand, slug = writer.load_brand(), pagine.corrente()
+
+    async def go():
+        status = await msg.reply_text("Leggo la domanda e preparo la risposta per le storie…")
+        try:
+            jdir = config.DATA_DIR / "jobs" / f"risposta_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            out, paths, cv = await asyncio.to_thread(storie.rispondi, brand, slug, storage.list_rules(), jdir, foto, domanda)
+            await status.delete()
+            await _manda_storie(context.bot, chat_id, paths, cv,
+                                f"Risposta a: \"{out.get('domanda', '')}\"\nNell'ultima storia puoi rimettere lo sticker DOMANDA "
+                                "per raccoglierne altre. Il file Canva ha i testi modificabili.")
+        except Exception:
+            log.exception("Risposta alla domanda non creata")
+            await status.edit_text("Non sono riuscito a preparare la risposta. Riprova tra poco.")
+    context.application.create_task(go())
+
+
+async def cmd_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not await _authorized(update):
+        return
+    domanda = " ".join(context.args or []).strip()
+    if not domanda:
+        await update.effective_message.reply_text(
+            "Scrivi la domanda dopo il comando (/risposta come faccio a...), oppure mandami lo screenshot del box "
+            "domanda con didascalia \"risposta\".")
+        return
+    await _rispondi_domanda(update, context, None, domanda)
+
+
 async def cmd_crea(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """/crea [quanti] [tema o indicazioni]: caroselli originali da zero, testo su nero, nello stile della pagina."""
     if not await _authorized(update):
@@ -689,6 +776,11 @@ async def on_media(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif msg.document and (msg.document.mime_type or "").startswith("image/"):
         file_id = msg.document.file_id
     else:
+        return
+    if re.match(r"^\s*(risposta|rispondi|domanda)\b", msg.caption or "", re.IGNORECASE):
+        f = await context.bot.get_file(file_id)          # screenshot di un box domanda: risposta per le storie
+        extra = re.sub(r"^\s*(risposta|rispondi|domanda)\s*:?\s*", "", msg.caption, flags=re.IGNORECASE)
+        await _rispondi_domanda(update, context, bytes(await f.download_as_bytearray()), extra)
         return
     cm = re.match(r"^\s*cta\s*:?\s*([\w-]+)\s*$", msg.caption or "", re.IGNORECASE)
     if cm:   # slide CTA di AttraiSeduci da mettere in fondo ai caroselli
@@ -1063,6 +1155,8 @@ def main():
     app.add_handler(CommandHandler("stile", cmd_stile))
     app.add_handler(CommandHandler("studio", cmd_studio))
     app.add_handler(CommandHandler("crea", cmd_crea))
+    app.add_handler(CommandHandler("storie", cmd_storie))
+    app.add_handler(CommandHandler("risposta", cmd_risposta))
     app.add_handler(MessageHandler(filters.PHOTO | filters.Document.IMAGE, on_media))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_text))
     async def notify_restart(context: ContextTypes.DEFAULT_TYPE):

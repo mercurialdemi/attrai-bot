@@ -1,0 +1,105 @@
+# Strutture delle STORIE Instagram (valgono per tutte le pagine; il tono e i dolori vengono dalla scheda della pagina).
+# Ogni categoria ha 3 strutture. Ogni struttura è una sequenza di storie: il ruolo di ognuna in ordine.
+# Modificale liberamente: il bot le legge ogni volta che crea una serie di storie.
+
+didattica:
+  descrizione: Insegna una cosa concreta in poche storie. Chi la guarda ne esce sapendo capire o fare qualcosa.
+  strutture:
+    - id: errore-meccanismo-soluzione
+      nome: Errore → meccanismo → soluzione
+      storie:
+        - "GANCIO: l'errore che quasi tutti fanno, detto in una frase che colpisce"
+        - "SCENA: come si presenta l'errore nella vita reale (situazione riconoscibile)"
+        - "MECCANISMO: perché succede, la psicologia sotto (uno studio o un principio, semplice)"
+        - "SOLUZIONE: cosa fare invece, concreto"
+        - "CHIUSURA: la frase che fissa il concetto + domanda (sticker DOMANDA o SONDAGGIO)"
+    - id: segnali
+      nome: 3 segnali da riconoscere
+      storie:
+        - "GANCIO: 'Se fa queste 3 cose, ...' (promessa chiara)"
+        - "SEGNALE 1: cosa vedi + cosa significa"
+        - "SEGNALE 2: cosa vedi + cosa significa"
+        - "SEGNALE 3: il più sottile, cosa significa"
+        - "CHIUSURA: cosa fare se li riconosci + sticker SONDAGGIO ('Ti è successo?' sì/no)"
+    - id: mito-verita
+      nome: Mito contro verità
+      storie:
+        - "GANCIO: la falsa credenza che tutti ripetono"
+        - "MITO: perché ci crediamo (cosa sembra vero)"
+        - "VERITÀ: cosa succede davvero, con un esempio o uno studio"
+        - "CONSEGUENZA: cosa cambia per chi lo capisce"
+        - "CHIUSURA: domanda introspettiva (sticker DOMANDA)"
+
+vendita:
+  descrizione: Porta al manuale giusto partendo dal dolore, mai dal prodotto. Il manuale arriva solo alla fine.
+  strutture:
+    - id: dolore-falsa-credenza-manuale
+      nome: Dolore → falsa credenza → spiraglio → manuale
+      storie:
+        - "DOLORE: la situazione che fa male, raccontata come la vive lui/lei"
+        - "FALSA CREDENZA: cosa pensa di dover fare (e perché non funziona)"
+        - "SPIRAGLIO: la verità che cambia la prospettiva, speranza concreta"
+        - "MANUALE: una sola riga su cosa trova nel manuale (titolo tra virgolette), mai l'indice"
+        - "AZIONE: link in bio o parola da commentare/scrivere in DM (sticker LINK se c'è)"
+    - id: prima-dopo
+      nome: Prima → dopo
+      storie:
+        - "PRIMA: com'è la sua vita adesso con questo problema (scena precisa)"
+        - "IL COSTO: cosa gli sta facendo perdere, urgenza"
+        - "DOPO: com'è quando ha capito come funziona"
+        - "IL PONTE: il manuale come passaggio tra prima e dopo, in una riga"
+        - "AZIONE: link in bio / parola in DM (sticker LINK)"
+    - id: domande-qualifica
+      nome: Domande che qualificano
+      storie:
+        - "DOMANDA 1: 'Ti è mai successo che...?' (sticker SONDAGGIO sì/no)"
+        - "DOMANDA 2: un secondo sintomo dello stesso dolore (sticker SONDAGGIO)"
+        - "RISPOSTA: se hai risposto sì, ecco cosa sta succedendo davvero"
+        - "MANUALE: per questo ho scritto... (una riga, titolo tra virgolette)"
+        - "AZIONE: scrivimi la parola in DM o link in bio (sticker LINK)"
+
+connessione:
+  descrizione: Fa interagire e sentire compresi. Serve a far salire le risposte e la vicinanza con il pubblico.
+  strutture:
+    - id: sondaggio-opinione
+      nome: Sondaggio di opinione
+      storie:
+        - "DOMANDA POLARIZZANTE sul tema (sticker SONDAGGIO con due risposte nette)"
+        - "LA MIA RISPOSTA: cosa ne penso e perché, in modo diretto"
+        - "DOMANDA APERTA: 'E tu cosa ne pensi?' (sticker DOMANDA)"
+    - id: ti-e-mai-successo
+      nome: Ti è mai successo?
+      storie:
+        - "SCENA: una situazione precisa che il pubblico vive spesso"
+        - "SONDAGGIO: 'Ti è mai successo?' (sticker SONDAGGIO)"
+        - "SIGNIFICATO: cosa vuol dire quando succede"
+        - "DOMANDA: 'Raccontami com'è andata' (sticker DOMANDA)"
+    - id: quiz
+      nome: Quiz
+      storie:
+        - "QUIZ: domanda sul tema con 3-4 risposte (sticker QUIZ, risposta giusta indicata)"
+        - "RISPOSTA: qual era quella giusta e perché, breve"
+        - "CHIUSURA: una frase che fa riflettere + sticker DOMANDA"
+
+virale:
+  descrizione: Punta sull'emozione e sulla condivisione (verità scomode, frasi che fanno dire 'è proprio così').
+  strutture:
+    - id: verita-scomoda
+      nome: Verità scomoda
+      storie:
+        - "GANCIO: la verità scomoda detta senza filtri"
+        - "SVILUPPO: perché è così (2-3 frasi che pungono)"
+        - "FRASE FINALE: da screenshot, da mandare a un amico/amica"
+    - id: confessione
+      nome: Confessione in prima persona
+      storie:
+        - "CONFESSIONE: 'Per anni ho creduto che...'"
+        - "IL MOMENTO: quando ho capito che non era così (scena)"
+        - "LA LEZIONE: cosa ho imparato, una frase forte"
+        - "DOMANDA: 'Anche tu?' (sticker SONDAGGIO)"
+    - id: lista-secca
+      nome: Lista secca
+      storie:
+        - "GANCIO: 'Le X cose che ...'"
+        - "PUNTI: 3-4 punti brevi, uno per storia o tutti in una"
+        - "FRASE FINALE: chiusura d'impatto + invito a condividere"
