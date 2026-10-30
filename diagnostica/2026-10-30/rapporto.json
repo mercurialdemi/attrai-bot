@@ -1,11 +1,19 @@
 {
  "giorno": "2026-10-30",
- "post_preparati": 1,
- "slide_totali": 9,
+ "post_preparati": 2,
+ "slide_totali": 25,
  "slide_fallite": 0,
  "lavorazione": {
+  "testo-su-sfondo-uniforme": {
+   "totali": 4,
+   "fallite": 0
+  },
   "openai-testo": {
-   "totali": 8,
+   "totali": 19,
+   "fallite": 0
+  },
+  "cta-stile-post": {
+   "totali": 1,
    "fallite": 0
   },
   "cta-illustrata": {
@@ -16,42 +24,32 @@
  "segnalazioni": [
   {
    "job_id": 1,
-   "testo": "frasi scritte troppo in piccolo, non si leggono bene",
-   "quando": "2026-10-30T09:57:54+00:00"
+   "testo": "le pagine dove c'è l'angelo le hai fatte con frase su sfondo nero invece era da fare con soggetto giusto.",
+   "quando": "2026-10-30T10:49:19+00:00"
   }
  ],
  "post_con_problemi": [
   {
    "job_id": 1,
-   "fonte": "https://www.instagram.com/p/De4r6AgmJVw/",
+   "fonte": "https://www.instagram.com/p/DfDDH-9k1WR/",
    "fallite": [],
    "slides": [
     {
      "numero": 1,
-     "via": "openai-testo",
-     "tentativi": 1,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
      "fallita": false,
      "problema": "",
-     "testo_originale": "I CHEATED ON YOU.\nI KNOW.",
-     "testo": "TI HO\nTRADITO.\n\nLO SO.",
+     "testo_originale": "Why do you tell\npeople to walk away?",
+     "testo": "Perché consigli sempre\ndi andarsene?",
      "blocchi": [
       {
-       "x": 120,
-       "y": 88,
-       "w": 350,
-       "h": 115,
-       "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      },
-      {
-       "x": 708,
-       "y": 90,
-       "w": 240,
-       "h": 45,
-       "carattere": "fumetto",
-       "colore": "#111111",
+       "x": 485,
+       "y": 305,
+       "w": 400,
+       "h": 70,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
        "colore_evidenziato": "",
        "allineamento": "center"
       }
@@ -63,26 +61,16 @@
      "tentativi": 1,
      "fallita": false,
      "problema": "",
-     "testo_originale": "YOU KNEW?\nSINCE THE NIGHT YOU STARTED HIDING YOUR PHONE.",
-     "testo": "LO SAPEVI?\n\nDA QUANDO HAI COMINCIATO\nA NASCONDERE\nIL TELEFONO.",
+     "testo_originale": "Because not everyone\ndeserves another chance.",
+     "testo": "Perché non tutti meritano\nun'altra possibilità.",
      "blocchi": [
       {
-       "x": 88,
-       "y": 113,
-       "w": 345,
-       "h": 50,
-       "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      },
-      {
-       "x": 540,
-       "y": 62,
-       "w": 400,
-       "h": 115,
-       "carattere": "fumetto",
-       "colore": "#111111",
+       "x": 437,
+       "y": 254,
+       "w": 470,
+       "h": 68,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
        "colore_evidenziato": "",
        "allineamento": "center"
       }
@@ -90,40 +78,20 @@
     },
     {
      "numero": 3,
-     "via": "openai-testo",
-     "tentativi": 1,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
      "fallita": false,
      "problema": "",
-     "testo_originale": "THEN WHY DIDN'T YOU CONFRONT ME?\nBECAUSE I WASN'T WAITING FOR AN EXCUSE.\nI WAS WAITING UNTIL I COULD LEAVE WITHOUT DOUBTING MYSELF.",
-     "testo": "E PERCHÉ NON MI\nHAI MAI DETTO NIENTE?\n\nPERCHÉ NON VOLEVO\nSENTIRE SCUSE.\n\nASPETTAVO DI\nPOTERMENE ANDARE\nSENZA RIPENSAMENTI.",
+     "testo_originale": "But everyone makes\nmistakes.",
+     "testo": "Ma tutti\nsbagliano.",
      "blocchi": [
       {
-       "x": 115,
-       "y": 72,
-       "w": 370,
+       "x": 477,
+       "y": 309,
+       "w": 380,
        "h": 68,
-       "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      },
-      {
-       "x": 640,
-       "y": 397,
-       "w": 260,
-       "h": 92,
-       "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      },
-      {
-       "x": 670,
-       "y": 557,
-       "w": 270,
-       "h": 122,
-       "carattere": "fumetto",
-       "colore": "#111111",
+       "carattere": "normale",
+       "colore": "#FFFFFF",
        "colore_evidenziato": "",
        "allineamento": "center"
       }
@@ -135,26 +103,16 @@
      "tentativi": 1,
      "fallita": false,
      "problema": "",
-     "testo_originale": "SO YOU WERE PRETENDING?\nNO. I WAS ACCEPTING THAT THE WOMAN I LOVED WASN'T THE WOMAN BESIDE ME.",
-     "testo": "QUINDI\nFINGEVI?\n\nNO.\nMI STAVO RASSEGNANDO:\nLA DONNA CHE AMAVO\nNON ERA QUELLA\nCHE AVEVO ACCANTO.",
+     "testo_originale": "Then let them make\nthose mistakes with\nsomeone else.",
+     "testo": "Allora che sbaglino\ncon qualcun altro.",
      "blocchi": [
       {
-       "x": 110,
-       "y": 77,
-       "w": 340,
-       "h": 85,
-       "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      },
-      {
-       "x": 585,
-       "y": 483,
-       "w": 340,
-       "h": 230,
-       "carattere": "fumetto",
-       "colore": "#111111",
+       "x": 483,
+       "y": 199,
+       "w": 375,
+       "h": 105,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
        "colore_evidenziato": "",
        "allineamento": "center"
       }
@@ -162,30 +120,20 @@
     },
     {
      "numero": 5,
-     "via": "openai-testo",
-     "tentativi": 1,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
      "fallita": false,
      "problema": "",
-     "testo_originale": "CAN WE FIX THIS?\nYOU DON'T FIX BETRAYAL BY ASKING THE BETRAYED MAN TO CARRY THE REPAIR.",
-     "testo": "POSSIAMO\nRIMEDIARE?\n\nNON PUOI CHIEDERE\nA CHI È STATO\nTRADITO DI\nRACCOGLIERE\nI COCCI.",
+     "testo_originale": "What about forgiveness?",
+     "testo": "E il perdono, allora?",
      "blocchi": [
       {
-       "x": 110,
-       "y": 97,
-       "w": 230,
-       "h": 103,
-       "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      },
-      {
-       "x": 550,
-       "y": 23,
-       "w": 380,
-       "h": 145,
-       "carattere": "fumetto",
-       "colore": "#111111",
+       "x": 464,
+       "y": 348,
+       "w": 464,
+       "h": 32,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
        "colore_evidenziato": "",
        "allineamento": "center"
       }
@@ -197,26 +145,16 @@
      "tentativi": 1,
      "fallita": false,
      "problema": "",
-     "testo_originale": "THEN WHERE ARE WE GOING?\nHOME.",
-     "testo": "ALLORA\nDOVE STIAMO ANDANDO?\n\nA CASA.",
+     "testo_originale": "Forgive them.\nJust don't give them the\nsame access again.",
+     "testo": "Perdonali.\nMa non ridargli\nlo stesso posto.",
      "blocchi": [
       {
-       "x": 85,
-       "y": 95,
-       "w": 400,
-       "h": 120,
-       "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      },
-      {
-       "x": 770,
-       "y": 207,
-       "w": 160,
-       "h": 43,
-       "carattere": "fumetto",
-       "colore": "#111111",
+       "x": 442,
+       "y": 223,
+       "w": 462,
+       "h": 104,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
        "colore_evidenziato": "",
        "allineamento": "center"
       }
@@ -224,30 +162,20 @@
     },
     {
      "numero": 7,
-     "via": "openai-testo",
-     "tentativi": 1,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
      "fallita": false,
      "problema": "",
-     "testo_originale": "THIS ISN'T OUR HOME.\nNO. IT'S MINE. YOU'RE NOT WELCOME HERE.",
-     "testo": "MA QUESTA NON È\nCASA NOSTRA.\n\nNO.\nÈ CASA MIA.\nQUI NON SEI\nLA BENVENUTA.",
+     "testo_originale": "Isn't that cruel?",
+     "testo": "Non è crudele?",
      "blocchi": [
       {
-       "x": 115,
-       "y": 80,
-       "w": 330,
-       "h": 117,
-       "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      },
-      {
-       "x": 705,
-       "y": 60,
-       "w": 250,
-       "h": 170,
-       "carattere": "fumetto",
-       "colore": "#111111",
+       "x": 464,
+       "y": 352,
+       "w": 288,
+       "h": 30,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
        "colore_evidenziato": "",
        "allineamento": "center"
       }
@@ -259,36 +187,16 @@
      "tentativi": 1,
      "fallita": false,
      "problema": "",
-     "testo_originale": "SHE THOUGHT HIS SILENCE MEANT HE WAS CLUELESS.\nIT MEANT HE STOPPED REACTING AND STARTED PREPARING.\nSTRONG MEN DON'T ALWAYS ANNOUNCE THEIR EXIT.",
-     "testo": "LEI PENSAVA\nCHE TACESSE PERCHÉ\nNON SAPEVA NIENTE.\n\nINVECE AVEVA\nSMESSO DI REAGIRE\nE COMINCIATO\nA PREPARARSI.\n\nUN UOMO FORTE\nNON SEMPRE\nTI AVVISA\nPRIMA DI ANDARSENE.",
+     "testo_originale": "No. Losing access to\nyou is a consequence,\nnot cruelty.",
+     "testo": "No. Perdere il posto accanto\na te è una conseguenza,\nnon una crudeltà.",
      "blocchi": [
       {
-       "x": 578,
-       "y": 98,
-       "w": 370,
-       "h": 105,
-       "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "left"
-      },
-      {
-       "x": 578,
-       "y": 258,
-       "w": 360,
-       "h": 120,
-       "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      },
-      {
-       "x": 615,
-       "y": 433,
-       "w": 325,
-       "h": 142,
-       "carattere": "fumetto",
-       "colore": "#111111",
+       "x": 435,
+       "y": 209,
+       "w": 410,
+       "h": 104,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
        "colore_evidenziato": "",
        "allineamento": "center"
       }
@@ -296,19 +204,19 @@
     },
     {
      "numero": 9,
-     "via": "cta-illustrata",
+     "via": "cta-stile-post",
      "tentativi": null,
      "fallita": false,
      "problema": "",
      "testo_originale": "",
-     "testo": "Se questa storia ti suona familiare,\nsai già che si può essere l'uomo che c'è sempre,\nquello di cui si fida, quello che le tiene la casa in piedi.\nMa questo non significa che ti desideri.\n\nÈ proprio per questo che ho scritto \"Come uscire dalla friendzone\":\nper spiegarti la differenza tra essere apprezzato ed essere desiderato,\ngli errori che ti rendono soltanto una presenza sicura\ne cosa devi cambiare per non rimanere intrappolato in quel ruolo.\n\nPerché non ti serve darle ancora di più.\nTi serve",
+     "testo": "Se ti sei rivista in questa scena,\nse lo hai perdonato\nma non gli hai ridato il suo posto,\nnon sei stata crudele.\n\nHai trovato questa pagina per un motivo.\nSeguici prima di dimenticarti di noi.\n\n@AmoreInfedele",
      "blocchi": []
     }
    ],
-   "concetto": "Lei confessa in macchina di averlo tradito, e lui le risponde con calma che lo sapeva già da tempo. Non l'ha affrontata perché non voleva sentire scuse: aspettava di essere pronto ad andarsene senza ripensamenti. Lei gli chiede se si può rimediare, lui risponde che non tocca al tradito rimettere insieme i pezzi. La porta \"a casa\", che però è la casa nuova di lui, e lei resta fuori. Morale: il silenzio di un uomo forte non vuol dire che non sa niente, vuol dire che si sta preparando a uscire di scena. Il tono è drammatico, di rivalsa e dignità maschile.",
-   "descrizione": "Non ti ha mai detto niente. Ed era proprio quello il messaggio.\n\nIl telefono che all'improvviso sta a faccia in giù sul tavolo. Lo schermo che si spegne quando entri in cucina. Il cellulare portato in bagno anche per una doccia. Tu vedi tutto, e una sera ti accorgi che non hai più voglia di chiedere, perché la risposta la conosci già: una bugia detta bene.\n\nUn tradimento ti toglie due cose insieme: la donna che credevi di avere accanto e la fiducia nel tuo stesso giudizio. Per questo tanti uomini, invece di andarsene, cominciano a indagare, a supplicare, a chiedere dettagli che fanno solo più male. Ogni domanda li lega un po' di più a chi li ha feriti.\n\nShirley Glass, psicologa che ha passato decenni a studiare l'infedeltà, usava l'immagine dei muri e delle finestre. In una coppia sana c'è una finestra aperta tra i due e un muro verso l'esterno. Il tradimento comincia quando quel muro si sposta e il segreto passa dall'altra parte. Il telefono nascosto non è un dettaglio: è il segno che il muro si è già spostato.\n\nE il dolore che senti non è esagerato. Nel 2011 Ethan Kross, all'Università del Michigan, ha mostrato a persone lasciate da poco la foto dell'ex durante una risonanza: si attivavano le stesse aree che elaborano il dolore fisico. Il tuo corpo registra il tradimento come una ferita vera e ti spinge a fare qualsiasi cosa pur di farla smettere, perfino tornare da chi l'ha aperta.\n\nEd è qui che il silenzio dell'uomo della storia diventa forza. Non fingeva e non subiva. Aveva smesso di reagire per cominciare a decidere. Una scenata le avrebbe dato un palco dove difendersi; il silenzio la lascia sola con quello che ha fatto.\n\nNon è colpa tua se lei ha scelto di nascondere il telefono. Ma è una tua responsabilità non trasformare casa tua nel posto dove raccogli i suoi cocci. Puoi passare i prossimi mesi a chiederle perché. Oppure chiudere la porta e tornare a vivere.\n\nQuante volte hai visto un segnale chiaro e hai scelto di non guardarlo?\n\nSei d'accordo col post?\n\nSe in questa storia hai riconosciuto l'uomo che c'era sempre e non è bastato, ho scritto \"Come uscire dalla friendzone\" per spiegarti la differenza tra essere apprezzato ed essere desiderato.",
+   "concetto": "Un angelo e un diavolo giocano a scacchi e parlano di perdono. L'angelo difende le seconde possibilità, il diavolo risponde secco: non tutti le meritano. Se sbagliano, che sbaglino con qualcun altro. Puoi perdonare qualcuno senza farlo rientrare nella tua vita come prima, e perdere il posto accanto a te è una conseguenza, non una crudeltà. Il tono è serio, tagliente e un po' provocatorio.",
+   "descrizione": "Lo hai perdonato. E ti senti in colpa lo stesso, perché non gli hai ridato le chiavi.\n\nLui ti scrive che «se avessi perdonato davvero, saresti tornata come prima». E tu cominci a chiederti se il tuo perdono sia finto, solo perché non comprende il posto nel letto, la password del telefono, il diritto di sapere dove sei.\n\nTi hanno insegnato che perdonare e riaprire sono la stessa cosa. Il perdono è un lavoro che fai dentro di te: smetti di vivere in funzione del torto. La riconciliazione invece è un accordo tra due persone, e per esistere ha bisogno che anche l'altro faccia la sua parte.\n\nNel 2010 Laura Luchies, Eli Finkel e colleghi hanno dato un nome a questo rischio: effetto zerbino. Hanno studiato persone che perdonavano il partner dopo un torto. Se lui aveva riparato davvero, con i fatti e non solo con le parole, perdonare faceva crescere il rispetto di sé. Se non aveva riparato nulla, lo stesso perdono lo consumava, e con lui la chiarezza su chi si è.\n\nUn anno dopo James McNulty ha seguito coppie di sposini nei primi anni di matrimonio. Dove si tendeva a perdonare tutto, le aggressioni verbali e fisiche del partner restavano stabili nel tempo. Dove il perdono non era automatico, calavano. Senza una conseguenza, un comportamento non ha motivo di cambiare.\n\nEcco la parte scomoda, quella che il diavolo del carosello dice in una riga. Ridare lo stesso posto a chi non ha cambiato niente gli comunica che il tuo dolore costa zero. E il giro di scuse e promesse si regge proprio su quel prezzo a zero.\n\nNon è colpa tua se ha tradito la tua fiducia. È responsabilità tua decidere quanto accesso a te merita adesso: un saluto, una conversazione, oppure niente. Il perdono puoi regalarlo. La fiducia si riguadagna con i fatti, un passo alla volta.\n\nCosa ha fatto lui, concretamente, per meritare di tornare dove stava prima?\n\nSei d'accordo col post?\n\n#amoreinfedele #tradimento #perdono #relazionitossiche #psicologiarelazionale",
    "segnalazioni": [
-    "frasi scritte troppo in piccolo, non si leggono bene"
+    "le pagine dove c'è l'angelo le hai fatte con frase su sfondo nero invece era da fare con soggetto giusto."
    ]
   }
  ]
