@@ -10,23 +10,24 @@ temi_report: >
   dimenticare lei, cercare risposte su cosa è successo, sentirsi persi dopo la separazione, vivere in funzione
   dell'ex, autostima e ricostruzione di sé. Non la riconquista dell'ex.
 
-# Collaboratori di ResetRelazionale (dal file di Gabriele, 28/10/2026). Altri: /aggiungi @pagina dal gruppo
+# Collaboratori di ResetRelazionale: i 15 scelti da Gabriele (30/10/2026). Altri: /aggiungi @pagina dal gruppo
+collaboratori_versione: 2026-10-30
 pagine_monitorate:
+  - kiingrobs
+  - badboyscode
+  - the.move.mentor
+  - black_thoughtss_
   - maskulinemind
-  - thementalpower
   - alexaubreypoetry
-  - romances
-  - scratch.diary_
-  - thought.minds
-  - mental.aspect
-  - masculineisriot
   - miralaurona
-  - poetsarticle
-  - be.poets
-  - the_deep_thinker
-  - softenthought
-  - yourpoets
-  - emotionally.perfect
+  - masculineisriot
+  - menspittingfacts
+  - bittercodes
+  - masculinityadvice
+  - thementalpower
+  - thealphatake
+  - traditional.male
+  - philosophaire_
 
 # Pagine da studiare (mai nel report): /studia @pagina dal gruppo
 pagine_studio: []
