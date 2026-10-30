@@ -12,49 +12,24 @@ temi_report: >
   rifiuto, rotture e distacco raccontati in modo riflessivo, nostalgia, frasi e scene in cui uomini e donne si
   riconoscono. Non seduzione pratica e non motivazionale generico.
 
-# Collaboratori di Il Pensatore (dal file di Gabriele, 28/10/2026). Altri: /aggiungi @pagina dal gruppo
+# Collaboratori di Il Pensatore: i 15 scelti da Gabriele (29/10/2026). Altri: /aggiungi @pagina dal gruppo
+collaboratori_versione: 2026-10-29
 pagine_monitorate:
-  - maskulinemind
-  - thementalpower
+  - atmavoyage
   - alexaubreypoetry
-  - romances
-  - scratch.diary_
-  - thought.minds
-  - mental.aspect
-  - masculineisriot
-  - miralaurona
-  - poetsarticle
-  - be.poets
-  - the_deep_thinker
-  - softenthought
-  - yourpoets
-  - emotionally.perfect
-  - pointless_existence._
-  - the.move.mentor
-  - traditional.male
-  - badboyscode
-  - menspittingfacts
-  - masculineprint
-  - readthisdeeply
-  - aroundgrowth
-  - blackthoughts
-  - mepoets
-  - victorianpoetry
-  - poetstribe
-  - poets.title
-  - poets
-  - theunsharedfeelings_
-  - thescatteredfeelings
-  - successverse_
-  - philosophaire_
-  - inspiring.poet
   - happycouplesconnect
-  - azure_writes_
-  - poetsandquotes
-  - poetsphere
-  - bittercodes
-  - optiimusmind
+  - yourpoets
+  - poets.title
+  - volatvio
+  - masculineisriot
+  - maskulinemind
+  - psychologyposts_
+  - the.holistic.psychologist
+  - wayofmens
+  - freedom.from.the.madness
   - 7.hrs
+  - miralaurona
+  - i.m_an_overthinker
 
 # Pagine da studiare (mai nel report): /studia @pagina dal gruppo
 pagine_studio:
