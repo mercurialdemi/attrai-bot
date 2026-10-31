@@ -1,98 +1,87 @@
 {
  "giorno": "2026-10-31",
- "post_preparati": 2,
- "slide_totali": 17,
- "slide_fallite": 1,
+ "post_preparati": 6,
+ "slide_totali": 60,
+ "slide_fallite": 0,
  "lavorazione": {
-  "openai-pulizia+blocchi": {
-   "totali": 1,
-   "fallite": 1
-  },
   "testo-su-sfondo-uniforme": {
-   "totali": 5,
-   "fallite": 0
-  },
-  "cta-stile-post": {
-   "totali": 1,
-   "fallite": 0
-  },
-  "openai-testo": {
    "totali": 9,
    "fallite": 0
   },
+  "openai-testo": {
+   "totali": 45,
+   "fallite": 0
+  },
+  "cta-stile-post": {
+   "totali": 3,
+   "fallite": 0
+  },
   "cta-illustrata": {
+   "totali": 2,
+   "fallite": 0
+  },
+  "cta-alone": {
    "totali": 1,
    "fallite": 0
   }
  },
- "segnalazioni": [],
+ "segnalazioni": [
+  {
+   "job_id": 1,
+   "testo": "le pagine dove c'è l'angelo le hai fatte con frase su sfondo nero invece era da fare con soggetto giusto.",
+   "quando": "2026-10-30T10:49:19+00:00"
+  },
+  {
+   "job_id": 5,
+   "testo": "non deve esserci un uomo nella slide finale con il cta, ma una donna perché è una pagina per donne e aumenta effetto \"mi ci rivedo\" nella lettrice donna",
+   "quando": "2026-10-31T13:37:17+00:00"
+  }
+ ],
  "post_con_problemi": [
   {
-   "job_id": 50,
-   "fonte": "https://www.instagram.com/p/De5L6yjoA8X/",
-   "fallite": [
-    1
-   ],
+   "job_id": 1,
+   "fonte": "https://www.instagram.com/p/DfDDH-9k1WR/",
+   "fallite": [],
    "slides": [
     {
      "numero": 1,
-     "via": "openai-pulizia+blocchi",
-     "tentativi": 2,
-     "fallita": true,
-     "problema": "Resta la frase originale in inglese \"MOST WOMEN LOSE A GOOD MAN\" non tradotta, che non doveva essere presente. Il resto del testo italiano corrisponde a quello atteso. | poi: OpenAI non ha risposto (Error code: 400 - Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include)",
-     "testo_originale": "MOST WOMEN LOSE A\nGOOD MAN\nBY LISTENING TO THEIR\nLONELY, BITTER, H*E\nFRIENDS.",
-     "testo": "TANTE DONNE PERDONO\nUN BRAV'UOMO\nPER DARE RETTA ALLE AMICHE\nSOLE, ACIDE E FACILI.",
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Why do you tell\npeople to walk away?",
+     "testo": "Perché consigli sempre\ndi andarsene?",
      "blocchi": [
       {
-       "x": 80,
-       "y": 760,
-       "w": 865,
-       "h": 455,
+       "x": 485,
+       "y": 305,
+       "w": 400,
+       "h": 70,
        "carattere": "normale",
        "colore": "#FFFFFF",
-       "colore_evidenziato": "#F5C518",
+       "colore_evidenziato": "",
        "allineamento": "center"
       }
      ]
     },
     {
      "numero": 2,
-     "via": "testo-su-sfondo-uniforme",
-     "tentativi": null,
+     "via": "openai-testo",
+     "tentativi": 1,
      "fallita": false,
      "problema": "",
-     "testo_originale": "She's getting advice from women who cant keep a man.\n\nFrom women who sleep around.\n\nFrom women who are secretly jealous of her.",
-     "testo": "Prende consigli da donne che un uomo\nnon sanno tenerselo.\n\nDa donne che vanno a letto con chiunque.\n\nDa donne che, sotto sotto,\nla invidiano.",
+     "testo_originale": "Because not everyone\ndeserves another chance.",
+     "testo": "Perché non tutti meritano\nun'altra possibilità.",
      "blocchi": [
       {
-       "x": 138,
-       "y": 495,
-       "w": 765,
-       "h": 115,
+       "x": 437,
+       "y": 254,
+       "w": 470,
+       "h": 68,
        "carattere": "normale",
        "colore": "#FFFFFF",
        "colore_evidenziato": "",
-       "allineamento": "left"
-      },
-      {
-       "x": 138,
-       "y": 690,
-       "w": 765,
-       "h": 50,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "left"
-      },
-      {
-       "x": 138,
-       "y": 790,
-       "w": 765,
-       "h": 120,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "left"
+       "allineamento": "center"
       }
      ]
     },
@@ -102,69 +91,39 @@
      "tentativi": null,
      "fallita": false,
      "problema": "",
-     "testo_originale": "These \"friends\" don't want her happy.\n\nThey want her single like them.\n\nThey want her out on Friday nights, drunk, crying in the bathroom.",
-     "testo": "Queste \"amiche\" non la vogliono felice.\n\nLa vogliono single, come loro.\n\nLa vogliono fuori il venerdì sera,\nubriaca, a piangere chiusa in bagno.",
+     "testo_originale": "But everyone makes\nmistakes.",
+     "testo": "Ma tutti\nsbagliano.",
      "blocchi": [
       {
-       "x": 138,
-       "y": 525,
-       "w": 775,
-       "h": 50,
+       "x": 477,
+       "y": 309,
+       "w": 380,
+       "h": 68,
        "carattere": "normale",
        "colore": "#FFFFFF",
        "colore_evidenziato": "",
-       "allineamento": "left"
-      },
-      {
-       "x": 138,
-       "y": 655,
-       "w": 640,
-       "h": 50,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "left"
-      },
-      {
-       "x": 138,
-       "y": 785,
-       "w": 765,
-       "h": 115,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "left"
+       "allineamento": "center"
       }
      ]
     },
     {
      "numero": 4,
-     "via": "testo-su-sfondo-uniforme",
-     "tentativi": null,
+     "via": "openai-testo",
+     "tentativi": 1,
      "fallita": false,
      "problema": "",
-     "testo_originale": "They whisper in her ear:\n\"Girl, you can do better.\"\n\nTranslation:\n\"Come join our misery.\"",
-     "testo": "Le sussurrano all'orecchio:\n\"Tesoro, meriti di meglio.\"\n\nTraduzione:\n\"Vieni a stare male con noi.\"",
+     "testo_originale": "Then let them make\nthose mistakes with\nsomeone else.",
+     "testo": "Allora che sbaglino\ncon qualcun altro.",
      "blocchi": [
       {
-       "x": 138,
-       "y": 530,
-       "w": 520,
-       "h": 110,
+       "x": 483,
+       "y": 199,
+       "w": 375,
+       "h": 105,
        "carattere": "normale",
        "colore": "#FFFFFF",
        "colore_evidenziato": "",
-       "allineamento": "left"
-      },
-      {
-       "x": 138,
-       "y": 720,
-       "w": 500,
-       "h": 115,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "left"
+       "allineamento": "center"
       }
      ]
     },
@@ -174,76 +133,290 @@
      "tentativi": null,
      "fallita": false,
      "problema": "",
-     "testo_originale": "They'll tell her to leave the man who loves her, then sleep with him behind her back.\n\nThat's the level of \"sisterhood\" shes trusting.",
-     "testo": "Le diranno di lasciare l'uomo che la ama.\nPoi ci andranno a letto\nalle sue spalle.\n\nEcco la \"sorellanza\"\ndi cui si fida.",
+     "testo_originale": "What about forgiveness?",
+     "testo": "E il perdono, allora?",
      "blocchi": [
       {
-       "x": 138,
-       "y": 525,
-       "w": 755,
-       "h": 180,
+       "x": 464,
+       "y": 348,
+       "w": 464,
+       "h": 32,
        "carattere": "normale",
        "colore": "#FFFFFF",
        "colore_evidenziato": "",
-       "allineamento": "left"
-      },
-      {
-       "x": 138,
-       "y": 785,
-       "w": 730,
-       "h": 115,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "left"
+       "allineamento": "center"
       }
      ]
     },
     {
      "numero": 6,
-     "via": "testo-su-sfondo-uniforme",
-     "tentativi": null,
+     "via": "openai-testo",
+     "tentativi": 1,
      "fallita": false,
      "problema": "",
-     "testo_originale": "A wise woman protects her relationship from single friends.\n\nA foolish one lets them poison it until it dies.",
-     "testo": "La donna saggia protegge la coppia\ndalle amiche single.\n\nQuella sciocca la lascia avvelenare,\nfinché non muore.",
+     "testo_originale": "Forgive them.\nJust don't give them the\nsame access again.",
+     "testo": "Perdonali.\nMa non ridargli\nlo stesso posto.",
      "blocchi": [
       {
-       "x": 138,
-       "y": 565,
-       "w": 640,
-       "h": 110,
+       "x": 442,
+       "y": 223,
+       "w": 462,
+       "h": 104,
        "carattere": "normale",
        "colore": "#FFFFFF",
        "colore_evidenziato": "",
-       "allineamento": "left"
-      },
-      {
-       "x": 138,
-       "y": 755,
-       "w": 755,
-       "h": 110,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "left"
+       "allineamento": "center"
       }
      ]
     },
     {
      "numero": 7,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Isn't that cruel?",
+     "testo": "Non è crudele?",
+     "blocchi": [
+      {
+       "x": 464,
+       "y": 352,
+       "w": 288,
+       "h": 30,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "No. Losing access to\nyou is a consequence,\nnot cruelty.",
+     "testo": "No. Perdere il posto accanto\na te è una conseguenza,\nnon una crudeltà.",
+     "blocchi": [
+      {
+       "x": 435,
+       "y": 209,
+       "w": 410,
+       "h": 104,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 9,
      "via": "cta-stile-post",
      "tentativi": null,
      "fallita": false,
      "problema": "",
      "testo_originale": "",
-     "testo": "Se hai mai sentito uscire dalla sua bocca\nil \"meriti di meglio\"\ndelle sue amiche,\nsai già come va a finire.\n\nSegui @attraiseduci,\nogni giorno parliamo di relazioni,\nseduzione e psicologia femminile.",
+     "testo": "Se ti sei rivista in questa scena,\nse lo hai perdonato\nma non gli hai ridato il suo posto,\nnon sei stata crudele.\n\nHai trovato questa pagina per un motivo.\nSeguici prima di dimenticarti di noi.\n\n@AmoreInfedele",
      "blocchi": []
     }
    ],
-   "concetto": "Molte donne mandano all'aria una relazione con un brav'uomo perché si fanno consigliare da amiche sole, amareggiate e invidiose. Queste amiche non vogliono la sua felicità: la vogliono single e infelice come loro, e quando le dicono \"meriti di meglio\" intendono \"vieni a stare male con noi\". Alcune la spingono a lasciarlo e poi ci provano con lui. La donna saggia protegge la coppia da queste voci, quella sciocca la lascia avvelenare. Registro provocatorio e tagliente.",
-   "descrizione": "La vostra relazione non finisce in salotto. Finisce in una chat di gruppo dove tu non ci sei.\n\nLitigate per una sciocchezza, lei prende il telefono e in mezz'ora quattro amiche hanno già deciso come andrà a finire. Il giorno dopo ti guarda in un altro modo e usa parole che non sono sue: \"non mi valorizzi\", \"meriti di meglio\". E tu ti ritrovi a difenderti in un processo in cui non hai mai avuto la parola.\n\nTi logora più di qualsiasi litigio, perché ti costringe a dimostrare ogni giorno quanto vali a persone che di voi non sanno niente. Ed è proprio qui che molti uomini sbagliano: provano a farsi approvare dalle amiche, oppure le attaccano. In tutti e due i casi il problema diventano loro.\n\nChe il gruppo pesi sulla coppia non è un'impressione. Nel 1992 Susan Sprecher e Diane Felmlee hanno seguito delle coppie per diversi mesi. Hanno visto che quando gli amici approvano la relazione, i due si amano di più e restano insieme più a lungo. Nel 2014 H. Colleen Sinclair ha smontato il cosiddetto effetto Romeo e Giulietta: quando le persone vicine sono contrarie, l'amore non si rafforza, si consuma. Una donna che si sente ripetere \"lui non fa per te\" alla fine comincia a crederci.\n\nNon tutte le amiche lo fanno, e spesso non lo fanno per cattiveria. A volte hanno solo paura di perdere la compagna del venerdì sera. Ma per te il risultato non cambia.\n\nPer questo il tuo compito non è vincere contro le sue amiche, ma guardare bene chi hai accanto. Se porta ogni vostro disaccordo davanti al gruppo, ti sta dicendo che il suo giudizio conta meno della loro opinione. E una relazione non regge se lei non sa decidere da sola cosa vuole. Il tuo standard è una donna che protegge la coppia, non una che la mette ai voti.\n\nNon puoi controllare chi le dà consigli. Puoi scegliere se restare con chi si lascia convincere a perderti.\n\nQuante volte le hai sentito dire frasi che erano chiaramente di qualcun altro?\n\nSegui @attraiseduci: ogni giorno parliamo di attrazione, relazioni e dinamiche tra uomo e donna.",
-   "segnalazioni": []
+   "concetto": "Un angelo e un diavolo giocano a scacchi e parlano di perdono. L'angelo difende le seconde possibilità, il diavolo risponde secco: non tutti le meritano. Se sbagliano, che sbaglino con qualcun altro. Puoi perdonare qualcuno senza farlo rientrare nella tua vita come prima, e perdere il posto accanto a te è una conseguenza, non una crudeltà. Il tono è serio, tagliente e un po' provocatorio.",
+   "descrizione": "Lo hai perdonato. E ti senti in colpa lo stesso, perché non gli hai ridato le chiavi.\n\nLui ti scrive che «se avessi perdonato davvero, saresti tornata come prima». E tu cominci a chiederti se il tuo perdono sia finto, solo perché non comprende il posto nel letto, la password del telefono, il diritto di sapere dove sei.\n\nTi hanno insegnato che perdonare e riaprire sono la stessa cosa. Il perdono è un lavoro che fai dentro di te: smetti di vivere in funzione del torto. La riconciliazione invece è un accordo tra due persone, e per esistere ha bisogno che anche l'altro faccia la sua parte.\n\nNel 2010 Laura Luchies, Eli Finkel e colleghi hanno dato un nome a questo rischio: effetto zerbino. Hanno studiato persone che perdonavano il partner dopo un torto. Se lui aveva riparato davvero, con i fatti e non solo con le parole, perdonare faceva crescere il rispetto di sé. Se non aveva riparato nulla, lo stesso perdono lo consumava, e con lui la chiarezza su chi si è.\n\nUn anno dopo James McNulty ha seguito coppie di sposini nei primi anni di matrimonio. Dove si tendeva a perdonare tutto, le aggressioni verbali e fisiche del partner restavano stabili nel tempo. Dove il perdono non era automatico, calavano. Senza una conseguenza, un comportamento non ha motivo di cambiare.\n\nEcco la parte scomoda, quella che il diavolo del carosello dice in una riga. Ridare lo stesso posto a chi non ha cambiato niente gli comunica che il tuo dolore costa zero. E il giro di scuse e promesse si regge proprio su quel prezzo a zero.\n\nNon è colpa tua se ha tradito la tua fiducia. È responsabilità tua decidere quanto accesso a te merita adesso: un saluto, una conversazione, oppure niente. Il perdono puoi regalarlo. La fiducia si riguadagna con i fatti, un passo alla volta.\n\nCosa ha fatto lui, concretamente, per meritare di tornare dove stava prima?\n\nSei d'accordo col post?\n\n#amoreinfedele #tradimento #perdono #relazionitossiche #psicologiarelazionale",
+   "segnalazioni": [
+    "le pagine dove c'è l'angelo le hai fatte con frase su sfondo nero invece era da fare con soggetto giusto."
+   ]
+  },
+  {
+   "job_id": 5,
+   "fonte": "https://www.instagram.com/p/DfDDH-9k1WR/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Why do you tell\npeople to walk away?",
+     "testo": "Perché dici alle persone\ndi andarsene?",
+     "blocchi": [
+      {
+       "x": 485,
+       "y": 305,
+       "w": 397,
+       "h": 70,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Because not everyone\ndeserves another chance.",
+     "testo": "Perché non tutti meritano\nuna seconda possibilità.",
+     "blocchi": [
+      {
+       "x": 437,
+       "y": 256,
+       "w": 467,
+       "h": 66,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "But everyone makes\nmistakes.",
+     "testo": "Ma sbagliano\ntutti.",
+     "blocchi": [
+      {
+       "x": 477,
+       "y": 311,
+       "w": 379,
+       "h": 66,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Then let them make\nthose mistakes with\nsomeone else.",
+     "testo": "Allora che sbaglino\ncon qualcun altro.",
+     "blocchi": [
+      {
+       "x": 482,
+       "y": 219,
+       "w": 375,
+       "h": 105,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "What about forgiveness?",
+     "testo": "E il perdono?",
+     "blocchi": [
+      {
+       "x": 465,
+       "y": 348,
+       "w": 463,
+       "h": 32,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Forgive them.\nJust don't give them the\nsame access again.",
+     "testo": "Perdonali pure.\nMa non ridargli\nlo stesso posto.",
+     "blocchi": [
+      {
+       "x": 442,
+       "y": 223,
+       "w": 456,
+       "h": 105,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Isn't that cruel?",
+     "testo": "Non è crudele?",
+     "blocchi": [
+      {
+       "x": 463,
+       "y": 350,
+       "w": 289,
+       "h": 30,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "No. Losing access to\nyou is a consequence,\nnot cruelty.",
+     "testo": "No. Perdere il posto\naccanto a te non è crudeltà.\nÈ una conseguenza.",
+     "blocchi": [
+      {
+       "x": 434,
+       "y": 209,
+       "w": 411,
+       "h": 107,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se ti sei rivista in questa scena,\nricorda:\nil perdono lo decidi tu.\nIl posto accanto a te\nsi guadagna.\n\nSe non ci segui,\nprobabilmente non ci\nrivedrai mai più.\n\nMa se già lo fai\ncongratulazioni!\nStai crescendo con noi\nogni giorno.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Un angelo e un diavolo giocano a scacchi e discutono: l'angelo chiede perché il diavolo dica alla gente di andarsene, e il diavolo risponde che non tutti meritano un'altra possibilità. Se tutti sbagliano, che sbaglino con qualcun altro. Puoi perdonare, ma senza ridare a quella persona lo stesso posto nella tua vita. E non è crudeltà: è la conseguenza di ciò che ha fatto. Registro: provocatorio e tagliente, da botta e risposta.",
+   "descrizione": "Ti ha chiesto scusa. E tu gli hai creduto, di nuovo.\n\nLo conosci quel momento: lui seduto sul bordo del letto, gli occhi bassi, la voce rotta. Senti la rabbia sciogliersi e pensi che perdonare voglia dire tornare come prima. Così riapri la porta, rimetti il suo spazzolino nel bicchiere, sblocchi il numero. Qualche mese dopo fissi lo stesso schermo, con lo stesso nodo allo stomaco.\n\nTi è costato più del tradimento. Ti è costata la fiducia in te stessa, perché ogni volta che lo riaccogli una parte di te impara che il tuo dolore si cancella con una frase detta bene.\n\nIl meccanismo è questo: hai fuso due cose che la psicologia tiene separate. Nel 1998 Michael McCullough e colleghi hanno descritto il perdono come un cambiamento interno: si spengono la voglia di vendetta e il bisogno di stare alla larga. In quella definizione la fiducia non c'è. Everett Worthington, che studia il perdono da decenni, insiste su una distinzione precisa: perdonare succede dentro di te e puoi farlo da sola, riconciliarsi succede tra due persone e richiede che l'altro dimostri nel tempo di essere di nuovo affidabile.\n\nPer questo, nel post, il diavolo ha ragione. Il perdono lo decidi tu. Il posto accanto a te si guadagna con i fatti. Le scuse che arrivano sempre allo stesso punto del ciclo, dopo il danno e prima del prossimo, fanno parte del copione: chi le pronuncia rimpiange ciò che ha perso, non ciò che ha fatto.\n\nNon è colpa tua se ti ha ferita. È responsabilità tua decidere quanta strada concedergli per arrivare di nuovo a te. Puoi lasciarlo andare in pace, oppure tenerlo a distanza e guardare quello che fa, non quello che promette.\n\nPerdonare ti libera. Riaprire la porta senza prove ti espone.\n\nL'ultima volta che ti ha chiesto scusa, cosa è cambiato davvero, a parte le parole?\n\nSei d'accordo col post? Se questo dialogo ti ha parlato, segui @amoreinfedele: qui si parla di quello che viene dopo.\n\n#amoreinfedele #tradimento #perdono #relazionitossiche #psicologiarelazionale",
+   "segnalazioni": [
+    "non deve esserci un uomo nella slide finale con il cta, ma una donna perché è una pagina per donne e aumenta effetto \"mi ci rivedo\" nella lettrice donna"
+   ]
   }
  ]
 }
