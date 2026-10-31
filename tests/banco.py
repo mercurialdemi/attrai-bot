@@ -91,6 +91,10 @@ CASI = {
         dict(testo="“So quanto valgo.”\nAlto almeno 1,80. Ricco.\nEmotivamente disponibile.\nE deve accettare tutto.", x=35, y=293, w=727, h=113, colore="#8C8C8C", allineamento="left", carattere=S)], "@thementalpower in basso"),
     "schermata_titolo.jpg": ("tinta_unita", "FUNNY HOW PATRIARCHY BECOMES ATTRACTIVE WHEN THE BILLS SHOW UP.", [
         dict(testo="CURIOSO:\nIL PATRIARCATO\nDIVENTA\nATTRAENTE\nAPPENA ARRIVANO\nLE BOLLETTE.", x=35, y=223, w=765, h=211, colore="#FFFFFF", allineamento="left", carattere=S)], "@thementalpower in basso"),
+    # post del 31/10 (post 50): Claude ha misurato l'altezza su 1250 invece che su 1000 (y+h oltre il bordo):
+    # le prime due righe restavano in inglese
+    "cover_amiche.jpg": ("foto", "MOST WOMEN LOSE A\nGOOD MAN\nBY LISTENING TO THEIR\nLONELY, BITTER, H*E\nFRIENDS.", [
+        dict(testo="TANTE [[DONNE]] PERDONO\n[[UN BRAV'UOMO]]\nPER DARE RETTA ALLE AMICHE\nSOLE, ACIDE E [[FACILI.]]", x=80, y=760, w=865, h=455, colore="#FFFFFF", colore_evidenziato="#F5C518", allineamento="center", maiuscolo=True, carattere=S)]),
 }
 
 

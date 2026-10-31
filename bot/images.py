@@ -633,12 +633,34 @@ def _rebuild_drawing(original, orig_fit, size, slide, blocks0, brand, testo, ori
     return None
 
 
+def _fix_block_scale(slide: dict, W: int, H: int) -> None:
+    """Claude a volte misura l'altezza in pixel di una slide 1000×1250 invece che in millesimi (0-1000):
+    i blocchi finiscono oltre il fondo e le prime righe del testo originale restano non cancellate.
+    Se un blocco sfora chiaramente e riportando tutto in scala ogni blocco rientra, si corregge."""
+    blocks = [b for b in (slide.get("blocchi") or []) if isinstance(b, dict) and "y" in b and "h" in b]
+    if not blocks or H <= W * 1.05:
+        return
+    try:
+        if max(float(b["y"]) + float(b["h"]) for b in blocks) <= 1015:
+            return
+        k = W / H
+        if max(float(b["y"]) + float(b["h"]) for b in blocks) * k > 1005:
+            return
+        for b in blocks:
+            b["y"], b["h"] = int(round(float(b["y"]) * k)), int(round(float(b["h"]) * k))
+        log.info("Slide %s: altezze dei blocchi riportate in millesimi (erano misurate su %d)",
+                 slide.get("numero"), round(1000 / k))
+    except (TypeError, ValueError):
+        return
+
+
 def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> tuple[Image.Image, bool, str]:
     """Restituisce (slide, ok, problemi). ok=False se dopo tutti i tentativi la slide non è corretta:
     in quel caso NON va consegnata come pronta."""
     original = Image.open(io.BytesIO(original_bytes)).convert("RGB")
     size = output_size(original)
     misura_watermark(original, slide)
+    _fix_block_scale(slide, *original.size)
     if not slide.get("da_modificare", True) and not (slide.get("watermark_originale") or "").strip():
         # già in italiano e senza marchi di altre pagine: si consegna l'originale, nessun ritocco
         slide["_via"] = "originale"
