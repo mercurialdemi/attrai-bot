@@ -1,0 +1,249 @@
+{
+ "giorno": "2026-10-31",
+ "post_preparati": 2,
+ "slide_totali": 17,
+ "slide_fallite": 1,
+ "lavorazione": {
+  "openai-pulizia+blocchi": {
+   "totali": 1,
+   "fallite": 1
+  },
+  "testo-su-sfondo-uniforme": {
+   "totali": 5,
+   "fallite": 0
+  },
+  "cta-stile-post": {
+   "totali": 1,
+   "fallite": 0
+  },
+  "openai-testo": {
+   "totali": 9,
+   "fallite": 0
+  },
+  "cta-illustrata": {
+   "totali": 1,
+   "fallite": 0
+  }
+ },
+ "segnalazioni": [],
+ "post_con_problemi": [
+  {
+   "job_id": 50,
+   "fonte": "https://www.instagram.com/p/De5L6yjoA8X/",
+   "fallite": [
+    1
+   ],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "Resta la frase originale in inglese \"MOST WOMEN LOSE A GOOD MAN\" non tradotta, che non doveva essere presente. Il resto del testo italiano corrisponde a quello atteso. | poi: OpenAI non ha risposto (Error code: 400 - Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include)",
+     "testo_originale": "MOST WOMEN LOSE A\nGOOD MAN\nBY LISTENING TO THEIR\nLONELY, BITTER, H*E\nFRIENDS.",
+     "testo": "TANTE DONNE PERDONO\nUN BRAV'UOMO\nPER DARE RETTA ALLE AMICHE\nSOLE, ACIDE E FACILI.",
+     "blocchi": [
+      {
+       "x": 80,
+       "y": 760,
+       "w": 865,
+       "h": 455,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#F5C518",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "She's getting advice from women who cant keep a man.\n\nFrom women who sleep around.\n\nFrom women who are secretly jealous of her.",
+     "testo": "Prende consigli da donne che un uomo\nnon sanno tenerselo.\n\nDa donne che vanno a letto con chiunque.\n\nDa donne che, sotto sotto,\nla invidiano.",
+     "blocchi": [
+      {
+       "x": 138,
+       "y": 495,
+       "w": 765,
+       "h": 115,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 138,
+       "y": 690,
+       "w": 765,
+       "h": 50,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 138,
+       "y": 790,
+       "w": 765,
+       "h": 120,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "These \"friends\" don't want her happy.\n\nThey want her single like them.\n\nThey want her out on Friday nights, drunk, crying in the bathroom.",
+     "testo": "Queste \"amiche\" non la vogliono felice.\n\nLa vogliono single, come loro.\n\nLa vogliono fuori il venerdì sera,\nubriaca, a piangere chiusa in bagno.",
+     "blocchi": [
+      {
+       "x": 138,
+       "y": 525,
+       "w": 775,
+       "h": 50,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 138,
+       "y": 655,
+       "w": 640,
+       "h": 50,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 138,
+       "y": 785,
+       "w": 765,
+       "h": 115,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "They whisper in her ear:\n\"Girl, you can do better.\"\n\nTranslation:\n\"Come join our misery.\"",
+     "testo": "Le sussurrano all'orecchio:\n\"Tesoro, meriti di meglio.\"\n\nTraduzione:\n\"Vieni a stare male con noi.\"",
+     "blocchi": [
+      {
+       "x": 138,
+       "y": 530,
+       "w": 520,
+       "h": 110,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 138,
+       "y": 720,
+       "w": 500,
+       "h": 115,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "They'll tell her to leave the man who loves her, then sleep with him behind her back.\n\nThat's the level of \"sisterhood\" shes trusting.",
+     "testo": "Le diranno di lasciare l'uomo che la ama.\nPoi ci andranno a letto\nalle sue spalle.\n\nEcco la \"sorellanza\"\ndi cui si fida.",
+     "blocchi": [
+      {
+       "x": 138,
+       "y": 525,
+       "w": 755,
+       "h": 180,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 138,
+       "y": 785,
+       "w": 730,
+       "h": 115,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "A wise woman protects her relationship from single friends.\n\nA foolish one lets them poison it until it dies.",
+     "testo": "La donna saggia protegge la coppia\ndalle amiche single.\n\nQuella sciocca la lascia avvelenare,\nfinché non muore.",
+     "blocchi": [
+      {
+       "x": 138,
+       "y": 565,
+       "w": 640,
+       "h": 110,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 138,
+       "y": 755,
+       "w": 755,
+       "h": 110,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se hai mai sentito uscire dalla sua bocca\nil \"meriti di meglio\"\ndelle sue amiche,\nsai già come va a finire.\n\nSegui @attraiseduci,\nogni giorno parliamo di relazioni,\nseduzione e psicologia femminile.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Molte donne mandano all'aria una relazione con un brav'uomo perché si fanno consigliare da amiche sole, amareggiate e invidiose. Queste amiche non vogliono la sua felicità: la vogliono single e infelice come loro, e quando le dicono \"meriti di meglio\" intendono \"vieni a stare male con noi\". Alcune la spingono a lasciarlo e poi ci provano con lui. La donna saggia protegge la coppia da queste voci, quella sciocca la lascia avvelenare. Registro provocatorio e tagliente.",
+   "descrizione": "La vostra relazione non finisce in salotto. Finisce in una chat di gruppo dove tu non ci sei.\n\nLitigate per una sciocchezza, lei prende il telefono e in mezz'ora quattro amiche hanno già deciso come andrà a finire. Il giorno dopo ti guarda in un altro modo e usa parole che non sono sue: \"non mi valorizzi\", \"meriti di meglio\". E tu ti ritrovi a difenderti in un processo in cui non hai mai avuto la parola.\n\nTi logora più di qualsiasi litigio, perché ti costringe a dimostrare ogni giorno quanto vali a persone che di voi non sanno niente. Ed è proprio qui che molti uomini sbagliano: provano a farsi approvare dalle amiche, oppure le attaccano. In tutti e due i casi il problema diventano loro.\n\nChe il gruppo pesi sulla coppia non è un'impressione. Nel 1992 Susan Sprecher e Diane Felmlee hanno seguito delle coppie per diversi mesi. Hanno visto che quando gli amici approvano la relazione, i due si amano di più e restano insieme più a lungo. Nel 2014 H. Colleen Sinclair ha smontato il cosiddetto effetto Romeo e Giulietta: quando le persone vicine sono contrarie, l'amore non si rafforza, si consuma. Una donna che si sente ripetere \"lui non fa per te\" alla fine comincia a crederci.\n\nNon tutte le amiche lo fanno, e spesso non lo fanno per cattiveria. A volte hanno solo paura di perdere la compagna del venerdì sera. Ma per te il risultato non cambia.\n\nPer questo il tuo compito non è vincere contro le sue amiche, ma guardare bene chi hai accanto. Se porta ogni vostro disaccordo davanti al gruppo, ti sta dicendo che il suo giudizio conta meno della loro opinione. E una relazione non regge se lei non sa decidere da sola cosa vuole. Il tuo standard è una donna che protegge la coppia, non una che la mette ai voti.\n\nNon puoi controllare chi le dà consigli. Puoi scegliere se restare con chi si lascia convincere a perderti.\n\nQuante volte le hai sentito dire frasi che erano chiaramente di qualcun altro?\n\nSegui @attraiseduci: ogni giorno parliamo di attrazione, relazioni e dinamiche tra uomo e donna.",
+   "segnalazioni": []
+  }
+ ]
+}
