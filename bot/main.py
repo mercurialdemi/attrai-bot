@@ -57,6 +57,7 @@ COMMANDS = [
         ("collega", "Collega questo gruppo a una pagina (es. /collega reset)",
          "da scrivere dentro il gruppo di una pagina: da lì in poi report, post, logo, tono e CTA sono di quella pagina"),
         ("pagina", "Su quale pagina stai lavorando", "mostra la pagina di questa chat e le pagine disponibili"),
+        ("costi", "Quanto stai spendendo di Claude", "spesa di oggi e di ieri divisa per passaggio, e gli ultimi 7 giorni"),
     ]),
 ]
 
@@ -140,6 +141,13 @@ async def cmd_collega(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"studio; i link che mandi qui li preparo con logo, tono e CTA di {b['nome']}.\n"
         f"Collaboratori di {b['nome']}: {', '.join('@' + h for h in b.get('pagine_monitorate') or []) or 'nessuno (aggiungili con /aggiungi @pagina)'}\n\n"
         "Importante: perché io legga i link che mandate, rendimi amministratore del gruppo.")
+
+
+async def cmd_costi(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not await _authorized(update):
+        return
+    from bot import costi
+    await update.effective_message.reply_text(costi.riepilogo())
 
 
 async def cmd_pagina(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -1153,6 +1161,7 @@ def main():
     app.add_handler(CommandHandler("diagnosi", cmd_diagnosi))
     app.add_handler(CommandHandler("altri", cmd_altri))
     app.add_handler(CommandHandler("statistiche", cmd_statistiche))
+    app.add_handler(CommandHandler("costi", cmd_costi))
     app.add_handler(CommandHandler("analizza", cmd_analizza))
     app.add_handler(CommandHandler("stile", cmd_stile))
     app.add_handler(CommandHandler("studio", cmd_studio))

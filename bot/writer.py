@@ -91,6 +91,11 @@ _CTA = {
     "required": ["tipo", "manuale", "frase", "motivo"],
 }
 
+# per la traduzione il testo intero della slide non si chiede: è la somma dei blocchi (si ricava nel codice)
+_SLIDE_ITEM_TRAD = {**_SLIDE_ITEM,
+                    "properties": {k: v for k, v in _SLIDE_ITEM["properties"].items() if k != "testo"},
+                    "required": [k for k in _SLIDE_ITEM["required"] if k != "testo"]}
+
 SLIDES_TOOL = {
     "name": "slide_tradotte",
     "description": "Restituisce la trascrizione e la traduzione italiana di ogni slide.",
@@ -102,7 +107,7 @@ SLIDES_TOOL = {
             "formato": {"type": "string", "enum": ["carosello", "singolo"]},
             "natura": {"type": "string", "enum": ["didattico", "virale"],
                        "description": "didattico = INSEGNA qualcosa di concreto: spiega un meccanismo, un trucco, cosa fare o non fare, segnali da riconoscere, errori con la soluzione. Chi lo legge ne esce sapendo fare o capire qualcosa in più -> CTA al manuale. virale = punta sull'EMOZIONE più che sull'insegnamento: provoca, polarizza, tocca l'ego o l'orgoglio, fa sentire rabbia, rivalsa, riconoscimento o nostalgia (frasi d'impatto, verità scomode, scene e dialoghi che fanno dire 'è proprio così', confronti uomo/donna, meme, citazioni). Anche se tocca un tema serio, se non spiega come fare è virale -> CTA segui la pagina. Nel dubbio: se non c'è un insegnamento pratico, è virale."},
-            "slides": {"type": "array", "items": _SLIDE_ITEM},
+            "slides": {"type": "array", "items": _SLIDE_ITEM_TRAD},
         },
         "required": ["concetto", "senso", "formato", "natura", "slides"],
     },
@@ -163,7 +168,7 @@ POST_TOOL = {
     "input_schema": {
         "type": "object",
         "properties": {
-            **SLIDES_TOOL["input_schema"]["properties"],
+            **{**SLIDES_TOOL["input_schema"]["properties"], "slides": {"type": "array", "items": _SLIDE_ITEM}},
             **{k: v for k, v in CAPTION_TOOL["input_schema"]["properties"].items() if k not in ("slide_cta", "testo_slide_finale", "formato_post")},
             "slide_da_rifare": {
                 "type": "array", "items": {"type": "integer"},
@@ -386,6 +391,8 @@ def _tool_call(system: str, content: list, tool: dict, model: str | None = None,
                 use_strict = False
                 continue
             raise
+        from bot import costi
+        costi.registra(tool["name"], model or config.CLAUDE_MODEL, getattr(resp, "usage", None))
         if resp.stop_reason == "max_tokens":
             raise RuntimeError("Risposta di Claude troncata: post troppo lungo.")
         for block in resp.content:
@@ -450,7 +457,7 @@ Ricevi le slide di un post di una pagina collaboratrice che ci ha autorizzato a 
   italiane che hanno lo stesso ruolo. Non perdere mai un'evidenziazione dell'originale.
   colore_evidenziato vuoto solo se non ci sono parole di un altro colore.
 - Segnala in watermark_originale handle, nome o logo di un'altra pagina e dove si trova. Se è il nostro (@{brand['handle']}, {brand['nome']}) o non c'è, lascialo vuoto.
-- da_modificare = false per le slide già in italiano e senza riferimenti ad altre pagine (comprese le slide con la nostra CTA o il nostro profilo): restano identiche all'originale e testo = testo_originale.
+- da_modificare = false per le slide già in italiano e senza riferimenti ad altre pagine (comprese le slide con la nostra CTA o il nostro profilo): restano identiche all'originale e i blocchi riportano il testo originale.
 
 Regole fisse date da Gabriele (valgono anche qui se riguardano le slide):
 {_rules_block(rules)}
@@ -461,7 +468,7 @@ def translate_slides(caption: str, owner: str, images: list[bytes], brand: dict,
     content: list = []
     for i, data in enumerate(images, 1):
         content.append({"type": "text", "text": f"Slide {i}:"})
-        content.append(_image_block(data))
+        content.append(_image_block(data, 1024))
     content.append({"type": "text", "text": (
         f"Pagina di origine: @{owner}. Numero di slide: {len(images)}.\n"
         f"Descrizione originale, solo per capire il contesto:\n<<<\n{(caption or '(vuota)')[:2000]}\n>>>"
@@ -475,9 +482,9 @@ def translate_slides(caption: str, owner: str, images: list[bytes], brand: dict,
     ours = {brand["handle"].lower(), brand["nome"].lower().replace(" ", "")}
     own_post = (owner or "").lower() in ours
     for s in out["slides"]:
-        s["testo"] = plain(clean_text(s.get("testo", "")))
         for b in s.get("blocchi") or []:
             b["testo"] = clean_text(b.get("testo", ""))
+        s["testo"] = plain(clean_text(s.get("testo") or "\n\n".join(b["testo"] for b in s.get("blocchi") or [])))
         wm = (s.get("watermark_originale") or "").lower().replace(" ", "").replace("@", "")
         if own_post or any(o in wm for o in ours):
             s["watermark_originale"] = ""      # il nostro marchio non va mai sostituito
@@ -963,16 +970,64 @@ def check_slide(image_jpeg: bytes, expected_text: str, old_watermark: str,
 
 # ---------------------------------------------------------------- modifiche
 
+MODIFICA_TOOL = {
+    "name": "modifica_post",
+    "description": "Restituisce SOLO quello che la modifica cambia nel post.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "slide_cambiate": {
+                "type": "array", "items": _SLIDE_ITEM,
+                "description": "SOLO le slide che la modifica cambia, ognuna completa di tutti i campi (identici "
+                               "all'attuale tranne quello che cambia). Lista vuota se nessuna slide cambia.",
+            },
+            "descrizione": {"type": "string", "description": "La descrizione nuova completa SOLO se la modifica la "
+                                                              "cambia. Stringa vuota se resta uguale."},
+            "cta": _CTA,
+            "slide_da_rifare": {
+                "type": "array", "items": {"type": "integer"},
+                "description": "Numeri delle slide da rigenerare anche se il testo non cambia (es. richiesta grafica). Altrimenti lista vuota.",
+            },
+        },
+        "required": ["slide_cambiate", "descrizione", "cta", "slide_da_rifare"],
+    },
+}
+
+
+def _senza_interni(x):
+    """Toglie i campi interni (che iniziano con _) a ogni livello: non servono a Claude e costano token."""
+    if isinstance(x, dict):
+        return {k: _senza_interni(v) for k, v in x.items() if not str(k).startswith("_")}
+    if isinstance(x, list):
+        return [_senza_interni(v) for v in x]
+    return x
+
+
 def revise_post(post: dict, instruction: str, brand: dict, rules: list[dict], recent: dict) -> dict:
-    current = {k: v for k, v in post.items() if not k.startswith("_")}
+    current = _senza_interni(post)
     system = (_caption_system(brand, rules, recent)
               + "\nTRADUZIONE DELLE SLIDE\n" + TRADUZIONE.get((brand.get("traduzione_slide") or "fedele").lower(), TRADUZIONE["fedele"]))
     content = [{"type": "text", "text": (
         "Questo è il post attuale in JSON:\n"
-        f"{json.dumps(current, ensure_ascii=False, indent=1)}\n\n"
+        f"{json.dumps(current, ensure_ascii=False, separators=(',', ':'))}\n\n"
         f"Richiesta di modifica di Gabriele:\n<<<\n{instruction}\n>>>\n\n"
-        "Applica SOLO la modifica richiesta e restituisci il post completo con lo strumento post_pronto. "
-        "Lascia identico tutto quello che la richiesta non tocca (stesse slide, stessi testi). "
+        "Applica SOLO la modifica richiesta con lo strumento modifica_post. Restituisci soltanto le slide che "
+        "cambiano (complete, con tutti i campi) e la descrizione solo se cambia (altrimenti stringa vuota); "
+        "la cta va sempre restituita (uguale all'attuale se non cambia). Tutto il resto resta identico. "
         "Se la richiesta riguarda la grafica di slide specifiche senza cambiare il testo, mettile in slide_da_rifare."
     )}]
-    return _finalize(_tool_call(system, content, POST_TOOL))
+    out = _tool_call(system, content, MODIFICA_TOOL, max_tokens=12000)
+    new = json.loads(json.dumps(current))            # copia: si parte dal post attuale e si applicano i cambi
+    by_num = {sl.get("numero"): i for i, sl in enumerate(new.get("slides") or [])}
+    for sl in out.get("slide_cambiate") or []:
+        i = by_num.get(sl.get("numero"))
+        if i is None:
+            new.setdefault("slides", []).append(sl)
+        else:
+            new["slides"][i] = sl
+    if (out.get("descrizione") or "").strip():
+        new["descrizione"] = out["descrizione"]
+    if isinstance(out.get("cta"), dict) and out["cta"].get("tipo"):
+        new["cta"] = out["cta"]
+    new["slide_da_rifare"] = [n for n in out.get("slide_da_rifare") or [] if isinstance(n, int)]
+    return _finalize(new)
