@@ -57,8 +57,8 @@ COMMANDS = [
         ("collega", "Collega questo gruppo a una pagina (es. /collega reset)",
          "da scrivere dentro il gruppo di una pagina: da lì in poi report, post, logo, tono e CTA sono di quella pagina"),
         ("pagina", "Su quale pagina stai lavorando", "mostra la pagina di questa chat e le pagine disponibili"),
-        ("costi", "Quanto stai spendendo di Claude", "spesa di oggi e di ieri divisa per passaggio, e gli ultimi 7 giorni"),
-        ("tetto", "Tetto di spesa Claude al giorno (es. /tetto 8)",
+        ("costi", "Quanto sta spendendo il bot (Claude e OpenAI)", "spesa di oggi e di ieri divisa per passaggio, e gli ultimi 7 giorni"),
+        ("tetto", "Tetto di spesa del bot al giorno (es. /tetto 8)",
          "oltre il tetto il bot si ferma fino al giorno dopo; all'80% ti avvisa. /tetto da solo mostra quello attuale"),
     ]),
 ]
@@ -167,7 +167,7 @@ async def cmd_tetto(update: Update, context: ContextTypes.DEFAULT_TYPE):
             return
         costi.imposta_tetto(v)
     await update.effective_message.reply_text(
-        f"Tetto di spesa Claude: {costi.tetto():.2f} € al giorno. Oggi spesi {costi.speso_oggi():.2f} €.\n"
+        f"Tetto di spesa del bot (Claude + OpenAI): {costi.tetto():.2f} € al giorno. Oggi spesi {costi.speso_oggi():.2f} €.\n"
         "All'80% ti avviso, al 100% il bot si ferma fino a domani.")
 
 

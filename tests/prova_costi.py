@@ -64,3 +64,11 @@ m, l, t = writer.livello_correzione("Livello alto: riscrivi la descrizione")
 assert (m, l, t) == (config.CAPTION_MODEL, "alto", "riscrivi la descrizione"), (m, l, t)
 assert writer.livello_correzione("livello medio, cambia hook")[:2] == (config.CLAUDE_MODEL, "medio")
 print("livelli ok")
+
+# OpenAI: costo dai token della risposta, o stima per qualità
+costi.registra_openai(types.SimpleNamespace(input_tokens=1500, output_tokens=500,
+                      input_tokens_details=types.SimpleNamespace(image_tokens=1400, text_tokens=100)), "medium")
+costi.registra_openai(None, "medium")
+r = costi.riepilogo()
+assert "immagini OpenAI" in r and "OpenAI 0.0" in r, r
+print(r.splitlines()[1])

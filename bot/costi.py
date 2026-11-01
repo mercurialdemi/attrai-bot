@@ -93,6 +93,49 @@ def registra(strumento: str, model: str, usage) -> None:
         log.warning("Contatore costi non aggiornato: %s", e)
 
 
+# OpenAI immagini (gpt-image): dollari per milione di token, stime dai prezzi pubblici; correggibili da Render
+OPENAI_IN_TESTO = float(os.getenv("OPENAI_PREZZO_TESTO", "5"))
+OPENAI_IN_IMMAGINE = float(os.getenv("OPENAI_PREZZO_IMMAGINE_IN", "8"))
+OPENAI_OUT = float(os.getenv("OPENAI_PREZZO_OUT", "30"))
+OPENAI_STIMA = {"low": 0.012, "medium": 0.025, "high": 0.065}   # $ a immagine se OpenAI non dice i token
+
+
+def registra_openai(usage, qualita: str = "medium") -> None:
+    """Costo di un'immagine OpenAI: dai token dichiarati nella risposta, altrimenti stima per qualità."""
+    try:
+        g = lambda o, k: int(getattr(o, k, 0) or 0) if o is not None else 0
+        det = getattr(usage, "input_tokens_details", None) if usage is not None else None
+        out = g(usage, "output_tokens")
+        if usage is not None and (out or g(usage, "input_tokens")):
+            img_in = g(det, "image_tokens")
+            txt_in = g(det, "text_tokens") or max(0, g(usage, "input_tokens") - img_in)
+            usd = (txt_in * OPENAI_IN_TESTO + img_in * OPENAI_IN_IMMAGINE + out * OPENAI_OUT) / 1e6
+        else:
+            usd = OPENAI_STIMA.get(qualita, 0.025)
+        _aggiungi("immagini OpenAI", usd * EURO_PER_DOLLARO, g(usage, "input_tokens"), out)
+    except Exception as e:
+        log.warning("Contatore OpenAI non aggiornato: %s", e)
+
+
+def _aggiungi(passo: str, eur: float, tin: int = 0, tout: int = 0) -> None:
+    oggi = dt.date.today().isoformat()
+    with _lock:
+        f = _file()
+        try:
+            d = json.loads(f.read_text(encoding="utf-8"))
+        except Exception:
+            d = {}
+        r = d.setdefault(oggi, {}).setdefault(passo, {"chiamate": 0, "euro": 0.0, "in": 0, "out": 0})
+        r["chiamate"] += 1
+        r["euro"] = round(r["euro"] + eur, 5)
+        r["in"] += tin
+        r["out"] += tout
+        f.parent.mkdir(parents=True, exist_ok=True)
+        f.write_text(json.dumps(d, indent=1), encoding="utf-8")
+    log.info("%s: %.3f €", passo, eur)
+    _dopo_registrazione()
+
+
 def riepilogo(giorni: int = 7) -> str:
     try:
         d = json.loads(_file().read_text(encoding="utf-8"))
@@ -105,8 +148,9 @@ def riepilogo(giorni: int = 7) -> str:
         if g not in d:
             continue
         tot = sum(v["euro"] for v in d[g].values())
+        oa = d[g].get("immagini OpenAI", {}).get("euro", 0.0)
         etichetta = "Oggi" if k == 0 else "Ieri" if k == 1 else g
-        righe.append(f"{etichetta}: {tot:.2f} €")
+        righe.append(f"{etichetta}: {tot:.2f} € (Claude {tot - oa:.2f} € · OpenAI {oa:.2f} €)")
         if k <= 1:
             for passo, v in sorted(d[g].items(), key=lambda x: -x[1]["euro"]):
                 righe.append(f"  · {passo}: {v['euro']:.2f} € ({v['chiamate']} chiamate)")
@@ -118,7 +162,7 @@ def riepilogo(giorni: int = 7) -> str:
         post = d[g]["descrizione e CTA"]["chiamate"]
     tot_oggi = sum(v["euro"] for v in d.get(g, {}).values())
     extra = f"\nPost preparati oggi: {post} (circa {tot_oggi / post:.2f} € a post, correzioni comprese)" if post else ""
-    return ("Spesa Claude (stima dai token):\n" + "\n".join(righe) + extra
+    return ("Spesa del bot (stima dai token; OpenAI contato da oggi 1/11 sera):\n" + "\n".join(righe) + extra
             + f"\nTetto giornaliero: {tetto():.2f} € (si cambia con /tetto)")
 
 
@@ -172,7 +216,7 @@ def controlla(strumento: str) -> None:
     """Prima di ogni chiamata a Claude: se il tetto del giorno è raggiunto, si ferma."""
     t, s = tetto(), speso_oggi()
     if t > 0 and s >= t:
-        _avvisa_una_volta("100", f"⛔ Tetto di spesa Claude raggiunto: oggi {s:.2f} € su {t:.2f} €. "
+        _avvisa_una_volta("100", f"⛔ Tetto di spesa del bot (Claude + OpenAI) raggiunto: oggi {s:.2f} € su {t:.2f} €. "
                                  "Il bot si ferma fino a domani. Per continuare oggi alza il tetto con /tetto (es. /tetto 12).")
         raise TettoSpesa(f"Tetto di spesa di oggi raggiunto ({s:.2f} € su {t:.2f} €). "
                          "Riparte domani, oppure alza il tetto con /tetto.")
@@ -181,5 +225,5 @@ def controlla(strumento: str) -> None:
 def _dopo_registrazione() -> None:
     t, s = tetto(), speso_oggi()
     if t > 0 and s >= 0.8 * t:
-        _avvisa_una_volta("80", f"⚠️ Spesa Claude di oggi: {s:.2f} € su un tetto di {t:.2f} €. "
+        _avvisa_una_volta("80", f"⚠️ Spesa del bot di oggi (Claude + OpenAI): {s:.2f} € su un tetto di {t:.2f} €. "
                                 "Al tetto il bot si ferma fino a domani. Dettaglio con /costi.")

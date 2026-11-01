@@ -299,7 +299,10 @@ def _openai_edit(original: Image.Image, prompt: str) -> Image.Image | None:
     else:                                                       # modelli vecchi: tre formati fissi, fedeltà alta
         args["size"] = "1024x1536" if h > w * 1.1 else ("1536x1024" if w > h * 1.1 else "1024x1024")
         args["input_fidelity"] = "high"
+    from bot import costi
+    costi.controlla("immagini_openai")                          # tetto di spesa del giorno (Claude + OpenAI)
     resp = _oclient.images.edit(**args)
+    costi.registra_openai(getattr(resp, "usage", None), config.OPENAI_IMAGE_QUALITY)
     data = resp.data[0].b64_json if resp.data else None
     if not data:
         return None
