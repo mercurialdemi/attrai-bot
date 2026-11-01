@@ -194,8 +194,7 @@ async def _produce(bot, chat_ids: list[int], brand: dict, chosen: list[instagram
                 job_id = storage.save_job(0, 0, src.url, src.owner, post, paths)
                 pipeline.after_save(job_id, src.url, post, paths, failed)
                 sotto = "" if src.score >= min_score else " (sotto media, scelto per completare)"
-                header = (f"{label.capitalize()} {i}/{len(chosen)} · da @{src.owner} · {src.score:.1f}x la media{sotto}\n"
-                          f"Perché: {src.motivo}")
+                header = f"{label.capitalize()} {i}/{len(chosen)} · da @{src.owner} · {src.score:.1f}x la media{sotto}"
                 for c in chat_ids:
                     await pipeline.send_post(bot, c, job_id, post, paths, failed, header=header)
             except Exception:
@@ -453,8 +452,10 @@ def _link_lines(items: list, start: int, min_score: float, perche: dict | None =
                 else {"didattico": "📚 didattico", "virale": "🔥 virale"}).get(p.natura, "")
         testa = tipo_txt if tipo else ""
         out.append(f"{i}. " + (f"{testa}\n" if testa else "") + f"@{p.owner} · {p.score:.1f}x la sua media{'' if p.score >= min_score else ' (sotto media)'}"
-                   f" · {nums}\n{p.url}" + (f"\n{p.motivo}" if p.motivo else (f"\n“{anteprima}…”" if anteprima else ""))
-                   + (f"\n{perche[p.url]}" if perche.get(p.url) else ""))
+                   f" · {nums}\n{p.url}"
+                   # niente spiegazioni del perché (richiesta di Gabriele): solo la crescita, se c'è, o l'inizio del testo
+                   + (f"\n{p.motivo.splitlines()[0]}" if (p.motivo or "").startswith("📈") else
+                      (f"\n“{anteprima}…”" if anteprima else "")))
     return out
 
 

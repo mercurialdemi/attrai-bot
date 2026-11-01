@@ -66,8 +66,7 @@ COMMANDS = [
 HELP = (
     "GUIDA RAPIDA (quello che ti serve ogni giorno)\n"
     "1. Alle 8 ti arriva il report con i post migliori dei collaboratori: mandami i link che ti piacciono.\n"
-    "2. La domenica alle 10 arriva il perché della settimana: i 3 post migliori dei collaboratori e cosa li ha spinti.\n"
-    "   I caroselli da zero li fa solo quando li chiedi con /crea.\n"
+    "2. I caroselli da zero li fa solo quando li chiedi con /crea.\n"
     "3. Per correggere qualcosa rispondi al post: \"slide 3 più corta\", \"rifai la CTA con la casella\".\n"
     "4. Se una slide è sbagliata: rispondi alla slide con \"segnala: ...\" e Claude la corregge.\n"
     "Tutto il resto (studio della pagina, trend, correzioni) il bot lo fa da solo di notte.\n\n"
@@ -1012,18 +1011,7 @@ def _schedule_report(app: Application, slug: str):
 
     app.job_queue.run_daily(job, time=at, name=f"report_mattutino_{slug}")
 
-    # il perché dei post migliori: una volta a settimana (report.perche_giorno, 0 = domenica ... 6 = sabato,
-    # come conta Telegram)
-    giorno = int(cfg.get("perche_giorno", 0))
-    at_p = datetime.strptime(str(cfg.get("perche_ora", "10:00")), "%H:%M").time().replace(tzinfo=tz)
-
-    async def job_perche(context: ContextTypes.DEFAULT_TYPE):
-        pagine.imposta(slug)
-        chat_ids = _destinatari(slug)
-        if chat_ids:
-            await report.run_perche_settimanale(context.bot, chat_ids, int(cfg.get("perche_quanti_settimana", 3)))
-
-    app.job_queue.run_daily(job_perche, time=at_p, days=(giorno,), name=f"perche_settimanale_{slug}")
+    # il perché dei post migliori non si manda più (richiesta di Gabriele, 1/11): solo i link nel report
     log.info("%s: report programmato ogni giorno alle %s (%s) per %s", slug, cfg["ora"], tz, _destinatari(slug))
 
 
