@@ -478,7 +478,7 @@ def translate_slides(caption: str, owner: str, images: list[bytes], brand: dict,
         f"Pagina di origine: @{owner}. Numero di slide: {len(images)}.\n"
         f"Descrizione originale, solo per capire il contesto:\n<<<\n{(caption or '(vuota)')[:2000]}\n>>>"
     )})
-    out = _tool_call(_slides_system(brand, rules), content, SLIDES_TOOL, model=config.CAPTION_MODEL, max_tokens=16000)
+    out = _tool_call(_slides_system(brand, rules), content, SLIDES_TOOL, model=config.SLIDES_MODEL, max_tokens=16000)
     try:
         out = polish_slides(out)
     except Exception as e:

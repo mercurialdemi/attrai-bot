@@ -37,6 +37,8 @@ if REPORT_CHAT_IDS:
 CLAUDE_MODEL = _env("CLAUDE_MODEL", "claude-sonnet-5-5")
 # La descrizione è il testo che vende: la scrive il modello più forte nella scrittura (una chiamata per post)
 CAPTION_MODEL = _env("CAPTION_MODEL", "claude-opus-5-5")
+# lettura e prima traduzione delle slide (posizioni, colori, blocchi): il testo poi lo riscrive la rilettura
+SLIDES_MODEL = _env("SLIDES_MODEL", "") or CAPTION_MODEL
 GEMINI_IMAGE_MODEL = _env("GEMINI_IMAGE_MODEL", "gemini-2.5-flash-image")
 OPENAI_API_KEY = _env("OPENAI_API_KEY")
 OPENAI_IMAGE_MODEL = _env("OPENAI_IMAGE_MODEL", "gpt-image-2.5-sunburst")   # il migliore nelle modifiche e nel testo piccolo
