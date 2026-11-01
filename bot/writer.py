@@ -367,7 +367,8 @@ def _strict_schema(schema):
     return schema
 
 
-def _tool_call(system: str, content: list, tool: dict, model: str | None = None, max_tokens: int = 8000) -> dict:
+def _tool_call(system: str, content: list, tool: dict, model: str | None = None, max_tokens: int = 8000,
+               cache_ora: bool = False) -> dict:
     """Chiede a Claude di rispondere usando lo strumento indicato.
     I modelli 5.5 non accettano tool_choice forzato: si usa 'auto' con lo strumento 'strict'
     e l'istruzione esplicita di usarlo. Se il modello risponde a parole, si riprova una volta."""
@@ -382,7 +383,10 @@ def _tool_call(system: str, content: list, tool: dict, model: str | None = None,
                 model=model or config.CLAUDE_MODEL,
                 max_tokens=max_tokens,
                 # cache: istruzioni e strumento uguali da una chiamata all'altra costano un decimo dalla seconda in poi
-                system=[{"type": "text", "text": system, "cache_control": {"type": "ephemeral"}}] if system else [],
+                # cache_ora: istruzioni usate a ogni post (descrizione, correzioni) restano in cache un'ora, non 5 minuti
+                system=[{"type": "text", "text": system,
+                         "cache_control": {"type": "ephemeral", "ttl": "1h"} if cache_ora else {"type": "ephemeral"}}]
+                if system else [],
                 tools=[strict_tool if use_strict else tool],
                 tool_choice={"type": "auto"},
                 messages=[{"role": "user", "content": list(content) + [instruction]}],
@@ -619,12 +623,6 @@ def _cta_memory(style: dict) -> str:
         return f"- ({c['rendimento']}x la media{extra}, {c['tipo']}{' ' + c['manuale'] if c.get('manuale') else ''}) {c['testo']}"
     lines = "\n".join(info(c) for c in best[:8])
     worst = "\n".join(f"- {c['testo']}" for c in (style.get("cta_peggiori") or [])[:4])
-    if random.random() < 0.5:
-        mode = ("In questo post RIUSA una delle CTA migliori qui sotto (quella più adatta al tema e al tipo di CTA "
-                "richiesto), adattandola al dolore del post: stessa struttura e stessa leva, parole aggiornate.")
-    else:
-        mode = ("In questo post scrivi una CTA NUOVA, costruita sulle stesse leve delle CTA migliori qui sotto, "
-                "senza copiarle.")
     slide_txt = "\n".join(f"- ({t['tipo']}{' ' + t['manuale'] if t.get('manuale') else ''}) {' / '.join(t['testo'].splitlines())}"
                           for t in (style.get("testi_slide_cta") or [])[:15])
     conv = style.get("cta_conversioni") or {}
@@ -642,7 +640,30 @@ def _cta_memory(style: dict) -> str:
             + f"\nCTA CHE HANNO RESO DI PIÙ SULLA NOSTRA PAGINA:\n{lines}\n"
             + (f"Lezioni dallo studio: {style.get('lezioni_cta')}\n" if style.get("lezioni_cta") else "")
             + (f"CTA da NON imitare (post che hanno reso poco):\n{worst}\n" if worst else "")
-            + mode)
+            + "Come usare queste CTA in questo post: vedi 'CTA DI QUESTO POST' nel messaggio.")
+
+
+def _caption_variabile(recent: dict) -> str:
+    """La parte che cambia da un post all'altro (esempi scelti a caso, ultimi hook e autori, modo di usare le CTA).
+    Va nel messaggio e non nelle istruzioni: così le istruzioni restano identiche e Claude le rilegge dalla cache
+    (costano un ventesimo) invece di pagarle ogni volta per intero."""
+    style = load_style()
+    esempi = style.get("esempi") or []
+    out = ""
+    if esempi:
+        scelti = random.sample(esempi, min(3, len(esempi)))
+        out += ("ESEMPI DI DESCRIZIONI CHE HANNO FUNZIONATO SULLA NOSTRA PAGINA "
+                "(imita la voce, non copiare frasi né struttura):\n"
+                + "\n\n".join(f"<<<\n{e}\n>>>" for e in scelti) + "\n\n")
+    out += (f"Ultimi tipi di hook usati (dal più recente): {', '.join(recent.get('hook', [])[:3]) or 'nessuno'}. "
+            "Non usare lo stesso del più recente.\n"
+            f"Autori citati di recente, da non ripetere: {', '.join(recent.get('autori', [])[:15]) or 'nessuno'}.\n")
+    if style.get("cta_migliori") or style.get("testi_slide_cta") or (style.get("cta_conversioni") or {}).get("cta"):
+        out += ("CTA DI QUESTO POST: " + (
+            "RIUSA una delle CTA migliori (quella più adatta al tema e al tipo di CTA richiesto), adattandola al "
+            "dolore del post: stessa struttura e stessa leva, parole aggiornate." if random.random() < 0.5 else
+            "scrivi una CTA NUOVA, costruita sulle stesse leve delle CTA migliori, senza copiarle.") + "\n")
+    return out
 
 
 def _scuole(brand: dict) -> str:
@@ -668,17 +689,10 @@ def _caption_system(brand: dict, rules: list[dict], recent: dict) -> str:
         + (f" | COME SI VENDE: {' '.join(str(m['vendita']).split())}" if m.get("vendita") else "")
         for m in brand.get("manuali", [])
     )
-    ultimi_hook = ", ".join(recent.get("hook", [])[:3]) or "nessuno"
-    ultimi_autori = ", ".join(recent.get("autori", [])[:15]) or "nessuno"
     style = load_style()
     guida = style.get("guida", "").strip()
-    esempi = style.get("esempi") or []
-    esempi_txt = ""
-    if esempi:
-        scelti = random.sample(esempi, min(3, len(esempi)))
-        esempi_txt = ("\nESEMPI DI DESCRIZIONI CHE HANNO FUNZIONATO SULLA NOSTRA PAGINA "
-                      "(imita la voce, non copiare frasi né struttura):\n"
-                      + "\n\n".join(f"<<<\n{e}\n>>>" for e in scelti) + "\n")
+    esempi_txt = ("\nGli ESEMPI DI DESCRIZIONI che hanno funzionato sulla nostra pagina sono nel messaggio.\n"
+                  if style.get("esempi") else "")
     pubblico = str(brand.get("pubblico") or "").strip()
     priorita = ""
     if pubblico and brand["nome"] != "AttraiSeduci":
@@ -752,8 +766,7 @@ FORMATO
 HOOK E STRUTTURA
 {brand['hook']['regola'].strip()}
 {brand['hook']['struttura'].strip()}
-Ultimi tipi di hook usati (dal più recente): {ultimi_hook}. Non usare lo stesso del più recente.
-Autori citati di recente, da non ripetere: {ultimi_autori}.
+Gli ultimi tipi di hook usati e gli autori citati di recente sono nel messaggio: non ripeterli.
 Cita solo autori e studi reali che conosci con certezza; se non sei sicuro, non citare.
 
 {_scuole(brand)}
@@ -812,10 +825,11 @@ def write_caption(slides_out: dict, caption: str, brand: dict, rules: list[dict]
         "e sostituisci la CTA originale con la nostra."
         + _cta_slides_request(slides_out)
         + _source_cta_note(slides_out)
+        + "\n\n" + _caption_variabile(recent)
     )}]
     system = _caption_system(brand, rules, recent)
     try:
-        return _tool_call(system, content, CAPTION_TOOL, model=config.CAPTION_MODEL, max_tokens=6000)
+        return _tool_call(system, content, CAPTION_TOOL, model=config.CAPTION_MODEL, max_tokens=6000, cache_ora=True)
     except (anthropic.NotFoundError, anthropic.PermissionDeniedError) as e:
         log.warning("Modello %s non disponibile, uso %s: %s", config.CAPTION_MODEL, config.CLAUDE_MODEL, e)
         return _tool_call(system, content, CAPTION_TOOL, max_tokens=6000)
@@ -1015,9 +1029,10 @@ def revise_post(post: dict, instruction: str, brand: dict, rules: list[dict], re
         "Applica SOLO la modifica richiesta con lo strumento modifica_post. Restituisci soltanto le slide che "
         "cambiano (complete, con tutti i campi) e la descrizione solo se cambia (altrimenti stringa vuota); "
         "la cta va sempre restituita (uguale all'attuale se non cambia). Tutto il resto resta identico. "
-        "Se la richiesta riguarda la grafica di slide specifiche senza cambiare il testo, mettile in slide_da_rifare."
+        "Se la richiesta riguarda la grafica di slide specifiche senza cambiare il testo, mettile in slide_da_rifare.\n\n"
+        + _caption_variabile(recent)
     )}]
-    out = _tool_call(system, content, MODIFICA_TOOL, max_tokens=12000)
+    out = _tool_call(system, content, MODIFICA_TOOL, max_tokens=12000, cache_ora=True)
     new = json.loads(json.dumps(current))            # copia: si parte dal post attuale e si applicano i cambi
     by_num = {sl.get("numero"): i for i, sl in enumerate(new.get("slides") or [])}
     for sl in out.get("slide_cambiate") or []:

@@ -58,7 +58,9 @@ def costo(model: str, usage) -> float:
     """Costo in euro di una risposta, dai token che Anthropic dichiara."""
     p_in, p_w, p_r, p_out = PREZZI[_famiglia(model)]
     g = lambda k: int(getattr(usage, k, 0) or 0)
-    usd = (g("input_tokens") * p_in + g("cache_creation_input_tokens") * p_w
+    cc = getattr(usage, "cache_creation", None)
+    ora = int(getattr(cc, "ephemeral_1h_input_tokens", 0) or 0) if cc is not None else 0   # cache di un'ora: 2x
+    usd = (g("input_tokens") * p_in + (g("cache_creation_input_tokens") - ora) * p_w + ora * p_in * 2
            + g("cache_read_input_tokens") * p_r + g("output_tokens") * p_out) / 1e6
     return usd * EURO_PER_DOLLARO
 
