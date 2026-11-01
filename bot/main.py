@@ -68,6 +68,8 @@ HELP = (
     "1. Alle 8 ti arriva il report con i post migliori dei collaboratori: mandami i link che ti piacciono.\n"
     "2. I caroselli da zero li fa solo quando li chiedi con /crea.\n"
     "3. Per correggere qualcosa rispondi al post: \"slide 3 più corta\", \"rifai la CTA con la casella\".\n"
+    "   Le correzioni usano il modello più economico. Se il risultato non ti basta, scrivi \"livello medio: ...\"\n"
+    "   o \"livello alto: ...\" (es. \"livello alto: riscrivi la descrizione più forte\").\n"
     "4. Se una slide è sbagliata: rispondi alla slide con \"segnala: ...\" e Claude la corregge.\n"
     "Tutto il resto (studio della pagina, trend, correzioni) il bot lo fa da solo di notte.\n\n"
     "PAGINE SEPARATE\n"
@@ -692,7 +694,8 @@ async def _revise_created(update, context, job: dict, instruction: str, status):
 async def process_revision(update: Update, context: ContextTypes.DEFAULT_TYPE, job: dict, instruction: str):
     msg = update.effective_message
     chat_id = update.effective_chat.id
-    status = await msg.reply_text("Applico la modifica…")
+    _m, liv, _i = writer.livello_correzione(instruction)
+    status = await msg.reply_text("Applico la modifica…" if liv == "base" else f"Applico la modifica (livello {liv})…")
     if job["post"].get("_originale"):
         try:
             await _revise_created(update, context, job, instruction, status)

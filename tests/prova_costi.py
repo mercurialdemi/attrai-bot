@@ -56,3 +56,11 @@ assert sum("⛔" in a for a in avvisi) == 1          # l'avviso arriva una volta
 costi.imposta_tetto(50)
 costi.controlla("slide_tradotte")                    # alzato il tetto si riparte
 print("tetto ok:", avvisi)
+
+# correzioni: di base il modello economico, più alto solo se richiesto
+from bot import config
+assert writer.livello_correzione("slide 3 più corta")[:2] == (config.REVISE_MODEL, "base")
+m, l, t = writer.livello_correzione("Livello alto: riscrivi la descrizione")
+assert (m, l, t) == (config.CAPTION_MODEL, "alto", "riscrivi la descrizione"), (m, l, t)
+assert writer.livello_correzione("livello medio, cambia hook")[:2] == (config.CLAUDE_MODEL, "medio")
+print("livelli ok")

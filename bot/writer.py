@@ -1018,7 +1018,22 @@ def _senza_interni(x):
     return x
 
 
+LIVELLI = {"alto": "CAPTION_MODEL", "medio": "CLAUDE_MODEL"}
+_LIVELLO_RE = re.compile(r"\blivello\s+(alto|medio|massimo|base)\b\s*[:,.-]?\s*", re.IGNORECASE)
+
+
+def livello_correzione(instruction: str) -> tuple[str, str, str]:
+    """Le correzioni partono dal modello più economico. Scrivendo 'livello medio' o 'livello alto' (anche
+    'livello massimo') nel messaggio si sale. Restituisce (modello, nome del livello, istruzione senza la parola)."""
+    m = _LIVELLO_RE.search(instruction or "")
+    liv = (m.group(1).lower() if m else "base").replace("massimo", "alto")
+    pulita = _LIVELLO_RE.sub("", instruction).strip() if m else instruction
+    modello = getattr(config, LIVELLI[liv]) if liv in LIVELLI else config.REVISE_MODEL
+    return modello, liv, pulita or instruction
+
+
 def revise_post(post: dict, instruction: str, brand: dict, rules: list[dict], recent: dict) -> dict:
+    modello, _liv, instruction = livello_correzione(instruction)
     current = _senza_interni(post)
     system = (_caption_system(brand, rules, recent)
               + "\nTRADUZIONE DELLE SLIDE\n" + TRADUZIONE.get((brand.get("traduzione_slide") or "fedele").lower(), TRADUZIONE["fedele"]))
@@ -1032,7 +1047,7 @@ def revise_post(post: dict, instruction: str, brand: dict, rules: list[dict], re
         "Se la richiesta riguarda la grafica di slide specifiche senza cambiare il testo, mettile in slide_da_rifare.\n\n"
         + _caption_variabile(recent)
     )}]
-    out = _tool_call(system, content, MODIFICA_TOOL, max_tokens=12000, cache_ora=True)
+    out = _tool_call(system, content, MODIFICA_TOOL, model=modello, max_tokens=12000, cache_ora=True)
     new = json.loads(json.dumps(current))            # copia: si parte dal post attuale e si applicano i cambi
     by_num = {sl.get("numero"): i for i, sl in enumerate(new.get("slides") or [])}
     for sl in out.get("slide_cambiate") or []:

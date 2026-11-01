@@ -39,6 +39,8 @@ CLAUDE_MODEL = _env("CLAUDE_MODEL", "claude-sonnet-5-5")
 CAPTION_MODEL = _env("CAPTION_MODEL", "claude-opus-5-5")
 # lettura e prima traduzione delle slide (posizioni, colori, blocchi): il testo poi lo riscrive la rilettura
 SLIDES_MODEL = _env("SLIDES_MODEL", "") or CAPTION_MODEL
+# correzioni: di base il modello più economico; "livello medio" / "livello alto" nel messaggio le fanno salire
+REVISE_MODEL = _env("REVISE_MODEL", "claude-haiku-5-5")
 GEMINI_IMAGE_MODEL = _env("GEMINI_IMAGE_MODEL", "gemini-2.5-flash-image")
 OPENAI_API_KEY = _env("OPENAI_API_KEY")
 OPENAI_IMAGE_MODEL = _env("OPENAI_IMAGE_MODEL", "gpt-image-2.5-sunburst")   # il migliore nelle modifiche e nel testo piccolo
