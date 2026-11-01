@@ -1,0 +1,434 @@
+{
+ "giorno": "2026-11-01",
+ "post_preparati": 4,
+ "slide_totali": 39,
+ "slide_fallite": 5,
+ "lavorazione": {
+  "openai-testo": {
+   "totali": 2,
+   "fallite": 0
+  },
+  "blocchi-sfondo-pieno": {
+   "totali": 9,
+   "fallite": 0
+  },
+  "testo-su-sfondo-uniforme": {
+   "totali": 17,
+   "fallite": 0
+  },
+  "blocchi-ricostruzione-codice": {
+   "totali": 1,
+   "fallite": 0
+  },
+  "cta-stile-post": {
+   "totali": 3,
+   "fallite": 0
+  },
+  "blocchi-pulizia-codice": {
+   "totali": 1,
+   "fallite": 0
+  },
+  "openai-pulizia+blocchi": {
+   "totali": 5,
+   "fallite": 5
+  },
+  "cta-alone": {
+   "totali": 1,
+   "fallite": 0
+  }
+ },
+ "segnalazioni": [
+  {
+   "job_id": 55,
+   "testo": "non fluida, era meglio \"finché non diventi l'amante\"",
+   "quando": "2026-10-31T16:16:34+00:00"
+  }
+ ],
+ "post_con_problemi": [
+  {
+   "job_id": 54,
+   "fonte": "https://www.instagram.com/p/DfFTqIqm-nE/",
+   "fallite": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/)",
+     "testo_originale": "MATURE WIFE\nVS\nSELFISH WIFE",
+     "testo": "MOGLIE\nMATURA\n\nMOGLIE\nEGOISTA",
+     "blocchi": [
+      {
+       "x": 99,
+       "y": 31,
+       "w": 338,
+       "h": 133,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 578,
+       "y": 28,
+       "w": 339,
+       "h": 136,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/)",
+     "testo_originale": "MATURE WIFE\nI NEED MORE HELP THIS WEEK.\nSAYS WHAT SHE NEEDS BEFORE RESENTMENT BUILDS.\nSELFISH WIFE\nIF YOU LOVED ME, YOU'D KNOW.\nEXPECTS HIM TO READ HER MIND, THEN PUNISHES HIM FOR GUESSING WRONG.",
+     "testo": "MOGLIE\nMATURA\n\nMOGLIE\nEGOISTA\n\nQUESTA SETTIMANA\nMI SERVE UNA MANO.\n\nSE MI AMASSI,\nLO SAPRESTI.\n\nDICE COSA LE SERVE\nPRIMA DI COVARE\nRANCORE.\n\nPRETENDE CHE LE LEGGA\nNEL PENSIERO,\nPOI LO PUNISCE SE SBAGLIA.",
+     "blocchi": [
+      {
+       "x": 99,
+       "y": 31,
+       "w": 338,
+       "h": 133,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 578,
+       "y": 28,
+       "w": 339,
+       "h": 136,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 262,
+       "y": 184,
+       "w": 145,
+       "h": 55,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 708,
+       "y": 186,
+       "w": 235,
+       "h": 52,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 47,
+       "y": 855,
+       "w": 391,
+       "h": 95,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 542,
+       "y": 859,
+       "w": 422,
+       "h": 90,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/)",
+     "testo_originale": "MATURE WIFE\nI DISAGREE, BUT WE CAN DISCUSS THIS PRIVATELY.\nCORRECTS HIM WITHOUT DESTROYING HIS DIGNITY.\nSELFISH WIFE\nMAKES HIM THE PUNCHLINE WHEN OTHER PEOPLE ARE WATCHING.",
+     "testo": "MOGLIE\nMATURA\n\nMOGLIE\nEGOISTA\n\nNON SONO D'ACCORDO,\nMA NE PARLIAMO\nIN PRIVATO.\n\nLO CORREGGE\nSENZA TOGLIERGLI DIGNITÀ.\n\nLO METTE IN RIDICOLO\nPROPRIO DAVANTI\nAGLI ALTRI.",
+     "blocchi": [
+      {
+       "x": 99,
+       "y": 31,
+       "w": 338,
+       "h": 133,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 578,
+       "y": 28,
+       "w": 339,
+       "h": 136,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 66,
+       "y": 160,
+       "w": 172,
+       "h": 68,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 52,
+       "y": 863,
+       "w": 412,
+       "h": 52,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 552,
+       "y": 840,
+       "w": 406,
+       "h": 93,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/)",
+     "testo_originale": "MATURE WIFE\nI WAS WRONG. I HURT YOU. I'M SORRY.\nSELFISH WIFE\nAPOLOGIZES ONLY AFTER EXPLAINING WHY IT WAS STILL HIS FAULT.",
+     "testo": "MOGLIE\nMATURA\n\nMOGLIE\nEGOISTA\n\nHO SBAGLIATO.\nTI HO FERITO.\nMI DISPIACE.\n\nSI SCUSA, MA SOLO DOPO\nAVER SPIEGATO PERCHÉ\nHA SBAGLIATO LUI.",
+     "blocchi": [
+      {
+       "x": 99,
+       "y": 31,
+       "w": 338,
+       "h": 133,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 578,
+       "y": 28,
+       "w": 339,
+       "h": 136,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 135,
+       "y": 207,
+       "w": 225,
+       "h": 86,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 547,
+       "y": 194,
+       "w": 417,
+       "h": 76,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/)",
+     "testo_originale": "MATURE WIFE\nNOTICES HIS SACRIFICES WITHOUT TREATING THEM AS HIS ONLY VALUE.\nSELFISH WIFE\nONLY NOTICES HIM WHEN HE STOPS PROVIDING, FIXING, OR GIVING.",
+     "testo": "MOGLIE\nMATURA\n\nMOGLIE\nEGOISTA\n\nVEDE I SUOI SACRIFICI\nSENZA RIDURLO\nA QUELLO CHE DÀ.\n\nSI ACCORGE DI LUI\nSOLO QUANDO SMETTE\nDI MANTENERE, AGGIUSTARE, DARE.",
+     "blocchi": [
+      {
+       "x": 99,
+       "y": 31,
+       "w": 338,
+       "h": 133,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 578,
+       "y": 28,
+       "w": 339,
+       "h": 136,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 42,
+       "y": 848,
+       "w": 422,
+       "h": 94,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 542,
+       "y": 848,
+       "w": 422,
+       "h": 97,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "openai-testo",
+     "tentativi": 2,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "MATURE WIFE\nSUPPORTS HIM WHEN HE STRUGGLES WHILE STILL HOLDING HIM ACCOUNTABLE.\nSELFISH WIFE\nUSES HIS LOWEST MOMENT AS PROOF THAT SHE DESERVES SOMEONE BETTER.",
+     "testo": "MOGLIE\nMATURA\n\nMOGLIE\nEGOISTA\n\nLO SOSTIENE QUANDO\nÈ IN DIFFICOLTÀ,\nSENZA FARGLI SCONTI.\n\nUSA IL SUO MOMENTO PEGGIORE\nCOME PROVA CHE LEI\nMERITA DI MEGLIO.",
+     "blocchi": [
+      {
+       "x": 99,
+       "y": 31,
+       "w": 338,
+       "h": 133,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 578,
+       "y": 28,
+       "w": 339,
+       "h": 136,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 31,
+       "y": 852,
+       "w": 438,
+       "h": 94,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 542,
+       "y": 852,
+       "w": 442,
+       "h": 94,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "cta-alone",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se ti sei riconosciuto anche in uno solo di questi 5 confronti\ne vuoi smettere di essere notato solo quando smetti di dare…\ndevi cambiare il modo in cui interpreti ogni interazione.\n\nNel mio manuale\n\"Diventa l'uomo a cui nessuna donna sa resistere\"\ntrovi le dinamiche psicologiche che spiegano\nperché alcune attenzioni aumentano l'attrazione\ne altre la distruggono, anche se sembrano giuste.\n\nDai un'occhiata al link in bio\no commenta con \"ATTRAZIONE\"\ne te lo invio in DM.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Un confronto a vignette tra la moglie matura e quella egoista. La prima dice chiaramente cosa le serve, ti corregge in privato, chiede scusa davvero, vede i tuoi sacrifici e ti sostiene nei momenti difficili. La seconda pretende che tu le legga nel pensiero, ti mette in ridicolo davanti agli altri, si scusa dando a te la colpa, si accorge di te solo quando smetti di dare e usa il tuo momento peggiore per dire che merita di meglio. Il tono è polarizzante e da riconoscimento immediato: 'è proprio così'.",
+   "descrizione": "🧠 Il modo in cui una donna ti tratta quando sbagli dice di lei più di mille dichiarazioni d'amore.\n\nTorni a casa e lei è fredda. Le chiedi cosa c'è e ti risponde \"niente\". Due giorni dopo scopri che era per una cosa che avresti dovuto capire da solo. Oppure siete a cena con gli amici e la battuta sul tuo lavoro, o su quella volta che hai sbagliato, arriva davanti a tutti. Tu sorridi, incassi e a casa non dici niente per non fare una scenata.\n\nOgni volta che lasci correre, perdi qualcosa: la stima che hai di te, il peso della tua parola in casa e alla lunga anche il desiderio. Un uomo che accetta di essere messo in ridicolo smette di sembrare un uomo da rispettare, prima agli occhi degli altri e poi ai suoi.\n\nJohn Gottman ha osservato per decenni centinaia di coppie nel suo laboratorio all'Università di Washington. Tra tutti i comportamenti che ha studiato, quello che faceva prevedere il divorzio con più forza era il disprezzo: il sarcasmo, la presa in giro, lo sguardo dall'alto. Non i litigi e nemmeno le differenze di carattere. Ha visto anche il contrario: le coppie che durano non litigano meno, sanno ricucire. Uno dei due dice \"ho sbagliato\" senza aggiungere un \"ma\".\n\nEd è proprio qui che molti uomini sbagliano. Pensano che il rispetto si guadagni dando di più: più soldi, più pazienza, più favori. Ma una donna che ti misura su quello che porti a casa si accorgerà davvero di te solo il giorno in cui smetterai di portarlo. In una coppia il rispetto non si compra. Lo tieni in piedi con i limiti che fai valere.\n\nQuesto non significa diventare duro o vendicativo. Significa dirle con calma, in privato, che certe cose davanti agli altri non succedono più. E poi restare coerente.\n\nUna donna matura non ti fa sentire piccolo per sentirsi grande. Se succede, la domanda non è cosa manca a lei, ma perché tu continui ad accettarlo.\n\nIn quale di questi cinque confronti ti sei riconosciuto, e da quanto tempo fai finta di niente?\n\nSe vuoi capire come si consuma il rispetto dentro una coppia e come riprendertelo senza doverlo implorare, ho scritto \"Diventa l'uomo a cui nessuna donna sa resistere\". Commenta \"ATTRAZIONE\" e te lo invio in DM, oppure lo trovi nel link in bio.",
+   "segnalazioni": []
+  },
+  {
+   "job_id": 55,
+   "fonte": "https://www.instagram.com/p/DeASEJlzkc-/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "You will never realize how sneaky women are unless you're her side dude.",
+     "testo": "Non saprai mai\nquanto sa essere\nsubdola una donna\nfinché l'amante non sei tu.",
+     "blocchi": [
+      {
+       "x": 101,
+       "y": 246,
+       "w": 792,
+       "h": 262,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se questa frase ti ha colpito,\nè perché anche tu hai visto\nda dietro le quinte\nquanto le viene facile mentire.\n\nSegui @attraiseduci:\nogni giorno parliamo di attrazione,\nrelazioni e dinamiche tra uomo e donna.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Il post dice che finché stai con una donna non vedi fino in fondo quanto sa essere brava a nascondere le cose. Te ne accorgi solo quando sei tu l'amante: lì vedi da vicino le bugie che lei racconta al suo compagno, e capisci che a lui potrebbe succedere la stessa cosa. Il tono è provocatorio, una verità scomoda in stile tweet.",
+   "descrizione": "La cosa più istruttiva che ti può capitare con una donna impegnata non è conquistarla. È vedere da vicino come mente all'uomo che ha accanto.\n\nTi scrive mentre lui è nell'altra stanza. Cancella la chat prima di tornare da lui. Ti racconta, quasi divertita, la scusa che ha usato per uscire stasera. All'inizio ti senti scelto, superiore, quello che ha qualcosa che all'altro manca.\n\nPoi una sera, da solo, ti viene un pensiero che non se ne va più: anche lui era convinto di conoscerla.\n\nFare l'amante ti mette in un posto che pochi uomini vedono, dietro le quinte. Vedi con che naturalezza fa la compagna affettuosa e con che calma tiene in piedi due versioni della stessa giornata. E capisci che lei non è un mostro. Per chi la pratica, la doppiezza diventa un'abilità come un'altra, e più la usa meno le costa.\n\nNel 2001 David Schmitt e David Buss hanno studiato quanto è diffuso, in entrambi i sessi, il tentativo di portare via il partner a qualcun altro. Nel 2014 Joshua Foster e colleghi hanno seguito le coppie nate così: meno impegno, meno soddisfazione, più occhi puntati su altre persone e più tradimenti. Chi ti sceglie tradendo qualcuno non lascia lo schema alla porta. Se lo porta dietro.\n\nEd è proprio qui che molti uomini sbagliano: si credono l'eccezione. \"Con me è diverso, con lui non era felice.\" Ma una persona non la giudichi da come tratta te quando sei la novità. La giudichi da come tratta chi le ha dato fiducia.\n\nNon vale per tutte le donne, e lo stesso discorso vale per gli uomini. Vale per quella che ti sta mostrando, sotto i tuoi occhi, quanto le viene facile mentire.\n\nIl tuo valore non si misura da chi riesci a portare via a un altro. Si misura da cosa decidi di non accettare.\n\nSe domani lei lasciasse lui per te, saresti davvero tranquillo la prima volta che la vedi sorridere al telefono?\n\nSe questa frase ti ha colpito, segui @attraiseduci: ogni giorno parliamo di attrazione, relazioni e dinamiche tra uomo e donna.",
+   "segnalazioni": [
+    "non fluida, era meglio \"finché non diventi l'amante\""
+   ]
+  }
+ ]
+}
