@@ -704,9 +704,10 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
             return rebuilt
     # FUMETTI: con OpenAI attivo li rifà direttamente OpenAI (testo che riempie la nuvoletta, contorni intatti);
     # col codice le nuvolette vengono ancora imperfette. Senza OpenAI resta il codice.
-    # Solo i fumetti veri (nuvolette) vanno subito a OpenAI. Disegni e dipinti con una scritta sopra (tipico del
-    # Pensatore) li prova prima il codice, gratis: OpenAI interviene solo se il controllo boccia la slide.
-    fumetto_ai = (mode == "codice" and _openai_scrive(slide)
+    # Fumetti, disegni e dipinti: il disegno originale resta com'è e il codice cambia solo i testi (gratis).
+    # OpenAI ridisegna la slide solo se il controllo la boccia (scelta di Gabriele, 1/11, per risparmiare).
+    # FUMETTI_OPENAI=subito su Render riporta i fumetti direttamente a OpenAI come prima.
+    fumetto_ai = (config.FUMETTI_OPENAI == "subito" and mode == "codice" and _openai_scrive(slide)
                   and any(b.get("carattere") == "fumetto" for b in blocks0))
     if fumetto_ai:
         slide["_motivo_codice"] = ""
