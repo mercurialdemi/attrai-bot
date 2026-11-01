@@ -1,477 +1,86 @@
 {
  "giorno": "2026-11-01",
- "post_preparati": 13,
- "slide_totali": 106,
- "slide_fallite": 3,
+ "post_preparati": 9,
+ "slide_totali": 84,
+ "slide_fallite": 7,
  "lavorazione": {
-  "testo-su-sfondo-uniforme": {
-   "totali": 9,
-   "fallite": 0
-  },
   "openai-testo": {
-   "totali": 78,
-   "fallite": 0
-  },
-  "cta-stile-post": {
-   "totali": 3,
+   "totali": 55,
    "fallite": 0
   },
   "cta-illustrata": {
-   "totali": 5,
+   "totali": 3,
    "fallite": 0
   },
   "cta-alone": {
-   "totali": 5,
+   "totali": 3,
    "fallite": 0
   },
   "openai-pulizia+blocchi": {
-   "totali": 3,
-   "fallite": 3
+   "totali": 7,
+   "fallite": 7
   },
-  "originale": {
-   "totali": 3,
+  "testo-su-sfondo-uniforme": {
+   "totali": 12,
+   "fallite": 0
+  },
+  "cta-stile-post": {
+   "totali": 2,
+   "fallite": 0
+  },
+  "blocchi-ricostruzione-codice": {
+   "totali": 2,
    "fallite": 0
   }
  },
  "segnalazioni": [
   {
-   "job_id": 1,
-   "testo": "le pagine dove c'è l'angelo le hai fatte con frase su sfondo nero invece era da fare con soggetto giusto.",
-   "quando": "2026-10-30T10:49:19+00:00"
-  },
-  {
-   "job_id": 5,
-   "testo": "non deve esserci un uomo nella slide finale con il cta, ma una donna perché è una pagina per donne e aumenta effetto \"mi ci rivedo\" nella lettrice donna",
-   "quando": "2026-10-31T13:37:17+00:00"
-  },
-  {
-   "job_id": 10,
-   "testo": "nella slide finale con il cta devi mettere l immagine di una donna perché aumenta riconoscibilità, non un uomo come qua. Ti ricordo che la pagina parla alle donne",
-   "quando": "2026-10-31T18:15:42+00:00"
-  },
-  {
-   "job_id": 12,
-   "testo": "nella slide finale qui su amoreinfedele deve esserci una donna non un uomo",
-   "quando": "2026-11-01T15:18:00+00:00"
+   "job_id": 9,
+   "testo": "la prima slide non è stata generata correttamente. Hai messo solo testo su sfondo bianco anziché le grafiche e i soggetti.",
+   "quando": "2026-11-01T17:50:32+00:00"
   }
  ],
  "post_con_problemi": [
   {
-   "job_id": 1,
-   "fonte": "https://www.instagram.com/p/DfDDH-9k1WR/",
-   "fallite": [],
-   "slides": [
-    {
-     "numero": 1,
-     "via": "testo-su-sfondo-uniforme",
-     "tentativi": null,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "Why do you tell\npeople to walk away?",
-     "testo": "Perché consigli sempre\ndi andarsene?",
-     "blocchi": [
-      {
-       "x": 485,
-       "y": 305,
-       "w": 400,
-       "h": 70,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      }
-     ]
-    },
-    {
-     "numero": 2,
-     "via": "openai-testo",
-     "tentativi": 1,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "Because not everyone\ndeserves another chance.",
-     "testo": "Perché non tutti meritano\nun'altra possibilità.",
-     "blocchi": [
-      {
-       "x": 437,
-       "y": 254,
-       "w": 470,
-       "h": 68,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      }
-     ]
-    },
-    {
-     "numero": 3,
-     "via": "testo-su-sfondo-uniforme",
-     "tentativi": null,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "But everyone makes\nmistakes.",
-     "testo": "Ma tutti\nsbagliano.",
-     "blocchi": [
-      {
-       "x": 477,
-       "y": 309,
-       "w": 380,
-       "h": 68,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      }
-     ]
-    },
-    {
-     "numero": 4,
-     "via": "openai-testo",
-     "tentativi": 1,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "Then let them make\nthose mistakes with\nsomeone else.",
-     "testo": "Allora che sbaglino\ncon qualcun altro.",
-     "blocchi": [
-      {
-       "x": 483,
-       "y": 199,
-       "w": 375,
-       "h": 105,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      }
-     ]
-    },
-    {
-     "numero": 5,
-     "via": "testo-su-sfondo-uniforme",
-     "tentativi": null,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "What about forgiveness?",
-     "testo": "E il perdono, allora?",
-     "blocchi": [
-      {
-       "x": 464,
-       "y": 348,
-       "w": 464,
-       "h": 32,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      }
-     ]
-    },
-    {
-     "numero": 6,
-     "via": "openai-testo",
-     "tentativi": 1,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "Forgive them.\nJust don't give them the\nsame access again.",
-     "testo": "Perdonali.\nMa non ridargli\nlo stesso posto.",
-     "blocchi": [
-      {
-       "x": 442,
-       "y": 223,
-       "w": 462,
-       "h": 104,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      }
-     ]
-    },
-    {
-     "numero": 7,
-     "via": "testo-su-sfondo-uniforme",
-     "tentativi": null,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "Isn't that cruel?",
-     "testo": "Non è crudele?",
-     "blocchi": [
-      {
-       "x": 464,
-       "y": 352,
-       "w": 288,
-       "h": 30,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      }
-     ]
-    },
-    {
-     "numero": 8,
-     "via": "openai-testo",
-     "tentativi": 1,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "No. Losing access to\nyou is a consequence,\nnot cruelty.",
-     "testo": "No. Perdere il posto accanto\na te è una conseguenza,\nnon una crudeltà.",
-     "blocchi": [
-      {
-       "x": 435,
-       "y": 209,
-       "w": 410,
-       "h": 104,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      }
-     ]
-    },
-    {
-     "numero": 9,
-     "via": "cta-stile-post",
-     "tentativi": null,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "",
-     "testo": "Se ti sei rivista in questa scena,\nse lo hai perdonato\nma non gli hai ridato il suo posto,\nnon sei stata crudele.\n\nHai trovato questa pagina per un motivo.\nSeguici prima di dimenticarti di noi.\n\n@AmoreInfedele",
-     "blocchi": []
-    }
-   ],
-   "concetto": "Un angelo e un diavolo giocano a scacchi e parlano di perdono. L'angelo difende le seconde possibilità, il diavolo risponde secco: non tutti le meritano. Se sbagliano, che sbaglino con qualcun altro. Puoi perdonare qualcuno senza farlo rientrare nella tua vita come prima, e perdere il posto accanto a te è una conseguenza, non una crudeltà. Il tono è serio, tagliente e un po' provocatorio.",
-   "descrizione": "Lo hai perdonato. E ti senti in colpa lo stesso, perché non gli hai ridato le chiavi.\n\nLui ti scrive che «se avessi perdonato davvero, saresti tornata come prima». E tu cominci a chiederti se il tuo perdono sia finto, solo perché non comprende il posto nel letto, la password del telefono, il diritto di sapere dove sei.\n\nTi hanno insegnato che perdonare e riaprire sono la stessa cosa. Il perdono è un lavoro che fai dentro di te: smetti di vivere in funzione del torto. La riconciliazione invece è un accordo tra due persone, e per esistere ha bisogno che anche l'altro faccia la sua parte.\n\nNel 2010 Laura Luchies, Eli Finkel e colleghi hanno dato un nome a questo rischio: effetto zerbino. Hanno studiato persone che perdonavano il partner dopo un torto. Se lui aveva riparato davvero, con i fatti e non solo con le parole, perdonare faceva crescere il rispetto di sé. Se non aveva riparato nulla, lo stesso perdono lo consumava, e con lui la chiarezza su chi si è.\n\nUn anno dopo James McNulty ha seguito coppie di sposini nei primi anni di matrimonio. Dove si tendeva a perdonare tutto, le aggressioni verbali e fisiche del partner restavano stabili nel tempo. Dove il perdono non era automatico, calavano. Senza una conseguenza, un comportamento non ha motivo di cambiare.\n\nEcco la parte scomoda, quella che il diavolo del carosello dice in una riga. Ridare lo stesso posto a chi non ha cambiato niente gli comunica che il tuo dolore costa zero. E il giro di scuse e promesse si regge proprio su quel prezzo a zero.\n\nNon è colpa tua se ha tradito la tua fiducia. È responsabilità tua decidere quanto accesso a te merita adesso: un saluto, una conversazione, oppure niente. Il perdono puoi regalarlo. La fiducia si riguadagna con i fatti, un passo alla volta.\n\nCosa ha fatto lui, concretamente, per meritare di tornare dove stava prima?\n\nSei d'accordo col post?\n\n#amoreinfedele #tradimento #perdono #relazionitossiche #psicologiarelazionale",
-   "segnalazioni": [
-    "le pagine dove c'è l'angelo le hai fatte con frase su sfondo nero invece era da fare con soggetto giusto."
-   ]
-  },
-  {
-   "job_id": 5,
-   "fonte": "https://www.instagram.com/p/DfDDH-9k1WR/",
-   "fallite": [],
-   "slides": [
-    {
-     "numero": 1,
-     "via": "testo-su-sfondo-uniforme",
-     "tentativi": null,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "Why do you tell\npeople to walk away?",
-     "testo": "Perché dici alle persone\ndi andarsene?",
-     "blocchi": [
-      {
-       "x": 485,
-       "y": 305,
-       "w": 397,
-       "h": 70,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      }
-     ]
-    },
-    {
-     "numero": 2,
-     "via": "openai-testo",
-     "tentativi": 1,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "Because not everyone\ndeserves another chance.",
-     "testo": "Perché non tutti meritano\nuna seconda possibilità.",
-     "blocchi": [
-      {
-       "x": 437,
-       "y": 256,
-       "w": 467,
-       "h": 66,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      }
-     ]
-    },
-    {
-     "numero": 3,
-     "via": "testo-su-sfondo-uniforme",
-     "tentativi": null,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "But everyone makes\nmistakes.",
-     "testo": "Ma sbagliano\ntutti.",
-     "blocchi": [
-      {
-       "x": 477,
-       "y": 311,
-       "w": 379,
-       "h": 66,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      }
-     ]
-    },
-    {
-     "numero": 4,
-     "via": "openai-testo",
-     "tentativi": 1,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "Then let them make\nthose mistakes with\nsomeone else.",
-     "testo": "Allora che sbaglino\ncon qualcun altro.",
-     "blocchi": [
-      {
-       "x": 482,
-       "y": 219,
-       "w": 375,
-       "h": 105,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      }
-     ]
-    },
-    {
-     "numero": 5,
-     "via": "testo-su-sfondo-uniforme",
-     "tentativi": null,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "What about forgiveness?",
-     "testo": "E il perdono?",
-     "blocchi": [
-      {
-       "x": 465,
-       "y": 348,
-       "w": 463,
-       "h": 32,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      }
-     ]
-    },
-    {
-     "numero": 6,
-     "via": "openai-testo",
-     "tentativi": 1,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "Forgive them.\nJust don't give them the\nsame access again.",
-     "testo": "Perdonali pure.\nMa non ridargli\nlo stesso posto.",
-     "blocchi": [
-      {
-       "x": 442,
-       "y": 223,
-       "w": 456,
-       "h": 105,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      }
-     ]
-    },
-    {
-     "numero": 7,
-     "via": "testo-su-sfondo-uniforme",
-     "tentativi": null,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "Isn't that cruel?",
-     "testo": "Non è crudele?",
-     "blocchi": [
-      {
-       "x": 463,
-       "y": 350,
-       "w": 289,
-       "h": 30,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      }
-     ]
-    },
-    {
-     "numero": 8,
-     "via": "openai-testo",
-     "tentativi": 1,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "No. Losing access to\nyou is a consequence,\nnot cruelty.",
-     "testo": "No. Perdere il posto\naccanto a te non è crudeltà.\nÈ una conseguenza.",
-     "blocchi": [
-      {
-       "x": 434,
-       "y": 209,
-       "w": 411,
-       "h": 107,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      }
-     ]
-    },
-    {
-     "numero": 9,
-     "via": "cta-stile-post",
-     "tentativi": null,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "",
-     "testo": "Se ti sei rivista in questa scena,\nricorda:\nil perdono lo decidi tu.\nIl posto accanto a te\nsi guadagna.\n\nSe non ci segui,\nprobabilmente non ci\nrivedrai mai più.\n\nMa se già lo fai\ncongratulazioni!\nStai crescendo con noi\nogni giorno.",
-     "blocchi": []
-    }
-   ],
-   "concetto": "Un angelo e un diavolo giocano a scacchi e discutono: l'angelo chiede perché il diavolo dica alla gente di andarsene, e il diavolo risponde che non tutti meritano un'altra possibilità. Se tutti sbagliano, che sbaglino con qualcun altro. Puoi perdonare, ma senza ridare a quella persona lo stesso posto nella tua vita. E non è crudeltà: è la conseguenza di ciò che ha fatto. Registro: provocatorio e tagliente, da botta e risposta.",
-   "descrizione": "Ti ha chiesto scusa. E tu gli hai creduto, di nuovo.\n\nLo conosci quel momento: lui seduto sul bordo del letto, gli occhi bassi, la voce rotta. Senti la rabbia sciogliersi e pensi che perdonare voglia dire tornare come prima. Così riapri la porta, rimetti il suo spazzolino nel bicchiere, sblocchi il numero. Qualche mese dopo fissi lo stesso schermo, con lo stesso nodo allo stomaco.\n\nTi è costato più del tradimento. Ti è costata la fiducia in te stessa, perché ogni volta che lo riaccogli una parte di te impara che il tuo dolore si cancella con una frase detta bene.\n\nIl meccanismo è questo: hai fuso due cose che la psicologia tiene separate. Nel 1998 Michael McCullough e colleghi hanno descritto il perdono come un cambiamento interno: si spengono la voglia di vendetta e il bisogno di stare alla larga. In quella definizione la fiducia non c'è. Everett Worthington, che studia il perdono da decenni, insiste su una distinzione precisa: perdonare succede dentro di te e puoi farlo da sola, riconciliarsi succede tra due persone e richiede che l'altro dimostri nel tempo di essere di nuovo affidabile.\n\nPer questo, nel post, il diavolo ha ragione. Il perdono lo decidi tu. Il posto accanto a te si guadagna con i fatti. Le scuse che arrivano sempre allo stesso punto del ciclo, dopo il danno e prima del prossimo, fanno parte del copione: chi le pronuncia rimpiange ciò che ha perso, non ciò che ha fatto.\n\nNon è colpa tua se ti ha ferita. È responsabilità tua decidere quanta strada concedergli per arrivare di nuovo a te. Puoi lasciarlo andare in pace, oppure tenerlo a distanza e guardare quello che fa, non quello che promette.\n\nPerdonare ti libera. Riaprire la porta senza prove ti espone.\n\nL'ultima volta che ti ha chiesto scusa, cosa è cambiato davvero, a parte le parole?\n\nSei d'accordo col post? Se questo dialogo ti ha parlato, segui @amoreinfedele: qui si parla di quello che viene dopo.\n\n#amoreinfedele #tradimento #perdono #relazionitossiche #psicologiarelazionale",
-   "segnalazioni": [
-    "non deve esserci un uomo nella slide finale con il cta, ma una donna perché è una pagina per donne e aumenta effetto \"mi ci rivedo\" nella lettrice donna"
-   ]
-  },
-  {
-   "job_id": 8,
-   "fonte": "https://www.instagram.com/p/DfFTqIqm-nE/",
+   "job_id": 3,
+   "fonte": "https://www.instagram.com/p/DeZ0yLdmPQx/",
    "fallite": [
+    1,
     4,
     5,
-    6
+    6,
+    8,
+    9,
+    10
    ],
    "slides": [
     {
      "numero": 1,
-     "via": "openai-testo",
-     "tentativi": 1,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "MATURE WIFE\nVS\nSELFISH WIFE",
-     "testo": "MOGLIE\nMATURA\n\nMOGLIE\nEGOISTA",
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/)",
+     "testo_originale": "YOU'RE NOT TAKING CARE OF ME SEXUALLY.\n\nBECAUSE YOU AREN'T TAKING CARE OF ME EMOTIONALLY.",
+     "testo": "A LETTO\nMI TRASCURI.\n\nPERCHÉ TU\nMI TRASCURI\nEMOTIVAMENTE.",
      "blocchi": [
       {
-       "x": 99,
-       "y": 23,
-       "w": 340,
-       "h": 145,
+       "x": 380,
+       "y": 12,
+       "w": 605,
+       "h": 90,
        "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
+       "colore": "#000000",
+       "colore_evidenziato": "#E53935",
        "allineamento": "center"
       },
       {
-       "x": 570,
-       "y": 23,
-       "w": 345,
-       "h": 145,
+       "x": 415,
+       "y": 538,
+       "w": 540,
+       "h": 112,
        "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
+       "colore": "#000000",
+       "colore_evidenziato": "#E53935",
        "allineamento": "center"
       }
      ]
@@ -479,70 +88,30 @@
     {
      "numero": 2,
      "via": "openai-testo",
-     "tentativi": 1,
+     "tentativi": 2,
      "fallita": false,
      "problema": "",
-     "testo_originale": "MATURE WIFE\nI NEED MORE HELP THIS WEEK.\nSAYS WHAT SHE NEEDS BEFORE RESENTMENT BUILDS.\nSELFISH WIFE\nIF YOU LOVED ME, YOU'D KNOW.\nEXPECTS HIM TO READ HER MIND, THEN PUNISHES HIM FOR GUESSING WRONG.",
-     "testo": "MOGLIE\nMATURA\n\nQUESTA SETTIMANA\nMI SERVE PIÙ AIUTO.\n\nDICE COSA LE SERVE\nPRIMA DI ACCUMULARE\nRANCORE.\n\nMOGLIE\nEGOISTA\n\nSE MI AMASSI,\nLO SAPRESTI.\n\nPRETENDE CHE LE LEGGA\nNEL PENSIERO, POI LO PUNISCE\nSE SBAGLIA.",
+     "testo_originale": "SO AFFECTION HAS CONDITIONS NOW?\n\nNO. BUT DESIRE DOESN'T SURVIVE WHERE CONNECTION KEEPS DYING.",
+     "testo": "QUINDI ADESSO L'AFFETTO\nHA DELLE CONDIZIONI?\n\nNO. MA IL DESIDERIO\nNON SOPRAVVIVE DOVE\nL'INTESA STA MORENDO.",
      "blocchi": [
       {
-       "x": 99,
-       "y": 23,
-       "w": 340,
-       "h": 145,
+       "x": 415,
+       "y": 15,
+       "w": 515,
+       "h": 75,
        "carattere": "fumetto",
-       "colore": "#111111",
+       "colore": "#000000",
        "colore_evidenziato": "",
-       "allineamento": "center"
+       "allineamento": "left"
       },
       {
-       "x": 190,
-       "y": 181,
-       "w": 190,
-       "h": 62,
+       "x": 385,
+       "y": 515,
+       "w": 585,
+       "h": 128,
        "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      },
-      {
-       "x": 130,
-       "y": 859,
-       "w": 282,
-       "h": 62,
-       "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      },
-      {
-       "x": 570,
-       "y": 23,
-       "w": 345,
-       "h": 145,
-       "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      },
-      {
-       "x": 698,
-       "y": 181,
-       "w": 245,
-       "h": 62,
-       "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      },
-      {
-       "x": 563,
-       "y": 855,
-       "w": 396,
-       "h": 90,
-       "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
+       "colore": "#000000",
+       "colore_evidenziato": "#E53935",
        "allineamento": "center"
       }
      ]
@@ -550,61 +119,31 @@
     {
      "numero": 3,
      "via": "openai-testo",
-     "tentativi": 1,
+     "tentativi": 2,
      "fallita": false,
      "problema": "",
-     "testo_originale": "MATURE WIFE\nI DISAGREE, BUT WE CAN DISCUSS THIS PRIVATELY.\nCORRECTS HIM WITHOUT DESTROYING HIS DIGNITY.\nSELFISH WIFE\nMAKES HIM THE PUNCHLINE WHEN OTHER PEOPLE ARE WATCHING.",
-     "testo": "MOGLIE\nMATURA\n\nNON SONO D'ACCORDO,\nMA NE PARLIAMO\nDOPO, DA SOLI.\n\nLO CORREGGE SENZA\nTOGLIERGLI DIGNITÀ.\n\nMOGLIE\nEGOISTA\n\nQUANDO C'È GENTE,\nLO ZIMBELLO\nÈ SEMPRE LUI.",
+     "testo_originale": "I WORK. I PROVIDE. I COME HOME. WHAT ELSE DO YOU WANT?\n\nA HUSBAND WHO NOTICES ME BEFORE HE TOUCHES ME.",
+     "testo": "LAVORO. PORTO I SOLDI A CASA.\nTORNO DA TE.\nCHE ALTRO VUOI?\n\nUN MARITO CHE\nMI VEDE\nPRIMA DI\nTOCCARMI.",
      "blocchi": [
       {
-       "x": 99,
-       "y": 23,
-       "w": 340,
-       "h": 145,
+       "x": 234,
+       "y": 15,
+       "w": 693,
+       "h": 143,
        "carattere": "fumetto",
-       "colore": "#111111",
+       "colore": "#000000",
        "colore_evidenziato": "",
-       "allineamento": "center"
+       "allineamento": "left"
       },
       {
-       "x": 68,
-       "y": 160,
-       "w": 292,
-       "h": 66,
+       "x": 505,
+       "y": 175,
+       "w": 400,
+       "h": 178,
        "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      },
-      {
-       "x": 52,
-       "y": 883,
-       "w": 396,
-       "h": 62,
-       "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      },
-      {
-       "x": 570,
-       "y": 23,
-       "w": 345,
-       "h": 145,
-       "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      },
-      {
-       "x": 554,
-       "y": 848,
-       "w": 415,
-       "h": 94,
-       "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "center"
+       "colore": "#000000",
+       "colore_evidenziato": "#E53935",
+       "allineamento": "left"
       }
      ]
     },
@@ -614,47 +153,27 @@
      "tentativi": 2,
      "fallita": true,
      "problema": "OpenAI non ha risposto (Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/)",
-     "testo_originale": "MATURE WIFE\nI WAS WRONG. I HURT YOU. I'M SORRY.\nSELFISH WIFE\nAPOLOGIZES ONLY AFTER EXPLAINING WHY IT WAS STILL HIS FAULT.",
-     "testo": "MOGLIE\nMATURA\n\nHO SBAGLIATO.\nTI HO FERITO.\nMI DISPIACE.\n\nMOGLIE\nEGOISTA\n\nCHIEDE SCUSA SOLO DOPO\nAVERGLI SPIEGATO PERCHÉ\nÈ COMUNQUE COLPA SUA.",
+     "testo_originale": "DO YOU KNOW WHAT CONSTANT REJECTION DOES TO A MAN?\n\nDO YOU KNOW WHAT CONSTANT EMOTIONAL NEGLECT DOES TO A WOMAN?",
+     "testo": "SAI COSA FA A UN UOMO\nESSERE RIFIUTATO\nDI CONTINUO?\n\nSAI COSA FA\nA UNA DONNA\nSENTIRSI TRASCURATA\nDI CONTINUO?",
      "blocchi": [
       {
-       "x": 99,
-       "y": 23,
-       "w": 340,
-       "h": 145,
+       "x": 344,
+       "y": 15,
+       "w": 615,
+       "h": 118,
        "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
+       "colore": "#000000",
+       "colore_evidenziato": "#E53935",
        "allineamento": "center"
       },
       {
-       "x": 125,
-       "y": 211,
-       "w": 240,
-       "h": 82,
+       "x": 323,
+       "y": 515,
+       "w": 396,
+       "h": 172,
        "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      },
-      {
-       "x": 570,
-       "y": 23,
-       "w": 345,
-       "h": 145,
-       "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      },
-      {
-       "x": 547,
-       "y": 199,
-       "w": 417,
-       "h": 70,
-       "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
+       "colore": "#000000",
+       "colore_evidenziato": "#E53935",
        "allineamento": "center"
       }
      ]
@@ -665,47 +184,27 @@
      "tentativi": 2,
      "fallita": true,
      "problema": "OpenAI non ha risposto (Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/)",
-     "testo_originale": "MATURE WIFE\nNOTICES HIS SACRIFICES WITHOUT TREATING THEM AS HIS ONLY VALUE.\nSELFISH WIFE\nONLY NOTICES HIM WHEN HE STOPS PROVIDING, FIXING, OR GIVING.",
-     "testo": "MOGLIE\nMATURA\n\nVEDE I SACRIFICI CHE FA,\nMA NON LO RIDUCE\nA QUELLI.\n\nMOGLIE\nEGOISTA\n\nSI ACCORGE DI LUI SOLO\nQUANDO SMETTE DI PROVVEDERE,\nDI AGGIUSTARE, DI DARE.",
+     "testo_originale": "I STOPPED TALKING BECAUSE NOTHING CHANGED.\n\nAND I STOPPED OPENING BECAUSE EVERY CONVERSATION FELT LIKE AN INCONVENIENCE.",
+     "testo": "HO SMESSO DI PARLARE PERCHÉ\nNON CAMBIAVA NIENTE.\n\nE IO HO SMESSO DI APRIRMI\nPERCHÉ OGNI DISCORSO\nTI DAVA FASTIDIO.",
      "blocchi": [
       {
-       "x": 99,
-       "y": 23,
-       "w": 340,
-       "h": 145,
+       "x": 16,
+       "y": 15,
+       "w": 547,
+       "h": 70,
        "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "center"
+       "colore": "#000000",
+       "colore_evidenziato": "#E53935",
+       "allineamento": "left"
       },
       {
-       "x": 42,
-       "y": 848,
-       "w": 417,
-       "h": 94,
+       "x": 333,
+       "y": 515,
+       "w": 640,
+       "h": 125,
        "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      },
-      {
-       "x": 570,
-       "y": 23,
-       "w": 345,
-       "h": 145,
-       "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      },
-      {
-       "x": 557,
-       "y": 848,
-       "w": 406,
-       "h": 94,
-       "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
+       "colore": "#000000",
+       "colore_evidenziato": "#E53935",
        "allineamento": "center"
       }
      ]
@@ -715,98 +214,232 @@
      "via": "openai-pulizia+blocchi",
      "tentativi": 2,
      "fallita": true,
-     "problema": "OpenAI non ha risposto (Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/)",
-     "testo_originale": "MATURE WIFE\nSUPPORTS HIM WHEN HE STRUGGLES WHILE STILL HOLDING HIM ACCOUNTABLE.\nSELFISH WIFE\nUSES HIS LOWEST MOMENT AS PROOF THAT SHE DESERVES SOMEONE BETTER.",
-     "testo": "MOGLIE\nMATURA\n\nLO SOSTIENE QUANDO CROLLA,\nSENZA TOGLIERGLI\nLE SUE RESPONSABILITÀ.\n\nMOGLIE\nEGOISTA\n\nNEL SUO MOMENTO PEGGIORE\nTROVA LA PROVA\nCHE MERITA DI MEGLIO.",
+     "problema": "OpenAI non ha risposto (Error code: 400 - Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include)",
+     "testo_originale": "SO WE'RE BOTH STARVING EACH OTHER?\n\nYES. YOU'RE WAITING FOR SEX TO FEEL LOVED. I'M WAITING TO FEEL LOVED BEFORE I WANT SEX.",
+     "testo": "QUINDI CI STIAMO\nLASCIANDO A DIGIUNO\nA VICENDA?\n\nSÌ. TU ASPETTI IL SES*O\nPER SENTIRTI AMATO.\nIO HO BISOGNO DI\nSENTIRMI AMATA\nPRIMA DI DESIDERARTI.",
      "blocchi": [
       {
-       "x": 99,
-       "y": 23,
-       "w": 340,
-       "h": 145,
+       "x": 385,
+       "y": 20,
+       "w": 552,
+       "h": 133,
        "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
+       "colore": "#000000",
+       "colore_evidenziato": "#E53935",
        "allineamento": "center"
       },
       {
-       "x": 83,
-       "y": 855,
-       "w": 365,
-       "h": 94,
+       "x": 411,
+       "y": 508,
+       "w": 475,
+       "h": 200,
        "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      },
-      {
-       "x": 570,
-       "y": 23,
-       "w": 345,
-       "h": 145,
-       "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      },
-      {
-       "x": 557,
-       "y": 855,
-       "w": 401,
-       "h": 94,
-       "carattere": "fumetto",
-       "colore": "#111111",
-       "colore_evidenziato": "",
+       "colore": "#000000",
+       "colore_evidenziato": "#E53935",
        "allineamento": "center"
       }
      ]
     },
     {
      "numero": 7,
-     "via": "cta-illustrata",
-     "tentativi": null,
+     "via": "openai-testo",
+     "tentativi": 1,
      "fallita": false,
      "problema": "",
-     "testo_originale": "",
-     "testo": "Se ti sei riconosciuta\nanche in uno solo\ndi questi cinque confronti,\nda una parte o dall'altra,\n\nhai trovato questa pagina\nper un motivo.\n\nSe ti piacciono questi contenuti,\nseguici prima di dimenticarti di noi.\n\n@AmoreInfedele",
-     "blocchi": []
+     "testo_originale": "WHO GOES FIRST?\n\nTHE ONE WHO CARES MORE ABOUT US THAN WINNING.",
+     "testo": "CHI COMINCIA?\n\nCHI TIENE\nPIÙ\nA NOI\nCHE A VINCERE.",
+     "blocchi": [
+      {
+       "x": 615,
+       "y": 20,
+       "w": 354,
+       "h": 42,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 323,
+       "y": 102,
+       "w": 370,
+       "h": 192,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "#E53935",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/)",
+     "testo_originale": "THEN TELL ME WHAT EMOTIONAL CARE LOOKS LIKE.\n\nASK ABOUT MY HEART BEFORE ASKING FOR MY BODY. MAKE ME FEEL CHOSEN OUTSIDE THE BEDROOM.",
+     "testo": "ALLORA DIMMI COSA\nVUOL DIRE, PER TE,\nPRENDERMI CURA DI TE.\n\nCHIEDIMI COME STA IL MIO CUORE\nPRIMA DI CERCARE IL MIO CORPO.\nFAMMI SENTIRE SCELTA ANCHE\nFUORI DAL LETTO.",
+     "blocchi": [
+      {
+       "x": 490,
+       "y": 15,
+       "w": 437,
+       "h": 112,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 401,
+       "y": 538,
+       "w": 573,
+       "h": 130,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "#E53935",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/)",
+     "testo_originale": "A MARRIAGE CAN STARVE TWO PEOPLE IN DIFFERENT WAYS.\n\nHE WITHDRAWS BECAUSE HE FEELS REJECTED.\n\nSHE REJECTS BECAUSE SHE FEELS EMOTIONALLY ABANDONED.\n\nIF NEITHER SPEAKS, THE CYCLE STARTS FEEDING ITSELF.",
+     "testo": "UN MATRIMONIO PUÒ LASCIARE A DIGIUNO\nDUE PERSONE IN MODI DIVERSI.\n\nLUI SI CHIUDE\nPERCHÉ SI SENTE\nRIFIUTATO.\n\nLEI LO RESPINGE\nPERCHÉ SI SENTE\nSOLA ACCANTO A LUI.\n\nSE NESSUNO DEI DUE PARLA,\nIL CIRCOLO NON SI FERMA PIÙ.",
+     "blocchi": [
+      {
+       "x": 146,
+       "y": 15,
+       "w": 724,
+       "h": 80,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "#E53935",
+       "allineamento": "center"
+      },
+      {
+       "x": 62,
+       "y": 145,
+       "w": 280,
+       "h": 82,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 635,
+       "y": 125,
+       "w": 310,
+       "h": 130,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 198,
+       "y": 512,
+       "w": 650,
+       "h": 82,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "#E53935",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 10,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/)",
+     "testo_originale": "IF YOU STILL LOVE EACH OTHER, BUT EMOTIONAL NEGLECT AND SEXUAL REJECTION HAVE TURNED YOUR MARRIAGE INTO A QUIET PUNISHMENT...\n\nTHAT'S WHY I CREATED THESE TWO GUIDES.\nCOMMENT \"RESET\"\nAND I'LL SEND THEM TO YOU.",
+     "testo": "SE VI SIETE RIVISTI IN QUESTA SCENA\nE TRA RIFIUTI E SILENZI IL VOSTRO\nRAPPORTO È DIVENTATO\nUNA PUNIZIONE SILENZIOSA...\n\nSEGUI LA PAGINA PER CAPIRVI DAVVERO.\n\nSEGUI ORA\n\nTI ASPETTO SU @ILPENSATORE",
+     "blocchi": [
+      {
+       "x": 31,
+       "y": 15,
+       "w": 938,
+       "h": 155,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "#E53935",
+       "allineamento": "center"
+      },
+      {
+       "x": 166,
+       "y": 690,
+       "w": 776,
+       "h": 50,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "#E53935",
+       "allineamento": "center"
+      },
+      {
+       "x": 234,
+       "y": 742,
+       "w": 547,
+       "h": 85,
+       "carattere": "fumetto",
+       "colore": "#E53935",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 229,
+       "y": 840,
+       "w": 542,
+       "h": 55,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
     }
    ],
-   "concetto": "Il carosello mette a confronto due mogli: quella matura e quella egoista. Per ogni situazione (bisogni, disaccordi davanti agli altri, scuse, sacrifici, momenti difficili) mostra cosa fa una e cosa fa l'altra. La matura dice cosa le serve, corregge in privato, si scusa davvero, vede i sacrifici di lui e lo sostiene. L'egoista pretende che lui le legga nel pensiero, lo umilia in pubblico, si scusa dando la colpa a lui e lo usa come prova che merita di meglio. Il registro è diretto, un po' provocatorio, ma con un intento educativo.",
-   "descrizione": "Io per anni ho aspettato che capisse da solo.\n\nIl lavandino pieno, la settimana impossibile, la stanchezza che mi si leggeva in faccia. Non dicevo niente. E quando lui non se ne accorgeva, la sera rispondevo a monosillabi e pensavo: se mi amasse, lo saprebbe.\n\nCi ho messo tempo a capire che quella frase non era una prova d'amore. Era paura. Chiedere aiuto ad alta voce vuol dire rischiare un no, e per chi è già stata delusa un no pesa come una conferma. Così smetti di chiedere e cominci a mettere alla prova. Già nel 1982 gli psicologi Roy Eidelson e Norman Epstein hanno misurato questa convinzione, \"chi mi ama deve capirmi senza parole\": le coppie che ci credono di più sono anche le meno soddisfatte. Ogni silenzio diventa un esame che l'altro non sa nemmeno di dover sostenere.\n\nLo stesso vale per la battuta davanti agli amici. John Gottman ha osservato per decenni centinaia di coppie nel suo laboratorio di Seattle e ha scoperto che il segnale che più annuncia la fine di un matrimonio non è il litigio ma il disprezzo: il sarcasmo, gli occhi al cielo, rendere l'altro ridicolo. Spesso nasce da un rancore mai detto, che esce quando c'è pubblico.\n\nEcco la parte scomoda. Questo carosello si legge in due direzioni. Puoi riconoscerti nella colonna dell'egoista, e non perché sei cattiva: a volte è così che una ferita vecchia si difende. Oppure puoi accorgerti che quella colonna descrive quello che ricevi tu. Le scuse che finiscono sempre con \"ma anche tu\", l'attenzione che arriva solo quando smetti di dare.\n\nIn entrambi i casi il metro è lo stesso. Una coppia sana non è quella in cui nessuno sbaglia, ma quella in cui si chiede con parole chiare, si corregge in privato e ci si scusa senza un \"però\" in coda.\n\nNon è colpa tua se hai imparato a non chiedere. È responsabilità tua ricominciare a farlo, e osservare cosa succede quando lo fai.\n\nQual è l'ultima cosa di cui avevi bisogno e che hai aspettato che lui indovinasse?\n\nSei d'accordo col post? Se ti sei riconosciuta anche in uno solo di questi confronti, segui @amoreinfedele: qui parliamo di quello che succede dopo.",
+   "concetto": "Una coppia sposata litiga sempre sulla stessa cosa. Lui si sente rifiutato a letto, lei si sente trascurata emotivamente. Ognuno aspetta che l'altro faccia il primo passo, e intanto restano entrambi a digiuno. La soluzione è prendersi cura del cuore prima di cercare il corpo, e il primo passo lo fa chi tiene più alla coppia che ad avere ragione. Il tono è drammatico e serio, quello del dialogo di coppia in cui ci si riconosce.",
+   "descrizione": "Un uomo mi ha raccontato che lui e sua moglie avevano smesso di litigare. Gli sembrava un buon segno. Poi ha capito che avevano smesso anche di cercarsi: lui non la toccava più per non sentirsi dire di no, lei non gli raccontava più niente per non vederlo sbuffare.\n\nSe vivi in una coppia così, quel silenzio lo conosci. Ognuno tiene il conto di quello che non riceve e intanto smette di dare. Lui perde la sensazione di essere desiderato, lei quella di essere vista. E siccome ciascuno aspetta che sia l'altro a muoversi, il circolo si stringe un po' di più ogni settimana.\n\nSotto c'è un equivoco su come funziona il desiderio. Molti pensano che arrivi da solo e che, se manca, sia un capriccio. Nel 2000 la ginecologa Rosemary Basson ha descritto un modello diverso: per tante persone, soprattutto nelle relazioni lunghe, il desiderio non viene prima dell'intimità ma nasce dentro di essa. Prima la vicinanza, poi il corpo risponde. Nel 2016 Gurit Birnbaum e Harry Reis l'hanno visto in laboratorio: quando una persona sente il partner attento a ciò che prova, il desiderio verso di lui cresce, negli uomini come nelle donne.\n\nPer questo \"porto i soldi a casa\" non basta. È cura vera, ma non arriva come attenzione. E il rifiuto, dall'altra parte, non arriva come richiesta di vicinanza: arriva come un giudizio sul proprio valore. Due persone affamate della stessa cosa, ognuna con una lingua che l'altra non capisce.\n\nPer spezzarlo non serve un grande discorso. Serve che uno dei due smetta di contare. Una domanda vera a fine giornata, ascoltare la risposta senza correggerla, un gesto che non chiede niente in cambio. E dall'altra parte accogliere quel gesto, invece di aspettare la prova che sia sincero.\n\nNon state smettendo di amarvi. State smettendo di nutrirvi.\n\nQual è l'ultima cosa che hai smesso di dare aspettando che l'altro facesse il primo passo?\n\nSe ti sei rivisto in questa scena, da qualunque lato del letto, segui @ilpensatore: qui parliamo di quello che succede in coppia quando nessuno ha il coraggio di dirlo ad alta voce.",
    "segnalazioni": []
   },
   {
-   "job_id": 10,
-   "fonte": "https://www.instagram.com/p/De9WWkDH7kE/",
+   "job_id": 9,
+   "fonte": "https://www.instagram.com/p/DeX69jLkssr/",
    "fallite": [],
    "slides": [
     {
      "numero": 1,
-     "via": "openai-testo",
-     "tentativi": 1,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
      "fallita": false,
      "problema": "",
-     "testo_originale": "even when we fight?\neven then.",
-     "testo": "anche quando litighiamo?\n\nanche allora.",
+     "testo_originale": "I checked your phone last night.\nWhile I was sleeping?",
+     "testo": "Stanotte ti ho\ncontrollato\nil telefono.\n\nMentre dormivo?",
      "blocchi": [
       {
-       "x": 94,
-       "y": 457,
-       "w": 380,
-       "h": 27,
+       "x": 270,
+       "y": 90,
+       "w": 280,
+       "h": 140,
        "carattere": "normale",
-       "colore": "#111111",
+       "colore": "#000000",
        "colore_evidenziato": "",
        "allineamento": "left"
       },
       {
-       "x": 769,
-       "y": 652,
-       "w": 208,
-       "h": 27,
+       "x": 300,
+       "y": 570,
+       "w": 380,
+       "h": 110,
        "carattere": "normale",
-       "colore": "#111111",
+       "colore": "#000000",
        "colore_evidenziato": "",
        "allineamento": "left"
       }
@@ -814,61 +447,71 @@
     },
     {
      "numero": 2,
-     "via": "openai-testo",
-     "tentativi": 1,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
      "fallita": false,
      "problema": "",
-     "testo_originale": "even when life gets hard?\nespecially when life gets hard.",
-     "testo": "anche quando le cose\nsi mettono male?\n\nsoprattutto quando\nsi mettono male.",
+     "testo_originale": "Yeah. I'm sorry.\n...",
+     "testo": "Sì.\nScusami.\n\n...",
      "blocchi": [
       {
-       "x": 101,
-       "y": 449,
-       "w": 266,
-       "h": 74,
+       "x": 290,
+       "y": 165,
+       "w": 300,
+       "h": 130,
        "carattere": "normale",
-       "colore": "#111111",
+       "colore": "#000000",
        "colore_evidenziato": "",
        "allineamento": "left"
       },
       {
-       "x": 599,
-       "y": 492,
-       "w": 307,
-       "h": 62,
+       "x": 750,
+       "y": 355,
+       "w": 110,
+       "h": 40,
        "carattere": "normale",
-       "colore": "#111111",
+       "colore": "#000000",
        "colore_evidenziato": "",
-       "allineamento": "right"
+       "allineamento": "center"
       }
      ]
     },
     {
      "numero": 3,
-     "via": "openai-testo",
-     "tentativi": 1,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
      "fallita": false,
      "problema": "",
-     "testo_originale": "what if i mess up?\nthen we'll talk about it and keep going.",
-     "testo": "e se sbaglio?\n\nallora ne parliamo\ne andiamo avanti.",
+     "testo_originale": "Did you find anything?\nNo.\nThen why did you feel like you needed to look?",
+     "testo": "Hai trovato\nqualcosa?\n\nNo.\n\nE allora perché hai\nsentito il bisogno\ndi guardare?",
      "blocchi": [
       {
-       "x": 83,
-       "y": 461,
-       "w": 333,
-       "h": 28,
-       "carattere": "normale",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "left"
-      },
-      {
-       "x": 711,
-       "y": 465,
-       "w": 260,
+       "x": 480,
+       "y": 50,
+       "w": 280,
        "h": 90,
        "carattere": "normale",
-       "colore": "#111111",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 375,
+       "y": 425,
+       "w": 95,
+       "h": 50,
+       "carattere": "normale",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 375,
+       "y": 690,
+       "w": 340,
+       "h": 120,
+       "carattere": "normale",
+       "colore": "#000000",
        "colore_evidenziato": "",
        "allineamento": "center"
       }
@@ -880,26 +523,36 @@
      "tentativi": 1,
      "fallita": false,
      "problema": "",
-     "testo_originale": "what if i fall apart?\nthen i'll help put you back together.",
-     "testo": "e se crollo?\n\nallora ti aiuto io\na rimettere insieme i pezzi.",
+     "testo_originale": "Because I've been cheated on before. Sometimes I'm scared you'll hurt me the same way.\nI understand why you're scared. But I'm not the person who hurt you.\nI know. I'm trying to trust again.",
+     "testo": "Perché mi hanno già\ntradito. A volte ho paura\nche tu mi faccia\nlo stesso.\n\nCapisco perché hai paura.\nMa non sono io\nquella che ti ha\nferito.\n\nLo so.\nSto provando a\nfidarmi di nuovo.",
      "blocchi": [
       {
-       "x": 89,
-       "y": 461,
-       "w": 349,
-       "h": 30,
+       "x": 315,
+       "y": 40,
+       "w": 360,
+       "h": 160,
        "carattere": "normale",
-       "colore": "#111111",
+       "colore": "#000000",
        "colore_evidenziato": "",
-       "allineamento": "left"
+       "allineamento": "center"
       },
       {
-       "x": 628,
-       "y": 465,
-       "w": 297,
-       "h": 66,
+       "x": 335,
+       "y": 395,
+       "w": 320,
+       "h": 160,
        "carattere": "normale",
-       "colore": "#111111",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 370,
+       "y": 730,
+       "w": 270,
+       "h": 110,
+       "carattere": "normale",
+       "colore": "#000000",
        "colore_evidenziato": "",
        "allineamento": "center"
       }
@@ -911,26 +564,56 @@
      "tentativi": 1,
      "fallita": false,
      "problema": "",
-     "testo_originale": "when we're old and wrinkly?\ni'll still look at you the same way i do now.",
-     "testo": "e quando saremo vecchi\ne pieni di rughe?\n\nti guarderò ancora\ncome ti guardo adesso.",
+     "testo_originale": "Then talk to me when you're scared, Don't go through my phone behind my back.\nI just don't want to lose you.\nAnd I don't want you to feel unsafe with me, But we need honesty, not secrets, to build trust.\nYou're right. I'm sorry.\nWe'll work through your fears together, but trust has to go both ways.",
+     "testo": "Allora, quando hai paura,\nparlamene. Non frugare nel\nmio telefono di nascosto.\n\nNon voglio perderti,\ntutto qui.\n\nE io non voglio che con me\nti senta insicuro.\nMa la fiducia si costruisce\ncon l'onestà, non con i segreti.\n\nHai ragione.\nScusami.\n\nLe tue paure\nle affrontiamo insieme.\nMa la fiducia deve valere\nper tutti e due.",
      "blocchi": [
       {
-       "x": 94,
-       "y": 445,
-       "w": 279,
-       "h": 66,
+       "x": 305,
+       "y": 35,
+       "w": 385,
+       "h": 125,
        "carattere": "normale",
-       "colore": "#111111",
+       "colore": "#000000",
        "colore_evidenziato": "",
        "allineamento": "center"
       },
       {
-       "x": 609,
-       "y": 438,
-       "w": 271,
-       "h": 98,
+       "x": 315,
+       "y": 320,
+       "w": 260,
+       "h": 85,
        "carattere": "normale",
-       "colore": "#111111",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 325,
+       "y": 545,
+       "w": 345,
+       "h": 165,
+       "carattere": "normale",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 280,
+       "y": 810,
+       "w": 190,
+       "h": 75,
+       "carattere": "normale",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 495,
+       "y": 825,
+       "w": 280,
+       "h": 110,
+       "carattere": "normale",
+       "colore": "#000000",
        "colore_evidenziato": "",
        "allineamento": "center"
       }
@@ -938,143 +621,19 @@
     },
     {
      "numero": 6,
-     "via": "openai-testo",
-     "tentativi": 1,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "forever?\nuntil our last breath and even past that.",
-     "testo": "per sempre?\n\nfino all'ultimo respiro.\ne anche dopo.",
-     "blocchi": [
-      {
-       "x": 123,
-       "y": 469,
-       "w": 167,
-       "h": 30,
-       "carattere": "normale",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "left"
-      },
-      {
-       "x": 576,
-       "y": 457,
-       "w": 339,
-       "h": 51,
-       "carattere": "normale",
-       "colore": "#111111",
-       "colore_evidenziato": "",
-       "allineamento": "right"
-      }
-     ]
-    },
-    {
-     "numero": 7,
-     "via": "cta-illustrata",
+     "via": "cta-stile-post",
      "tentativi": null,
      "fallita": false,
      "problema": "",
      "testo_originale": "",
-     "testo": "Se in questo dialogo\nhai cercato le risposte\nche nessuno ti ha mai dato,\n\nhai trovato questa pagina\nper un motivo.\n\nSe ti piacciono questi contenuti,\nseguici prima di dimenticarti di noi.\n\n@AmoreInfedele",
+     "testo": "Se ti sei rivisto in questa scena,\nda una parte o dall'altra,\nlo sai già:\nil passato spiega la paura,\nma non giustifica il controllo.\n\nSegui Il Pensatore\nper capire cosa succede in coppia\nquando nessuno trova le parole.",
      "blocchi": []
     }
    ],
-   "concetto": "Una coppia seduta su un'altalena sotto un albero: lei fa domande piene di paura (anche quando litighiamo? e se sbaglio? e se crollo? quando saremo vecchi?) e lui risponde ogni volta con una promessa semplice e sicura. Il messaggio è che l'amore vero non è quello che promette che sarà tutto perfetto, ma quello che resta anche nei momenti difficili, per sempre. Registro tenero, romantico, rassicurante.",
-   "descrizione": "\"Per sempre\" è la frase più facile da dire. \"Ne parliamo e andiamo avanti\" è la più difficile da fare.\n\nLeggi questo dialogo e da qualche parte fa male. Magari perché quel \"fino all'ultimo respiro\" te l'hanno già detto, a letto, a voce bassa. Poi, la prima volta che sei crollata davvero, i pezzi li hai rimessi insieme da sola, con il telefono in mano ad aspettare un messaggio che non arrivava.\n\nQuella storia ti ha insegnato a fidarti più delle parole che dei gesti. E quando le parole erano bellissime, i gesti che mancavano ti sembravano un dettaglio.\n\nNel 1987 Cindy Hazan e Phillip Shaver hanno mostrato che l'amore tra adulti si regge sullo stesso sistema di attaccamento dei bambini: nel partner cerchiamo una base sicura, qualcuno che si faccia trovare quando abbiamo paura. Anni dopo Sue Johnson, lavorando con coppie in crisi, ha visto che quasi ogni litigio nasconde una sola domanda: ci sei per me quando ho bisogno di te? Non \"mi ami?\", non \"per sempre?\". Ci sei, adesso.\n\nRileggi le slide con questo filtro. Le promesse sul futuro, le rughe, l'ultimo respiro, a chi le fa non costano niente. Quelle che contano stanno in mezzo: \"ne parliamo\", \"ti aiuto io\". Sono le uniche che puoi verificare oggi. Chi ti ha ferita spesso era bravissimo con le prime e assente nelle seconde, e la promessa dopo ogni ferita faceva parte dello stesso giro: ti teneva lì proprio mentre il resto mancava.\n\nNon è colpa tua se hai creduto a \"per sempre\": è una frase fatta apposta per essere creduta. È responsabilità tua, da qui in poi, quale metro usi. Non quanto è bella la promessa, ma cosa succede la sera dopo un litigio: c'è qualcuno che torna a parlarne, o qualcuno che ti lascia nel silenzio finché non chiedi scusa tu?\n\nL'amore che resta non si riconosce dal giuramento. Si riconosce da chi ti tiene la mano il martedì sera in cui non sei al tuo meglio.\n\nL'ultima volta che sei crollata, chi ha raccolto i pezzi: lui, o tu da sola?\n\nSei d'accordo col post?\n\n#amoreinfedele #tradimento #psicologiarelazionale #relazionitossiche",
+   "concetto": "Fumetto su una coppia: lui ha controllato di nascosto il telefono di lei mentre dormiva. Lei gli chiede perché, lui confessa di essere stato tradito in passato e di avere paura. Lei capisce, ma gli dice di parlarne invece di spiare: la fiducia si costruisce con l'onestà, non con i segreti, e deve valere in entrambe le direzioni. Il messaggio finale: l'amore vero è capire le paure dell'altro senza lasciare che distruggano la relazione. Registro: dolce, riflessivo, emotivo.",
+   "descrizione": "Controllare il telefono di chi ami non ti dà mai la pace che cerchi. Se va bene non trovi niente, e la paura resta lì, intatta, pronta per la notte dopo.\n\nChi lo fa di solito non è una persona cattiva. È qualcuno che è già stato tradito e che si porta dentro una ferita ancora aperta. Intanto però paga un prezzo alto. Perde stima di sé, perché si ritrova a fare cose in cui non si riconosce. E perde il rispetto dell'altro, che si sente trattato da colpevole per una colpa di qualcun altro.\n\nSi ripete per un motivo semplice: ogni controllo calma l'ansia per qualche ora, e proprio così la rinforza. Il cervello impara che la tranquillità arriva frugando, non fidandosi. Nel 2009, alla University of Guelph, Amy Muise e i suoi colleghi hanno visto lo stesso circolo su Facebook. Più le persone guardavano il profilo del partner, più trovavano dettagli ambigui. Più ne trovavano, più diventavano gelose e più tornavano a guardare.\n\nAlla Columbia, Geraldine Downey ha studiato per anni le persone molto sensibili al rifiuto. Un silenzio, un messaggio in ritardo o un telefono girato per loro sono prove di un abbandono in arrivo, e reagiscono con sospetto e controllo. Nelle coppie che ha seguito il risultato era amaro: i partner finivano davvero per sentirsi più insoddisfatti e per allontanarsi. La paura di essere lasciati diventa la strada più veloce per esserlo.\n\nPer questo la risposta della scena funziona. Lei non nega la ferita, ma non accetta di pagarne il conto. Il passato spiega la paura, ma non le dà il diritto di comandare. Quando ti sale il bisogno di controllare, è la tua ferita che chiede attenzione. Dire ad alta voce \"stasera ho paura\" ti espone di più ma ti avvicina. Il telefono preso di nascosto ti protegge per una notte e intanto ti allontana.\n\nChi ti ha tradito si è già preso abbastanza. Non lasciargli anche la relazione che hai adesso.\n\nQuando senti il bisogno di controllare, cosa stai cercando davvero: una prova, o qualcuno che ti rassicuri?\n\nSe ti sei rivisto in questa scena, da una parte o dall'altra, segui Il Pensatore: qui parliamo di quello che succede in coppia quando nessuno trova le parole.",
    "segnalazioni": [
-    "nella slide finale con il cta devi mettere l immagine di una donna perché aumenta riconoscibilità, non un uomo come qua. Ti ricordo che la pagina parla alle donne"
-   ]
-  },
-  {
-   "job_id": 12,
-   "fonte": "https://www.instagram.com/p/De7jvJmllfd/",
-   "fallite": [],
-   "slides": [
-    {
-     "numero": 1,
-     "via": "openai-testo",
-     "tentativi": 1,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "Single\nIn a Healthy Relationship\nIn a Relationship with a Narcissist",
-     "testo": "Single\n\nIn una relazione sana\n\nIn una relazione con un narcisista",
-     "blocchi": [
-      {
-       "x": 411,
-       "y": 17,
-       "w": 180,
-       "h": 42,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      },
-      {
-       "x": 195,
-       "y": 343,
-       "w": 625,
-       "h": 42,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      },
-      {
-       "x": 104,
-       "y": 676,
-       "w": 834,
-       "h": 42,
-       "carattere": "normale",
-       "colore": "#FFFFFF",
-       "colore_evidenziato": "",
-       "allineamento": "center"
-      }
-     ]
-    },
-    {
-     "numero": 2,
-     "via": "originale",
-     "tentativi": null,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "",
-     "testo": "",
-     "blocchi": []
-    },
-    {
-     "numero": 3,
-     "via": "originale",
-     "tentativi": null,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "",
-     "testo": "",
-     "blocchi": []
-    },
-    {
-     "numero": 4,
-     "via": "originale",
-     "tentativi": null,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "",
-     "testo": "",
-     "blocchi": []
-    },
-    {
-     "numero": 5,
-     "via": "cta-illustrata",
-     "tentativi": null,
-     "fallita": false,
-     "problema": "",
-     "testo_originale": "",
-     "testo": "Se ti sei rivista\nnella terza vignetta,\nhai trovato questa pagina\nper un motivo.\n\nSe ti piacciono questi contenuti,\nseguici prima di dimenticarti di noi.",
-     "blocchi": []
-    }
-   ],
-   "concetto": "Tre versioni della stessa vita: da single sei serena e ti godi i tuoi momenti, in una relazione sana gli stessi momenti diventano ancora più belli perché li condividi con qualcuno che ti fa stare bene, con un narcisista invece hai qualcuno accanto ma ti senti sola, ignorata, svuotata e perfino aggredita. Il messaggio: stare con la persona sbagliata è peggio che stare da sole. Registro amaro e di riconoscimento, molto 'è proprio così'.",
-   "descrizione": "Io la solitudine vera l'ho conosciuta in un letto matrimoniale.\n\nLui a mezzo metro, il telefono acceso sulla faccia. Io girata verso il muro a ripassare la frase detta a cena, per capire dove avevo sbagliato. Da single la sera era silenziosa. Con lui era silenziosa e faceva anche male.\n\nLa terza vignetta mostra proprio questo, ed è la cosa che chi non l'ha vissuto fatica a credere: puoi essere sola anche con qualcuno accanto, e quella solitudine pesa di più. Da sola non aspetti niente. Accanto a lui aspetti ogni sera, e ogni sera ricevi un silenzio, un sospiro, una battuta che ti fa sentire esagerata.\n\nNel 2003 Naomi Eisenberger, alla UCLA, fece giocare alcuni volontari a passarsi una palla virtuale. A un certo punto gli altri smettevano di lanciargliela. Bastava questo per attivare nel cervello aree coinvolte anche nel dolore fisico. Era solo una palla in un videogioco. Adesso pensa a una persona che ami che ti lascia fuori sul divano, in cucina, a letto, per mesi.\n\nEcco la parte scomoda: allora perché resti? Già nel 1981 Donald Dutton e Susan Painter descrivevano come i legami più difficili da sciogliere siano quelli in cui la freddezza si alterna a improvvisi momenti di calore. Il sabato in cui torna l'uomo dei primi tempi non ripaga i giorni di gelo. Ti lega ancora di più. E così ti convinci che, se sarai più paziente, più carina, meno pesante, quel sabato diventerà ogni giorno.\n\nChe lui rientri o no in una diagnosi conta poco: questo copione lo riconosci da quello che ti fa. Non è colpa tua se ti sei abituata a quel freddo. Adesso però sta a te chiamarlo col suo nome, invece di continuare a chiamarlo \"un periodo\".\n\nPuoi continuare a misurare la relazione dai momenti buoni. Oppure guardare la seconda vignetta e chiederti quando ti sei sentita così l'ultima volta.\n\nDa quanto tempo, accanto a lui, ti senti più sola di quando eri single?\n\nSei d'accordo col post?\n\n#amoreinfedele #relazionitossiche #dipendenzaaffettiva #psicologiarelazionale",
-   "segnalazioni": [
-    "nella slide finale qui su amoreinfedele deve esserci una donna non un uomo"
+    "la prima slide non è stata generata correttamente. Hai messo solo testo su sfondo bianco anziché le grafiche e i soggetti."
    ]
   }
  ]
