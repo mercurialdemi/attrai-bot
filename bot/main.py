@@ -12,7 +12,7 @@ from telegram import Update
 from telegram.constants import ChatAction
 from telegram.ext import (Application, CommandHandler, ContextTypes, MessageHandler, TypeHandler, filters)
 
-from . import analysis, config, crea, diagnostica, images, instagram, instagram_api, pagine, pipeline, report, storage, storie, writer
+from . import analysis, config, costi, crea, diagnostica, images, instagram, instagram_api, pagine, pipeline, report, storage, storie, writer
 
 logging.basicConfig(format="%(asctime)s %(levelname)s %(name)s: %(message)s", level=logging.INFO)
 logging.getLogger("httpx").setLevel(logging.WARNING)
@@ -58,6 +58,8 @@ COMMANDS = [
          "da scrivere dentro il gruppo di una pagina: da lì in poi report, post, logo, tono e CTA sono di quella pagina"),
         ("pagina", "Su quale pagina stai lavorando", "mostra la pagina di questa chat e le pagine disponibili"),
         ("costi", "Quanto stai spendendo di Claude", "spesa di oggi e di ieri divisa per passaggio, e gli ultimi 7 giorni"),
+        ("tetto", "Tetto di spesa Claude al giorno (es. /tetto 8)",
+         "oltre il tetto il bot si ferma fino al giorno dopo; all'80% ti avvisa. /tetto da solo mostra quello attuale"),
     ]),
 ]
 
@@ -148,6 +150,24 @@ async def cmd_costi(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
     from bot import costi
     await update.effective_message.reply_text(costi.riepilogo())
+
+
+async def cmd_tetto(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not await _authorized(update):
+        return
+    from bot import costi
+    arg = (context.args[0] if context.args else "").replace("€", "").replace(",", ".")
+    if arg:
+        try:
+            v = float(arg)
+            assert 0 < v <= 200
+        except Exception:
+            await update.effective_message.reply_text("Scrivi un numero in euro, es. /tetto 8")
+            return
+        costi.imposta_tetto(v)
+    await update.effective_message.reply_text(
+        f"Tetto di spesa Claude: {costi.tetto():.2f} € al giorno. Oggi spesi {costi.speso_oggi():.2f} €.\n"
+        "All'80% ti avviso, al 100% il bot si ferma fino a domani.")
 
 
 async def cmd_pagina(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -615,6 +635,8 @@ async def process_link(update: Update, context: ContextTypes.DEFAULT_TYPE, url: 
         await pipeline.send_post(context.bot, chat_id, job_id, post, paths, failed)
     except instagram.InstagramError as e:
         await status.edit_text(str(e))
+    except costi.TettoSpesa as e:
+        await status.edit_text(str(e))
     except Exception:
         log.exception("Errore elaborando %s", url)
         await status.edit_text("Qualcosa è andato storto mentre preparavo il post. Riprova; se succede ancora, controlla i log su Render.")
@@ -675,6 +697,8 @@ async def process_revision(update: Update, context: ContextTypes.DEFAULT_TYPE, j
     if job["post"].get("_originale"):
         try:
             await _revise_created(update, context, job, instruction, status)
+        except costi.TettoSpesa as e:
+            await status.edit_text(str(e))
         except Exception:
             log.exception("Errore nella modifica del carosello creato %s", job["id"])
             await status.edit_text("Non sono riuscito ad applicare la modifica. Riprova riformulandola.")
@@ -766,6 +790,8 @@ async def process_revision(update: Update, context: ContextTypes.DEFAULT_TYPE, j
                 storage.link_message(chat_id, m.message_id, job["id"])
         elif not wants_cta or (new.get("descrizione") or "").strip() != (old.get("descrizione") or "").strip():
             await pipeline.send_post(context.bot, chat_id, job["id"], new, paths, failed, only_text=True)
+    except costi.TettoSpesa as e:
+        await status.edit_text(str(e))
     except Exception:
         log.exception("Errore nella modifica del post %s", job["id"])
         await status.edit_text("Non sono riuscito ad applicare la modifica. Riprova riformulandola.")
@@ -1137,6 +1163,14 @@ def main():
     async def _menu(application: Application):
         """Menu dei comandi che Telegram mostra scrivendo "/" o col pulsante Menu."""
         from telegram import BotCommand
+        from bot import costi
+        loop = asyncio.get_running_loop()
+        destinatari = sorted(config.REPORT_CHAT_IDS or config.ALLOWED_USER_IDS)
+
+        def _avvisa(testo: str):          # chiamata anche dai thread: si passa dal loop del bot
+            for cid in destinatari:
+                asyncio.run_coroutine_threadsafe(application.bot.send_message(cid, testo), loop)
+        costi.avvisa = _avvisa
         try:
             await application.bot.set_my_commands(
                 [BotCommand(c, short) for _g, cmds in COMMANDS for c, short, _l in cmds])
@@ -1162,6 +1196,7 @@ def main():
     app.add_handler(CommandHandler("altri", cmd_altri))
     app.add_handler(CommandHandler("statistiche", cmd_statistiche))
     app.add_handler(CommandHandler("costi", cmd_costi))
+    app.add_handler(CommandHandler("tetto", cmd_tetto))
     app.add_handler(CommandHandler("analizza", cmd_analizza))
     app.add_handler(CommandHandler("stile", cmd_stile))
     app.add_handler(CommandHandler("studio", cmd_studio))

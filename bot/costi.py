@@ -86,6 +86,7 @@ def registra(strumento: str, model: str, usage) -> None:
             f.parent.mkdir(parents=True, exist_ok=True)
             f.write_text(json.dumps(d, indent=1), encoding="utf-8")
         log.info("Claude %s (%s): %.3f €", passo, _famiglia(model), eur)
+        _dopo_registrazione()
     except Exception as e:  # il contatore non deve mai bloccare il lavoro
         log.warning("Contatore costi non aggiornato: %s", e)
 
@@ -115,4 +116,68 @@ def riepilogo(giorni: int = 7) -> str:
         post = d[g]["descrizione e CTA"]["chiamate"]
     tot_oggi = sum(v["euro"] for v in d.get(g, {}).values())
     extra = f"\nPost preparati oggi: {post} (circa {tot_oggi / post:.2f} € a post, correzioni comprese)" if post else ""
-    return "Spesa Claude (stima dai token):\n" + "\n".join(righe) + extra
+    return ("Spesa Claude (stima dai token):\n" + "\n".join(righe) + extra
+            + f"\nTetto giornaliero: {tetto():.2f} € (si cambia con /tetto)")
+
+
+# ---------------------------------------------------------------- tetto di spesa giornaliero
+
+class TettoSpesa(RuntimeError):
+    """Tetto di spesa del giorno raggiunto: il bot non chiama più Claude fino a domani (o finché si alza il tetto)."""
+
+
+avvisa = None          # funzione impostata all'avvio (manda un messaggio Telegram ai soci)
+_avvisati: dict[str, set] = {}
+
+
+def _tetto_file() -> Path:
+    return _file().with_name("tetto_claude.json")
+
+
+def tetto() -> float:
+    try:
+        return float(json.loads(_tetto_file().read_text(encoding="utf-8"))["euro"])
+    except Exception:
+        return float(os.getenv("CLAUDE_TETTO_GIORNO", "8"))
+
+
+def imposta_tetto(euro: float) -> None:
+    _tetto_file().parent.mkdir(parents=True, exist_ok=True)
+    _tetto_file().write_text(json.dumps({"euro": round(float(euro), 2)}), encoding="utf-8")
+
+
+def speso_oggi() -> float:
+    try:
+        d = json.loads(_file().read_text(encoding="utf-8"))
+    except Exception:
+        return 0.0
+    return sum(v["euro"] for v in d.get(dt.date.today().isoformat(), {}).values())
+
+
+def _avvisa_una_volta(chiave: str, testo: str) -> None:
+    oggi = dt.date.today().isoformat()
+    fatti = _avvisati.setdefault(oggi, set())
+    if chiave in fatti or avvisa is None:
+        return
+    fatti.add(chiave)
+    try:
+        avvisa(testo)
+    except Exception as e:
+        log.warning("Avviso spesa non mandato: %s", e)
+
+
+def controlla(strumento: str) -> None:
+    """Prima di ogni chiamata a Claude: se il tetto del giorno è raggiunto, si ferma."""
+    t, s = tetto(), speso_oggi()
+    if t > 0 and s >= t:
+        _avvisa_una_volta("100", f"⛔ Tetto di spesa Claude raggiunto: oggi {s:.2f} € su {t:.2f} €. "
+                                 "Il bot si ferma fino a domani. Per continuare oggi alza il tetto con /tetto (es. /tetto 12).")
+        raise TettoSpesa(f"Tetto di spesa di oggi raggiunto ({s:.2f} € su {t:.2f} €). "
+                         "Riparte domani, oppure alza il tetto con /tetto.")
+
+
+def _dopo_registrazione() -> None:
+    t, s = tetto(), speso_oggi()
+    if t > 0 and s >= 0.8 * t:
+        _avvisa_una_volta("80", f"⚠️ Spesa Claude di oggi: {s:.2f} € su un tetto di {t:.2f} €. "
+                                "Al tetto il bot si ferma fino a domani. Dettaglio con /costi.")

@@ -32,3 +32,27 @@ costi.registra("esito_controllo", "claude-haiku-5-5", u)
 r = costi.riepilogo()
 assert "traduzione slide: 0.20" in r and "controllo slide: 0.01" in r, r
 print(r)
+
+# tetto: all'80% avvisa una volta, al 100% ferma le chiamate
+avvisi = []
+costi.avvisa = avvisi.append
+costi.imposta_tetto(0.25)
+costi.registra("slide_rilette", "claude-opus-5-5", types.SimpleNamespace(input_tokens=0, output_tokens=0,
+               cache_read_input_tokens=0, cache_creation_input_tokens=0))
+assert any("⚠️" in a for a in avvisi), avvisi
+costi.imposta_tetto(0.20)
+writer._tool_call = writer.__dict__.get("_tool_call")   # finto: il controllo si prova direttamente
+try:
+    costi.controlla("slide_tradotte")
+    raise SystemExit("il tetto non ha fermato la chiamata")
+except costi.TettoSpesa as e:
+    assert "/tetto" in str(e)
+assert sum("⛔" in a for a in avvisi) == 1
+try:
+    costi.controlla("slide_tradotte")
+except costi.TettoSpesa:
+    pass
+assert sum("⛔" in a for a in avvisi) == 1          # l'avviso arriva una volta sola al giorno
+costi.imposta_tetto(50)
+costi.controlla("slide_tradotte")                    # alzato il tetto si riparte
+print("tetto ok:", avvisi)

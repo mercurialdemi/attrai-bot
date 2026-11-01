@@ -374,6 +374,8 @@ def _tool_call(system: str, content: list, tool: dict, model: str | None = None,
     instruction = {"type": "text", "text": f"Rispondi esclusivamente chiamando lo strumento {tool['name']}."}
     strict_tool = {**tool, "input_schema": _strict_schema(tool["input_schema"]), "strict": True}
     use_strict = True
+    from bot import costi
+    costi.controlla(tool["name"])
     for attempt in range(3):
         try:
             resp = client().messages.create(
@@ -391,7 +393,6 @@ def _tool_call(system: str, content: list, tool: dict, model: str | None = None,
                 use_strict = False
                 continue
             raise
-        from bot import costi
         costi.registra(tool["name"], model or config.CLAUDE_MODEL, getattr(resp, "usage", None))
         if resp.stop_reason == "max_tokens":
             raise RuntimeError("Risposta di Claude troncata: post troppo lungo.")
