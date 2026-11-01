@@ -196,7 +196,10 @@ TRADUZIONE = {
         "la stessa cosa: stesse idee, stesso ordine, stessa forza, nessuna idea aggiunta o tolta. "
         "Cambia liberamente la costruzione delle frasi, i verbi, gli esempi culturali e i modi di dire perché "
         "suonino naturali in italiano. Vietati i calchi: 'cosa hai intenzione di fare al riguardo' diventa "
-        "'e tu cosa fai per risolverlo?'; 'la risposta si riduceva a una sola cosa' diventa 'il segreto? Una cosa sola.'"
+        "'e tu cosa fai per risolverlo?'; 'la risposta si riduceva a una sola cosa' diventa 'il segreto? Una cosa sola.'; "
+        "'unless you're her side dude' diventa 'finché non diventi l'amante' (non 'finché l'amante non sei tu'). "
+        "Ordine delle parole naturale, come si parla: niente soggetto o complemento spostati in avanti per "
+        "imitare l'inglese o per fare effetto."
     ),
     "adattata": (
         "ADATTATA: stesso significato e stessa forza, ma riscritta nel tono della nostra pagina "
