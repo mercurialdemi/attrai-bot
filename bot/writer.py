@@ -828,8 +828,12 @@ def write_caption(slides_out: dict, caption: str, brand: dict, rules: list[dict]
         + "\n\n" + _caption_variabile(recent)
     )}]
     system = _caption_system(brand, rules, recent)
+    # Descrizione: Opus sulle pagine che vendono manuali (la CTA deve vendere), Sonnet (metà prezzo) su quelle che
+    # chiedono solo "segui la pagina". Nella scheda della pagina modello_descrizione: alto | medio lo forza.
+    liv = str(brand.get("modello_descrizione") or ("alto" if brand.get("manuali") else "medio")).lower()
+    modello = config.CLAUDE_MODEL if liv == "medio" else config.CAPTION_MODEL
     try:
-        return _tool_call(system, content, CAPTION_TOOL, model=config.CAPTION_MODEL, max_tokens=6000, cache_ora=True)
+        return _tool_call(system, content, CAPTION_TOOL, model=modello, max_tokens=6000, cache_ora=True)
     except (anthropic.NotFoundError, anthropic.PermissionDeniedError) as e:
         log.warning("Modello %s non disponibile, uso %s: %s", config.CAPTION_MODEL, config.CLAUDE_MODEL, e)
         return _tool_call(system, content, CAPTION_TOOL, max_tokens=6000)
