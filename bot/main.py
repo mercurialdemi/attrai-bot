@@ -621,6 +621,10 @@ async def process_link(update: Update, context: ContextTypes.DEFAULT_TYPE, url: 
     msg = update.effective_message
     chat_id = update.effective_chat.id
     status = await msg.reply_text("Leggo il post…")
+    try:
+        await asyncio.to_thread(_libera_disco)
+    except Exception:
+        log.exception("Pulizia del disco prima del post non riuscita")
     work = storage.start_work(chat_id, url)
     try:
         brand = writer.load_brand()
@@ -1143,6 +1147,38 @@ def _cleanup_old_jobs(days: int = 10) -> int:
     return n
 
 
+def _libera_disco(max_mb: int = 650, fino_a_mb: int = 450) -> int:
+    """Il disco è da 1 GB: se le cartelle dei post di tutte le pagine superano max_mb, si cancellano le più
+    vecchie (di qualunque pagina) finché si scende sotto fino_a_mb. Si tengono sempre quelle delle ultime 6 ore,
+    così un post appena mandato si può ancora correggere."""
+    import shutil
+    import time
+    cartelle = []
+    for slug in pagine.elenco():
+        root = pagine.data_dir(slug) / "jobs"
+        if not root.exists():
+            continue
+        for d in root.iterdir():
+            try:
+                if d.is_dir():
+                    size = sum(f.stat().st_size for f in d.rglob("*") if f.is_file())
+                    cartelle.append((d.stat().st_mtime, size, d))
+            except OSError:
+                pass
+    totale = sum(c[1] for c in cartelle)
+    if totale <= max_mb * 1024 * 1024:
+        return 0
+    n, recenti = 0, time.time() - 6 * 3600
+    for mtime, size, d in sorted(cartelle):
+        if totale <= fino_a_mb * 1024 * 1024 or mtime > recenti:
+            break
+        shutil.rmtree(d, ignore_errors=True)
+        totale -= size
+        n += 1
+    log.info("Disco: cancellate %s cartelle di post vecchi, ora %.0f MB", n, totale / 1024 / 1024)
+    return n
+
+
 def main():
     _low_memory_restart()
     missing = config.missing_keys()
@@ -1215,10 +1251,13 @@ def main():
         n = 0
         for slug in pagine.elenco():
             pagine.imposta(slug)
-            n += await asyncio.to_thread(_cleanup_old_jobs)
+            n += await asyncio.to_thread(_cleanup_old_jobs, 5)
+        pagine.imposta(pagine.PRINCIPALE)
+        n += await asyncio.to_thread(_libera_disco)
         if n:
             log.info("Pulizia disco: cancellate %s cartelle di post vecchi", n)
-    app.job_queue.run_repeating(cleanup, interval=86400, first=60, name="pulizia_disco")
+    # ogni ora (e subito all'avvio): con 20-25 post al giorno il disco da 1 GB si riempiva in pochi giorni
+    app.job_queue.run_repeating(cleanup, interval=3600, first=30, name="pulizia_disco")
     for slug in pagine.elenco():                      # ogni pagina ha il suo report, i suoi caroselli e il suo studio
         if _brand_di(slug).get("in_pausa"):
             log.info("%s: in pausa, niente report né studio", slug)
