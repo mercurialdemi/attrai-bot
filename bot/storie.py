@@ -1,11 +1,12 @@
 """Storie Instagram (9:16) per la pagina corrente.
 
-- /storie                 -> il bot propone 6 temi (2 didattici, 2 vendita, 1 connessione, 1 virale)
+- /storie                 -> il bot propone 6 temi (didattici, di vendita se la pagina ha manuali, box domande)
 - /storie 3               -> crea la serie del tema 3 della proposta
 - /storie <tema>          -> crea la serie su un tema scelto da te (il tipo lo sceglie il bot)
-- /storie vendita <tema>  -> forza il tipo: didattica, vendita, connessione, virale
+- /storie vendita <tema>  -> forza il tipo: didattica, vendita, domande
 
-Le strutture (3 per tipo) sono in brands/comuni/storie_strutture.yaml. Il testo lo scrive Claude con il tono e i dolori
+Le strutture (2 didattiche, 2 di vendita, 1 box domande, decise con Gabriele il 2/11) sono in
+brands/comuni/storie_strutture.yaml. Il testo lo scrive Claude con il tono e i dolori
 della pagina; la grafica la fa il codice (gratis): sfondo a tinta unita della pagina, titolo e testo con caratteri
 diversi, due stili che si alternano: 'box' (un riquadro nero dietro al testo) e 'strisce' (una striscia nera dietro
 ogni riga). Sotto resta lo spazio per lo sticker (sondaggio, domanda, quiz, link) da aggiungere su Instagram.
@@ -29,10 +30,9 @@ log = logging.getLogger(__name__)
 
 W, H = 1080, 1920
 TOP_SAFE, BOTTOM_SAFE = 270, 420          # zone coperte dall'interfaccia di Instagram (nome in alto, risposte in basso)
-TIPI = ["didattica", "vendita", "connessione", "virale", "lancio"]
+TIPI = ["didattica", "vendita", "domande"]
 SINONIMI = {"didattico": "didattica", "didattiche": "didattica", "marketing": "vendita", "manuale": "vendita",
-            "vendite": "vendita", "interazione": "connessione", "sondaggio": "connessione", "virali": "virale",
-            "lanci": "lancio"}
+            "vendite": "vendita", "domanda": "domande", "box": "domande", "qa": "domande", "risposte": "domande"}
 
 # colori per pagina (sfondo a tinta unita, accento per i titoli)
 PALETTE_PAGINA = {
@@ -78,7 +78,9 @@ def _profilo(brand: dict) -> str:
             f"DI COSA PARLA: {' '.join(str(brand.get('temi_report') or brand.get('posizionamento') or '').split())}\n"
             f"POSIZIONAMENTO: {' '.join(str(brand.get('posizionamento') or '').split())}\n"
             f"TONO: {' '.join(brand.get('tono') or [])}\n"
-            f"MANUALI IN VENDITA:\n{manuali or '- nessuno: niente storie di vendita, la chiusura è segui la pagina'}\n"
+            + (f"VOCE DELLE STORIE (ha la precedenza sul tono qui sopra): {' '.join(str(brand['storie_voce']).split())}\n"
+               if brand.get("storie_voce") else "")
+            + f"MANUALI IN VENDITA:\n{manuali or '- nessuno: niente storie di vendita, la chiusura è segui la pagina'}\n"
             f"PAROLE DA CENSURARE (penultima lettera con *): {', '.join(brand.get('parole_censurate') or [])}")
 
 
@@ -98,8 +100,8 @@ TEMI_TOOL = {
 def proponi_temi(brand: dict) -> list[dict]:
     fatti = [f"{s.get('tipo')}: {s.get('tema')}" for s in _storico()[-25:]]
     vendita = 2 if brand.get("manuali") else 0
-    richiesta = (f"Proponi 6 temi per serie di storie: {2 + (2 - vendita)} didattica, {vendita} vendita, "
-                 "1 connessione, 1 virale. Temi concreti, sui dolori veri di questo pubblico, tutti diversi tra loro"
+    richiesta = (f"Proponi 6 temi per serie di storie: {3 + (2 - vendita)} didattica, {vendita} vendita, "
+                 "1 domande (box domande). Temi concreti, sui dolori veri di questo pubblico, tutti diversi tra loro"
                  + (" e diversi da quelli già fatti:\n" + "\n".join(fatti) if fatti else "."))
     out = writer._tool_call("Sei lo stratega delle storie Instagram di una pagina italiana.\n" + _profilo(brand),
                             [{"type": "text", "text": richiesta}], TEMI_TOOL, model=config.CLAUDE_MODEL, max_tokens=2000)
@@ -147,7 +149,7 @@ STORIE_TOOL = {
 
 def scrivi(brand: dict, tema: str, tipo: str | None, rules: list[dict]) -> dict:
     st = strutture()
-    tipi = [tipo] if tipo else [t for t in TIPI if t not in ("vendita", "lancio") or (brand.get("manuali") and t != "lancio")]
+    tipi = [tipo] if tipo else [t for t in TIPI if t != "vendita" or brand.get("manuali")]
     usate = [s.get("struttura") for s in _storico()[-6:]]
     blocchi = []
     for t in tipi:
@@ -316,11 +318,9 @@ def istruzioni(serie: dict) -> str:
     for i, s in enumerate(serie.get("storie") or [], 1):
         if s.get("sticker") not in (None, "", "nessuno"):
             righe.append(f"Storia {i}: aggiungi lo sticker {s['sticker'].upper()} nello spazio libero in basso → {s.get('sticker_testo', '')}")
-    if serie.get("tipo") == "lancio":
-        n = len(serie.get("storie") or [])
-        terzo = max(1, round(n / 3))
-        righe.append(f"Lancio in 3 giorni: storie 1-{terzo} il primo giorno, {terzo + 1}-{2 * terzo} il secondo, "
-                     f"{2 * terzo + 1}-{n} il terzo.")
+    if serie.get("tipo") == "domande":
+        righe.append("Quando arrivano le domande, mandami lo screenshot di ognuna con scritto \"risposta\" "
+                     "(o /risposta <domanda>): preparo la storia di risposta con lo spazio in alto per lo sticker.")
     righe.append("Il file Canva ha i testi modificabili.")
     return "\n".join(righe)
 

@@ -127,3 +127,6 @@ testo_overlay:
   colore: "#FFFFFF"
   contorno: "#000000"
   posizione: centro
+
+# voce delle storie (decisa con Gabriele il 2/11)
+storie_voce: "Smaschera con calma. Riporta la frase o il gesto di lui, tra virgolette o come scena breve, poi dice in una riga cosa significava davvero (es. 'Ti ha detto che sei troppo sensibile. Era la sua scusa più comoda.'). Lucida, chirurgica, dalla parte di lei: chi legge si sente capita e protetta, mai giudicata. Mai volgare, mai urlata, niente insulti: la forza sta nella frase che svela. Seconda persona, presente, frasi brevi."

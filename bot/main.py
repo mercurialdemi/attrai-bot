@@ -26,7 +26,7 @@ COMMANDS = [
         ("crea", "Carosello originale da zero (es. /crea 2 friendzone)",
          "crea caroselli nuovi nello stile AttraiSeduci: /crea, /crea 3, /crea segnali di disinteresse"),
         ("storie", "Storie: temi proposti o su un tema (es. /storie vendita gelosia)",
-         "/storie propone 6 temi; /storie 3 crea il tema 3; /storie <tema> o /storie didattica|vendita|connessione|virale|lancio <tema>"),
+         "/storie propone 6 temi; /storie 3 crea il tema 3; /storie <tema> o /storie didattica|vendita|domande <tema>"),
         ("risposta", "Risposta a un box domanda (o manda la foto con scritto risposta)",
          "/risposta <domanda>, oppure manda lo screenshot della domanda con didascalia \"risposta\""),
         ("report", "Post migliori dei collaboratori, adesso",
