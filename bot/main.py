@@ -560,13 +560,17 @@ async def _rispondi_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, 
         status = await msg.reply_text("Leggo la domanda e preparo la risposta per le storie…")
         try:
             jdir = config.DATA_DIR / "jobs" / f"risposta_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-            out, paths, cv = await asyncio.to_thread(storie.rispondi, brand, slug, storage.list_rules(), jdir, foto, domanda)
+            low = f" {domanda.lower()} "
+            chiusura = "vendita" if " vendita " in low else ("didattica" if " didattica " in low else None)
+            testo_domanda = " ".join(w for w in domanda.split() if w.lower() not in ("vendita", "didattica"))
+            out, paths, cv = await asyncio.to_thread(storie.rispondi, brand, slug, storage.list_rules(), jdir, foto,
+                                                     testo_domanda, chiusura)
             await status.delete()
             await _manda_storie(context.bot, chat_id, paths, cv,
-                                f"Risposta a: \"{out.get('domanda', '')}\"\nSu Instagram rispondi alla domanda dal box e usa questa "
-                                "immagine come sfondo: lo spazio in alto è lasciato libero per lo sticker con la domanda. "
-                                "Nell'ultima storia puoi rimettere il box DOMANDA per raccoglierne altre. "
-                                "Il file Canva ha i testi modificabili.")
+                                f"Risposta a: \"{out.get('domanda', '')}\" · chiusura {out.get('chiusura', '')}\n"
+                                "Su Instagram rispondi alla domanda dal box e usa la prima slide come sfondo: la metà alta "
+                                "è libera per lo sticker con la domanda. Il file Canva ha i testi modificabili.\n"
+                                "Per forzare la chiusura scrivi \"risposta vendita\" o \"risposta didattica\".")
         except Exception:
             log.exception("Risposta alla domanda non creata")
             await status.edit_text("Non sono riuscito a preparare la risposta. Riprova tra poco.")

@@ -15,7 +15,7 @@ from pptx.enum.text import MSO_AUTO_SIZE, PP_ALIGN
 from pptx.util import Emu, Pt
 
 PX = 9525          # 1 pixel a 96 dpi in EMU
-FONT_NAMES = {"regular": "Inter", "semibold": "Inter SemiBold", "bold": "Inter", "titolo": "Anton", "stretto": "Oswald",
+FONT_NAMES = {"bold_carlito": "Carlito", "italic_carlito": "Carlito", "regular": "Inter", "semibold": "Inter SemiBold", "bold": "Inter", "titolo": "Anton", "stretto": "Oswald",
               "regular_tight": "Inter Tight", "semibold_tight": "Inter Tight SemiBold", "bold_tight": "Inter Tight",
               "regular_montserrat": "Montserrat", "semibold_montserrat": "Montserrat SemiBold", "bold_montserrat": "Montserrat",
               "regular_poppins": "Poppins", "semibold_poppins": "Poppins SemiBold", "bold_poppins": "Poppins",
