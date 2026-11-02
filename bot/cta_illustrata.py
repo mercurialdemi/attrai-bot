@@ -54,6 +54,16 @@ PROMPT_SEGUI = (
 )
 
 
+def _al_pubblico(prompt: str) -> str:
+    """Pagine che parlano alle donne (es. AmoreInfedele): nella slide CTA disegnata c'è una donna, non un uomo."""
+    from . import writer
+    pubblico = str(writer.load_brand().get("pubblico") or "").strip().lower()
+    if not pubblico.startswith("donne"):
+        return prompt
+    return (prompt.replace("a confident, well-dressed man", "a confident, elegant woman")
+            .replace("same man, same woman if present", "same woman, same man if present"))
+
+
 def _green_quads(img: Image.Image, want: int) -> list[np.ndarray]:
     import cv2
     a = np.asarray(img.convert("RGB")).astype(np.int16)
@@ -287,7 +297,7 @@ def make(post: dict, originals: list[bytes], jdir: Path) -> tuple[Path, dict] | 
     from . import images
     ref = Image.open(io.BytesIO(originals[0])).convert("RGB")
     n = "one book" if len(books) == 1 else f"{len(books)} books, one in each hand"
-    prompt = PROMPT.format(n=n) if books else PROMPT_SEGUI
+    prompt = _al_pubblico(PROMPT.format(n=n) if books else PROMPT_SEGUI)
     for attempt in range(2):
         try:
             gen = images._gemini_edit(ref, prompt)
@@ -427,7 +437,7 @@ def make_alone(post: dict, jdir: Path) -> tuple[Path, dict] | None:
         ref = Image.open(op).convert("RGB")
         for _ in range(2):
             try:
-                gen = images._gemini_edit(ref, PROMPT_SCENA)
+                gen = images._gemini_edit(ref, _al_pubblico(PROMPT_SCENA))
             except Exception as e:
                 log.warning("CTA casella: scena non generata (%s)", e)
                 gen = None
