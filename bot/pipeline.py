@@ -237,14 +237,8 @@ def apply_cta_slide(post: dict, paths: list[Path], failed: list[int], jdir: Path
 
 
 def summary(post: dict, failed: list[int], header: str = "") -> str:
-    cta = post.get("cta", {})
-    cta_txt = f"manuale {cta.get('manuale')}" if cta.get("tipo") == "manuale" else "segui la pagina"
+    """Messaggio finale: solo intestazione (se c'è) e avvisi importanti. Vuoto se non c'è niente da dire."""
     lines = [header] if header else []
-    lines += [
-        f"Tipo: {post.get('formato')} {post.get('natura')} | Hook: {post.get('tipo_hook')}",
-        f"CTA: {cta_txt}. {cta.get('motivo', '')}",
-        f"Musica dell'originale: {post.get('musica') or 'non indicata da Instagram (o post senza musica)'}",
-    ]
     if failed:
         motivi = []
         for n in failed:
@@ -257,8 +251,7 @@ def summary(post: dict, failed: list[int], header: str = "") -> str:
                         + ("\nMotivo: " + " | ".join(motivi)[:600] if motivi else ""))
     if post.get("_avviso"):
         lines.append(post["_avviso"])
-    lines.append("Rispondi a questo messaggio per chiedere modifiche.")
-    return "\n".join(lines)
+    return "\n".join(lines).strip()
 
 
 async def send_post(bot, chat_id: int, job_id: int, post: dict, paths: list[Path], failed: list[int],
@@ -287,7 +280,9 @@ async def send_post(bot, chat_id: int, job_id: int, post: dict, paths: list[Path
             sent.append(m)
     if con_descrizione:
         sent.append(await bot.send_message(chat_id, post["descrizione"]))
-        sent.append(await bot.send_message(chat_id, summary(post, failed, header)))
+        testo = summary(post, failed, header)
+        if testo:
+            sent.append(await bot.send_message(chat_id, testo))
     if failed and paths:
         orig_dir = paths[0].parent / "originali"
         for n in failed:

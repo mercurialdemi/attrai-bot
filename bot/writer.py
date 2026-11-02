@@ -412,7 +412,6 @@ def _finalize(post: dict) -> dict:
     if len(post["descrizione"]) > 2200:
         cut = post["descrizione"][:2200]
         post["descrizione"] = cut[: max(cut.rfind("\n"), cut.rfind(". ") + 1, 1800)].strip()
-        post["_avviso"] = "Descrizione tagliata a 2200 caratteri: controlla il finale."
     for s in post.get("slides", []):
         s["testo"] = clean_text(s.get("testo", ""))
     post.setdefault("slide_da_rifare", [])
