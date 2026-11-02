@@ -1,0 +1,26 @@
+{
+ "giorno": "2026-11-02",
+ "post_preparati": 2,
+ "slide_totali": 16,
+ "slide_fallite": 0,
+ "lavorazione": {
+  "openai-testo": {
+   "totali": 12,
+   "fallite": 0
+  },
+  "cta-illustrata": {
+   "totali": 1,
+   "fallite": 0
+  },
+  "blocchi-ricostruzione-codice": {
+   "totali": 2,
+   "fallite": 0
+  },
+  "cta-alone": {
+   "totali": 1,
+   "fallite": 0
+  }
+ },
+ "segnalazioni": [],
+ "post_con_problemi": []
+}
