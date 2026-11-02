@@ -80,7 +80,7 @@ def _profilo(brand: dict) -> str:
             f"TONO: {' '.join(brand.get('tono') or [])}\n"
             + (f"VOCE DELLE STORIE (ha la precedenza sul tono qui sopra): {' '.join(str(brand['storie_voce']).split())}\n"
                if brand.get("storie_voce") else "")
-            + f"MANUALI IN VENDITA:\n{manuali or '- nessuno: niente storie di vendita, la chiusura è segui la pagina'}\n"
+            + f"MANUALI IN VENDITA:\n{manuali or '- nessuno: niente storie di vendita; chiudi con condividi o rispondi'}\n"
             f"PAROLE DA CENSURARE (penultima lettera con *): {', '.join(brand.get('parole_censurate') or [])}")
 
 
