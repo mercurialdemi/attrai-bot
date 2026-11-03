@@ -972,6 +972,8 @@ def check_slide(image_jpeg: bytes, expected_text: str, old_watermark: str,
             "nuvoletta di un fumetto o ne tocca il contorno. Anche gli ACCENTI delle maiuscole "
             "(È, À, Ù...) che toccano o entrano nella riga di sopra sono un errore grave.\n"
             "Il logo circolare con la scritta " + load_brand()["nome"] + ", se presente, è corretto e non è un residuo.\n"
+            "Firme, handle, nomi o watermark di ALTRE pagine (es. una firma piccola in basso come 'be.poets') vanno "
+            "tolti apposta: se nella slide nuova mancano NON è un errore, non bocciare la slide per questo.\n"
             "Controlla la slide con lo strumento esito_controllo. Ignora differenze di a capo e di maiuscole."
         )},
     ]
