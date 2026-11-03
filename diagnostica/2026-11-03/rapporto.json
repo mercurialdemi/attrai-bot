@@ -1,30 +1,545 @@
 {
  "giorno": "2026-11-03",
- "post_preparati": 2,
- "slide_totali": 9,
- "slide_fallite": 0,
+ "post_preparati": 17,
+ "slide_totali": 133,
+ "slide_fallite": 2,
  "lavorazione": {
-  "blocchi-ricostruzione-codice": {
-   "totali": 1,
-   "fallite": 0
+  "openai-testo": {
+   "totali": 51,
+   "fallite": 2
   },
-  "testo-su-sfondo-uniforme": {
+  "cta-alone": {
    "totali": 5,
    "fallite": 0
   },
-  "cta-stile-post": {
-   "totali": 1,
-   "fallite": 0
-  },
-  "originale": {
-   "totali": 1,
-   "fallite": 0
-  },
   "cta-illustrata": {
+   "totali": 5,
+   "fallite": 0
+  },
+  "testo-su-sfondo-uniforme": {
+   "totali": 18,
+   "fallite": 0
+  },
+  "cta-stile-post": {
+   "totali": 4,
+   "fallite": 0
+  },
+  "blocchi-ricostruzione-codice": {
+   "totali": 10,
+   "fallite": 0
+  },
+  "blocchi-pulizia-codice": {
+   "totali": 9,
+   "fallite": 0
+  },
+  "openai-codice": {
    "totali": 1,
+   "fallite": 0
+  },
+  "creato-testo-su-nero": {
+   "totali": 27,
+   "fallite": 0
+  },
+  "cta-creata": {
+   "totali": 3,
    "fallite": 0
   }
  },
- "segnalazioni": [],
- "post_con_problemi": []
+ "segnalazioni": [
+  {
+   "job_id": 9,
+   "testo": "la prima slide non è stata generata correttamente. Hai messo solo testo su sfondo bianco anziché le grafiche e i soggetti.",
+   "quando": "2026-11-01T17:50:32+00:00"
+  },
+  {
+   "job_id": 20,
+   "testo": "hai generato una pagina nera con testo anziché rimanere fedele al immagine del post originale",
+   "quando": "2026-11-03T15:16:50+00:00"
+  }
+ ],
+ "post_con_problemi": [
+  {
+   "job_id": 9,
+   "fonte": "https://www.instagram.com/p/DeX69jLkssr/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "I checked your phone last night.\nWhile I was sleeping?",
+     "testo": "Stanotte ti ho\ncontrollato\nil telefono.\n\nMentre dormivo?",
+     "blocchi": [
+      {
+       "x": 270,
+       "y": 90,
+       "w": 280,
+       "h": 140,
+       "carattere": "normale",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 300,
+       "y": 570,
+       "w": 380,
+       "h": 110,
+       "carattere": "normale",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Yeah. I'm sorry.\n...",
+     "testo": "Sì.\nScusami.\n\n...",
+     "blocchi": [
+      {
+       "x": 290,
+       "y": 165,
+       "w": 300,
+       "h": 130,
+       "carattere": "normale",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 750,
+       "y": 355,
+       "w": 110,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Did you find anything?\nNo.\nThen why did you feel like you needed to look?",
+     "testo": "Hai trovato\nqualcosa?\n\nNo.\n\nE allora perché hai\nsentito il bisogno\ndi guardare?",
+     "blocchi": [
+      {
+       "x": 480,
+       "y": 50,
+       "w": 280,
+       "h": 90,
+       "carattere": "normale",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 375,
+       "y": 425,
+       "w": 95,
+       "h": 50,
+       "carattere": "normale",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 375,
+       "y": 690,
+       "w": 340,
+       "h": 120,
+       "carattere": "normale",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Because I've been cheated on before. Sometimes I'm scared you'll hurt me the same way.\nI understand why you're scared. But I'm not the person who hurt you.\nI know. I'm trying to trust again.",
+     "testo": "Perché mi hanno già\ntradito. A volte ho paura\nche tu mi faccia\nlo stesso.\n\nCapisco perché hai paura.\nMa non sono io\nquella che ti ha\nferito.\n\nLo so.\nSto provando a\nfidarmi di nuovo.",
+     "blocchi": [
+      {
+       "x": 315,
+       "y": 40,
+       "w": 360,
+       "h": 160,
+       "carattere": "normale",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 335,
+       "y": 395,
+       "w": 320,
+       "h": 160,
+       "carattere": "normale",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 370,
+       "y": 730,
+       "w": 270,
+       "h": 110,
+       "carattere": "normale",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Then talk to me when you're scared, Don't go through my phone behind my back.\nI just don't want to lose you.\nAnd I don't want you to feel unsafe with me, But we need honesty, not secrets, to build trust.\nYou're right. I'm sorry.\nWe'll work through your fears together, but trust has to go both ways.",
+     "testo": "Allora, quando hai paura,\nparlamene. Non frugare nel\nmio telefono di nascosto.\n\nNon voglio perderti,\ntutto qui.\n\nE io non voglio che con me\nti senta insicuro.\nMa la fiducia si costruisce\ncon l'onestà, non con i segreti.\n\nHai ragione.\nScusami.\n\nLe tue paure\nle affrontiamo insieme.\nMa la fiducia deve valere\nper tutti e due.",
+     "blocchi": [
+      {
+       "x": 305,
+       "y": 35,
+       "w": 385,
+       "h": 125,
+       "carattere": "normale",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 315,
+       "y": 320,
+       "w": 260,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 325,
+       "y": 545,
+       "w": 345,
+       "h": 165,
+       "carattere": "normale",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 280,
+       "y": 810,
+       "w": 190,
+       "h": 75,
+       "carattere": "normale",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 495,
+       "y": 825,
+       "w": 280,
+       "h": 110,
+       "carattere": "normale",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se ti sei rivisto in questa scena,\nda una parte o dall'altra,\nlo sai già:\nil passato spiega la paura,\nma non giustifica il controllo.\n\nSegui Il Pensatore\nper capire cosa succede in coppia\nquando nessuno trova le parole.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Fumetto su una coppia: lui ha controllato di nascosto il telefono di lei mentre dormiva. Lei gli chiede perché, lui confessa di essere stato tradito in passato e di avere paura. Lei capisce, ma gli dice di parlarne invece di spiare: la fiducia si costruisce con l'onestà, non con i segreti, e deve valere in entrambe le direzioni. Il messaggio finale: l'amore vero è capire le paure dell'altro senza lasciare che distruggano la relazione. Registro: dolce, riflessivo, emotivo.",
+   "descrizione": "Controllare il telefono di chi ami non ti dà mai la pace che cerchi. Se va bene non trovi niente, e la paura resta lì, intatta, pronta per la notte dopo.\n\nChi lo fa di solito non è una persona cattiva. È qualcuno che è già stato tradito e che si porta dentro una ferita ancora aperta. Intanto però paga un prezzo alto. Perde stima di sé, perché si ritrova a fare cose in cui non si riconosce. E perde il rispetto dell'altro, che si sente trattato da colpevole per una colpa di qualcun altro.\n\nSi ripete per un motivo semplice: ogni controllo calma l'ansia per qualche ora, e proprio così la rinforza. Il cervello impara che la tranquillità arriva frugando, non fidandosi. Nel 2009, alla University of Guelph, Amy Muise e i suoi colleghi hanno visto lo stesso circolo su Facebook. Più le persone guardavano il profilo del partner, più trovavano dettagli ambigui. Più ne trovavano, più diventavano gelose e più tornavano a guardare.\n\nAlla Columbia, Geraldine Downey ha studiato per anni le persone molto sensibili al rifiuto. Un silenzio, un messaggio in ritardo o un telefono girato per loro sono prove di un abbandono in arrivo, e reagiscono con sospetto e controllo. Nelle coppie che ha seguito il risultato era amaro: i partner finivano davvero per sentirsi più insoddisfatti e per allontanarsi. La paura di essere lasciati diventa la strada più veloce per esserlo.\n\nPer questo la risposta della scena funziona. Lei non nega la ferita, ma non accetta di pagarne il conto. Il passato spiega la paura, ma non le dà il diritto di comandare. Quando ti sale il bisogno di controllare, è la tua ferita che chiede attenzione. Dire ad alta voce \"stasera ho paura\" ti espone di più ma ti avvicina. Il telefono preso di nascosto ti protegge per una notte e intanto ti allontana.\n\nChi ti ha tradito si è già preso abbastanza. Non lasciargli anche la relazione che hai adesso.\n\nQuando senti il bisogno di controllare, cosa stai cercando davvero: una prova, o qualcuno che ti rassicuri?\n\nSe ti sei rivisto in questa scena, da una parte o dall'altra, segui Il Pensatore: qui parliamo di quello che succede in coppia quando nessuno trova le parole.",
+   "segnalazioni": [
+    "la prima slide non è stata generata correttamente. Hai messo solo testo su sfondo bianco anziché le grafiche e i soggetti."
+   ]
+  },
+  {
+   "job_id": 20,
+   "fonte": "https://www.instagram.com/p/Dew7rclnP9Y/",
+   "fallite": [
+    5,
+    9
+   ],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "blocchi-pulizia-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "PEOPLE WHO DON'T KNOW HOW TO COMMUNICATE THINK EVERYTHING IS AN ARGUMENT.",
+     "testo": "Chi non sa comunicare\nvede una lite\nin ogni discorso.",
+     "blocchi": [
+      {
+       "x": 215,
+       "y": 170,
+       "w": 575,
+       "h": 170,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "blocchi-pulizia-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "PEOPLE WHO DON'T KNOW HOW TO LISTEN THINK EVERYTHING IS CRITICISM.",
+     "testo": "Chi non sa ascoltare\nsente una critica\nin ogni parola.",
+     "blocchi": [
+      {
+       "x": 105,
+       "y": 635,
+       "w": 490,
+       "h": 200,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "PEOPLE WHO DON'T REGULATE THEIR EMOTIONS THINK THAT FEELING SOMETHING JUSTIFIES ANY WAY OF ACTING.",
+     "testo": "Chi non sa gestire le proprie emozioni\ncrede che provare qualcosa\nlo autorizzi a tutto.",
+     "blocchi": [
+      {
+       "x": 295,
+       "y": 120,
+       "w": 465,
+       "h": 330,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "PEOPLE WHO NEVER WORKED ON THEMSELVES THINK EVERYONE ELSE IS THE PROBLEM.",
+     "testo": "Chi non ha mai lavorato su di sé\ncrede che il problema\nsiano sempre gli altri.",
+     "blocchi": [
+      {
+       "x": 215,
+       "y": 245,
+       "w": 530,
+       "h": 180,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": true,
+     "problema": "La luna, che nell'originale è ben visibile, è quasi sparita e resta solo un alone appena percepibile. Anche la maggior parte delle stelle è scomparsa. Il testo è corretto. | poi: Il testo è corretto e non ci sono residui. Manca però la firma \"victorianpoetry\" con il piccolo disegno in basso al centro, presente nell'originale.",
+     "testo_originale": "PEOPLE WHO DON'T KNOW HOW TO BE ALONE THINK ANY COMPANY IS LOVE.",
+     "testo": "Chi non sa stare da solo\nscambia per amore\nqualsiasi compagnia.",
+     "blocchi": [
+      {
+       "x": 170,
+       "y": 235,
+       "w": 440,
+       "h": 190,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "PEOPLE WHO DON'T LEARN TO MANAGE THEIR THOUGHTS END UP BEING CONTROLLED BY THEM.",
+     "testo": "Chi non impara a gestire i propri pensieri\nfinisce per diventarne schiavo.",
+     "blocchi": [
+      {
+       "x": 220,
+       "y": 130,
+       "w": 670,
+       "h": 190,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "PEOPLE WHO DON'T FACE THEIR PROBLEMS THINK IGNORING THEM WILL MAKE THEM DISAPPEAR.",
+     "testo": "Chi non affronta i propri problemi\ncrede che ignorarli\nbasti a farli sparire.",
+     "blocchi": [
+      {
+       "x": 175,
+       "y": 110,
+       "w": 650,
+       "h": 180,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "PEOPLE WHO DON'T KNOW HOW TO REGULATE THEMSELVES GET THROWN OFF BY ANY WORD OR ACTION FROM SOMEONE ELSE.",
+     "testo": "Chi non sa ritrovare il proprio equilibrio\nlo perde per una parola\no un gesto qualsiasi.",
+     "blocchi": [
+      {
+       "x": 105,
+       "y": 210,
+       "w": 600,
+       "h": 210,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": true,
+     "problema": "Il testo è corretto, ma nella nuova slide mancano elementi dell'illustrazione: il semaforo con la luce rossa a destra è sparito e resta solo un palo. La figura della persona sul marciapiede è sbiadita e meno definita rispetto all'originale. Il riquadro scuro in alto copre parte dell'illustrazione e la sfondo non corrisponde all'originale. | poi: Il testo è corretto e non ci sono residui. Però nella slide nuova manca la firma \"victorianpoetry\" in basso al centro, presente nell'originale, quindi un elemento grafico è sparito.",
+     "testo_originale": "PEOPLE WHO CAN'T TOLERATE UNCERTAINTY THINK THEY NEED ALL THE ANSWERS TO FEEL CALM.",
+     "testo": "Chi non sopporta\nl'incertezza\ncrede di dover avere\ntutte le risposte\nper stare tranquillo.",
+     "blocchi": [
+      {
+       "x": 530,
+       "y": 350,
+       "w": 320,
+       "h": 360,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "right"
+      }
+     ]
+    },
+    {
+     "numero": 10,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "PEOPLE WHO DON'T WORK ON THEIR SELF-ESTEEM NEED OTHERS TO CHOOSE THEMTO FEEL LIKE ENOUGH.",
+     "testo": "Chi non lavora sulla propria autostima\nha bisogno che qualcuno lo scelga\nper sentirsi abbastanza.",
+     "blocchi": [
+      {
+       "x": 135,
+       "y": 500,
+       "w": 570,
+       "h": 250,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 11,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "HEALING IS ALSO TO STOP HOLDING OTHERS RESPONSIBLE FOR WHAT IS YOURS TO WORK ON.",
+     "testo": "Guarire è anche\nsmettere di far pagare agli altri\nquello su cui devi lavorare tu.",
+     "blocchi": [
+      {
+       "x": 235,
+       "y": 670,
+       "w": 530,
+       "h": 210,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 12,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se ti sei riconosciuto\nanche in una sola di queste frasi,\nnon è un caso.\n\nCapire da dove nasce una reazione\nè il primo passo per smettere di ripeterla.\n\nSegui @ilpensatore\nper leggere i prossimi post.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Una serie di verità scomode sulla maturità emotiva: chi non sa comunicare vede litigi ovunque, chi non sa ascoltare vede critiche ovunque, chi non lavora su di sé dà la colpa agli altri. Ogni slide ha la stessa struttura: \"chi non ha imparato X, crede che Y\". Si chiude dicendo che guarire significa anche smettere di far pagare agli altri ciò che spetta a noi. Registro: riflessivo, un po' tagliente, da frase che fa dire \"è proprio così\". L'ultima slide è una promozione di un libro di poesie della pagina originale.",
+   "descrizione": "Per anni ho creduto che il problema fossero le persone che incontravo. Ogni discussione era colpa dell'altro, ogni silenzio un attacco, ogni parola storta un processo alle mie intenzioni. Poi ho notato che in tutte quelle scene c'era un elemento che tornava sempre. Io.\n\nQuando una persona non ha strumenti per reggere le proprie emozioni, il mondo diventa un campo minato. Una frase neutra suona come un'accusa, una richiesta come un rimprovero. Il prezzo è alto: rapporti che si logorano per malintesi mai chiariti e partner che imparano a pesare ogni parola, finché smettono di dire le cose vere.\n\nSotto c'è un meccanismo che John Gottman ha osservato per decenni nel suo laboratorio all'Università di Washington, studiando coppie che discutevano davanti alle telecamere. Quando ci sentiamo attaccati il corpo va in allarme e smettiamo, letteralmente, di ascoltare. La difesa continua scatta contro ciò che le parole dell'altro risvegliano in noi, molto più che contro ciò che ha detto. Il problema raramente è la frase. È la ferita su cui cade.\n\nLo stesso vale per la solitudine. Nel 2014 Timothy Wilson e i suoi colleghi, all'Università della Virginia, hanno chiesto ad alcune persone di restare quindici minuti sole con i propri pensieri, senza telefono. Molte preferirono darsi una scossa elettrica dolorosa pur di non stare lì. Se non sopporti il silenzio con te stesso, qualsiasi compagnia ti sembra amore, perché ti toglie da quella stanza.\n\nIl passaggio pratico è piccolo e scomodo. Quando senti la reazione salire, fermati un attimo e chiediti se stai rispondendo a quello che l'altro ha detto o a quello che ti ricorda. Quella pausa di pochi secondi è il punto in cui comincia la maturità emotiva: smetti di chiedere agli altri di calmarti e inizi a farlo da solo.\n\nChi si prende la responsabilità del proprio mondo interno smette di vivere nel sospetto e comincia a vivere nei rapporti.\n\nQuale di queste frasi ti ha fatto pensare a qualcuno, e quale ti ha fatto pensare a te?\n\nSe ti sei riconosciuto anche in una sola di queste frasi, segui @ilpensatore: qui parliamo di ciò che succede davvero dentro le relazioni, prima, durante e dopo.",
+   "segnalazioni": [
+    "hai generato una pagina nera con testo anziché rimanere fedele al immagine del post originale"
+   ]
+  }
+ ]
 }
