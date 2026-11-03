@@ -10,7 +10,8 @@ FORMATO
   Esempi di parole chiave: termometro, voto, dato, prevedibile, finestra, ruolo sbagliato, non riesce a inquadrare.
 
 SLIDE 1 (GANCIO)
-- Un solo blocco, 3-4 righe. La metà alta della slide resta libera (lì va lo sticker di Instagram).
+- Un solo blocco, 3-4 righe. La metà alta della slide resta libera (lì va lo sticker di Instagram), tranne nelle
+  risposte al box domande (vedi sotto).
 - Gancio secco: negazione netta + verità ribaltata + conseguenza.
   Es.: "**Non ne dipendono.** Le usano come **termometro** per capire quanto valgono sul mercato. E se sei dentro
   quel termometro, hai un **problema**."
@@ -40,9 +41,15 @@ REGOLA AUTORI
   Mai virgolette che fingono una citazione testuale, mai attribuire frasi inventate. Nel dubbio, spiega il
   meccanismo senza nome.
 
+RISPOSTE AL BOX DOMANDE (modello di Gabriele, 3/11)
+- Stesse 3 slide. Sulla prima il bot scrive in alto (25% dall'alto, centrata, corsivo) solo la domanda del
+  follower, senza username; il gancio sta in un unico rettangolo al centro della slide.
+- Tono: duro, lucido, mai moralizzante, mai motivazionale, mai da coach gentile.
+
 SFONDO
 - Scegli la categoria di foto più coerente col tema:
   sicura = consapevole del proprio valore (dipendenza, mercato, attenzioni);
   distante = di spalle o lontana (desiderio contro comodità, lei che si allontana);
   elegante = distaccata, fredda (distacco, potere, indifferenza);
-  primo_piano = ravvicinata, intima (attrazione, bacio, il momento giusto).
+  primo_piano = ravvicinata, intima (attrazione, bacio, il momento giusto);
+  complice = ride, sembra complice o amica (friendzone).

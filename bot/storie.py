@@ -126,7 +126,7 @@ def capisci_richiesta(testo: str) -> tuple[str | None, str]:
 
 # ---------------------------------------------------------------- testi (formato del prompt di Gabriele, 2/11)
 
-SFONDI = ["sicura", "distante", "elegante", "primo_piano"]
+SFONDI = ["sicura", "distante", "elegante", "primo_piano", "complice"]   # complice = ride, sembra amica (friendzone)
 AUTORI_BASE = ["Robert Greene", "Rollo Tomassi", "Neil Strauss", "Mystery", "David DeAngelo", "Esther Perel"]
 
 _SLIDE = {"type": "object", "properties": {
@@ -206,9 +206,10 @@ def _pulisci_blocco(testo: str, brand: dict) -> str:
 # ---------------------------------------------------------------- grafica
 
 ROSSO = (230, 57, 70)            # #E63946
-GRIGIO = (190, 190, 190)
+GRIGIO = (221, 221, 221)          # #DDDDDD
 FONT_BOLD = config.ROOT / "assets" / "carlito_bold.ttf"
 FONT_CORSIVO = config.ROOT / "assets" / "carlito_italic.ttf"
+FONT_GRASSETTO_CORSIVO = config.ROOT / "assets" / "carlito_bold_italic.ttf"
 MARGINE_X = 54                   # rettangoli larghi il 90% della slide
 PAD_X, PAD_Y, GAP = 24, 12, 28
 
@@ -261,6 +262,32 @@ def _righe(draw, testo: str, font, max_w: int) -> list[list[list[tuple[str, bool
     return righe
 
 
+def textslide_wrap(draw, testo: str, font, max_w: int) -> list[str]:
+    """La domanda in alto su due righe di lunghezza simile (come nel modello di Gabriele); se è lunga, a capo
+    normale, massimo 3 righe."""
+    parole = (testo or "").split()
+    if len(parole) >= 4:
+        migliore = None
+        for i in range(1, len(parole)):
+            a, b = " ".join(parole[:i]), " ".join(parole[i:])
+            la, lb = draw.textlength(a, font=font), draw.textlength(b, font=font)
+            if max(la, lb) <= max_w and (migliore is None or max(la, lb) < migliore[0]):
+                migliore = (max(la, lb), [a, b])
+        if migliore:
+            return migliore[1]
+    righe, cur = [], ""
+    for p in (testo or "").split():
+        prova = (cur + " " + p).strip()
+        if cur and draw.textlength(prova, font=font) > max_w:
+            righe.append(cur)
+            cur = p
+        else:
+            cur = prova
+    if cur:
+        righe.append(cur)
+    return righe[:3]
+
+
 def sfondi_disponibili(slug: str) -> list[Path]:
     d = config.ROOT / "assets" / "storie_sfondi" / slug
     return sorted(d.glob("*.jpg")) if d.exists() else []
@@ -289,7 +316,7 @@ def _base(slug: str, foto: Path | None) -> Image.Image:
 
 
 def disegna(blocchi: list[str], prima: bool, brand: dict, base: Image.Image,
-            placements: list | None = None) -> tuple[Image.Image, Image.Image]:
+            placements: list | None = None, domanda: str = "") -> tuple[Image.Image, Image.Image]:
     """Rettangoli neri pieni allineati a sinistra, testo bianco con parole chiave rosse. Restituisce
     (storia finita, sfondo con i rettangoli ma senza testo, per Canva)."""
     img = base.copy()
@@ -297,6 +324,9 @@ def disegna(blocchi: list[str], prima: bool, brand: dict, base: Image.Image,
     max_w = W - 2 * MARGINE_X - 2 * PAD_X
     zona_alta = H // 2 + 40 if prima else TOP_SAFE         # slide 1: metà alta libera per lo sticker
     zona_bassa = H - BOTTOM_SAFE
+    if prima and domanda:
+        # risposta al box domande: domanda del follower in alto (25%), gancio al centro (45-50%)
+        zona_alta, zona_bassa = int(H * 0.36), int(H * 0.64)
     size = 58 if prima else 50
     while True:
         f = _font(FONT_BOLD, size)
@@ -330,6 +360,16 @@ def disegna(blocchi: list[str], prima: bool, brand: dict, base: Image.Image,
                               "size": size, "weight": "bold_carlito", "color": (255, 255, 255), "runs": runs})
             ty += lh
         y += h_blocco + GAP
+    if prima and domanda:
+        qf = _font(FONT_GRASSETTO_CORSIVO, 40)
+        q_righe = textslide_wrap(draw, domanda, qf, W - 2 * MARGINE_X - 40)
+        qy = int(H * 0.25) - len(q_righe) * 50 // 2
+        for r in q_righe:
+            qx = (W - draw.textlength(r, font=qf)) / 2
+            draw.text((qx, qy), r, font=qf, fill=(255, 255, 255))
+            righe_out.append({"testo": r, "x": float(qx), "y": float(qy), "size": 40, "weight": "bold_carlito",
+                              "color": (255, 255, 255)})
+            qy += 50
     nome = "@" + (brand.get("handle") or brand["nome"])
     nf = _font(FONT_CORSIVO, 30)
     nx, ny = W - MARGINE_X - draw.textlength(nome, font=nf), H - BOTTOM_SAFE + 40
@@ -348,7 +388,8 @@ def _disegna_serie(serie: dict, brand: dict, slug: str, jdir: Path, nome: str) -
     paths, slides = [], []
     for i, s in enumerate(serie.get("slides") or [], 1):
         pl: list = []
-        img, sf = disegna(s.get("blocchi") or [], i == 1, brand, base, pl)
+        img, sf = disegna(s.get("blocchi") or [], i == 1, brand, base, pl,
+                          domanda=(serie.get("domanda") or "").strip() if serie.get("_mostra_domanda") else "")
         p = jdir / f"{nome}_{i:02d}.jpg"
         img.save(p, quality=95)
         bg = jdir / f"{nome}_{i:02d}_sfondo.jpg"
@@ -415,13 +456,22 @@ def rispondi(brand: dict, slug: str, rules: list[dict], jdir: Path, foto: bytes 
         chiusura = "didattica"
     forza = (f"La chiusura deve essere {chiusura.upper()}." if chiusura else
              "Scegli tu la chiusura: vendita solo se la domanda tocca da vicino il dolore di un manuale.")
-    content.append({"type": "text", "text": "Rispondi in 3 slide (gancio che risponde alla domanda, didattica, chiusura). "
-                    + forza + " Non riportare nomi o dati personali di chi scrive. Usa lo strumento risposta_storia."})
+    content.append({"type": "text", "text": "MODELLO RISPOSTA BOX DOMANDE: rispondi in 3 slide (gancio che risponde alla "
+                    "domanda, didattica, chiusura). In domanda scrivi solo la domanda del follower (niente 'Risposta a "
+                    "@username', niente nomi o dati personali): il bot la stampa in alto sulla prima slide. Slide 1: un "
+                    "solo blocco di 3-4 righe, negazione netta, verità ribaltata, conseguenza. Slide 2: 2-3 blocchi; nel "
+                    "primo, se l'idea è davvero di un autore della lista, nominalo (regola autori). Slide 3: chiusura "
+                    "didattica aperta ('Finché non capirai…, continuerai a…') oppure, se vendita, 3 blocchi: amplifica il "
+                    "problema, il manuale come tassello mancante ('Nel manuale \"[titolo]\" spiego…'), costo del non "
+                    "agire + 'Ti lascio qui il link del manuale.' Tono duro e lucido, mai moralizzante, mai "
+                    "motivazionale, mai da coach gentile. " + forza + " Usa lo strumento risposta_storia."})
     out = writer._tool_call(_system(brand, rules), content, RISPOSTA_TOOL, model=config.CAPTION_MODEL, max_tokens=4000)
     if chiusura:
         out["chiusura"] = chiusura
     out["slides"] = (out.get("slides") or [])[:3]
     _pulisci(out, brand)
+    out["domanda"] = writer.clean_text(writer.censor(out.get("domanda") or domanda or "", brand))
+    out["_mostra_domanda"] = True                       # la domanda in alto sulla prima slide, al 25%
     paths, canva_path = _disegna_serie(out, brand, slug, jdir, "risposta")
     _ricorda({"tipo": "risposta_" + str(out.get("chiusura")), "tema": out.get("domanda", ""),
               "sfondo_file": out.get("sfondo_file"), "quando": datetime.now(timezone.utc).isoformat(timespec="seconds")})
