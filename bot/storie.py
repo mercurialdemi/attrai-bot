@@ -361,15 +361,15 @@ def disegna(blocchi: list[str], prima: bool, brand: dict, base: Image.Image,
             ty += lh
         y += h_blocco + GAP
     if prima and domanda:
-        qf = _font(FONT_GRASSETTO_CORSIVO, 40)
-        q_righe = textslide_wrap(draw, domanda, qf, W - 2 * MARGINE_X - 40)
-        qy = int(H * 0.25) - len(q_righe) * 50 // 2
+        qf = _font(FONT_GRASSETTO_CORSIVO, 30)                  # piccola e stretta (modello: 17pt contro 46 del gancio)
+        q_righe = textslide_wrap(draw, domanda, qf, int(W * 0.62))
+        qy = int(H * 0.25) - len(q_righe) * 38 // 2
         for r in q_righe:
             qx = (W - draw.textlength(r, font=qf)) / 2
             draw.text((qx, qy), r, font=qf, fill=(255, 255, 255))
-            righe_out.append({"testo": r, "x": float(qx), "y": float(qy), "size": 40, "weight": "bold_carlito",
+            righe_out.append({"testo": r, "x": float(qx), "y": float(qy), "size": 30, "weight": "bold_carlito",
                               "color": (255, 255, 255)})
-            qy += 50
+            qy += 38
     nome = "@" + (brand.get("handle") or brand["nome"])
     nf = _font(FONT_CORSIVO, 30)
     nx, ny = W - MARGINE_X - draw.textlength(nome, font=nf), H - BOTTOM_SAFE + 40

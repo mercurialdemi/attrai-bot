@@ -253,8 +253,9 @@ FIT_TOOL = {
                 "pagina_migliore": {"type": "string", "description": "Tra QUESTA pagina e le nostre altre pagine, il NOME di quella a cui il post è più adatto (pubblico e dolore), oppure 'nessuna'."},
                 "natura": {"type": "string", "enum": ["didattico", "virale"],
                            "description": "didattico = INSEGNA qualcosa di concreto: spiega un meccanismo, un trucco, cosa fare o non fare, segnali da riconoscere, errori con la soluzione. virale = punta sull'EMOZIONE più che sull'insegnamento: provoca, polarizza, tocca ego o orgoglio, fa sentire rabbia, rivalsa, riconoscimento o nostalgia (frasi d'impatto, verità scomode, scene, confronti, citazioni). Nel dubbio: se non c'è un insegnamento pratico, è virale."},
+                "valore_didattico": {"type": "integer", "description": "Quanto INSEGNA davvero, da 0 a 5. 5 = spiega un meccanismo o un metodo concreto e completo (passi, segnali, errori con la soluzione, cosa fare): un post da salvare per rileggerlo. 3 = qualche spunto pratico. 0-1 = nessun insegnamento (frase d'impatto, emozione, scena, meme)."},
                 "motivo": {"type": "string", "description": "Perché va (o non va) su questa pagina, massimo 14 parole."},
-            }, "required": ["numero", "dolore", "adatto", "pagina_migliore", "natura", "motivo"]}},
+            }, "required": ["numero", "dolore", "adatto", "pagina_migliore", "natura", "valore_didattico", "motivo"]}},
         },
         "required": ["post"],
     },
@@ -349,7 +350,12 @@ def _fit_filter(cands: list, brand: dict) -> tuple[list, bool]:
                 p.pagina = brand["nome"]
                 prima = p.motivo if (p.motivo or "").startswith("📈") else ""
                 p.motivo = (prima + "\n" if prima else "") + r.get("motivo", "")
-                p.natura = r.get("natura", "")
+                try:
+                    p.valore = int(r.get("valore_didattico") or 0)
+                except (TypeError, ValueError):
+                    p.valore = 0
+                # didattico SOLO se insegna davvero (Gabriele: "ne vorrei alcuni veramente didattici")
+                p.natura = "didattico" if (r.get("natura") == "didattico" and p.valore >= 4) else "virale"
                 keep.append(p)
     keep.sort(key=lambda p: -p.score)
     return keep, ok
@@ -416,14 +422,30 @@ def _perche(items: list) -> dict:
 
 
 def _bilancia(cands: list, n: int) -> list:
-    """I migliori n post, metà didattici e metà virali (se di un tipo ce ne sono pochi, si completa con l'altro)."""
-    did = [p for p in cands if p.natura == "didattico"]
+    """I migliori n post, metà didattici e metà virali (se di un tipo ce ne sono pochi, si completa con l'altro).
+    Ogni pagina compare una volta sola (due solo se mancano post): niente report fatti sempre delle stesse pagine.
+    I didattici si ordinano prima per quanto insegnano davvero, poi per rendimento."""
+    did = sorted([p for p in cands if p.natura == "didattico"], key=lambda p: (-getattr(p, "valore", 0), -p.score))
     vir = [p for p in cands if p.natura != "didattico"]
-    k_did = min(len(did), (n + 1) // 2)
-    k_vir = min(len(vir), n - k_did)
-    k_did = min(len(did), n - k_vir)
-    scelti = did[:k_did] + vir[:k_vir]
-    return sorted(scelti, key=lambda p: (p.natura != "didattico", -p.score))
+
+    def prendi(lista: list, quanti: int, usati: dict) -> list:
+        out = []
+        for limite in (1, 2):
+            for p in lista:
+                if len(out) >= quanti:
+                    return out
+                if p not in out and usati.get(p.owner, 0) < limite:
+                    out.append(p)
+                    usati[p.owner] = usati.get(p.owner, 0) + 1
+        return out
+
+    usati: dict = {}
+    scelti_did = prendi(did, (n + 1) // 2, usati)
+    scelti_vir = prendi(vir, n - len(scelti_did), usati)
+    if len(scelti_did) + len(scelti_vir) < n:                       # pochi virali: si completa coi didattici
+        scelti_did += prendi([p for p in did if p not in scelti_did], n - len(scelti_did) - len(scelti_vir), usati)
+    scelti = scelti_did + scelti_vir
+    return sorted(scelti, key=lambda p: (p.natura != "didattico", -getattr(p, "valore", 0) if p.natura == "didattico" else 0, -p.score))
 
 
 def _sezioni(items: list, min_score: float, perche: dict | None = None, start: int = 1) -> list[str]:
@@ -565,9 +587,14 @@ async def run_report(bot, chat_ids: list[int]) -> None:
             ore, filtered = st["ore"], True
             windows = sorted({st["ore"], max(st["ore"], 120), max(st["ore"], 168)})
             for ore in windows:
-                cands = rank_candidates(posts, ore, st["candidati"] * 4)
-                cands = [p for p in cands if _ripescabile(p, shown_before)
-                         and (st["completa"] or p.score >= st["min_score"])]
+                tutti = rank_candidates(posts, ore, 400)
+                cands = tutti[:st["candidati"] * 4]
+                # i didattici fanno salvataggi più che like (i salvataggi dei collaboratori non si vedono): i caroselli
+                # lunghi, che spesso sono quelli che insegnano, entrano tra i candidati anche se sono nella media
+                lunghi = [p for p in tutti[st["candidati"] * 4:]
+                          if len(p.image_urls or []) >= 5 and p.score >= 0.8][:20]
+                cands = [p for p in cands + lunghi if _ripescabile(p, shown_before)
+                         and (st["completa"] or p.score >= st["min_score"] or p in lunghi)]
                 if cands:
                     cands, filtered = await asyncio.to_thread(_fit_filter, cands, brand)
                 if len(cands) >= st["link"]:
