@@ -707,8 +707,10 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
     # Fumetti, disegni e dipinti: il disegno originale resta com'è e il codice cambia solo i testi (gratis).
     # OpenAI ridisegna la slide solo se il controllo la boccia (scelta di Gabriele, 1/11, per risparmiare).
     # FUMETTI_OPENAI=subito su Render riporta i fumetti direttamente a OpenAI come prima.
+    # (3/11, Gabriele: col codice i disegni del Pensatore venivano peggio) FUMETTI_OPENAI=subito: disegni e fumetti
+    # li rifà subito OpenAI; "se-serve" = prima il codice, OpenAI solo se il controllo boccia la slide.
     fumetto_ai = (config.FUMETTI_OPENAI == "subito" and mode == "codice" and _openai_scrive(slide)
-                  and any(b.get("carattere") == "fumetto" for b in blocks0))
+                  and (slide.get("sfondo") == "disegno" or any(b.get("carattere") == "fumetto" for b in blocks0)))
     if fumetto_ai:
         slide["_motivo_codice"] = ""
     if mode == "codice" and blocks0 and not fumetto_ai:
