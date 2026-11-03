@@ -40,6 +40,8 @@ class SourcePost:
     natura: str = ""               # didattico | virale (report)
     pagina: str = ""               # a quale delle nostre pagine va (report)
     musica: str = ""               # brano usato nel post originale ("Artista – Titolo"), se Instagram lo indica
+    salvataggi: int | None = None  # se lo scraper li riporta (Instagram li mostra su molti post)
+    condivisioni: int | None = None
 
     @property
     def is_video(self) -> bool:
@@ -94,7 +96,24 @@ def _music(it) -> str:
     return found[0][:120] if found else ""
 
 
+_CHIAVI_VISTE: set = set()
+
+
+def _conteggio(it: dict, parole: tuple) -> int | None:
+    """Cerca un numero tra i campi del post il cui nome contiene una delle parole (es. 'save', 'share'): i nomi
+    cambiano da uno scraper all'altro (savesCount, saveCount, sharesCount, reshareCount...)."""
+    for k, v in it.items():
+        kl = k.lower()
+        if any(w in kl for w in parole) and isinstance(v, (int, float)) and not isinstance(v, bool) and v >= 0:
+            return int(v)
+    return None
+
+
 def _parse_item(url: str, it: dict) -> SourcePost:
+    numerici = tuple(sorted(k for k, v in it.items() if isinstance(v, (int, float)) and not isinstance(v, bool)))
+    if numerici not in _CHIAVI_VISTE:            # una volta: quali numeri dà lo scraper (per vedere se ci sono i salvataggi)
+        _CHIAVI_VISTE.add(numerici)
+        log.info("Campi numerici dello scraper: %s", ", ".join(numerici))
     images: list[str] = []
     for child in it.get("childPosts") or []:
         if (child.get("type") or "").lower() != "video":
@@ -113,6 +132,8 @@ def _parse_item(url: str, it: dict) -> SourcePost:
         comments=it.get("commentsCount"),
         timestamp=it.get("timestamp") or "",
         musica=_music(it),
+        salvataggi=_conteggio(it, ("save",)),
+        condivisioni=_conteggio(it, ("share", "reshare", "repost")),
     )
 
 

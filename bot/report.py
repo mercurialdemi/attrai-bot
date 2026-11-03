@@ -57,7 +57,10 @@ def _engagement(p: instagram.SourcePost) -> float | None:
     comments = p.comments if (p.comments is not None and p.comments >= 0) else None
     if likes is None and comments is None:
         return None
-    return (likes or 0) + 3 * (comments or 0)   # un commento vale più di un like
+    # un commento vale più di un like; salvataggi e condivisioni (se lo scraper li dà) valgono ancora di più:
+    # sono il segnale dei post didattici, che si salvano per rileggerli
+    return ((likes or 0) + 3 * (comments or 0)
+            + 4 * (getattr(p, "salvataggi", None) or 0) + 4 * (getattr(p, "condivisioni", None) or 0))
 
 
 def _parse_ts(ts: str) -> datetime | None:
@@ -253,7 +256,7 @@ FIT_TOOL = {
                 "pagina_migliore": {"type": "string", "description": "Tra QUESTA pagina e le nostre altre pagine, il NOME di quella a cui il post è più adatto (pubblico e dolore), oppure 'nessuna'."},
                 "natura": {"type": "string", "enum": ["didattico", "virale"],
                            "description": "didattico = INSEGNA qualcosa di concreto: spiega un meccanismo, un trucco, cosa fare o non fare, segnali da riconoscere, errori con la soluzione. virale = punta sull'EMOZIONE più che sull'insegnamento: provoca, polarizza, tocca ego o orgoglio, fa sentire rabbia, rivalsa, riconoscimento o nostalgia (frasi d'impatto, verità scomode, scene, confronti, citazioni). Nel dubbio: se non c'è un insegnamento pratico, è virale."},
-                "valore_didattico": {"type": "integer", "description": "Quanto INSEGNA davvero, da 0 a 5. 5 = spiega un meccanismo o un metodo concreto e completo (passi, segnali, errori con la soluzione, cosa fare): un post da salvare per rileggerlo. 3 = qualche spunto pratico. 0-1 = nessun insegnamento (frase d'impatto, emozione, scena, meme)."},
+                "valore_didattico": {"type": "integer", "description": "Quanto INSEGNA davvero, da 0 a 5 (se ci sono, tanti salvataggi rispetto ai like sono un segnale forte di post didattico). 5 = spiega un meccanismo o un metodo concreto e completo (passi, segnali, errori con la soluzione, cosa fare): un post da salvare per rileggerlo. 3 = qualche spunto pratico. 0-1 = nessun insegnamento (frase d'impatto, emozione, scena, meme)."},
                 "motivo": {"type": "string", "description": "Perché va (o non va) su questa pagina, massimo 14 parole."},
             }, "required": ["numero", "dolore", "adatto", "pagina_migliore", "natura", "valore_didattico", "motivo"]}},
         },
@@ -325,7 +328,9 @@ def _fit_filter(cands: list, brand: dict) -> tuple[list, bool]:
         chunk = cands[start:start + 12]
         content = []
         for i, p in enumerate(chunk, 1):
-            content.append({"type": "text", "text": f"{i}. @{p.owner}: "
+            numeri = (f" [like {p.likes or 0}, salvataggi {p.salvataggi}]" if getattr(p, "salvataggi", None) is not None
+                      else "")
+            content.append({"type": "text", "text": f"{i}. @{p.owner}{numeri}: "
                                                     f"{' '.join((p.caption or '(nessuna descrizione)').split())[:400]}"})
             if p.image_urls:
                 try:
@@ -425,7 +430,11 @@ def _bilancia(cands: list, n: int) -> list:
     """I migliori n post, metà didattici e metà virali (se di un tipo ce ne sono pochi, si completa con l'altro).
     Ogni pagina compare una volta sola (due solo se mancano post): niente report fatti sempre delle stesse pagine.
     I didattici si ordinano prima per quanto insegnano davvero, poi per rendimento."""
-    did = sorted([p for p in cands if p.natura == "didattico"], key=lambda p: (-getattr(p, "valore", 0), -p.score))
+    def salvati(p) -> float:          # salvataggi in rapporto ai like: alto = post da rileggere (didattico vero)
+        s_ = getattr(p, "salvataggi", None)
+        return (s_ or 0) / max(p.likes or 1, 1) if s_ is not None else 0.0
+    did = sorted([p for p in cands if p.natura == "didattico"],
+                 key=lambda p: (-getattr(p, "valore", 0), -salvati(p), -p.score))
     vir = [p for p in cands if p.natura != "didattico"]
 
     def prendi(lista: list, quanti: int, usati: dict) -> list:
