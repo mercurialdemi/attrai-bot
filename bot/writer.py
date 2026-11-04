@@ -973,7 +973,9 @@ def check_slide(image_jpeg: bytes, expected_text: str, old_watermark: str,
             "(È, À, Ù...) che toccano o entrano nella riga di sopra sono un errore grave.\n"
             "Il logo circolare con la scritta " + load_brand()["nome"] + ", se presente, è corretto e non è un residuo.\n"
             "Firme, handle, nomi o watermark di ALTRE pagine (es. una firma piccola in basso come 'be.poets') vanno "
-            "tolti apposta: se nella slide nuova mancano NON è un errore, non bocciare la slide per questo.\n"
+            "tolti apposta: se nella slide nuova mancano NON è un errore, non bocciare la slide per questo. "
+            "Lo stesso vale per un piccolo logo, simbolo, icona o disegnino in un angolo o sul bordo (es. in basso a "
+            "destra): è il marchio della pagina di origine, toglierlo è voluto e NON è un 'elemento grafico sparito'.\n"
             "Controlla la slide con lo strumento esito_controllo. Ignora differenze di a capo e di maiuscole."
         )},
     ]
