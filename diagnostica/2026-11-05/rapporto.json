@@ -1,38 +1,505 @@
 {
  "giorno": "2026-11-05",
- "post_preparati": 4,
- "slide_totali": 33,
- "slide_fallite": 0,
+ "post_preparati": 18,
+ "slide_totali": 139,
+ "slide_fallite": 1,
  "lavorazione": {
-  "openai-testo": {
+  "originale": {
    "totali": 1,
-   "fallite": 0
-  },
-  "cta-alone": {
-   "totali": 1,
-   "fallite": 0
-  },
-  "blocchi-ricostruzione-codice": {
-   "totali": 4,
-   "fallite": 0
-  },
-  "blocchi-sfondo-pieno": {
-   "totali": 14,
    "fallite": 0
   },
   "cta-illustrata": {
-   "totali": 1,
+   "totali": 3,
    "fallite": 0
   },
+  "openai-testo": {
+   "totali": 13,
+   "fallite": 1
+  },
   "testo-su-sfondo-uniforme": {
-   "totali": 10,
+   "totali": 36,
    "fallite": 0
   },
   "cta-stile-post": {
+   "totali": 8,
+   "fallite": 0
+  },
+  "creato-testo-su-nero": {
+   "totali": 45,
+   "fallite": 0
+  },
+  "cta-creata": {
+   "totali": 5,
+   "fallite": 0
+  },
+  "blocchi-ricostruzione-codice": {
+   "totali": 9,
+   "fallite": 0
+  },
+  "cta-alone": {
    "totali": 2,
+   "fallite": 0
+  },
+  "blocchi-sfondo-pieno": {
+   "totali": 16,
+   "fallite": 0
+  },
+  "blocchi-pulizia-codice": {
+   "totali": 1,
    "fallite": 0
   }
  },
- "segnalazioni": [],
- "post_con_problemi": []
+ "segnalazioni": [
+  {
+   "job_id": 76,
+   "testo": "nel cta non coprire tutto il soggetto, sennò rimane un muro di testo ed è brutto",
+   "quando": "2026-11-05T15:46:04+00:00"
+  }
+ ],
+ "post_con_problemi": [
+  {
+   "job_id": 60,
+   "fonte": "https://www.instagram.com/p/DYzH3SxiEJr/",
+   "fallite": [
+    1
+   ],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": true,
+     "problema": "La scritta \"(Quello che quasi nessuno sa leggere)\" si accavalla con la parola \"UNA DONNA\" e le due righe si sovrappongono. Inoltre la foto è più corta rispetto all'originale, con una fascia nera diversa, e manca il piccolo logo grafico in basso a destra. | poi: Il testo è corretto, ma nell'angolo in basso a destra manca il piccolo simbolo grafico presente nell'originale. Elemento grafico sparito.",
+     "testo_originale": "GIRL'S LOVE LANGUAGE (Most People Don't Notice)",
+     "testo": "IL LINGUAGGIO D'AMORE DI UNA DONNA\n\n(Quello che quasi nessuno sa leggere)",
+     "blocchi": [
+      {
+       "x": 45,
+       "y": 615,
+       "w": 910,
+       "h": 355,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#FF5A5F",
+       "allineamento": "center"
+      },
+      {
+       "x": 320,
+       "y": 965,
+       "w": 360,
+       "h": 35,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "1. When she looks at you quietly → She wants your attention.\n2. When she acts playful → She feels safe with you.\n3. When she's at her worst → She needs reassurance, not fixing.\n4. When she goes silent → Something is bothering her.\n5. When she cries → Just be there, don't try to solve everything.",
+     "testo": "1. Quando ti guarda in silenzio\n→ Cerca la tua attenzione.\n\n2. Quando ti stuzzica e scherza\n→ Con te si sente al sicuro.\n\n3. Quando dà il peggio di sé\n→ Vuole essere rassicurata, non aggiustata.\n\n4. Quando si chiude nel silenzio\n→ Qualcosa non va.\n\n5. Quando piange\n→ Stalle accanto. Non devi risolvere tutto.",
+     "blocchi": [
+      {
+       "x": 130,
+       "y": 218,
+       "w": 740,
+       "h": 570,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "6. When she pulls away → She's testing if you'll stay.\n7. When she's scared → She needs emotional safety, not advice.\n8. When she shares something personal → She trusts you deeply.\n9. When she gets clingy → She just wants to feel chosen.\n10. When she says \"I love you\" → She means it more than she shows.",
+     "testo": "6. Quando prende le distanze\n→ Vuole vedere se resti.\n\n7. Quando ha paura\n→ Le serve sentirsi al sicuro, non un consiglio.\n\n8. Quando ti racconta qualcosa di intimo\n→ Si fida di te fino in fondo.\n\n9. Quando ti sta addosso\n→ Vuole solo sentirsi scelta.\n\n10. Quando ti dice \"Ti amo\"\n→ Lo sente più di quanto lasci vedere.",
+     "blocchi": [
+      {
+       "x": 130,
+       "y": 218,
+       "w": 740,
+       "h": 570,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se ti sei riconosciuto anche in uno solo di questi 10 segnali…\ne ogni volta hai risposto con un consiglio,\nuna battuta o un silenzio,\ndevi smettere di guardare ciò che dice\ne iniziare a leggere ciò che succede sotto.\n\nHo scritto un manuale che ti spiega i pattern reali\nche regolano attrazione, investimento\ne perdita di valore nelle relazioni,\nsenza filtri e senza illusioni.\n\nSi chiama \"Diventa l'uomo a cui nessuna donna sa resistere\"\ne lo trovi nel link in bio,\noppure commenta \"ATTRAZIONE\" e te ",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Carosello che elenca 10 segnali del linguaggio d'amore femminile che molti uomini non notano: cosa significa davvero il suo silenzio, la sua distanza, le lacrime, la gelosia o l'attaccamento. Ogni segnale ha la sua lettura emotiva e cosa fare. Il tono è informativo e pratico, con un po' di intuizione psicologica. Ultima slide: invito a seguire la pagina.",
+   "descrizione": "Quante volte lei ti ha detto tutto senza aprire bocca, e tu le hai risposto con un consiglio, una battuta o un silenzio?\n\nTorna a casa tesa e risponde a monosillabi. Le chiedi «che hai?» e lei dice «niente». Tu ci credi, oppure parti con la lista delle soluzioni. Lei si chiude ancora di più, tu ti senti respinto, e la serata finisce con due persone sullo stesso divano a chilometri di distanza. Ogni volta perdi un pezzo della sua fiducia, e non capisci nemmeno dove hai sbagliato.\n\nIl motivo è semplice: tu ascolti le parole, lei ti misura su come reagisci. Nel 1987 Cindy Hazan e Phillip Shaver hanno mostrato che l'amore adulto segue le stesse regole dell'attaccamento infantile: quando ci si sente in pericolo si cerca un punto fermo, e si controlla se regge. Le distanze, le provocazioni, i momenti in cui dà il peggio di sé sono spesso proprio questo: una prova per vedere se resti in piedi.\n\nEd è proprio qui che molti uomini sbagliano, in due direzioni opposte. C'è chi va nel panico e la rincorre, e chi si offende e si ritira. Entrambi le dicono la stessa cosa: che il suo umore comanda il tuo. L'uomo che resta calmo davanti alla sua tempesta le dà esattamente quello che stava cercando.\n\nVale anche per i momenti belli. Nel 2004 Shelly Gable e i suoi colleghi hanno osservato che la qualità di una coppia dipende molto da come reagisci quando l'altra persona ti racconta qualcosa di importante. Se lei si apre e tu rispondi distratto, la prossima confidenza la porterà a qualcun altro.\n\nLeggerla non vuol dire diventare il suo terapeuta né vivere in funzione dei suoi umori. Vuol dire capire cosa ti sta chiedendo davvero e darglielo senza perdere il tuo centro.\n\nUna donna non si fida di chi la capisce soltanto. Si fida di chi la capisce e non trema.\n\nQuale di questi dieci segnali hai preso per un problema, quando in realtà era una domanda?\n\nSe anche uno solo ti ha riportato a una sera precisa, nel manuale \"Diventa l'uomo a cui nessuna donna sa resistere\" ti spiego come leggere quello che lei non dice e come restare l'uomo che desidera anche quando ti mette alla prova. Link in bio, oppure commenta \"ATTRAZIONE\" e te lo mando in DM.",
+   "segnalazioni": []
+  },
+  {
+   "job_id": 76,
+   "fonte": "https://www.instagram.com/p/DfXMT9NEgUy/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "If She Starts Ignoring You Don't Panic Do This Instead......",
+     "testo": "Se lei comincia a ignorarti\nnon andare nel panico.\nFai così......",
+     "blocchi": [
+      {
+       "x": 104,
+       "y": 366,
+       "w": 751,
+       "h": 327,
+       "carattere": "normale",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "1. Stay Unshaken\n\nThe worst thing you can do is chase. A high-value man is unfazed. He gives her space without reacting emotionally.\n\nShe stops replying to your texts? Instead of double-texting or asking if something's wrong, you carry on with your day as if nothing happened.\n\nSave for later",
+     "testo": "1. Resta impassibile\n\nLa cosa peggiore che puoi fare è rincorrerla. Un uomo di valore non si scompone: le lascia spazio e non reagisce di pancia.\n\nSmette di risponderti? Niente secondo messaggio, niente \"è successo qualcosa?\". Vai avanti con la tua giornata come se nulla fosse.\n\nSalva per dopo",
+     "blocchi": [
+      {
+       "x": 101,
+       "y": 291,
+       "w": 317,
+       "h": 31,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 376,
+       "w": 802,
+       "h": 148,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 542,
+       "w": 812,
+       "h": 186,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 393,
+       "y": 937,
+       "w": 208,
+       "h": 24,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "2. Trigger the Fear of Loss\n\nIf she pulls away, match her energy. Step back, focus on yourself, and let her feel your absence.\n\nShe used to call you every evening but suddenly stops? You don't bring it up. Instead, you hit the gym, hang out with friends, and let her feel the shift.\n\nSave for later",
+     "testo": "2. Falle sentire che può perderti\n\nSe si allontana, tu ricambi. Un passo indietro, la testa su di te, e lasci che senta la tua assenza.\n\nTi chiamava tutte le sere e di colpo smette? Non le chiedi niente. Vai in palestra, esci con gli amici e lasci che il cambiamento lo senta lei.\n\nSalva per dopo",
+     "blocchi": [
+      {
+       "x": 101,
+       "y": 291,
+       "w": 500,
+       "h": 31,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 376,
+       "w": 802,
+       "h": 112,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 542,
+       "w": 800,
+       "h": 186,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 393,
+       "y": 937,
+       "w": 208,
+       "h": 24,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "3. Keep Your Options Open\n\nA high-value man never acts like she's the only woman in his world. He continues living his best life, pursuing his goals, and maintaining his social circle.\n\nShe starts acting distant, so instead of sulking, you go on a weekend trip with friends, post a few stories, and let her see that your life doesn't revolve around her.\n\nSave for later",
+     "testo": "3. Non chiuderti nessuna porta\n\nUn uomo di valore non si comporta mai come se lei fosse l'unica donna al mondo. Continua a vivere al meglio, a inseguire i suoi obiettivi, a vedere i suoi amici.\n\nLei comincia a fare la distaccata? Invece di tenere il muso, parti per un weekend con gli amici, pubblichi qualche storia e le fai vedere che la tua vita non gira intorno a lei.\n\nSalva per dopo",
+     "blocchi": [
+      {
+       "x": 101,
+       "y": 278,
+       "w": 525,
+       "h": 31,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 359,
+       "w": 800,
+       "h": 197,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 522,
+       "w": 790,
+       "h": 210,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 393,
+       "y": 937,
+       "w": 208,
+       "h": 24,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "4. Maintain Mystery\n\nIf she reaches out, don't immediately ask why she pulled away. Stay intriguing—let her wonder about your mindset and next move.\n\nShe messages you after days of silence, saying, \"Hey, what's up?\" Instead of asking where she's been, you reply, \"Busy with some exciting things. You good?\" and leave it at that.\n\nSave for later",
+     "testo": "4. Resta un mistero\n\nSe si rifà viva, non chiederle subito perché è sparita. Resta intrigante: lascia che si domandi cosa pensi e quale sarà la tua prossima mossa.\n\nTi scrive dopo giorni di silenzio: \"Ehi, come va?\". Niente \"che fine avevi fatto?\". Rispondi: \"Preso con un paio di cose interessanti. Tu tutto bene?\" e chiudi lì.\n\nSalva per dopo",
+     "blocchi": [
+      {
+       "x": 101,
+       "y": 249,
+       "w": 378,
+       "h": 31,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 332,
+       "w": 812,
+       "h": 230,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 532,
+       "w": 830,
+       "h": 240,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 393,
+       "y": 937,
+       "w": 208,
+       "h": 24,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "5. Reframe the Dynamic\n\nIf she distances herself, act as if you were already becoming less invested. This shifts the power dynamic and makes her reconsider her actions.\n\nShe cancels plans last minute, expecting you to reschedule? Instead, you say, \"No worries, I've got a packed schedule anyway,\" and make her wonder what's keeping you so occupied.\n\nSave for later",
+     "testo": "5. Ribalta i ruoli\n\nSe prende le distanze, comportati come se il tuo interesse stesse già calando. Gli equilibri si spostano e tocca a lei chiedersi dove sta sbagliando.\n\nDisdice all'ultimo e si aspetta che sia tu a proporre un'altra sera? Rispondi: \"Nessun problema, tanto ho l'agenda piena\", e la lasci a chiedersi cosa ti tenga così impegnato.\n\nSalva per dopo",
+     "blocchi": [
+      {
+       "x": 101,
+       "y": 252,
+       "w": 464,
+       "h": 31,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 332,
+       "w": 812,
+       "h": 190,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 535,
+       "w": 812,
+       "h": 236,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 393,
+       "y": 937,
+       "w": 208,
+       "h": 24,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "6. Come Back Stronger, Not Needier –\n\nIf she returns, don't reward her behavior with instant validation. Instead, let her gradually earn back your attention through consistency.\n\nShe starts texting again after ignoring you for a week. Instead of acting excited, you take your time to respond and keep conversations short until she proves she's genuinely interested.\n\nSave for later",
+     "testo": "6. Torna più forte, non più bisognoso\n\nSe torna, non premiarla con attenzioni immediate. La tua attenzione deve riguadagnarsela poco alla volta, con la costanza.\n\nRicomincia a scriverti dopo una settimana di silenzio? Niente entusiasmo. Rispondi con calma e tieni le conversazioni brevi, finché non dimostra di essere davvero interessata.\n\nSalva per dopo",
+     "blocchi": [
+      {
+       "x": 101,
+       "y": 291,
+       "w": 629,
+       "h": 31,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 325,
+       "w": 812,
+       "h": 150,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 540,
+       "w": 812,
+       "h": 190,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 393,
+       "y": 937,
+       "w": 208,
+       "h": 24,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "cta-illustrata",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se ti sei riconosciuto anche in uno solo di questi 6 punti…\nse anche tu hai riempito il suo silenzio con i tuoi messaggi,\ne vuoi davvero capire perché all'inizio ti cercava e poi è sparita…\ndevi smettere di guardare ciò che dice\ne iniziare a leggere ciò che succede sotto.\n\nHo scritto un manuale che ti spiega i pattern reali\nche regolano attrazione, investimento\ne perdita di valore nelle relazioni,\nsenza filtri e senza illusioni.\n\nSi chiama \"Diventa l'uomo a cui nessuna donna sa resistere\"\ne lo t",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Se una donna inizia a ignorarti, la reazione peggiore è andare nel panico e rincorrerla. Funziona l'opposto: resti calmo, ti fai un po' più distante anche tu, porti avanti la tua vita e le tue passioni, mantieni un po' di mistero e, se torna, non le dai subito tutta la tua attenzione. Deve riguadagnarsela con la costanza. Il tono è da consiglio diretto, tra il pratico e il motivazionale, con una chiusura che spinge a informarsi prima di pagarne le conseguenze.",
+   "descrizione": "Quando una donna comincia a sparire, quasi ogni uomo fa la stessa cosa: la insegue. Ed è proprio questa la mossa che chiude la partita.\n\nLe hai scritto stamattina. Ha visualizzato. Sono le undici di sera e stai riscrivendo per la terza volta un messaggio che non dovresti mandare, e alla fine lo mandi. Ogni ora di silenzio ti toglie un pezzo di calma, e lei lo sente anche senza vederti.\n\nTi costa più di una conversazione persa. Ogni messaggio in più le dice che la tua giornata dipende dalla sua risposta. E un uomo la cui serenità dipende da lei smette di essere una scelta e diventa una certezza. Le certezze non si desiderano.\n\nNel 1966 Jack Brehm ha descritto la reattanza psicologica: quando una persona sente minacciata la propria libertà di scegliere, si allontana da chi le fa pressione. Il tuo \"è successo qualcosa?\", per lei, è pressione. Nel 1975 Stephen Worchel ha mostrato l'altra metà del meccanismo: gli stessi biscotti sembravano più buoni quando nel barattolo ne restavano pochi. Quello che è sempre disponibile perde valore, quello che può mancare lo acquista.\n\nEd è qui che molti uomini sbagliano: prendono queste sei mosse come una freddezza da recitare. Se fingi indifferenza e intanto controlli il telefono ogni dieci minuti, lei se ne accorge dal tono. Palestra, amici e weekend fuori servono a riportare su di te il centro della tua vita, non a mandarle segnali. Il distacco che attrae non si recita: è una vita che sta in piedi anche senza la sua risposta.\n\nUna donna non si allontana da un uomo che ha una vita. Si allontana da quello che le ha consegnato la sua.\n\nSe ti sei riconosciuto anche in uno solo di questi 6 punti, il problema non è cosa le scrivi, ma quanto hai bisogno che ti risponda. Ho scritto un manuale che ti spiega perché all'inizio una donna ti desidera e poi si raffredda, e come smettere di perdere valore proprio mentre provi a riprendertela. Si chiama \"Diventa l'uomo a cui nessuna donna sa resistere\": lo trovi nel link in bio, oppure commenta \"ATTRAZIONE\" e te lo mando in DM.",
+   "segnalazioni": [
+    "nel cta non coprire tutto il soggetto, sennò rimane un muro di testo ed è brutto"
+   ]
+  }
+ ]
 }
