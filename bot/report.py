@@ -116,6 +116,8 @@ def rank_candidates(posts: list[instagram.SourcePost], hours: int, limit: int) -
     baseline = _baselines(posts)
 
     since = datetime.now(timezone.utc) - timedelta(hours=hours)
+    tipiche = [baseline[o] for o in baseline]          # la mediana delle medie delle pagine = la nicchia
+    nicchia = max(statistics.median(tipiche), 1.0) if tipiche else 1.0
     recent = []
     for p in posts:
         ts = _parse_ts(p.timestamp)
@@ -124,7 +126,16 @@ def rank_candidates(posts: list[instagram.SourcePost], hours: int, limit: int) -
             continue
         if (_eta_ore(p) or 0) < 6:      # troppo giovane per giudicarlo: lo si rilegge domani (finestra di 2 giorni)
             continue
-        p.score = _normalizzato(e, _eta_ore(p)) / baseline.get(p.owner, max(e, 1.0))   # a parità di età
+        n = _normalizzato(e, _eta_ore(p))
+        p.score = n / baseline.get(p.owner, max(e, 1.0))   # a parità di età, rispetto alla SUA pagina
+        # Le pagine che pubblicano poco ma sono quasi sempre virali (es. @masculinecraze) hanno una media altissima:
+        # un loro post virale risulta "1x" e non entrava mai. Si guarda anche la NICCHIA (mediana di tutti i
+        # collaboratori): se il post è almeno nella media della sua pagina ed è molto sopra la nicchia, sale.
+        p.score_nicchia = n / nicchia
+        if p.score >= 0.8 and p.score_nicchia > p.score:
+            # tetto 2.5: entrano nel report, ma non scavalcano i post davvero eccezionali delle altre pagine
+            # (altrimenti le pagine grandi tornerebbero sempre in cima)
+            p.score = max(p.score, min(2.5, (p.score * p.score_nicchia) ** 0.5))
         recent.append(p)
     done = storage.processed_urls([p.url for p in recent])
     recent = [p for p in recent if p.url not in done]
@@ -483,7 +494,8 @@ def _link_lines(items: list, start: int, min_score: float, perche: dict | None =
                 else {"didattico": "📚 didattico", "virale": "🔥 virale"}).get(p.natura, "")
         testa = tipo_txt if tipo else ""
         out.append(f"{i}. " + (f"{testa}\n" if testa else "") + f"@{p.owner} · {p.score:.1f}x la sua media{'' if p.score >= min_score else ' (sotto media)'}"
-                   f" · {nums}\n{p.url}"
+                   + (f" · {p.score_nicchia:.1f}x la nicchia" if getattr(p, "score_nicchia", 0) >= 2 else "")
+                   + f" · {nums}\n{p.url}"
                    # niente spiegazioni del perché (richiesta di Gabriele): solo la crescita, se c'è, o l'inizio del testo
                    + (f"\n{p.motivo.splitlines()[0]}" if (p.motivo or "").startswith("📈") else
                       (f"\n“{anteprima}…”" if anteprima else "")))

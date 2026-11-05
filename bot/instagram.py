@@ -36,6 +36,7 @@ class SourcePost:
     comments: int | None = None
     timestamp: str = ""            # ISO, ora di pubblicazione
     score: float = 0.0             # rendimento rispetto alla media della pagina (report)
+    score_nicchia: float = 0.0     # rendimento rispetto alla media di tutti i collaboratori (report)
     motivo: str = ""               # perché è stato scelto (report)
     natura: str = ""               # didattico | virale (report)
     pagina: str = ""               # a quale delle nostre pagine va (report)
