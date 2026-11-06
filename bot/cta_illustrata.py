@@ -214,6 +214,8 @@ def _texts(img: Image.Image, text: str, font_path: Path = COMIC) -> Image.Image:
     paras = [p.strip() for p in text.split("\n\n") if p.strip()]
     if not paras:
         return img
+    # dentro i riquadri il testo scorre su righe pari (gli "a capo" del testo lasciavano righe orfane)
+    paras = [" ".join(p.split()) for p in paras]
     head = paras[0].upper()
     body = "\n".join(paras[1:-1]) if len(paras) > 2 else ""
     if Path(font_path) == COMIC:
@@ -232,8 +234,12 @@ def _texts(img: Image.Image, text: str, font_path: Path = COMIC) -> Image.Image:
     MARKER = BODY = font_path
     fh = ImageFont.truetype(str(MARKER), int(W * 0.075))
     lines_h = _wrap(d, head, fh, inner)
-    while len(lines_h) > 3 and fh.size > 30:
-        fh = ImageFont.truetype(str(MARKER), fh.size - 4)
+    # il soggetto al centro deve restare visibile (segnalazione 5/11: "non coprire tutto il soggetto"):
+    # riquadro in alto al massimo il 21% della slide, quello in basso al massimo il 29%; se il testo è lungo
+    # si rimpicciolisce il carattere invece di allargare i riquadri
+    max_top, max_bot = int(H * 0.21), int(H * 0.29)
+    while fh.size > 30 and (len(lines_h) > 3 or int(fh.size * 1.12) * len(lines_h) + int(fh.size * 0.7) > max_top):
+        fh = ImageFont.truetype(str(MARKER), fh.size - 2)
         lines_h = _wrap(d, head, fh, inner)
     lh = int(fh.size * 1.12)
     top_box = (margin, int(H * 0.035), W - margin, int(H * 0.035) + lh * len(lines_h) + int(fh.size * 0.7))
@@ -247,9 +253,19 @@ def _texts(img: Image.Image, text: str, font_path: Path = COMIC) -> Image.Image:
     # testo + chiusura in basso
     fb = ImageFont.truetype(str(BODY), int(W * 0.04))
     fc = ImageFont.truetype(str(MARKER), int(W * 0.058))
-    lines_b = _wrap(d, body, fb, inner) if body else []
-    lines_c = _wrap(d, close, fc, inner) if close else []
-    hb = int(fb.size * 1.25) * len(lines_b) + (int(fc.size * 1.15) * len(lines_c)) + int(W * 0.05)
+    min_b, min_c = int(W * 0.028), int(W * 0.036)
+    while True:
+        lines_b = _wrap(d, body, fb, inner) if body else []
+        lines_c = _wrap(d, close, fc, inner) if close else []
+        hb = int(fb.size * 1.25) * len(lines_b) + (int(fc.size * 1.15) * len(lines_c)) + int(W * 0.05)
+        if hb <= max_bot or (fb.size <= min_b and fc.size <= min_c):
+            break
+        if fc.size > min_c and fc.size >= fb.size * 1.3:     # prima si riduce la chiusura rossa
+            fc = ImageFont.truetype(str(MARKER), fc.size - 2)
+        elif fb.size > min_b:
+            fb = ImageFont.truetype(str(BODY), fb.size - 2)
+        else:
+            fc = ImageFont.truetype(str(MARKER), fc.size - 2)
     if lines_b or lines_c:
         bot_box = (margin, H - int(H * 0.035) - hb, W - margin, H - int(H * 0.035))
         img = _panel(img, bot_box, 34)
