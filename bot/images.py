@@ -686,9 +686,14 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
     # serve il percorso a blocchi solo per titoli con font stretti o parole evidenziate davvero ([[ ]])
     special = any(b.get("carattere") in ("titolo", "stretto", "fumetto") or "[[" in (b.get("testo") or "") or "{{" in (b.get("testo") or "")
                   for b in (slide.get("blocchi") or []))
+    def _marchi(im):
+        W_, H_ = im.size
+        wb_ = textslide.wm_box(slide, W_, H_)
+        return ([wb_] if wb_ else []) + textslide.other_marks(slide, W_, H_)
     if config.SLIDE_TEXT_MODE != "gemini-sempre" and not special:
         lay = textslide.analyze(original, slide.get("testo_originale", ""),
-                                has_mark=bool((slide.get("watermark_originale") or "").strip()))
+                                has_mark=bool((slide.get("watermark_originale") or "").strip()),
+                                escludi=_marchi(original))
         if lay and slide.get("_peso_post"):
             lay.weight = slide["_peso_post"]          # stesso font e spessore in tutte le slide del post
         if lay:
@@ -727,7 +732,8 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
         slide["_motivo_codice"] = ""
     if mode == "codice" and blocks0 and not fumetto_ai:
         uni = textslide.analyze(orig_fit, slide.get("testo_originale", ""),
-                                has_mark=bool((slide.get("watermark_originale") or "").strip()))
+                                has_mark=bool((slide.get("watermark_originale") or "").strip()),
+                                escludi=_marchi(orig_fit))
         if uni:
             # slide tutta su colore pieno: si cancella TUTTO ciò che non è sfondo (nessun residuo, anche
             # se un blocco è stato misurato male) e si riscrivono i blocchi nelle loro caselle

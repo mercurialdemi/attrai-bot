@@ -178,8 +178,11 @@ def _identify_font(ink: np.ndarray, text_lines: list, orig_lines: list[str]):
     return (top[0], top[1]) if top[3] > 0.25 and top[3] > base else None
 
 
-def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False) -> Layout | None:
-    """Restituisce il layout se la slide è testo su sfondo uniforme, altrimenti None."""
+def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False,
+            escludi: list | None = None) -> Layout | None:
+    """Restituisce il layout se la slide è testo su sfondo uniforme, altrimenti None.
+    `escludi`: riquadri dei marchi dell'altra pagina (avatar, nome, @handle): si cancellano ma non si misurano
+    come testo (Gabriele, 6/11: il pezzo d'oro dell'avatar di @dominatemanhood_ era diventato il colore del titolo)."""
     a = np.asarray(img.convert("RGB")).astype(np.int16)
     H, W, _ = a.shape
     b = max(4, int(min(H, W) * 0.02))
@@ -193,6 +196,19 @@ def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False) -
         return None
 
     ink = dist > 70
+    if escludi:
+        ink = ink.copy()
+        for (x0, y0, x1, y1) in escludi:
+            px, py = int(W * 0.015), int(H * 0.015)
+            ya, yb = max(0, y0 - py), min(H, y1 + py)
+            cols = ink[ya:yb].any(axis=0)
+            gap = int(W * 0.06)
+            xa, xb = max(0, x0 - px), min(W, x1 + px)
+            while xb < W and cols[xb:min(W, xb + gap)].any():
+                xb = xb + int(np.where(cols[xb:min(W, xb + gap)])[0].max()) + 1
+            while xa > 0 and cols[max(0, xa - gap):xa].any():
+                xa = max(0, xa - gap) + int(np.where(cols[max(0, xa - gap):xa])[0].min())
+            ink[ya:yb, xa:xb] = False
     if ink.sum() < 50:
         return None
     lines = []
@@ -219,6 +235,16 @@ def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False) -
                 lines.append((p0, p1, int(cols.min()), int(cols.max())))
     if not lines:
         return None
+    if has_mark:
+        # pezzi stretti attaccati sotto un elemento più largo (es. la parte bassa dell'avatar, sotto il nome
+        # della pagina): non sono righe di testo
+        tenute = []
+        for l in lines:
+            sopra = [q for q in tenute if 0 <= l[0] - q[1] <= 12 and q[2] <= l[2] and l[3] <= q[3]]
+            if sopra and (l[3] - l[2]) < W * 0.08:
+                continue
+            tenute.append(l)
+        lines = tenute
     heights = np.array([l[1] - l[0] + 1 for l in lines])
     med_h = float(np.median(heights))
     # un blocco molto più alto di una riga di testo, fuori dalle fasce alta e bassa dei marchi, è un'illustrazione:
@@ -257,7 +283,9 @@ def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False) -
     top, bottom = text_lines[0][0], text_lines[-1][1]
     size = int(np.percentile(t_heights, 75) / 0.93)    # riga con maiuscole e discendenti ≈ 0.93 del corpo
 
-    strong = dist > 120
+    strong = np.zeros_like(ink)
+    for l in text_lines:                    # il colore si misura solo sulle righe di testo (non su avatar e loghi)
+        strong[l[0]:l[1] + 1, l[2]:l[3] + 1] = dist[l[0]:l[1] + 1, l[2]:l[3] + 1] > 120
     color = tuple(int(c) for c in np.median(a[strong], axis=0)) if strong.any() else (255, 255, 255)
     # peso: spessore medio dei tratti verticali (lunghezza delle corse orizzontali di inchiostro) rispetto al corpo
     runs = []

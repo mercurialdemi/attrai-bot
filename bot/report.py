@@ -458,7 +458,9 @@ def _tieni(cands: list, st: dict) -> list:
     vir_forti = [p for p in cands if p.natura != "didattico" and p.score >= st["min_score"]]
     out = did + vir_forti
     if len(out) < st["link"]:
-        resto = sorted([p for p in cands if p not in out and p.score >= 1.0], key=lambda p: -p.score)
+        # pochi post forti: si arriva comunque al numero richiesto con i migliori rimasti (già in tema e almeno
+        # 0.8x la loro media), dal più forte (Gabriele: "almeno 4-5-6 link ogni giorno")
+        resto = sorted([p for p in cands if p not in out], key=lambda p: -p.score)
         out += resto[:st["link"] - len(out)]
     return sorted(out, key=lambda p: -p.score)
 
