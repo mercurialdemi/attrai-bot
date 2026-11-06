@@ -535,7 +535,9 @@ def rispondi(brand: dict, slug: str, rules: list[dict], jdir: Path, foto: bytes 
               "Scegli tu la chiusura: vendita solo se la domanda tocca da vicino il dolore di un manuale.")
              + " Se la chiusura è di vendita: " + CTA_TESTO[cta])
     content.append({"type": "text", "text": "MODELLO RISPOSTA BOX DOMANDE: rispondi in 3 slide (gancio che risponde alla "
-                    "domanda, didattica, chiusura). In domanda scrivi solo la domanda del follower (niente 'Risposta a "
+                    "domanda, spiegazione, chiusura). Applica la sezione PROFONDITÀ: la slide 2 spiega il meccanismo psicologico "
+                    "(perché lei fa così, cosa comunica, cosa succede nella sua testa) con un esempio concreto e "
+                    "un'intuizione non ovvia, in 2-3 blocchi. In domanda scrivi solo la domanda del follower (niente 'Risposta a "
                     "@username', niente nomi o dati personali): il bot la stampa in alto sulla prima slide. Slide 1: un "
                     "solo blocco di 3-4 righe, negazione netta, verità ribaltata, conseguenza. Slide 2: 2-3 blocchi; nel "
                     "primo, se l'idea è davvero di un autore della lista, nominalo (regola autori). Slide 3: chiusura "

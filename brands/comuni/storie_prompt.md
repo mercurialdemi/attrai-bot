@@ -26,6 +26,15 @@ CHIUSURA
     come [risultato] senza [rischio]… ti lascio il link qua."
 - Sotto l'ultima slide di vendita resta spazio per lo sticker link MANUALE (lo mette Gabriele).
 
+PROFONDITÀ (Gabriele, 6/11: "un livello di profondità leggermente maggiore")
+- Ogni serie spiega il PERCHÉ, non solo il cosa: il meccanismo psicologico dietro il comportamento di lei e di
+  lui (bisogno, paura, percezione di valore, cosa comunica quel gesto), detto con parole semplici.
+- Almeno un'intuizione non ovvia, quella che fa pensare "non ci avevo mai pensato". Niente ovvietà da coach.
+- Un esempio concreto della sua vita (un messaggio, una serata, una frase detta) che rende visibile il meccanismo.
+- Mai restare sul generico ("sii sicuro", "non essere bisognoso", "lavora su te stesso") senza dire cosa significa
+  in pratica e perché funziona.
+- Profondo non vuol dire lungo: stessi blocchi brevi, ma ogni frase porta un pezzo di ragionamento.
+
 REGOLE DI SCRITTURA
 - Frasi brevi, mai subordinate complesse. Seconda persona singolare (tu), presente: immedesimazione.
 - Mai nozioni accademiche o linguaggio da libro.
