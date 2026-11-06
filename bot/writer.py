@@ -1054,7 +1054,15 @@ def revise_post(post: dict, instruction: str, brand: dict, rules: list[dict], re
         "Se la richiesta riguarda la grafica di slide specifiche senza cambiare il testo, mettile in slide_da_rifare.\n\n"
         + _caption_variabile(recent)
     )}]
-    out = _tool_call(system, content, MODIFICA_TOOL, model=modello, max_tokens=12000, cache_ora=True)
+    try:
+        out = _tool_call(system, content, MODIFICA_TOOL, model=modello, max_tokens=12000, cache_ora=True)
+    except RuntimeError as e:
+        if "troncata" not in str(e) or modello == config.CLAUDE_MODEL:
+            raise
+        # il modello economico a volte riscrive tutto il post e la risposta si tronca: un secondo tentativo
+        # col modello di livello medio e più spazio, invece di lasciare Gabriele con un errore (6/11)
+        log.warning("Correzione troncata con %s: riprovo con %s", modello, config.CLAUDE_MODEL)
+        out = _tool_call(system, content, MODIFICA_TOOL, model=config.CLAUDE_MODEL, max_tokens=24000, cache_ora=True)
     new = json.loads(json.dumps(current))            # copia: si parte dal post attuale e si applicano i cambi
     by_num = {sl.get("numero"): i for i, sl in enumerate(new.get("slides") or [])}
     for sl in out.get("slide_cambiate") or []:
