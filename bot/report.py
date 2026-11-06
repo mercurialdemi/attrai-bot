@@ -287,9 +287,11 @@ def pagine_nostre(brand: dict) -> list[dict]:
             b = yaml.safe_load(pagine.brand_file(slug).read_text(encoding="utf-8")) or {}
         except Exception:
             continue
-        if b.get("nome"):
+        if b.get("nome") and (not b.get("in_pausa") or b["nome"] == brand.get("nome")):
+            # le pagine in pausa non ricevono post: non devono "rubarli" alle altre
             out.append({"nome": b["nome"], "handle": b.get("handle", ""), "pubblico": b.get("pubblico", ""),
-                        "temi": b.get("temi_report") or b.get("posizionamento", "")})
+                        "temi": b.get("temi_report") or b.get("posizionamento", ""),
+                        "monitora": {str(h).lower().lstrip("@") for h in b.get("pagine_monitorate") or []}})
     return out or [{"nome": brand["nome"], "handle": brand.get("handle", ""), "pubblico": "",
                     "temi": brand.get("posizionamento", "")}]
 
@@ -335,6 +337,7 @@ def _fit_filter(cands: list, brand: dict) -> tuple[list, bool]:
               "sport, auto, pubblicità, notizie, giveaway, motivazionali generici non legati ai temi della pagina.\n"
               "Per ogni post dì anche se è DIDATTICO o VIRALE.")
     keep, ok = [], True
+    tutte = pagine_nostre(brand)
     for start in range(0, len(cands), 12):
         chunk = cands[start:start + 12]
         content = []
@@ -360,9 +363,19 @@ def _fit_filter(cands: list, brand: dict) -> tuple[list, bool]:
         for r in out.get("post", []):
             n = r.get("numero")
             # ogni post va a UNA sola pagina: quella a cui è più adatto (niente doppioni tra le nostre pagine)
-            migliore = _nome_pagina(r.get("pagina_migliore"), pagine_nostre(brand)) or brand["nome"]
-            if isinstance(n, int) and 1 <= n <= len(chunk) and r.get("adatto") and migliore == brand["nome"]:
-                p = chunk[n - 1]
+            migliore = _nome_pagina(r.get("pagina_migliore"), tutte) or brand["nome"]
+            if not (isinstance(n, int) and 1 <= n <= len(chunk)):
+                continue
+            p = chunk[n - 1]
+            # il post va a un'altra nostra pagina solo se quella pagina segue lo stesso collaboratore (lo riceverà
+            # nel suo report); altrimenti resta qui, invece di sparire da tutti i report
+            altra = next((pg for pg in tutte if pg["nome"] == migliore), None)
+            if migliore != brand["nome"] and altra and (p.owner or "").lower() not in altra.get("monitora", set()):
+                migliore = brand["nome"]
+            if not (r.get("adatto") and migliore == brand["nome"]):
+                log.info("Report %s: scartato @%s %.1fx (%s): %s", brand["nome"], p.owner, p.score or 0,
+                         "va a " + migliore if migliore != brand["nome"] else "non in tema", r.get("motivo", ""))
+            if r.get("adatto") and migliore == brand["nome"]:
                 p.pagina = brand["nome"]
                 prima = p.motivo if (p.motivo or "").startswith("📈") else ""
                 p.motivo = (prima + "\n" if prima else "") + r.get("motivo", "")
@@ -437,6 +450,19 @@ def _perche(items: list) -> dict:
         return {}
 
 
+def _tieni(cands: list, st: dict) -> list:
+    """Didattici veri: bastano 0.8x la media della pagina. Virali: almeno la soglia (punteggio_minimo).
+    Se i virali sopra soglia sono pochi, si completa coi migliori virali sopra la media (1x), così il report
+    arriva sempre al numero di post richiesto quando i post ci sono."""
+    did = [p for p in cands if p.natura == "didattico"]
+    vir_forti = [p for p in cands if p.natura != "didattico" and p.score >= st["min_score"]]
+    out = did + vir_forti
+    if len(out) < st["link"]:
+        resto = sorted([p for p in cands if p not in out and p.score >= 1.0], key=lambda p: -p.score)
+        out += resto[:st["link"] - len(out)]
+    return sorted(out, key=lambda p: -p.score)
+
+
 def _bilancia(cands: list, n: int) -> list:
     """I migliori n post, metà didattici e metà virali (se di un tipo ce ne sono pochi, si completa con l'altro).
     Ogni pagina compare una volta sola (due solo se mancano post): niente report fatti sempre delle stesse pagine.
@@ -493,7 +519,7 @@ def _link_lines(items: list, start: int, min_score: float, perche: dict | None =
         tipo_txt = ({"didattico": "📚 DIDATTICO (CTA manuale)", "virale": "🔥 VIRALE (segui la pagina)"} if principale
                 else {"didattico": "📚 didattico", "virale": "🔥 virale"}).get(p.natura, "")
         testa = tipo_txt if tipo else ""
-        out.append(f"{i}. " + (f"{testa}\n" if testa else "") + f"@{p.owner} · {p.score:.1f}x la sua media{'' if p.score >= min_score else ' (sotto media)'}"
+        out.append(f"{i}. " + (f"{testa}\n" if testa else "") + f"@{p.owner} · {p.score:.1f}x la sua media"
                    + (f" · {p.score_nicchia:.1f}x la nicchia" if getattr(p, "score_nicchia", 0) >= 2 else "")
                    + f" · {nums}\n{p.url}"
                    # niente spiegazioni del perché (richiesta di Gabriele): solo la crescita, se c'è, o l'inizio del testo
@@ -614,10 +640,13 @@ async def run_report(bot, chat_ids: list[int]) -> None:
                 # lunghi, che spesso sono quelli che insegnano, entrano tra i candidati anche se sono nella media
                 lunghi = [p for p in tutti[st["candidati"] * 4:]
                           if len(p.image_urls or []) >= 5 and p.score >= 0.8][:20]
-                cands = [p for p in cands + lunghi if _ripescabile(p, shown_before)
-                         and (st["completa"] or p.score >= st["min_score"] or p in lunghi)]
+                # tra i candidati entrano tutti i post almeno nella media della pagina: un DIDATTICO può essere
+                # meno virale (Gabriele: "è ovvio che un didattico andrà un po' meno virale"); la soglia vale
+                # per i virali, dopo aver capito di che tipo è ogni post
+                cands = [p for p in cands + lunghi if _ripescabile(p, shown_before) and p.score >= 0.8]
                 if cands:
                     cands, filtered = await asyncio.to_thread(_fit_filter, cands, brand)
+                    cands = _tieni(cands, st)
                 if len(cands) >= st["link"]:
                     break
             riepilogo = _page_summary(posts, handles, ore, st["min_score"], own)
@@ -638,10 +667,10 @@ async def run_report(bot, chat_ids: list[int]) -> None:
                 perche = await asyncio.to_thread(_perche, first[:st["perche"]])   # solo i migliori: costa immagini
             await _send_links(
                 bot, chat_ids,
-                f"☀️ {brand['nome']} · post dei collaboratori andati almeno {st['min_score']:.1f}x sopra la media della loro pagina "
-                f"(ultimi {ore // 24} giorni, mai mandati prima)"
+                f"☀️ {brand['nome']} · post dei collaboratori sopra la media della loro pagina (virali da "
+                f"{st['min_score']:.1f}x, didattici anche un po' meno) · ultimi {ore // 24} giorni, mai mandati prima"
                 + (" · oggi pochi post forti, ho guardato anche i giorni prima" if ore > st["ore"] else "") + ".\n"
-                f"I {len(first)} migliori, metà didattici e metà virali:"
+                + (f"I {len(first)} migliori, metà didattici e metà virali:" if len(first) > 1 else "Il migliore:")
                 + ("" if filtered else "\n(filtro di tema non riuscito: li vedi tutti)"),
                 _sezioni(first, st["min_score"], perche),
                 riepilogo + "\n\nMandami il link di quelli che ti piacciono e li preparo in italiano."
