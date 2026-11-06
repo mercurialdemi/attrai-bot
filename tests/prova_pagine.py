@@ -47,7 +47,7 @@ assert main._destinatari("ilpensatore") == []
 # 4. report: nel gruppo Reset restano solo i post che vanno a Reset
 pagine.imposta("resetrelazionale")
 b = writer.load_brand()
-cands = [instagram.SourcePost(url=f"u{i}", owner="x", caption="c", kind="Sidecar", score=s)
+cands = [instagram.SourcePost(url=f"u{i}", owner="miralaurona", caption="c", kind="Sidecar", score=s)
          for i, s in enumerate([5, 3, 2])]
 visti = []
 
@@ -67,7 +67,7 @@ keep, ok = report._fit_filter(cands, b)
 assert [p.url for p in keep] == ["u1"], [p.url for p in keep]
 assert "PUBBLICO: uomini" in visti[-1] and "AmoreInfedele" in visti[-1]   # profilo della pagina + confini con le altre
 pagine.imposta("amoreinfedele")
-cands2 = [instagram.SourcePost(url=f"u{i}", owner="x", caption="c", kind="Sidecar", score=s)
+cands2 = [instagram.SourcePost(url=f"u{i}", owner="miralaurona", caption="c", kind="Sidecar", score=s)
           for i, s in enumerate([5, 3, 2])]
 keep2, _ = report._fit_filter(cands2, writer.load_brand())
 assert [p.url for p in keep2] == ["u0"], [p.url for p in keep2]   # post diversi dello stesso collaboratore, pagine diverse

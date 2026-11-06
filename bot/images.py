@@ -506,11 +506,20 @@ def add_brand_mark(img: Image.Image, brand: dict, avoid: list | None = None,
         def free(yy):
             r = (ax - 8, yy - 8, ax + total_w + 8, yy + d + 8)
             return not any(not (r[2] < b[0] or r[0] > b[2] or r[3] < b[1] or r[1] > b[3]) for b in (avoid or []))
-        # al posto del watermark; se il testo italiano (più lungo) arriva fin lì, appena sotto il testo
-        for yy in range(ay, H - d - 6, 4):
+        # al posto del watermark; se il testo italiano (più lungo) arriva fin lì, ci si sposta restando dalla
+        # STESSA parte del testo: intestazione sopra il testo (stile tweet) → il nostro marchio resta sopra
+        sopra = bool(avoid) and cy < (min(b_[1] for b_ in avoid) + max(b_[3] for b_ in avoid)) / 2
+        verso = range(ay, margin // 2 - 1, -4) if sopra else range(ay, H - d - 6, 4)
+        for yy in verso:
             if free(yy):
                 x, y = ax, yy
                 break
+        else:
+            if sopra:
+                for yy in range(ay, H - d - 6, 4):
+                    if free(yy):
+                        x, y = ax, yy
+                        break
 
     if logo:
         layer.alpha_composite(logo, (x, y))
@@ -587,8 +596,11 @@ def needs_logo(slide: dict, brand: dict) -> bool:
 def _avoid_boxes(slide: dict, W: int, H: int) -> list[tuple[int, int, int, int]]:
     """Zone con testo, dove il logo non deve andare."""
     from . import textslide as ts
-    boxes = [ts.block_box(b, W, H) for b in (slide.get("blocchi") or []) if (b.get("testo") or "").strip()]
-    for r in (slide.get("_canva") or {}).get("righe", []):
+    righe = (slide.get("_canva") or {}).get("righe", [])
+    # se il testo italiano è già scritto si usano le sue righe vere (le caselle stimate di Claude sono larghe
+    # e possono coprire anche l'intestazione dell'altra pagina, spingendo il nostro marchio lontano)
+    boxes = [] if righe else [ts.block_box(b, W, H) for b in (slide.get("blocchi") or []) if (b.get("testo") or "").strip()]
+    for r in righe:
         size = r.get("size", 30)
         boxes.append((int(r["x"]), int(r["y"]), int(r["x"] + size * 0.62 * len(r.get("testo", ""))),
                       int(r["y"] + size * 1.12)))
@@ -721,8 +733,16 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
             # se un blocco è stato misurato male) e si riscrivono i blocchi nelle loro caselle
             clean = textslide.background(orig_fit, uni)
             placements: list = []
-            img = textslide.render_blocks(clean, orig_fit, blocks0, placements,
-                                          boxes=textslide.boxes_on_plain(orig_fit, uni, blocks0))
+            Wf, Hf = orig_fit.size
+            marchi = ([textslide.wm_box(slide, Wf, Hf)] if textslide.wm_box(slide, Wf, Hf) else []) \
+                + textslide.other_marks(slide, Wf, Hf)
+            caselle = textslide.boxes_on_plain(orig_fit, uni, blocks0, escludi=marchi)
+            # colore misurato sull'originale (non stimato) e stesso font riconosciuto per i blocchi di testo normale
+            textslide.colori_veri(orig_fit, uni, blocks0, caselle)
+            for b_ in blocks0:
+                if (b_.get("carattere") or "normale") == "normale" and uni.weight in textslide.FONTS:
+                    b_["peso"] = uni.weight
+            img = textslide.render_blocks(clean, orig_fit, blocks0, placements, boxes=caselle)
             ok, problems = (True, "")
             if config.SLIDE_CHECK:
                 ok, problems = writer.check_slide(_jpeg(img), testo, slide.get("watermark_originale", ""),

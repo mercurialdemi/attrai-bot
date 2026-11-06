@@ -1054,13 +1054,27 @@ def _retexture(orig: np.ndarray, filled: np.ndarray, mask: np.ndarray) -> np.nda
     return np.clip(out, 0, 255).astype(np.uint8)
 
 
-def boxes_on_plain(img: Image.Image, lay, blocks: list[dict]) -> list:
+def boxes_on_plain(img: Image.Image, lay, blocks: list[dict], escludi: list | None = None) -> list:
     """Slide su colore pieno: per ogni blocco la casella vera del testo originale (righe misurate e assegnate
-    al blocco più vicino), con interlinea e altezza delle lettere. Formato come try_local_clean."""
+    al blocco più vicino), con interlinea e altezza delle lettere. Formato come try_local_clean.
+    `escludi`: riquadri dei marchi della pagina di origine (avatar + nome in stile tweet): non sono testo, e se
+    finissero nella casella del titolo lo farebbero salire dove stava l'intestazione."""
     a = np.asarray(img.convert("RGB")).astype(np.int16)
     H, W, _ = a.shape
     ink = np.abs(a - np.array(lay.bg)).max(axis=2) > 70
     ink[int(H * 0.9):] = False                       # fascia bassa: marchi, non testo
+    for (x0, y0, x1, y1) in escludi or []:
+        px, py = int(W * 0.01), int(H * 0.01)
+        ya, yb = max(0, y0 - py), min(H, y1 + py)
+        # il riquadro stimato può tagliare il nome lungo della pagina: si allarga finché la scritta continua
+        cols = ink[ya:yb].any(axis=0)
+        gap = int(W * 0.06)
+        xa, xb = max(0, x0 - px), min(W, x1 + px)
+        while xb < W and cols[xb:min(W, xb + gap)].any():
+            xb = xb + int(np.where(cols[xb:min(W, xb + gap)])[0].max()) + 1
+        while xa > 0 and cols[max(0, xa - gap):xa].any():
+            xa = max(0, xa - gap) + int(np.where(cols[max(0, xa - gap):xa])[0].min())
+        ink[ya:yb, xa:xb] = False
     rows = [r for r in _runs(ink.sum(axis=1) >= 2, min_gap=1) if r[1] - r[0] >= 5]
     bbs = [block_box(b, W, H) for b in blocks]
     groups = [[] for _ in blocks]
@@ -1419,3 +1433,34 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
                                    "runs": [[w, list(c), b] for w, c, b in runs]})
             y += lh
     return out
+
+
+def colori_veri(img: Image.Image, lay, blocks: list[dict], boxes: list) -> None:
+    """Slide su colore pieno: il colore del testo si MISURA sull'originale, non si prende dalla stima di Claude
+    (Gabriele, 6/11: un titolo bianco era uscito dorato). Le parole evidenziate [[ ]] restano solo se quel colore
+    c'è davvero tra le lettere dell'originale; altrimenti si tolgono i segni e tutto prende il colore misurato."""
+    import re
+    a = np.asarray(img.convert("RGB")).astype(np.int16)
+    H, W, _ = a.shape
+    for bl, entry in zip(blocks, boxes):
+        x0, y0, x1, y1 = entry[0]
+        sub = a[max(0, y0):min(H, y1 + 1), max(0, x0):min(W, x1 + 1)].reshape(-1, 3)
+        if not len(sub):
+            continue
+        d = np.abs(sub - np.array(lay.bg)).max(axis=1)
+        forte = sub[d > max(90, int(d.max() * 0.7))] if d.max() > 0 else sub[:0]
+        if len(forte) < 30:
+            continue
+        hl = bl.get("colore_evidenziato")
+        if hl:
+            c = np.array(_hex(hl))
+            vicini = (np.abs(forte - c).max(axis=1) < 60).mean()
+            if vicini >= 0.04:
+                # due colori davvero: il colore "normale" è quello delle lettere lontane dall'evidenziato
+                resto = forte[np.abs(forte - c).max(axis=1) >= 60]
+                if len(resto) >= 30:
+                    bl["colore"] = "#%02X%02X%02X" % tuple(int(v) for v in np.median(resto, axis=0))
+                continue
+            bl["testo"] = re.sub(r"\[\[|\]\]", "", bl.get("testo") or "")
+            bl["colore_evidenziato"] = ""
+        bl["colore"] = "#%02X%02X%02X" % tuple(int(v) for v in np.median(forte, axis=0))
