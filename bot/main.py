@@ -571,7 +571,9 @@ async def _rispondi_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, 
                                 f"Risposta a: \"{out.get('domanda', '')}\" · chiusura {out.get('chiusura', '')}\n"
                                 "Su Instagram rispondi alla domanda dal box e usa la prima slide come sfondo: la metà alta "
                                 "è libera per lo sticker con la domanda. Il file Canva ha i testi modificabili.\n"
-                                "Per forzare la chiusura scrivi \"risposta vendita\" o \"risposta didattica\".")
+                                + ("Ultima slide: metti lo sticker link MANUALE sotto il testo.\n"
+                                   if out.get("chiusura") == "vendita" else "")
+                                + "Per forzare la chiusura scrivi \"risposta vendita\" o \"risposta didattica\".")
         except Exception:
             log.exception("Risposta alla domanda non creata")
             await status.edit_text("Non sono riuscito a preparare la risposta. Riprova tra poco.")
