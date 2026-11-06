@@ -33,6 +33,12 @@ PROFONDITÀ (Gabriele, 6/11: "un livello di profondità leggermente maggiore")
 - Un esempio concreto della sua vita (un messaggio, una serata, una frase detta) che rende visibile il meccanismo.
 - Mai restare sul generico ("sii sicuro", "non essere bisognoso", "lavora su te stesso") senza dire cosa significa
   in pratica e perché funziona.
+- PORTALO NEL DISCORSO: il lettore deve arrivare a capire da solo, non ricevere la lezione. Tecniche:
+  · fallo ricordare: "Pensa all'ultima volta che…", "Ricordi quando lei…" (lui ci mette la sua scena);
+  · dagli i pezzi e lascia a lui il collegamento: due fatti accostati ("Ti scrive quando è sola. Sparisce quando
+    esce con le amiche.") e solo dopo la domanda ("Ti sei mai chiesto cosa li tiene insieme?");
+  · domande che lo fanno fermare, a cui risponde da solo prima di toccare;
+  · l'ultima frase lascia un collegamento aperto che lui chiude da solo con la sua vita.
 - Profondo non vuol dire lungo: stessi blocchi brevi, ma ogni frase porta un pezzo di ragionamento.
 
 REGOLE DI SCRITTURA
