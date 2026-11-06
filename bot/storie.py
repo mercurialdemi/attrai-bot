@@ -4,10 +4,12 @@
 - /storie 3               -> crea la serie del tema 3 della proposta
 - /storie <tema>          -> serie didattica sul tema
 - /storie vendita <tema>  -> forza il tipo: didattica, vendita, domande
+- /storie pas <tema>      -> forza una delle 6 strutture (pas, bab, epifania, mito, scqa, ciclo)
 - foto del box domande con "risposta" (o /risposta <domanda>) -> risposta in 3 slide
 
-Una serie = 3 slide: gancio (metà alta libera per lo sticker), didattica, chiusura o CTA al manuale. Il prompt è in
-brands/comuni/storie_prompt.md (modificabile). Grafica fatta dal codice (gratis): foto della pagina
+Una serie = 3-4 slide con la stessa foto, costruita su una delle 6 strutture di brands/comuni/storie_strutture.yaml
+(scelta a rotazione). Le serie di vendita alternano la chiusura col manuale citato e quella senza citarlo. Il prompt
+è in brands/comuni/storie_prompt.md (modificabile). Grafica fatta dal codice (gratis): foto della pagina
 (assets/storie_sfondi/<pagina>/<categoria>_NN.jpg) con velo nero al 55%, rettangoli neri pieni a sinistra, testo
 bianco Carlito Bold con le parole chiave in rosso, handle in basso a destra. Esce anche il file per Canva.
 """
@@ -115,13 +117,74 @@ def proposta(n: int) -> dict | None:
 
 
 def capisci_richiesta(testo: str) -> tuple[str | None, str]:
-    """'vendita friendzone e gelosia' -> ('vendita', 'friendzone e gelosia'); 'gelosia' -> (None, 'gelosia')."""
+    """'vendita friendzone e gelosia' -> ('vendita', 'friendzone e gelosia'); 'gelosia' -> (None, 'gelosia').
+    Una struttura scritta prima del tema (es. 'vendita pas gelosia') resta nel tema: la legge struttura_chiesta."""
     parole = (testo or "").strip().split(maxsplit=1)
     if parole:
         t = SINONIMI.get(parole[0].lower(), parole[0].lower())
         if t in TIPI:
             return t, (parole[1] if len(parole) > 1 else "")
     return None, (testo or "").strip()
+
+
+# ---------------------------------------------------------------- le 6 strutture (Gabriele, 6/11)
+
+def strutture() -> dict:
+    p = config.ROOT / "brands" / "comuni" / "storie_strutture.yaml"
+    try:
+        return yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+    except Exception as e:
+        log.warning("Strutture delle storie non lette: %s", e)
+        return {}
+
+
+def struttura_chiesta(tema: str) -> tuple[str | None, str]:
+    """'pas gelosia dopo la rottura' -> ('pas', 'gelosia dopo la rottura')."""
+    parole = (tema or "").strip().split(maxsplit=1)
+    if parole:
+        w = parole[0].lower().strip(":,.")
+        for k, v in strutture().items():
+            if w == k or w in [str(x).lower() for x in v.get("parole") or []]:
+                return k, (parole[1] if len(parole) > 1 else "")
+    return None, (tema or "").strip()
+
+
+def scegli_struttura(tipo: str, chiesta: str | None = None) -> str | None:
+    """La struttura chiesta, oppure quella adatta al tipo usata meno di recente (rotazione, niente ripetizioni)."""
+    tutte = strutture()
+    if chiesta in tutte:
+        return chiesta
+    adatte = [k for k, v in tutte.items() if tipo in (v.get("tipi") or ["didattica", "vendita"])]
+    if not adatte:
+        return None
+    usate = [h.get("struttura") for h in _storico()]
+    def ultima(k):                      # indice dell'ultimo uso (-1 = mai usata)
+        return max((i for i, u in enumerate(usate) if u == k), default=-1)
+    meno = min(ultima(k) for k in adatte)
+    return random.choice([k for k in adatte if ultima(k) == meno])
+
+
+def modo_cta() -> str:
+    """Le serie di vendita alternano: manuale citato / non citato (Gabriele: 'teniamo entrambe le opzioni')."""
+    ultimi = [h.get("cta") for h in _storico() if h.get("cta")]
+    return "non_citato" if ultimi and ultimi[-1] == "citato" else "citato"
+
+
+def _testo_struttura(k: str | None) -> str:
+    v = strutture().get(k or "") or {}
+    if not v:
+        return ""
+    passi = "\n".join(f"  Slide {i}: {t}" for i, t in enumerate(v.get("slide") or [], 1))
+    return (f"STRUTTURA DELLA SERIE: {v.get('nome', k)} (categoria: {v.get('categoria', '')}). "
+            f"{len(v.get('slide') or [])} passaggi; se un passaggio è segnato facoltativo puoi fare 3 slide. "
+            f"Segui ogni slide:\n{passi}")
+
+
+CTA_TESTO = {
+    "citato": "Chiusura di vendita col MANUALE CITATO (titolo + 'trovi esattamente: 3 cose concrete' + 'Ti lascio il link qua.').",
+    "non_citato": "Chiusura di vendita col MANUALE NON CITATO: niente titolo né contenuti, solo dolore, costo del non "
+                  "agire e 'Se vuoi capire come [risultato] senza [rischio]… ti lascio il link qua.'",
+}
 
 
 # ---------------------------------------------------------------- testi (formato del prompt di Gabriele, 2/11)
@@ -136,7 +199,7 @@ _SLIDE = {"type": "object", "properties": {
 
 STORIE_TOOL = {
     "name": "serie_storie",
-    "description": "Una serie di storie Instagram pronte (3 slide; 1 slide per il box domande).",
+    "description": "Una serie di storie Instagram pronte (3-4 slide secondo la struttura; 1 slide per il box domande).",
     "input_schema": {"type": "object", "properties": {
         "tipo": {"type": "string", "enum": TIPI},
         "sfondo": {"type": "string", "enum": SFONDI, "description": "Categoria di foto di sfondo più coerente col tema."},
@@ -166,13 +229,19 @@ def _system(brand: dict, rules: list[dict]) -> str:
 
 
 def scrivi(brand: dict, tema: str, tipo: str | None, rules: list[dict]) -> dict:
+    chiesta, tema = struttura_chiesta(tema)
     if tipo is None:
         tipo = "didattica"
     if tipo == "vendita" and not brand.get("manuali"):
         tipo = "didattica"
+    struttura = scegli_struttura(tipo, chiesta) if tipo != "domande" else None
+    if struttura and tipo not in (strutture()[struttura].get("tipi") or [tipo]):
+        tipo = (strutture()[struttura].get("tipi") or [tipo])[0]        # es. SCQA chiesta per la vendita: è didattica
+    cta = modo_cta() if tipo == "vendita" else ""
     richiesta = {
-        "didattica": "Serie DIDATTICA: 3 slide (gancio, didattica, chiusura aperta senza vendere).",
-        "vendita": "Serie di VENDITA: 3 slide (gancio, didattica, chiusura con il manuale più adatto al tema).",
+        "didattica": "Serie DIDATTICA: chiusura senza vendere.\n" + _testo_struttura(struttura),
+        "vendita": ("Serie di VENDITA, col manuale più adatto al tema.\n" + _testo_struttura(struttura) + "\n"
+                    + CTA_TESTO.get(cta, "")),
         "domande": ("BOX DOMANDE: 1 slide sola. Un blocco di 3-4 righe che apre il tema con un gancio e invita a fare "
                     "la domanda che non farebbero a nessuno (la metà alta resta libera per lo sticker DOMANDA). "
                     "Scrivi anche sticker_testo, breve (es. 'Chiedimi tutto su [tema]')."),
@@ -181,7 +250,9 @@ def scrivi(brand: dict, tema: str, tipo: str | None, rules: list[dict]) -> dict:
                             [{"type": "text", "text": f"Tema: {tema}\n{richiesta}\nScrivi con lo strumento serie_storie."}],
                             STORIE_TOOL, model=config.CAPTION_MODEL, max_tokens=4000)
     out["tipo"] = tipo
-    out["slides"] = (out.get("slides") or [])[:1 if tipo == "domande" else 3]
+    out["struttura"] = struttura or ""
+    out["cta"] = cta
+    out["slides"] = (out.get("slides") or [])[:1 if tipo == "domande" else 4]
     _pulisci(out, brand)
     return out
 
@@ -408,8 +479,9 @@ def _disegna_serie(serie: dict, brand: dict, slug: str, jdir: Path, nome: str) -
 def crea(brand: dict, slug: str, tema: str, tipo: str | None, rules: list[dict], jdir: Path) -> tuple[dict, list[Path], Path | None]:
     serie = scrivi(brand, tema, tipo, rules)
     paths, canva_path = _disegna_serie(serie, brand, slug, jdir, "storia")
-    serie["tema"] = tema
-    _ricorda({"tipo": serie.get("tipo"), "tema": tema, "sfondo_file": serie.get("sfondo_file"),
+    serie["tema"] = struttura_chiesta(tema)[1]
+    _ricorda({"tipo": serie.get("tipo"), "tema": serie["tema"], "sfondo_file": serie.get("sfondo_file"),
+              "struttura": serie.get("struttura", ""), "cta": serie.get("cta", ""),
               "quando": datetime.now(timezone.utc).isoformat(timespec="seconds")})
     return serie, paths, canva_path
 
@@ -417,13 +489,17 @@ def crea(brand: dict, slug: str, tema: str, tipo: str | None, rules: list[dict],
 def istruzioni(serie: dict) -> str:
     """Il testo che accompagna le storie."""
     tipo = serie.get("tipo", "")
-    righe = [f"STORIE · {tipo} · {serie.get('tema', '')}"]
+    nome_s = (strutture().get(serie.get("struttura") or "") or {}).get("nome", "")
+    righe = [f"STORIE · {tipo} · {serie.get('tema', '')}" + (f"\nStruttura: {nome_s}" if nome_s else "")
+             + ({"citato": " · manuale citato", "non_citato": " · manuale non citato"}.get(serie.get("cta") or "", ""))]
     if tipo == "domande":
         righe.append(f"Metti lo sticker DOMANDA nella metà alta: \"{serie.get('sticker_testo', '')}\".")
         righe.append("Quando arrivano le domande, mandami lo screenshot di ognuna con scritto \"risposta\" "
                      "(o /risposta <domanda>): ogni risposta sono 3 slide, con la metà alta libera per lo sticker.")
     else:
         righe.append("Slide 1: la metà alta è libera per lo sticker (es. box domanda).")
+        if tipo == "vendita":
+            righe.append("Ultima slide: metti lo sticker link MANUALE sotto il testo.")
     righe.append("Il file Canva ha i testi modificabili.")
     return "\n".join(righe)
 
@@ -454,16 +530,17 @@ def rispondi(brand: dict, slug: str, rules: list[dict], jdir: Path, foto: bytes 
         content.append({"type": "text", "text": f"Domanda: {domanda}"})
     if not brand.get("manuali"):
         chiusura = "didattica"
-    forza = (f"La chiusura deve essere {chiusura.upper()}." if chiusura else
-             "Scegli tu la chiusura: vendita solo se la domanda tocca da vicino il dolore di un manuale.")
+    cta = modo_cta()
+    forza = ((f"La chiusura deve essere {chiusura.upper()}." if chiusura else
+              "Scegli tu la chiusura: vendita solo se la domanda tocca da vicino il dolore di un manuale.")
+             + " Se la chiusura è di vendita: " + CTA_TESTO[cta])
     content.append({"type": "text", "text": "MODELLO RISPOSTA BOX DOMANDE: rispondi in 3 slide (gancio che risponde alla "
                     "domanda, didattica, chiusura). In domanda scrivi solo la domanda del follower (niente 'Risposta a "
                     "@username', niente nomi o dati personali): il bot la stampa in alto sulla prima slide. Slide 1: un "
                     "solo blocco di 3-4 righe, negazione netta, verità ribaltata, conseguenza. Slide 2: 2-3 blocchi; nel "
                     "primo, se l'idea è davvero di un autore della lista, nominalo (regola autori). Slide 3: chiusura "
-                    "didattica aperta ('Finché non capirai…, continuerai a…') oppure, se vendita, 3 blocchi: amplifica il "
-                    "problema, il manuale come tassello mancante ('Nel manuale \"[titolo]\" spiego…'), costo del non "
-                    "agire + 'Ti lascio qui il link del manuale.' Tono duro e lucido, mai moralizzante, mai "
+                    "didattica aperta ('Finché non capirai…, continuerai a…') oppure, se vendita, la chiusura di vendita "
+                    "indicata sotto. Tono duro e lucido, mai moralizzante, mai "
                     "motivazionale, mai da coach gentile. " + forza + " Usa lo strumento risposta_storia."})
     out = writer._tool_call(_system(brand, rules), content, RISPOSTA_TOOL, model=config.CAPTION_MODEL, max_tokens=4000)
     if chiusura:
@@ -473,6 +550,7 @@ def rispondi(brand: dict, slug: str, rules: list[dict], jdir: Path, foto: bytes 
     out["domanda"] = writer.clean_text(writer.censor(out.get("domanda") or domanda or "", brand))
     out["_mostra_domanda"] = True                       # la domanda in alto sulla prima slide, al 25%
     paths, canva_path = _disegna_serie(out, brand, slug, jdir, "risposta")
-    _ricorda({"tipo": "risposta_" + str(out.get("chiusura")), "tema": out.get("domanda", ""),
+    out["cta"] = cta if out.get("chiusura") == "vendita" else ""
+    _ricorda({"tipo": "risposta_" + str(out.get("chiusura")), "tema": out.get("domanda", ""), "cta": out["cta"],
               "sfondo_file": out.get("sfondo_file"), "quando": datetime.now(timezone.utc).isoformat(timespec="seconds")})
     return out, paths, canva_path

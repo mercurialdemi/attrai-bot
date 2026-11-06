@@ -19,6 +19,7 @@ ESEMPIO = [
                  "Finché non vedi la tua **categoria**, resterai un **numero** nel suo foglio di calcolo. Ses*o a parte."]},
 ]
 visti = {}
+richieste = []
 
 
 def finto(system, content, tool, **k):
@@ -30,6 +31,7 @@ def finto(system, content, tool, **k):
         if "BOX DOMANDE" in content[0]["text"]:
             return {"tipo": "domande", "sfondo": "primo_piano", "sticker_testo": "Chiedimi tutto sulla gelosia",
                     "slides": [{"blocchi": ["Fammi la domanda che non faresti a **nessuno** sulla gelosia."]}]}
+        richieste.append(content[0]["text"])
         return {"tipo": "didattica", "sfondo": "sicura", "sticker_testo": "", "slides": ESEMPIO + ESEMPIO}
     return {"domanda": "Come faccio a smettere di pensarla?", "chiusura": "vendita", "sfondo": "distante", "slides": ESEMPIO}
 
@@ -41,7 +43,8 @@ for slug in pagine.elenco():
     storie.proponi_temi(b)
     assert storie.proposta(1)["tema"] == "t1"
     serie, paths, cv = storie.crea(b, slug, "attenzioni maschili", None, [], Path(T) / slug)
-    assert len(paths) == 3 and all(p.exists() for p in paths) and cv and Path(cv).exists(), slug   # sempre 3 slide
+    assert len(paths) == 4 and all(p.exists() for p in paths) and cv and Path(cv).exists(), slug   # al massimo 4 slide
+    assert "STRUTTURA DELLA SERIE" in richieste[-1] and serie["struttura"], slug
     if slug == "attraiseduci":
         assert serie["sfondo_file"].startswith("sicura_"), serie["sfondo_file"]                    # foto della categoria
     box, bp, _ = storie.crea(b, slug, "gelosia", "domande", [], Path(T) / (slug + "_box"))
@@ -50,6 +53,19 @@ for slug in pagine.elenco():
     assert len(rp) == 3 and rp[0].exists()
     if not b.get("manuali"):
         assert out["chiusura"] == "didattica"                                                     # niente vendita
+# rotazione: 6 serie didattiche/vendita di fila senza ripetere la struttura finché ce ne sono di nuove
+pagine.imposta("attraiseduci")
+b = writer.load_brand()
+usate = []
+for k in range(4):
+    serie, _, _ = storie.crea(b, "attraiseduci", "gelosia", "vendita", [], Path(T) / f"rot{k}")
+    usate.append((serie["struttura"], serie["cta"]))
+assert len({u[0] for u in usate}) == 4, usate                       # 4 strutture di vendita, tutte diverse
+assert [u[1] for u in usate][:2] in (["citato", "non_citato"], ["non_citato", "citato"]), usate   # CTA alternata
+serie, _, _ = storie.crea(b, "attraiseduci", "scqa perché si allontana", None, [], Path(T) / "scqa")
+assert serie["struttura"] == "scqa" and serie["tema"] == "perché si allontana", (serie["struttura"], serie["tema"])
+assert "SCQA" in richieste[-1]
+print("strutture:", usate)
 print("prima storia:", Path(T) / "attraiseduci" / "storia_01.jpg")
 assert storie.capisci_richiesta("marketing gelosia") == ("vendita", "gelosia")
 assert storie.capisci_richiesta("box gelosia") == ("domande", "gelosia")
