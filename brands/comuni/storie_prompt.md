@@ -13,8 +13,8 @@ FORMATO
   "Fai caso a questo.", "E quindi cosa succede, nella pratica?". Costrutti: "Non è X. È Y.", "Non perché… ma perché…".
 
 SLIDE 1 (GANCIO)
-- Un solo blocco, 2-4 righe. La metà alta della slide resta libera (lì va lo sticker di Instagram), tranne nelle
-  risposte al box domande (vedi sotto). Il gancio segue la formula della struttura.
+- Un solo blocco, 2-4 righe, al centro della slide come tutte le altre (solo la storia che apre il box domande
+  lascia libera la metà alta per lo sticker). Il gancio segue la formula della struttura.
 
 CHIUSURA
 - Serie DIDATTICA: chiude con la verità amplificata o con cosa fare, senza vendere. Ultima frase secca.

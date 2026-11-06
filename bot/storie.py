@@ -416,13 +416,15 @@ def _base(slug: str, foto: Path | None) -> Image.Image:
 
 
 def disegna(blocchi: list[str], prima: bool, brand: dict, base: Image.Image,
-            placements: list | None = None, domanda: str = "") -> tuple[Image.Image, Image.Image]:
+            placements: list | None = None, domanda: str = "", sticker: bool = False) -> tuple[Image.Image, Image.Image]:
     """Rettangoli neri pieni allineati a sinistra, testo bianco con parole chiave rosse. Restituisce
     (storia finita, sfondo con i rettangoli ma senza testo, per Canva)."""
     img = base.copy()
     draw = ImageDraw.Draw(img)
     max_w = W - 2 * MARGINE_X - 2 * PAD_X
-    zona_alta = H // 2 + 40 if prima else TOP_SAFE         # slide 1: metà alta libera per lo sticker
+    # testo centrato in verticale su tutte le slide (Gabriele, 6/11); solo la storia che apre il box domande
+    # tiene libera la metà alta per lo sticker DOMANDA
+    zona_alta = H // 2 + 40 if sticker else TOP_SAFE
     zona_bassa = H - BOTTOM_SAFE
     if prima and domanda:
         # risposta al box domande: domanda del follower in alto (25%), gancio al centro (45-50%)
@@ -489,7 +491,8 @@ def _disegna_serie(serie: dict, brand: dict, slug: str, jdir: Path, nome: str) -
     for i, s in enumerate(serie.get("slides") or [], 1):
         pl: list = []
         img, sf = disegna(s.get("blocchi") or [], i == 1, brand, base, pl,
-                          domanda=(serie.get("domanda") or "").strip() if serie.get("_mostra_domanda") else "")
+                          domanda=(serie.get("domanda") or "").strip() if serie.get("_mostra_domanda") else "",
+                          sticker=i == 1 and serie.get("tipo") == "domande")
         p = jdir / f"{nome}_{i:02d}.jpg"
         img.save(p, quality=95)
         bg = jdir / f"{nome}_{i:02d}_sfondo.jpg"
@@ -524,9 +527,8 @@ def istruzioni(serie: dict) -> str:
     if tipo == "domande":
         righe.append(f"Metti lo sticker DOMANDA nella metà alta: \"{serie.get('sticker_testo', '')}\".")
         righe.append("Quando arrivano le domande, mandami lo screenshot di ognuna con scritto \"risposta\" "
-                     "(o /risposta <domanda>): ogni risposta sono 3 slide, con la metà alta libera per lo sticker.")
+                     "(o /risposta <domanda>): ogni risposta sono 3 slide, con la domanda scritta in alto sulla prima.")
     else:
-        righe.append("Slide 1: la metà alta è libera per lo sticker (es. box domanda).")
         if tipo == "vendita":
             righe.append("Ultima slide: metti lo sticker link MANUALE sotto il testo.")
     righe.append("Il file Canva ha i testi modificabili.")
