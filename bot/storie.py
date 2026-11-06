@@ -429,7 +429,7 @@ def disegna(blocchi: list[str], prima: bool, brand: dict, base: Image.Image,
     if prima and domanda:
         # risposta al box domande: domanda del follower in alto (25%), gancio al centro (45-50%)
         zona_alta, zona_bassa = int(H * 0.36), int(H * 0.64)
-    size = 58 if prima else 50
+    size = 68 if prima else 50                # il gancio è più breve: scritto più grande (Gabriele, 6/11)
     while True:
         f = _font(FONT_BOLD, size)
         lh = int(size * 1.22)

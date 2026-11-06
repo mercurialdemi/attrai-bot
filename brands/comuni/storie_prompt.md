@@ -13,7 +13,7 @@ FORMATO
   "Fai caso a questo.", "E quindi cosa succede, nella pratica?". Costrutti: "Non è X. È Y.", "Non perché… ma perché…".
 
 SLIDE 1 (GANCIO)
-- Un solo blocco, 2-4 righe, al centro della slide come tutte le altre (solo la storia che apre il box domande
+- Un solo blocco, più breve delle altre slide (2-3 righe, esce scritto più grande), al centro della slide come tutte le altre (solo la storia che apre il box domande
   lascia libera la metà alta per lo sticker). Il gancio segue la formula della struttura.
 
 CHIUSURA
