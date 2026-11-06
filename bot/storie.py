@@ -180,6 +180,35 @@ def _testo_struttura(k: str | None) -> str:
             f"Segui ogni slide:\n{passi}")
 
 
+def riepilogo_strutture(chiave: str = "") -> str:
+    """/strutture: le 6 strutture, quale tocca adesso, le ultime serie fatte. /strutture pas: il dettaglio di una."""
+    tutte = strutture()
+    k, _ = struttura_chiesta(chiave)
+    if k:
+        v = tutte[k]
+        passi = "\n".join(f"{i}. {t}" for i, t in enumerate(v.get("slide") or [], 1))
+        return (f"{v.get('nome', k)}\nCategoria: {v.get('categoria', '')} · per serie: {', '.join(v.get('tipi') or [])}\n"
+                f"Da forzare con: /storie {'vendita ' if 'vendita' in (v.get('tipi') or []) else ''}{k} <tema>\n\n{passi}")
+    nomi = {kk: vv.get("nome", kk) for kk, vv in tutte.items()}
+    righe = ["Le 6 strutture delle storie (scritte /strutture pas per vederne una per intero):"]
+    for kk, vv in tutte.items():
+        righe.append(f"· {kk}: {vv.get('nome', kk)} ({', '.join(vv.get('tipi') or [])})")
+    prossime = {t: scegli_struttura(t) for t in ("didattica", "vendita")}
+    righe.append(f"\nProssima a rotazione: didattica → {nomi.get(prossime['didattica'], '-')}; "
+                 f"vendita → {nomi.get(prossime['vendita'], '-')} (manuale {modo_cta().replace('_', ' ')})")
+    fatte = [h for h in _storico() if h.get("tema")][-10:]
+    if fatte:
+        righe.append("\nUltime serie fatte:")
+        for h in reversed(fatte):
+            quando = (h.get("quando") or "")[:10]
+            st = h.get("struttura") or ("risposta box" if str(h.get("tipo", "")).startswith("risposta") else "-")
+            cta = {"citato": ", manuale citato", "non_citato": ", manuale non citato"}.get(h.get("cta") or "", "")
+            righe.append(f"· {quando} · {h.get('tipo')} · {st}{cta} · {h.get('tema')}")
+    righe.append("\nI temi proposti li vedi con /storie. Per cambiare una struttura dimmelo in chat (sta nel file "
+                 "brands/comuni/storie_strutture.yaml).")
+    return "\n".join(righe)
+
+
 CTA_TESTO = {
     "citato": "Chiusura di vendita col MANUALE CITATO (titolo + 'trovi esattamente: 3 cose concrete' + 'Ti lascio il link qua.').",
     "non_citato": "Chiusura di vendita col MANUALE NON CITATO: niente titolo né contenuti, solo dolore, costo del non "

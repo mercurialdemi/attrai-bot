@@ -28,6 +28,8 @@ COMMANDS = [
         ("storie", "Storie: temi proposti o su un tema (es. /storie vendita gelosia)",
          "/storie propone 6 temi; /storie 3 crea il tema 3; /storie <tema> o /storie didattica|vendita|domande <tema>; "
          "struttura a scelta: /storie vendita pas|bab|epifania|mito <tema>, /storie scqa|ciclo <tema> (altrimenti a rotazione)"),
+        ("strutture", "Le 6 strutture delle storie e le ultime serie fatte",
+         "/strutture mostra le 6 strutture, quale tocca a rotazione e le ultime serie; /strutture pas il dettaglio di una"),
         ("risposta", "Risposta a un box domanda (o manda la foto con scritto risposta)",
          "/risposta <domanda>, oppure manda lo screenshot della domanda con didascalia \"risposta\""),
         ("report", "Post migliori dei collaboratori, adesso",
@@ -578,6 +580,12 @@ async def _rispondi_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, 
             log.exception("Risposta alla domanda non creata")
             await status.edit_text("Non sono riuscito a preparare la risposta. Riprova tra poco.")
     context.application.create_task(go())
+
+
+async def cmd_strutture(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not await _authorized(update):
+        return
+    await update.effective_message.reply_text(storie.riepilogo_strutture(" ".join(context.args or [])))
 
 
 async def cmd_risposta(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -1237,6 +1245,7 @@ def main():
     app.add_handler(CommandHandler("crea", cmd_crea))
     app.add_handler(CommandHandler("storie", cmd_storie))
     app.add_handler(CommandHandler("risposta", cmd_risposta))
+    app.add_handler(CommandHandler("strutture", cmd_strutture))
     app.add_handler(MessageHandler(filters.PHOTO | filters.Document.IMAGE, on_media))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_text))
     async def notify_restart(context: ContextTypes.DEFAULT_TYPE):
