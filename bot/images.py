@@ -792,10 +792,14 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
                                  textslide._hex(b.get("colore_evidenziato")) if b.get("colore_evidenziato") else None) if c]
                     for b in blocks0]
             wb = textslide.wm_box(slide, W_, H_)
-            if wb:
-                areas.append(wb)
-            areas += textslide.other_marks(slide, W_, H_)
+            testo_box = list(areas)
+            marchi = ([textslide.allarga_marchio(orig_fit, wb, testo_box)] if wb else []) \
+                + [textslide.allarga_marchio(orig_fit, m, testo_box) for m in textslide.other_marks(slide, W_, H_)]
             clean = textslide.inpaint_boxes(orig_fit, areas, colors=cols)
+            if marchi:
+                # marchi dell'altra pagina (avatar, @handle, filetti): ricostruzione liscia, senza riportare la
+                # "grana" presa dalle zone vicine (7/11: rimetteva l'ombra di @themasculinecreed)
+                clean = textslide.inpaint_boxes(clean, marchi, texture=False)
             # caselle misurate PRIMA della sfumatura (dopo, tutta la fascia risulterebbe "cambiata")
             pre = []
             for b_ in blocks0:
@@ -836,6 +840,10 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
         except Exception as e:  # rete, quota, filtri di sicurezza
             log.warning("Gemini tentativo %s fallito: %s", attempt + 1, e)
             problems = f"{_motore()} non ha risposto ({str(e)[:140]})"
+            if "safety" in str(e).lower() or "moderation" in str(e).lower():
+                # rifiuto per contenuto (es. foto sensuale): riprovare la stessa immagine non serve
+                problems = f"{_motore()} rifiuta questa immagine per i suoi filtri sui contenuti"
+                break
             continue
         if edited is None:
             problems = f"{_motore()} non ha prodotto l'immagine"

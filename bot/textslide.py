@@ -996,7 +996,7 @@ def _color_mask(a, box, colors, W, H):
 
 
 def inpaint_boxes(img: Image.Image, boxes: list[tuple[int, int, int, int]], pad: float = 0.025,
-                  colors: list | None = None) -> Image.Image:
+                  colors: list | None = None, texture: bool = True) -> Image.Image:
     """Cancella col codice le scritte dentro i riquadri anche su foto o sfumature (senza Gemini):
     trova i pixel delle lettere confrontando con lo sfondo 'sfocato' e ricostruisce lo sfondo attorno.
     `colors` (per riquadro, facoltativo): colori del testo; se ci sono si cercano le lettere per colore."""
@@ -1046,7 +1046,8 @@ def inpaint_boxes(img: Image.Image, boxes: list[tuple[int, int, int, int]], pad:
     if not mask.any():
         return img.convert("RGB")
     out = cv2.inpaint(a, mask, 6, cv2.INPAINT_TELEA)
-    out = _retexture(a, out, mask)
+    if texture:
+        out = _retexture(a, out, mask)
     return Image.fromarray(cv2.cvtColor(out, cv2.COLOR_BGR2RGB))
 
 
@@ -1165,7 +1166,9 @@ def dark_fade(img: Image.Image, original: Image.Image, boxes: list) -> Image.Ima
     alpha = np.broadcast_to(alpha, (H, W)).copy()
     # sopra il testo si scurisce SOLO ciò che nell'originale era già scuro: elementi chiari o colorati
     # (badge col numero, foto) restano intatti; dentro la fascia del testo invece tutto diventa fascia piena
-    lum = np.asarray(original.convert("L")).astype(np.float32)
+    # luminosità dell'immagine GIÀ ripulita: con l'originale i marchi cancellati (avatar, @handle) restavano
+    # "esclusi" dalla sfumatura e ricomparivano come un'ombra chiara (7/11, @themasculinecreed)
+    lum = np.asarray(img.convert("L")).astype(np.float32)
     dark_w = np.clip((140 - lum) / 90, 0, 1)
     above = np.arange(H)[:, None] < top - H * 0.01
     alpha = np.where(above, np.minimum(alpha, dark_w), alpha)
@@ -1496,3 +1499,35 @@ def colori_veri(img: Image.Image, lay, blocks: list[dict], boxes: list) -> None:
             bl["testo"] = re.sub(r"\[\[|\]\]", "", bl.get("testo") or "")
             bl["colore_evidenziato"] = ""
         bl["colore"] = "#%02X%02X%02X" % tuple(int(v) for v in np.median(forte, axis=0))
+
+
+def allarga_marchio(img: Image.Image, box: tuple, evita: list | None = None) -> tuple:
+    """Riquadro del marchio dell'altra pagina allargato alla scritta che continua fuori dalla stima di Claude
+    (es. "@themasculinecreed" più largo dell'avatar sopra: 7/11 ne restava metà). Si cercano, nelle righe del
+    marchio e poco sotto, i pixel che staccano dallo sfondo locale; ci si allarga finché la scritta continua.
+    `evita`: caselle del testo da non toccare (il riquadro non scende fin lì)."""
+    a = np.asarray(img.convert("L")).astype(np.int16)
+    H, W = a.shape
+    x0, y0, x1, y1 = [int(v) for v in box]
+    giu = y1 + int(H * 0.035)
+    for b in evita or []:
+        if b[0] < x1 + W * 0.3 and b[2] > x0 - W * 0.3 and b[1] >= y0:
+            giu = min(giu, int(b[1]) - 4)
+    ya, yb = max(0, y0), max(min(H, giu), y1)
+    fascia = a[ya:yb]
+    if fascia.size == 0:
+        return box
+    fondo = np.median(fascia, axis=0)
+    segno = np.abs(fascia - np.median(fondo)) > 60
+    cols = segno.sum(axis=0) >= 2
+    gap = int(W * 0.035)
+    xa, xb = max(0, x0), min(W, x1)
+    while xb < W and cols[xb:min(W, xb + gap)].any():
+        xb = xb + int(np.where(cols[xb:min(W, xb + gap)])[0].max()) + 1
+    while xa > 0 and cols[max(0, xa - gap):xa].any():
+        xa = max(0, xa - gap) + int(np.where(cols[max(0, xa - gap):xa])[0].min())
+    righe = np.where(segno[:, xa:xb].sum(axis=1) >= 2)[0]
+    yb2 = ya + int(righe.max()) + 3 if len(righe) else y1
+    # margine: le scritte sottili lasciano un'ombra se il riquadro le taglia appena
+    py, px = int(H * 0.012), int(W * 0.01)
+    return (max(0, xa - px), max(0, y0 - py), min(W, xb + px), min(max(y1, yb2) + py, max(yb, y1)))
