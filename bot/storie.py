@@ -388,9 +388,66 @@ def textslide_wrap(draw, testo: str, font, max_w: int) -> list[str]:
     return righe[:3]
 
 
+def _sfondi_caricati(slug: str) -> Path:
+    """Foto aggiunte dal bot (didascalia "sfondo"): disco persistente, cartella per pagina."""
+    from . import pagine
+    return pagine._base_data() / "storie_sfondi" / slug
+
+
 def sfondi_disponibili(slug: str) -> list[Path]:
-    d = config.ROOT / "assets" / "storie_sfondi" / slug
-    return sorted(d.glob("*.jpg")) if d.exists() else []
+    out = []
+    for d in (config.ROOT / "assets" / "storie_sfondi" / slug, _sfondi_caricati(slug)):
+        if d.exists():
+            out += sorted(d.glob("*.jpg"))
+    return out
+
+
+CLASSIFICA_TOOL = {
+    "name": "categoria_sfondo",
+    "description": "Categoria della foto da usare come sfondo delle storie.",
+    "input_schema": {"type": "object", "properties": {
+        "categoria": {"type": "string", "enum": SFONDI},
+        "scritte": {"type": "boolean", "description": "true se nella foto ci sono scritte, loghi o @ di altre pagine "
+                                                       "in sovrimpressione (non contano marche su vestiti o insegne)."}},
+        "required": ["categoria", "scritte"]},
+}
+
+
+def aggiungi_sfondo(slug: str, data: bytes, categoria: str | None = None) -> tuple[str, bool]:
+    """Salva una foto tra gli sfondi delle storie della pagina. Senza categoria la sceglie Claude (modello economico).
+    Restituisce (categoria, scritte_sovrapposte)."""
+    import io
+    import time
+    from . import writer
+    scritte = False
+    if categoria not in SFONDI:
+        try:
+            out = writer._tool_call(
+                "Classifichi foto da usare come sfondo di storie Instagram. Categorie: sicura = consapevole del proprio "
+                "valore, posa decisa; distante = di spalle o lontana; elegante = distaccata, fredda, curata; "
+                "primo_piano = ravvicinata, intima; complice = ride, sembra complice o amica.",
+                [writer._image_block(data, 768), {"type": "text", "text": "Categoria di questa foto?"}],
+                CLASSIFICA_TOOL, model=config.CHECK_MODEL, max_tokens=200)
+            categoria = out.get("categoria") if out.get("categoria") in SFONDI else "primo_piano"
+            scritte = bool(out.get("scritte"))
+        except Exception as e:
+            log.warning("Categoria sfondo non riconosciuta: %s", e)
+            categoria = "primo_piano"
+    im = Image.open(io.BytesIO(data)).convert("RGB")
+    if im.height > 1920:
+        im = im.resize((round(im.width * 1920 / im.height), 1920), Image.LANCZOS)
+    d = _sfondi_caricati(slug)
+    d.mkdir(parents=True, exist_ok=True)
+    im.save(d / f"{categoria}_{int(time.time() * 1000)}.jpg", "JPEG", quality=90)
+    return categoria, scritte
+
+
+def conta_sfondi(slug: str) -> str:
+    tutte = sfondi_disponibili(slug)
+    if not tutte:
+        return "nessuna foto (le storie escono su tinta unita)"
+    cont = {c: sum(1 for p in tutte if p.name.startswith(c + "_")) for c in SFONDI}
+    return ", ".join(f"{c.replace('_', ' ')} {n}" for c, n in cont.items()) + f" · totale {len(tutte)}"
 
 
 def scegli_sfondo(slug: str, categoria: str) -> Path | None:

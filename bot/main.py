@@ -28,6 +28,9 @@ COMMANDS = [
         ("storie", "Storie: temi proposti o su un tema (es. /storie vendita gelosia)",
          "/storie propone 6 temi; /storie 3 crea il tema 3; /storie <tema> o /storie didattica|vendita|domande <tema>; "
          "struttura a scelta: /storie vendita pas|bab|epifania|mito <tema>, /storie scqa|ciclo <tema> (altrimenti a rotazione)"),
+        ("sfondi", "Foto di sfondo delle storie di questa pagina",
+         "/sfondi mostra quante foto ha la pagina per categoria. Per aggiungerne: manda le foto (anche in album) con "
+         "didascalia \"sfondo\" (categoria scelta dal bot) o \"sfondo distante\" / sicura / elegante / primo piano / complice"),
         ("strutture", "Le 6 strutture delle storie e le ultime serie fatte",
          "/strutture mostra le 6 strutture, quale tocca a rotazione e le ultime serie; /strutture pas il dettaglio di una"),
         ("risposta", "Risposta a un box domanda (o manda la foto con scritto risposta)",
@@ -582,6 +585,17 @@ async def _rispondi_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, 
     context.application.create_task(go())
 
 
+async def cmd_sfondi(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not await _authorized(update):
+        return
+    slug = pagine.corrente()
+    await update.effective_message.reply_text(
+        f"Sfondi delle storie di {writer.load_brand().get('nome', slug)}: {storie.conta_sfondi(slug)}.\n"
+        "Per aggiungerne: manda le foto in questo gruppo, anche tutte insieme in un album, con didascalia \"sfondo\" "
+        "(la categoria la sceglie il bot) oppure \"sfondo distante\", \"sfondo sicura\", \"sfondo elegante\", "
+        "\"sfondo primo piano\", \"sfondo complice\".")
+
+
 async def cmd_strutture(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not await _authorized(update):
         return
@@ -824,6 +838,48 @@ _albums: dict[str, dict] = {}
 ALBUM_WAIT = 6  # secondi di attesa dopo l'ultima immagine: gli album inviati di seguito diventano un solo post
 
 
+_sfondi_album: dict[str, str] = {}          # album di foto-sfondo -> categoria scritta nella didascalia
+_sfondi_esito: dict[str, dict] = {}
+
+
+async def _salva_sfondo(update: Update, context: ContextTypes.DEFAULT_TYPE, file_id: str, cat: str, gruppo: str):
+    """Aggiunge la foto agli sfondi delle storie della pagina del gruppo; un solo messaggio di riepilogo per album."""
+    slug = pagine.corrente()
+    f = await context.bot.get_file(file_id)
+    data = bytes(await f.download_as_bytearray())
+    try:
+        categoria, scritte = await asyncio.to_thread(storie.aggiungi_sfondo, slug, data,
+                                                     cat if cat in storie.SFONDI else None)
+    except Exception as e:
+        await update.effective_message.reply_text(f"Foto non salvata: {e}")
+        return
+    es = _sfondi_esito.setdefault(gruppo, {"n": {}, "scritte": 0, "task": None, "msg": update.effective_message})
+    es["n"][categoria] = es["n"].get(categoria, 0) + 1
+    es["scritte"] += int(scritte)
+    if es["task"]:
+        es["task"].cancel()
+
+    async def riepilogo():
+        try:
+            await asyncio.sleep(4)
+        except asyncio.CancelledError:
+            return
+        e = _sfondi_esito.pop(gruppo, None)
+        _sfondi_album.pop(gruppo, None)
+        if not e:
+            return
+        tot = sum(e["n"].values())
+        parti = ", ".join(f"{n} {c.replace('_', ' ')}" for c, n in e["n"].items())
+        testo = (f"Aggiunte {tot} foto agli sfondi delle storie di {writer.load_brand().get('nome', slug)}: {parti}.\n"
+                 f"Ora: {storie.conta_sfondi(slug)}.")
+        if e["scritte"]:
+            testo += (f"\n⚠️ In {e['scritte']} foto ci sono scritte o @ di altre pagine: escono sotto il testo delle "
+                      "storie, meglio sostituirle.")
+        await e["msg"].reply_text(testo)
+
+    es["task"] = context.application.create_task(riepilogo())
+
+
 async def on_media(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not await _authorized(update):
         return
@@ -838,6 +894,19 @@ async def on_media(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f = await context.bot.get_file(file_id)          # screenshot di un box domanda: risposta per le storie
         extra = re.sub(r"^\s*(risposta|rispondi|domanda)\s*:?\s*", "", msg.caption, flags=re.IGNORECASE)
         await _rispondi_domanda(update, context, bytes(await f.download_as_bytearray()), extra)
+        return
+    # foto per gli sfondi delle storie: didascalia "sfondo" (o "sfondo distante"); in un album basta sulla prima
+    sm = re.match(r"^\s*sfond[oi]\b\s*:?\s*([\w ]*)$", msg.caption or "", re.IGNORECASE)
+    mg = msg.media_group_id
+    if sm or (mg and mg in _sfondi_album):
+        if sm:
+            cat = sm.group(1).strip().lower().replace(" ", "_")
+            cat = {"primo": "primo_piano", "primopiano": "primo_piano", "amica": "complice"}.get(cat, cat)
+            if mg:
+                _sfondi_album[mg] = cat
+        else:
+            cat = _sfondi_album[mg]
+        await _salva_sfondo(update, context, file_id, cat, mg or str(msg.message_id))
         return
     cm = re.match(r"^\s*cta\s*:?\s*([\w-]+)\s*$", msg.caption or "", re.IGNORECASE)
     if cm:   # slide CTA di AttraiSeduci da mettere in fondo ai caroselli
@@ -1246,6 +1315,7 @@ def main():
     app.add_handler(CommandHandler("storie", cmd_storie))
     app.add_handler(CommandHandler("risposta", cmd_risposta))
     app.add_handler(CommandHandler("strutture", cmd_strutture))
+    app.add_handler(CommandHandler("sfondi", cmd_sfondi))
     app.add_handler(MessageHandler(filters.PHOTO | filters.Document.IMAGE, on_media))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_text))
     async def notify_restart(context: ContextTypes.DEFAULT_TYPE):
