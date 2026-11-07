@@ -240,7 +240,11 @@ def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False,
         # della pagina): non sono righe di testo
         tenute = []
         for l in lines:
-            sopra = [q for q in tenute if 0 <= l[0] - q[1] <= 12 and q[2] <= l[2] and l[3] <= q[3]]
+            # (anche un po' staccati, se l'elemento sopra è molto più alto di una riga: con una compressione
+            # JPEG diversa il fondo dell'avatar di @dominatemanhood_ si staccava di 13 px e diventava "testo")
+            sopra = [q for q in tenute if q[2] <= l[2] and l[3] <= q[3]
+                     and (0 <= l[0] - q[1] <= 12
+                          or (0 <= l[0] - q[1] <= H * 0.03 and (q[1] - q[0]) > 1.6 * (l[1] - l[0])))]
             if sopra and (l[3] - l[2]) < W * 0.08:
                 continue
             tenute.append(l)
