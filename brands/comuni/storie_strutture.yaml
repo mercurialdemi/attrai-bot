@@ -5,65 +5,93 @@
 # categoria: identificazione (si riconosce) · autorita (capisce un meccanismo nuovo) · conversione (vuole risolvere)
 # tipi: con quali serie si può usare (didattica e/o vendita)
 
+# Ogni riga dice la FUNZIONE della slide, non le parole da usare: il bot non deve copiarne le frasi.
+
 pas:
-  nome: "PAS · problema, agitazione, soluzione"
+  nome: PAS · problema, agitazione, soluzione
   categoria: conversione
-  tipi: [vendita, didattica]
-  parole: [pas, problema]
+  tipi:
+  - vendita
+  - didattica
+  parole:
+  - pas
+  - problema
   slide:
-    - "GANCIO = IL PROBLEMA, come lo vive lui, al presente, in seconda persona, con un dettaglio concreto. Formula: '[situazione precisa]. E tu [reazione sbagliata].'"
-    - "AGITAZIONE: cosa gli costa davvero e perché peggiora. Formula: 'Ogni volta che [fa X], lei [conseguenza]. E più lo fai, più [peggiora].'"
-    - "CONSEGUENZA (facoltativa, solo se serve una slide in più): cosa rischia di perdere se continua così, una scena del suo futuro."
-    - "SOLUZIONE: il principio che risolve, in una frase netta. Didattica: chiudi lì, con una frase secca. Vendita: il manuale come pezzo mancante (vedi CHIUSURA DI VENDITA)."
-
+  - 'GANCIO: il problema detto come lo vive lui, in una scena precisa che lo colpisce. Breve, deve fermare lo scroll.'
+  - 'AGITAZIONE: perché succede e cosa gli costa davvero, con un dettaglio concreto della sua vita.'
+  - '(facoltativa) CONSEGUENZA: dove lo porta se continua così.'
+  - 'SOLUZIONE: il principio che cambia le cose, come risposta naturale al problema. Didattica: chiudi lì. Vendita: il manuale
+    come passo successivo.'
 bab:
-  nome: "BAB · prima, dopo, ponte"
+  nome: BAB · prima, dopo, ponte
   categoria: identificazione
-  tipi: [vendita, didattica]
-  parole: [bab, prima-dopo, trasformazione]
+  tipi:
+  - vendita
+  - didattica
+  parole:
+  - bab
+  - prima-dopo
+  - trasformazione
   slide:
-    - "GANCIO = IL PRIMA: la sua situazione di adesso, 2-3 sintomi concreti in cui si riconosce ('Oggi: [sintomo], [sintomo], [sintomo].')."
-    - "IL DOPO: la stessa situazione per chi ha capito, una scena opposta e desiderabile ('Ora immagina [scena opposta].'). Mai promesse esagerate."
-    - "IL PONTE: cosa separa i due. Didattica: 'La differenza tra i due è una sola: [principio].' Vendita: il ponte è quello che trovi nel manuale (vedi CHIUSURA DI VENDITA)."
-
+  - 'GANCIO: la situazione in cui si trova adesso, in un''immagine che lo fa sentire scoperto. Breve, ferma lo scroll.'
+  - 'IL CONTRASTO: la stessa situazione vissuta da chi ha capito, e cosa cambia nella testa di lei. Concreto e credibile,
+    mai promesse.'
+  - 'IL PONTE: cosa separa le due versioni, detto come scoperta e non come regola. Didattica: chiudi lì. Vendita: il manuale
+    è il ponte.'
 epifania:
-  nome: "Gancio, storia, offerta (ponte dell'epifania)"
+  nome: Gancio, storia, offerta (ponte dell'epifania)
   categoria: identificazione
-  tipi: [vendita, didattica]
-  parole: [epifania, storia, hso]
+  tipi:
+  - vendita
+  - didattica
+  parole:
+  - epifania
+  - storia
+  - hso
   slide:
-    - "GANCIO = UNA SITUAZIONE SORPRENDENTE, nel mezzo della scena (es. 'Puoi parlarle per sei mesi e perdere contro uno che conosce da sei giorni.'). Solo situazioni realistiche, mai casi o clienti inventati."
-    - "LA STORIA: cosa succede, in frasi brevi: cosa fa lui (quello che fa il lettore), cosa succede poi. Il conflitto nascosto."
-    - "LA SCOPERTA: il cambio di prospettiva ('Perché [verità che ribalta tutto].'). È il momento in cui capisce."
-    - "LA NUOVA REGOLA: didattica = la regola che ne deriva, secca. Vendita = la regola (solo COSA, mai il come) + il manuale + il costo del non agire."
-
+  - 'GANCIO: una situazione sorprendente e realistica, nel mezzo della scena.'
+  - 'LA STORIA: cosa succede, in frasi brevi; il lettore si riconosce in chi la vive. Mai casi o clienti inventati.'
+  - 'LA SCOPERTA: il cambio di prospettiva che ribalta come leggeva la situazione.'
+  - 'LA NUOVA REGOLA: cosa ne deriva. Vendita: la regola (solo cosa, mai il come) e il manuale come passo successivo.'
 mito:
-  nome: "Il mito smontato (contrarian)"
+  nome: Il mito smontato (contrarian)
   categoria: autorita
-  tipi: [didattica, vendita]
-  parole: [mito, contrarian, credenza]
+  tipi:
+  - didattica
+  - vendita
+  parole:
+  - mito
+  - contrarian
+  - credenza
   slide:
-    - "GANCIO = LA CREDENZA, la frase che tutti ripetono tra virgolette, da sola in un blocco. Poi: 'Lo senti dire ovunque.' / 'Ma se guardi cosa succede davvero…'"
-    - "LA SFIDA: una domanda o un fatto osservabile che la manda in crisi ('Ma se bastasse [X], perché [Y]?'). Mai statistiche inventate."
-    - "LA VERITÀ: perché la credenza è incompleta e la prospettiva giusta ('Non è [X]. È [Y].')."
-    - "CHIUSURA: didattica = la conseguenza per lui, con una frase che pesa. Vendita = chi ci ha creduto ha costruito su un errore: il manuale riparte da lì."
-
+  - 'GANCIO: la convinzione che tutti ripetono, presentata in modo da far venire il dubbio.'
+  - 'LA SFIDA: un fatto osservabile o una domanda che la manda in crisi. Mai statistiche inventate.'
+  - 'LA VERITÀ: perché la convinzione è sbagliata o incompleta e cosa succede davvero.'
+  - 'CHIUSURA: la conseguenza per lui. Vendita: chi ci ha creduto ha costruito su un errore, il manuale riparte da lì.'
 scqa:
-  nome: "SCQA · situazione, complicazione, domanda, risposta"
+  nome: SCQA · situazione, complicazione, domanda, risposta
   categoria: autorita
-  tipi: [didattica]
-  parole: [scqa, meccanismo, spiegazione]
+  tipi:
+  - didattica
+  parole:
+  - scqa
+  - meccanismo
+  - spiegazione
   slide:
-    - "GANCIO = SITUAZIONE + COMPLICAZIONE: 'Fai [la cosa che sembra giusta]. Eppure [risultato opposto].'"
-    - "DOMANDA + RISPOSTA: 'Perché? Perché [meccanismo].' Poi il meccanismo spiegato in modo concreto, con un esempio della sua vita."
-    - "COSA CAMBIA: 'Quindi la prossima volta che [situazione], [cosa fare].' Chiusura secca, senza vendere."
-
+  - 'GANCIO: fa la cosa che sembra giusta e ottiene l''opposto, detto in modo che lo punga.'
+  - 'IL PERCHÉ: il meccanismo che spiega il paradosso, con un esempio concreto della sua vita.'
+  - 'COSA CAMBIA: cosa fare d''ora in poi, come conseguenza ovvia del meccanismo. Senza vendere.'
 ciclo:
-  nome: "Il ciclo aperto · promessa, indizi, rivelazione"
+  nome: Il ciclo aperto · promessa, indizi, rivelazione
   categoria: identificazione
-  tipi: [didattica]
-  parole: [ciclo, loop, segreto, curiosita]
+  tipi:
+  - didattica
+  parole:
+  - ciclo
+  - loop
+  - segreto
+  - curiosita
   slide:
-    - "GANCIO = LA PROMESSA senza la risposta: 'C'è [un segnale / un errore / una frase] che [rivela X]. Quasi nessuno lo nota.' Non dire ancora cos'è."
-    - "GLI INDIZI: cosa NON è ('Non è [X]. Non è [Y].') e un indizio che restringe. La risposta non si dice ancora: si chiude il blocco con '…'."
-    - "LA RIVELAZIONE: la risposta, chiara, e come usarla subito. Chiude con una frase secca."
+  - 'GANCIO: annuncia che esiste qualcosa (un segnale, un errore, una frase) senza dire cos''è.'
+  - 'GLI INDIZI: cosa non è e un indizio che restringe; la risposta resta sospesa.'
+  - 'LA RIVELAZIONE: la risposta, chiara, e come usarla subito.'

@@ -177,7 +177,8 @@ def _testo_struttura(k: str | None) -> str:
     passi = "\n".join(f"  Slide {i}: {t}" for i, t in enumerate(v.get("slide") or [], 1))
     return (f"STRUTTURA DELLA SERIE: {v.get('nome', k)} (categoria: {v.get('categoria', '')}). "
             f"{len(v.get('slide') or [])} passaggi; se un passaggio è segnato facoltativo puoi fare 3 slide. "
-            f"Segui ogni slide:\n{passi}")
+            f"Ogni riga dice la FUNZIONE della slide: scrivila con parole tue, non copiare le parole della "
+            f"descrizione (niente 'Oggi:', 'Ora immagina', 'La differenza tra i due è una sola').\n{passi}")
 
 
 def riepilogo_strutture(chiave: str = "") -> str:
@@ -296,7 +297,9 @@ def _revisione(brand: dict, rules: list[dict], bozza: dict, tool: dict, richiest
                  "Rileggila come la leggerebbe un follower e riscrivila dove serve, seguendo il prompt (soprattutto "
                  "RITMO E VOCE e PROFONDITÀ):\n"
                  "- elimina tutto ciò che suona da AI: frasi da libro, metafore accumulate, aforismi in fila, formule "
-                 "ripetute, aperture meccaniche;\n"
+                 "ripetute, aperture meccaniche, frasi che sembrano prese dalle istruzioni ('Oggi:', 'Ora immagina', "
+                 "'La differenza è una sola', 'X lo spiega bene'), cliché ('psicologo gratis', 'cerotto');\n"
+                 "- il lieto fine facile non esiste: niente 'e dopo qualche giorno è lei a cercarti';\n"
                  "- deve essere un discorso unico e fluido dalla prima all'ultima slide, con un'idea forte e chiara; "
                  "il valore o la CTA arrivano in modo naturale, come conseguenza logica del ragionamento (mai uno "
                  "stacco da spot);\n"
