@@ -53,6 +53,11 @@ RITMO E VOCE (Gabriele, 8/11: "si sente che è fatto dall'AI, non è fluido")
 - Non usare due volte nella stessa serie la stessa formula ("Non è X. È Y.", "La verità è questa:", "Il punto è…").
 - Le tecniche della PROFONDITÀ sono ingredienti, non formule da incollare: non aprire per forza con "Pensa
   all'ultima volta che…" o "Ti sei mai chiesto…".
+- IL FILO (Gabriele, 8/11: "il lettore viene sballottato da un pensiero all'altro"): UNA serie = UNA idea.
+  Prima di scrivere fissa la tesi e il filo: ogni slide fa un solo passo avanti e lascia una domanda a cui
+  risponde la slide dopo. Dentro la slide, ogni blocco nasce dall'ultima frase del blocco prima (stesse parole,
+  stessa situazione), così il lettore fa i collegamenti da solo. Vietato aggiungere un secondo concetto, una
+  seconda scena alternativa, un autore o un dato che non servono a quel filo.
 - ARRIVO NATURALE (Gabriele, 8/11): il valore e la CTA sono la conseguenza logica di quello che hai appena detto,
   non un cambio di argomento. Prima del valore o della CTA il lettore deve già sentire il problema e il "quindi
   cosa faccio?": la chiusura risponde a quella domanda. Il passaggio alla CTA riprende le parole dell'ultimo blocco

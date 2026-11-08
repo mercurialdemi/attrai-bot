@@ -231,11 +231,13 @@ STORIE_TOOL = {
     "name": "serie_storie",
     "description": "Una serie di storie Instagram pronte (3-4 slide secondo la struttura; 1 slide per il box domande).",
     "input_schema": {"type": "object", "properties": {
+        "tesi": {"type": "string", "description": "PRIMA di scrivere: l'UNICA idea che il lettore deve portarsi via, in una frase semplice. Tutta la serie serve a farcelo arrivare da solo."},
+        "filo": {"type": "array", "items": {"type": "string"}, "description": "PRIMA di scrivere: una riga per slide, in ordine: cosa fa capire quella slide e quale domanda lascia nella testa del lettore, a cui risponde la slide dopo. Nessuna slide introduce un argomento nuovo."},
         "tipo": {"type": "string", "enum": TIPI},
         "sfondo": {"type": "string", "enum": SFONDI, "description": "Categoria di foto di sfondo più coerente col tema."},
         "slides": {"type": "array", "items": _SLIDE},
         "sticker_testo": {"type": "string", "description": "Solo per il box domande: il testo da scrivere nello sticker DOMANDA (breve). Altrimenti vuoto."},
-    }, "required": ["tipo", "sfondo", "slides", "sticker_testo"]},
+    }, "required": ["tesi", "filo", "tipo", "sfondo", "slides", "sticker_testo"]},
 }
 
 
@@ -300,6 +302,9 @@ def _revisione(brand: dict, rules: list[dict], bozza: dict, tool: dict, richiest
                  "ripetute, aperture meccaniche, frasi che sembrano prese dalle istruzioni ('Oggi:', 'Ora immagina', "
                  "'La differenza è una sola', 'X lo spiega bene'), cliché ('psicologo gratis', 'cerotto');\n"
                  "- il lieto fine facile non esiste: niente 'e dopo qualche giorno è lei a cercarti';\n"
+                 "- PRIMA controlla il filo: scrivi la tesi (una sola idea) e una riga per slide con la domanda che "
+                 "ogni slide lascia aperta e che la slide dopo risolve. Ogni blocco che introduce un pensiero nuovo, "
+                 "non collegato al precedente, va tolto o riscritto: il lettore non deve mai essere 'sballottato';\n"
                  "- deve essere un discorso unico e fluido dalla prima all'ultima slide, con un'idea forte e chiara; "
                  "il valore o la CTA arrivano in modo naturale, come conseguenza logica del ragionamento (mai uno "
                  "stacco da spot);\n"
@@ -641,11 +646,13 @@ RISPOSTA_TOOL = {
     "description": "Risposta in 3 slide a una domanda arrivata dal box domande delle storie.",
     "input_schema": {"type": "object", "properties": {
         "domanda": {"type": "string", "description": "La domanda trascritta parola per parola (corretta solo negli errori di battitura evidenti)."},
+        "tesi": {"type": "string", "description": "PRIMA di scrivere: l'UNICA idea che il lettore deve portarsi via, in una frase semplice. Tutta la serie serve a farcelo arrivare da solo."},
+        "filo": {"type": "array", "items": {"type": "string"}, "description": "PRIMA di scrivere: una riga per slide, in ordine: cosa fa capire quella slide e quale domanda lascia nella testa del lettore, a cui risponde la slide dopo. Nessuna slide introduce un argomento nuovo."},
         "chiusura": {"type": "string", "enum": ["didattica", "vendita"],
                      "description": "vendita se la domanda tocca da vicino il dolore di un nostro manuale, altrimenti didattica."},
         "sfondo": {"type": "string", "enum": SFONDI},
         "slides": {"type": "array", "items": _SLIDE, "description": "Esattamente 3 slide: gancio che risponde alla domanda, didattica, chiusura."},
-    }, "required": ["domanda", "chiusura", "sfondo", "slides"]},
+    }, "required": ["domanda", "tesi", "filo", "chiusura", "sfondo", "slides"]},
 }
 
 
