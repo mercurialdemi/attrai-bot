@@ -1,0 +1,1341 @@
+{
+ "giorno": "2026-11-08",
+ "post_preparati": 5,
+ "slide_totali": 45,
+ "slide_fallite": 2,
+ "lavorazione": {
+  "blocchi-ricostruzione-codice": {
+   "totali": 4,
+   "fallite": 0
+  },
+  "testo-su-sfondo-uniforme": {
+   "totali": 31,
+   "fallite": 0
+  },
+  "cta-stile-post": {
+   "totali": 4,
+   "fallite": 0
+  },
+  "openai-pulizia+blocchi": {
+   "totali": 2,
+   "fallite": 2
+  },
+  "openai-testo": {
+   "totali": 3,
+   "fallite": 0
+  },
+  "cta-alone": {
+   "totali": 1,
+   "fallite": 0
+  }
+ },
+ "segnalazioni": [],
+ "post_con_problemi": [
+  {
+   "job_id": 85,
+   "fonte": "https://www.instagram.com/p/Denksm5E8rF/",
+   "fallite": [
+    1
+   ],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "Il vecchio watermark \"@themasculinecreed\" con l'avatar circolare è ancora visibile, sbiadito, sopra il titolo. Il testo del titolo è corretto. | poi: OpenAI non ha risposto (Error code: 400 - Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include)",
+     "testo_originale": "40 SIMP BEHAVIORS THAT MAKE YOU LESS ATTRACTIVE TO WOMEN",
+     "testo": "40 COMPORTAMENTI DA ZERBINO\nCHE AGLI OCCHI DI UNA DONNA\nTI RENDONO MENO ATTRAENTE",
+     "blocchi": [
+      {
+       "x": 67,
+       "y": 688,
+       "w": 867,
+       "h": 278,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#1EA7DD",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "1. Shying away from talking about s*x thinking it makes her feel \"comfortable\" for s*x later. 2. Asking her where she has been & who she has been with. 3. Admitting that you're dating only her just to \"secure\" her loyalty. 4. When your way of establishing boundaries is indirect, soft, and shaky. SWIPE",
+     "testo": "1. Evitare di parlare di s*sso, convinto che così\nlei si sentirà \"a suo agio\" quando sarà il momento.\n\n2. Chiederle dov'è stata e con chi.\n\n3. Dirle che vedi solo lei per\n\"assicurarti\" che ti resti fedele.\n\n4. Porre i tuoi limiti con un tono indiretto,\nmorbido e insicuro.\n\nSCORRI",
+     "blocchi": [
+      {
+       "x": 71,
+       "y": 249,
+       "w": 843,
+       "h": 80,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 71,
+       "y": 391,
+       "w": 843,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 71,
+       "y": 530,
+       "w": 843,
+       "h": 80,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 71,
+       "y": 674,
+       "w": 843,
+       "h": 83,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 738,
+       "y": 906,
+       "w": 123,
+       "h": 25,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "5. You keep extending the \"talking\" phase hoping things would magically just change. 6. You're okay with starting as friends first because \"hey, at least it's something, right?\" 7. You switch up your identity & beliefs to be more compatible with her. 8. You prefer white lies over hurting her feelings to be honest. SWIPE",
+     "testo": "5. Tiri per le lunghe la fase del \"ci sentiamo\"\nsperando che qualcosa cambi per magia.\n\n6. Accetti di partire come amici perché\n\"dai, meglio di niente, no?\"\n\n7. Cambi identità e convinzioni\nper sembrare più affine a lei.\n\n8. Preferisci una bugia a fin di bene\nalla verità che potrebbe ferirla.\n\nSCORRI",
+     "blocchi": [
+      {
+       "x": 88,
+       "y": 252,
+       "w": 810,
+       "h": 76,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 391,
+       "w": 810,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 532,
+       "w": 810,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 674,
+       "w": 810,
+       "h": 80,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 738,
+       "y": 906,
+       "w": 123,
+       "h": 25,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "9. Making her feel special before she has done anything special. 10. Being attentive to her social media accounts & always giving her one of these: 😍 11. Not clearly and comfortably claiming your leadership role. 12. Waiting for a CLEAR sign that it's time to kiss her. SWIPE",
+     "testo": "9. Farla sentire speciale prima che\nabbia fatto qualcosa di speciale.\n\n10. Stare dietro a ogni suo post e lasciarle\nsempre la faccina con gli occhi a cuore.\n\n11. Non prenderti con chiarezza e naturalezza\nil ruolo di guida.\n\n12. Aspettare un segnale CHIARO\nprima di baciarla.\n\nSCORRI",
+     "blocchi": [
+      {
+       "x": 73,
+       "y": 252,
+       "w": 843,
+       "h": 76,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 73,
+       "y": 391,
+       "w": 843,
+       "h": 80,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 73,
+       "y": 532,
+       "w": 843,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 73,
+       "y": 674,
+       "w": 843,
+       "h": 80,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 738,
+       "y": 906,
+       "w": 123,
+       "h": 25,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "13. Giving her your full attention whenever she's bored and what's some entertainment. 14. Thinking she should follow your lead when you have no lead. 15. Taking anything she says personally, positive or negative. 16. Being romantic without having any attraction established yet. SWIPE",
+     "testo": "13. Darle tutte le tue attenzioni ogni volta\nche si annoia e cerca qualcuno che la intrattenga.\n\n14. Pretendere che ti segua\nquando non sai nemmeno tu dove andare.\n\n15. Prendere sul personale tutto quello che dice,\nnel bene e nel male.\n\n16. Fare il romantico quando\nl'attrazione non c'è ancora.\n\nSCORRI",
+     "blocchi": [
+      {
+       "x": 88,
+       "y": 252,
+       "w": 810,
+       "h": 76,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 391,
+       "w": 810,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 532,
+       "w": 810,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 674,
+       "w": 810,
+       "h": 80,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 738,
+       "y": 906,
+       "w": 123,
+       "h": 25,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "17. Being vague & indirect about what you want with her. 18. Seeking her input to know what you want to do with her. 19. Being a different person with your friends and strangers than you are with her. 20. Caring too much about your looks, money, or anything that has nothing to do with WHO you are as a Man. SWIPE",
+     "testo": "17. Essere vago e indiretto\nsu cosa vuoi da lei.\n\n18. Chiederle un parere per decidere\ncosa fare con lei.\n\n19. Essere uno con amici e sconosciuti\ne un altro quando sei con lei.\n\n20. Preoccuparti troppo dell'aspetto, dei soldi\no di qualunque cosa non abbia niente a che fare\ncon CHI sei come Uomo.\n\nSCORRI",
+     "blocchi": [
+      {
+       "x": 88,
+       "y": 227,
+       "w": 820,
+       "h": 77,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 371,
+       "w": 820,
+       "h": 77,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 508,
+       "w": 820,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 652,
+       "w": 820,
+       "h": 130,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 738,
+       "y": 906,
+       "w": 123,
+       "h": 25,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "21. Letting her get comfortable with saying slick sh*t to test you. 22. Getting into arguments with other dudes over her. 23. Not guiding her on how to deal with you and just being happy she's there. 24. Complimenting her looks, not what she does or how she thinks. SWIPE",
+     "testo": "21. Lasciare che si abitui a lanciarti\nfrecciatine per metterti alla prova.\n\n22. Litigare con altri uomini\nper lei.\n\n23. Non insegnarle come trattarti\ne accontentarti del fatto che ci sia.\n\n24. Farle complimenti sull'aspetto e mai su\nquello che fa o su come pensa.\n\nSCORRI",
+     "blocchi": [
+      {
+       "x": 88,
+       "y": 249,
+       "w": 820,
+       "h": 80,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 391,
+       "w": 820,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 530,
+       "w": 820,
+       "h": 80,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 674,
+       "w": 820,
+       "h": 80,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 738,
+       "y": 906,
+       "w": 123,
+       "h": 25,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "25. Agreeing with her opinions even though they are against your values. 26. Having standards and boundaries until you meet hot women. 27. Checking in on her regularly to \"maintain\" her interest & make sure she doesn't forget you. 28. Fearing being playful and flirty to play it safe. SWIPE",
+     "testo": "25. Darle ragione anche quando le sue\nidee vanno contro i tuoi valori.\n\n26. Avere standard e limiti finché\nnon incontri una donna bellissima.\n\n27. Scriverle di continuo per \"tenere vivo\"\nil suo interesse e non farti dimenticare.\n\n28. Avere paura di scherzare e flirtare\nper andare sul sicuro.\n\nSCORRI",
+     "blocchi": [
+      {
+       "x": 68,
+       "y": 225,
+       "w": 855,
+       "h": 80,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 68,
+       "y": 366,
+       "w": 855,
+       "h": 80,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 68,
+       "y": 503,
+       "w": 855,
+       "h": 122,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 68,
+       "y": 649,
+       "w": 855,
+       "h": 80,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 738,
+       "y": 906,
+       "w": 123,
+       "h": 25,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "29. Agreeing to pay her tuition fees. 30. Letting her negotiate & have conditions for you to be with her. 31. Hovering around women instead of directly approaching them. 32. Indirectly approaching her and asking her about \"directions\" instead of telling her what you want to do with her SWIPE",
+     "testo": "29. Accettare di pagarle l'università.\n\n30. Lasciare che sia lei a trattare e a dettarti\nle condizioni per stare con te.\n\n31. Girare intorno alle donne invece\ndi avvicinarle direttamente.\n\n32. Avvicinarla con una scusa, come chiederle\n\"indicazioni\", invece di dirle\ncosa vuoi fare con lei.\n\nSCORRI",
+     "blocchi": [
+      {
+       "x": 88,
+       "y": 249,
+       "w": 825,
+       "h": 35,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 344,
+       "w": 825,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 483,
+       "w": 825,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 625,
+       "w": 825,
+       "h": 122,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 738,
+       "y": 906,
+       "w": 123,
+       "h": 25,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 10,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "33. Taking her out to watch a movie as a first date. 34. Acting like getting her number is a goal. 35. Having \"maybe\", \"Can I?\", \"Is it okay if..\" in your sentences. 36. Giving her one of those sideway hugs with hips far apart when greeting her. SWIPE",
+     "testo": "33. Portarla al cinema\nal primo appuntamento.\n\n34. Trattare il suo numero come un traguardo.\n\n35. Riempire i discorsi di \"forse\", \"posso?\",\n\"ti va bene se..\"\n\n36. Salutarla con quell'abbraccio di lato,\ncon i fianchi ben lontani.\n\nSCORRI",
+     "blocchi": [
+      {
+       "x": 88,
+       "y": 273,
+       "w": 825,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 415,
+       "w": 825,
+       "h": 33,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 486,
+       "w": 825,
+       "h": 77,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 625,
+       "w": 825,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 738,
+       "y": 906,
+       "w": 123,
+       "h": 25,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 11,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "37. When she finds out you've told your boys anything about being with her when you met her just a month ago. 38. Talking about family goals & expectations in first few dates. 39. Buying drinks for a woman to try to talk to her 40. Avoiding flirting with her face-to-face & choosing to do so over text instead. SWIPE",
+     "testo": "37. Farle scoprire che hai già raccontato\nagli amici di voi due quando\nla conosci da appena un mese.\n\n38. Parlare di famiglia e di aspettative\ngià ai primi appuntamenti.\n\n39. Offrire da bere a una donna\nsolo per attaccare bottone.\n\n40. Evitare di flirtare con lei dal vivo\ne farlo solo per messaggio.\n\nSCORRI",
+     "blocchi": [
+      {
+       "x": 88,
+       "y": 228,
+       "w": 825,
+       "h": 125,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 415,
+       "w": 825,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 555,
+       "w": 825,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 695,
+       "w": 825,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 738,
+       "y": 906,
+       "w": 123,
+       "h": 25,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 12,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se ti sei riconosciuto anche in uno solo\ndi questi 40 comportamenti,\nse anche tu stai ancora chiedendo\nil permesso di piacerle…\ndevi cambiare il modo in cui\ninterpreti ogni interazione.\n\nNel mio manuale\n\"Diventa l'uomo a cui nessuna donna sa resistere\"\ntrovi le dinamiche psicologiche che spiegano\nperché alcune attenzioni aumentano l'attrazione\ne altre la distruggono, anche se sembrano giuste.\n\nDai un'occhiata al link in bio\no commenta con \"ATTRAZIONE\"\ne te lo invio in DM.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Un elenco di 40 comportamenti da zerbino che fanno perdere attrazione a un uomo agli occhi delle donne: elemosinare attenzioni, essere vago sulle proprie intenzioni, chiedere il permesso per tutto, cambiare se stesso per piacerle, darle attenzioni che non si è guadagnata. Il messaggio è: smetti di inseguirla e di cercare la sua approvazione, prendi l'iniziativa con sicurezza e fai in modo che sia lei a guadagnarsi la tua presenza. Registro diretto, provocatorio, da \"verità scomode\" maschili.",
+   "descrizione": "Ci sono uomini che perdono una donna senza aver mai fatto niente di sbagliato. Nessuna mancanza di rispetto, nessuna scenata. Solo tanta disponibilità, data troppo presto e a chi non l'aveva ancora chiesta.\n\nLui le scrive il buongiorno ogni mattina, mette il cuore a ogni sua storia, le chiede dove vuole andare e poi cosa ne pensa. Ammorbidisce i suoi limiti, aspetta un segnale chiaro per baciarla. Poi si accorge che lei risponde dopo ore, come si risponde a chi c'è sempre.\n\nE il prezzo non è solo lei. È la stima di sé: comincia a chiedersi cosa abbia sbagliato proprio lui, che ha dato tutto.\n\nNel 2011 Erin Whitchurch, Timothy Wilson e Daniel Gilbert, all'Università della Virginia, hanno mostrato a delle ragazze i profili di uomini che le avevano valutate. Le più attratte non erano quelle che sapevano di piacere molto, ma quelle che non sapevano se piacevano o no. L'incertezza le portava a pensare a lui, e più ci pensavano più lo desideravano.\n\nEd è qui che molti uomini commettono l'errore: credono che rassicurarla la avvicini. Quasi tutti questi 40 punti hanno la stessa radice, chiedere il permesso di essere desiderato. Chiederle dov'è stata, giurarle che vedi solo lei, fare il romantico prima che ci sia attrazione: lei ci legge una cosa sola, la paura di perderla. E un uomo che ha già paura di perderla le ha già detto quanto vale.\n\nNon serve diventare freddi. Serve restare lo stesso uomo che sei con i tuoi amici, con le tue idee e i tuoi tempi, anche quando lei ti piace davvero.\n\nUna donna non si allontana dall'uomo che le dà troppo poco. Si allontana da quello che ha smesso di essere qualcuno pur di darle tutto.\n\nSe ti sei riconosciuto anche in uno solo di questi 40 comportamenti, il problema non è cosa fai ma da dove parti. Ho scritto un manuale che ti spiega cosa accende il desiderio femminile e quali attenzioni lo spengono, anche quando sembrano giuste. Si chiama \"Diventa l'uomo a cui nessuna donna sa resistere\": lo trovi nel link in bio, oppure commenta \"ATTRAZIONE\" e te lo mando in DM.",
+   "segnalazioni": []
+  },
+  {
+   "job_id": 86,
+   "fonte": "https://www.instagram.com/p/Denksm5E8rF/",
+   "fallite": [
+    1
+   ],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "Il vecchio handle @themasculinecreed è ancora visibile, sbiadito, sotto la foto. Resta anche una traccia sbiadita dell'avatar circolare al centro, sopra il filetto. Il testo italiano è corretto. | poi: OpenAI non ha risposto (Error code: 400 - Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include)",
+     "testo_originale": "40 SIMP BEHAVIORS THAT MAKE YOU LESS ATTRACTIVE TO WOMEN",
+     "testo": "40 COMPORTAMENTI DA ZERBINO\nCHE AGLI OCCHI DI UNA DONNA\nTI RENDONO MENO ATTRAENTE",
+     "blocchi": [
+      {
+       "x": 61,
+       "y": 690,
+       "w": 880,
+       "h": 278,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#1FB5E0",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "1. Shying away from talking about s*x thinking it makes her feel \"comfortable\" for s*x later.\n2. Asking her where she has been & who she has been with.\n3. Admitting that you're dating only her just to \"secure\" her loyalty.\n4. When your way of establishing boundaries is indirect, soft, and shaky.\nSWIPE",
+     "testo": "1. Girare alla larga dal s*sso nei discorsi,\nconvinto che così poi lei si sentirà\n\"a suo agio\" a farlo.\n\n2. Chiederle dov'è stata e con chi.\n\n3. Dirle che vedi solo lei per \"assicurarti\"\nche ti resti fedele.\n\n4. Mettere paletti in punta di piedi:\nindiretti, morbidi, incerti.\n\nSCORRI",
+     "blocchi": [
+      {
+       "x": 71,
+       "y": 249,
+       "w": 845,
+       "h": 56,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 71,
+       "y": 391,
+       "w": 845,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 71,
+       "y": 532,
+       "w": 845,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 71,
+       "y": 674,
+       "w": 845,
+       "h": 80,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 739,
+       "y": 903,
+       "w": 122,
+       "h": 32,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "right"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "5. You keep extending the \"talking\" phase hoping things would magically just change.\n6. You're okay with starting as friends first because \"hey, at least it's something, right?\"\n7. You switch up your identity & beliefs to be more compatible with her.\n8. You prefer white lies over hurting her feelings to be honest.\nSWIPE",
+     "testo": "5. Tiri in lungo la fase delle chiacchiere\nsperando che, per magia, qualcosa cambi.\n\n6. Accetti di partire come amici perché\n\"dai, meglio di niente, no?\"\n\n7. Cambi identità e convinzioni\nper andarle più a genio.\n\n8. Preferisci una bugia a fin di bene\na una verità che la ferisce.\n\nSCORRI",
+     "blocchi": [
+      {
+       "x": 88,
+       "y": 249,
+       "w": 810,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 391,
+       "w": 810,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 532,
+       "w": 810,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 674,
+       "w": 810,
+       "h": 80,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 739,
+       "y": 903,
+       "w": 122,
+       "h": 32,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "right"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "9. Making her feel special before she has done anything special.\n10. Being attentive to her social media accounts & always giving her one of these: 😍\n11. Not clearly and comfortably claiming your leadership role.\n12. Waiting for a CLEAR sign that it's time to kiss her.\nSWIPE",
+     "testo": "9. Farla sentire speciale prima che abbia\nfatto qualcosa di speciale.\n\n10. Stare sempre sui suoi social e lasciarle\nogni volta la faccina con gli occhi a cuore.\n\n11. Non prenderti il ruolo di guida,\ncon chiarezza e senza imbarazzo.\n\n12. Aspettare un segnale CHIARO\nprima di baciarla.\n\nSCORRI",
+     "blocchi": [
+      {
+       "x": 73,
+       "y": 249,
+       "w": 843,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 73,
+       "y": 391,
+       "w": 843,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 73,
+       "y": 532,
+       "w": 843,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 73,
+       "y": 674,
+       "w": 843,
+       "h": 80,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 739,
+       "y": 903,
+       "w": 122,
+       "h": 32,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "right"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "13. Giving her your full attention whenever she's bored and what's some entertainment.\n14. Thinking she should follow your lead when you have no lead.\n15. Taking anything she says personally, positive or negative.\n16. Being romantic without having any attraction established yet.\nSWIPE",
+     "testo": "13. Darle tutta la tua attenzione ogni volta\nche si annoia e cerca qualcuno che la intrattenga.\n\n14. Pretendere che ti segua quando\nnon sai nemmeno tu dove andare.\n\n15. Prendere sul personale qualsiasi cosa\ndica, nel bene e nel male.\n\n16. Fare il romantico quando tra voi\nnon è ancora scattata nessuna attrazione.\n\nSCORRI",
+     "blocchi": [
+      {
+       "x": 88,
+       "y": 249,
+       "w": 810,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 391,
+       "w": 810,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 532,
+       "w": 810,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 674,
+       "w": 810,
+       "h": 80,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 739,
+       "y": 903,
+       "w": 122,
+       "h": 32,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "right"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "17. Being vague & indirect about what you want with her.\n18. Seeking her input to know what you want to do with her.\n19. Being a different person with your friends and strangers than you are with her.\n20. Caring too much about your looks, money, or anything that has nothing to do with WHO you are as a Man.\nSWIPE",
+     "testo": "17. Restare vago e girarci intorno\nsu cosa vuoi da lei.\n\n18. Chiederle consiglio per capire\ncosa vuoi fare con lei.\n\n19. Essere un uomo con amici e sconosciuti\ne un altro quando sei con lei.\n\n20. Dare troppo peso all'aspetto, ai soldi\no a tutto ciò che non c'entra\ncon CHI sei come Uomo.\n\nSCORRI",
+     "blocchi": [
+      {
+       "x": 88,
+       "y": 228,
+       "w": 822,
+       "h": 75,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 368,
+       "w": 822,
+       "h": 79,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 508,
+       "w": 822,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 649,
+       "w": 822,
+       "h": 132,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 739,
+       "y": 903,
+       "w": 122,
+       "h": 32,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "right"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "21. Letting her get comfortable with saying slick sh*t to test you.\n22. Getting into arguments with other dudes over her.\n23. Not guiding her on how to deal with you and just being happy she's there.\n24. Complimenting her looks, not what she does or how she thinks.\nSWIPE",
+     "testo": "21. Lasciare che prenda l'abitudine di lanciarti\nfrecciatine per metterti alla prova.\n\n22. Litigare con altri uomini per lei.\n\n23. Non farle capire come deve trattarti\ne accontentarti che ci sia.\n\n24. Farle complimenti per l'aspetto e non per\nquello che fa o per come ragiona.\n\nSCORRI",
+     "blocchi": [
+      {
+       "x": 88,
+       "y": 249,
+       "w": 810,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 391,
+       "w": 810,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 532,
+       "w": 810,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 674,
+       "w": 810,
+       "h": 80,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 739,
+       "y": 903,
+       "w": 122,
+       "h": 32,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "right"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "25. Agreeing with her opinions even though they are against your values.\n26. Having standards and boundaries until you meet hot women.\n27. Checking in on her regularly to \"maintain\" her interest & make sure she doesn't forget you.\n28. Fearing being playful and flirty to play it safe.\nSWIPE",
+     "testo": "25. Darle ragione anche quando le sue idee\nvanno contro i tuoi valori.\n\n26. Avere standard e limiti finché non ti trovi\ndavanti una donna bellissima.\n\n27. Farti sentire di continuo per \"tenere vivo\"\nil suo interesse e non farti dimenticare.\n\n28. Non scherzare e non flirtare per paura,\ncosì da andare sul sicuro.\n\nSCORRI",
+     "blocchi": [
+      {
+       "x": 70,
+       "y": 228,
+       "w": 852,
+       "h": 75,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 70,
+       "y": 368,
+       "w": 852,
+       "h": 79,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 70,
+       "y": 508,
+       "w": 852,
+       "h": 127,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 70,
+       "y": 698,
+       "w": 852,
+       "h": 83,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 739,
+       "y": 903,
+       "w": 122,
+       "h": 32,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "right"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "29. Agreeing to pay her tuition fees.\n30. Letting her negotiate & have conditions for you to be with her.\n31. Hovering around women instead of directly approaching them.\n32. Indirectly approaching her and asking her about \"directions\" instead of telling her what you want to do with her\nSWIPE",
+     "testo": "29. Accettare di pagarle l'università.\n\n30. Lasciarle trattare e dettare\ncondizioni per stare con te.\n\n31. Ronzare intorno alle donne invece\ndi avvicinarle a viso aperto.\n\n32. Avvicinarla con una scusa, come chiederle\nun'\"indicazione\", invece di dirle cosa\nvuoi fare con lei.\n\nSCORRI",
+     "blocchi": [
+      {
+       "x": 88,
+       "y": 249,
+       "w": 785,
+       "h": 34,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 344,
+       "w": 785,
+       "h": 81,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 485,
+       "w": 785,
+       "h": 79,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 625,
+       "w": 785,
+       "h": 137,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 739,
+       "y": 903,
+       "w": 122,
+       "h": 32,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "right"
+      }
+     ]
+    },
+    {
+     "numero": 10,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "33. Taking her out to watch a movie as a first date.\n34. Acting like getting her number is a goal.\n35. Having \"maybe\", \"Can I?\", \"Is it okay if..\" in your sentences.\n36. Giving her one of those sideway hugs with hips far apart when greeting her.\nSWIPE",
+     "testo": "33. Portarla al cinema al primo appuntamento.\n\n34. Trattare il suo numero come se\nfosse il traguardo.\n\n35. Riempire le frasi di \"forse\", \"posso?\",\n\"ti va bene se...\"\n\n36. Salutarla con quell'abbraccio di lato,\na fianchi ben distanti.\n\nSCORRI",
+     "blocchi": [
+      {
+       "x": 88,
+       "y": 273,
+       "w": 822,
+       "h": 79,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 391,
+       "w": 822,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 508,
+       "w": 822,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 649,
+       "w": 822,
+       "h": 79,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 739,
+       "y": 903,
+       "w": 122,
+       "h": 32,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "right"
+      }
+     ]
+    },
+    {
+     "numero": 11,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "37. When she finds out you've told your boys anything about being with her when you met her just a month ago.\n38. Talking about family goals & expectations in first few dates.\n39. Buying drinks for a woman to try to talk to her\n40. Avoiding flirting with her face-to-face & choosing to do so over text instead.\nSWIPE",
+     "testo": "37. Lei che scopre che hai già raccontato\ndi voi agli amici, quando vi conoscete\nda appena un mese.\n\n38. Parlare di famiglia e progetti futuri\nnei primi appuntamenti.\n\n39. Offrire da bere a una donna\ncome pretesto per parlarle.\n\n40. Non flirtare mai con lei di persona\ne farlo solo per messaggio.\n\nSCORRI",
+     "blocchi": [
+      {
+       "x": 88,
+       "y": 228,
+       "w": 822,
+       "h": 124,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 410,
+       "w": 822,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 550,
+       "w": 822,
+       "h": 80,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 693,
+       "w": 822,
+       "h": 79,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 739,
+       "y": 903,
+       "w": 122,
+       "h": 32,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "right"
+      }
+     ]
+    },
+    {
+     "numero": 12,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se ti sei riconosciuto anche in uno solo\ndi questi 40 comportamenti…\nse anche tu continui a dare tutto\ne a ritrovarti sempre meno scelto…\n\ndevi cambiare il modo\nin cui interpreti ogni interazione.\n\nNel mio manuale\n\"Diventa l'uomo a cui nessuna donna sa resistere\"\ntrovi le dinamiche psicologiche che spiegano\nperché alcune attenzioni aumentano l'attrazione\ne altre la distruggono, anche se sembrano giuste.\n\nDai un'occhiata al link in bio\no commenta con \"ATTRAZIONE\"\ne te lo invio in DM.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Una lista di 40 comportamenti da \"zerbino\" che un uomo fa pensando di conquistare una donna e che invece lo rendono meno attraente: troppa disponibilità, insicurezza, niente guida, intenzioni vaghe, attenzioni regalate senza che lei abbia fatto nulla per meritarle. Il messaggio è: smettila di elemosinare la sua approvazione, prendi l'iniziativa, sii chiaro e fai in modo che sia lei a guadagnarsi la tua presenza. Il tono è diretto, un po' provocatorio, da fratello maggiore che ti fa notare gli errori.",
+   "descrizione": "Nessuna donna si è mai allontanata da te perché eri poco gentile. Molte si sono allontanate perché eri sempre disponibile.\n\nLe scrivi per tenerla vicina. Le dai ragione per evitare tensioni. Aspetti un segnale chiaro prima di baciarla. Ogni gesto ti sembra rispetto, ma lei ci vede un uomo che ha paura di perderla prima ancora di averla. E tu resti lì, umiliato, senza capire dove hai sbagliato, perché non hai fatto niente di male.\n\nNon la perdi in un colpo solo. Perdi valore un messaggio alla volta, finché diventi quello che c'è sempre e che nessuno sceglie.\n\nNel 2007 Paul Eastwick ed Eli Finkel hanno studiato centinaia di incontri di speed dating alla Northwestern University. Chi mostrava interesse per tutti indistintamente veniva desiderato meno. L'interesse attrae quando è selettivo, quando lei sente di essere stata scelta e non semplicemente accettata. Jennifer Crocker ha spiegato l'altra metà: se la tua stima dipende dall'approvazione di lei, ogni sua reazione diventa un verdetto, e i tuoi messaggi cominciano a sapere di ansia.\n\nEd è qui che molti uomini commettono l'errore: provano a correggere questi quaranta comportamenti uno per uno, come fossero copioni. Ma nascono quasi tutti dalla stessa radice. La faccina a cuore, il paletto messo in punta di piedi, il \"forse\" in ogni frase: è sempre un uomo che chiede il permesso di stare accanto a lei.\n\nQuando la tua vita ha un centro che non dipende da lei, la frecciatina smette di bruciare, il bacio non ha bisogno di autorizzazioni e un suo no diventa un'informazione, non una condanna.\n\nUna donna non si allontana dall'uomo che sa dirle di no. Si allontana da quello che non ne ha mai il coraggio.\n\nSe ti sei riconosciuto anche in uno solo di questi 40 comportamenti, il problema non è cosa fai ma da dove parti. Ho scritto un manuale che ti spiega cosa accende il desiderio femminile e quali attenzioni lo spengono, anche quando sembrano giuste. Si chiama \"Diventa l'uomo a cui nessuna donna sa resistere\": lo trovi nel link in bio, oppure commenta \"ATTRAZIONE\" e te lo mando in DM.\n\n#attrazione #psicologiafemminile #seduzione #relazioni",
+   "segnalazioni": []
+  }
+ ]
+}
