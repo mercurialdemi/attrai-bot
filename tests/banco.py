@@ -99,6 +99,11 @@ CASI = {
     # testo salito dove stavano avatar e nome dell'altra pagina)
     "tweet_cover_dominate.jpg": ("tinta_unita", "Before You Catch Feelings,\nAsk Her This First", [
         dict(testo="Prima di perdere la testa per lei,\nfalle queste domande", x=138, y=405, w=615, h=100, colore="#FFFFFF", allineamento="left", carattere=S, peso="regular")], "in alto: avatar e nome Dominatemanhood_"),
+    # post del 7/11 (post 85-86, @themasculinecreed): avatar + filetti + @handle al centro sopra il titolo;
+    # restava l'ombra del marchio e OpenAI rifiutava la foto: slide non fatta
+    "cover_simp_marchio.jpg": ("foto", "40 SIMP BEHAVIORS\nTHAT MAKE YOU LESS\nATTRACTIVE TO WOMEN", [
+        dict(testo="[[40 COMPORTAMENTI DA ZERBINO]]\nCHE AGLI OCCHI DI UNA DONNA\nTI RENDONO MENO ATTRAENTE", x=67, y=688, w=867, h=278, colore="#FFFFFF", colore_evidenziato="#1EA7DD", allineamento="center", maiuscolo=True, carattere=T)],
+        "al centro: avatar rotondo con due linee e @themasculinecreed sotto", {"x": 430, "y": 556, "w": 137, "h": 111}),
 }
 
 
@@ -113,7 +118,7 @@ def main(out_dir: str, salva: bool = False):
         b = io.BytesIO(); o.save(b, "JPEG", quality=95)
         sl = {"numero": 2, "testo": "\n\n".join(x["testo"] for x in blocks), "testo_originale": orig_txt,
               "sfondo": sfondo, "watermark_originale": (marchio or [""])[0], "da_modificare": True, "altri_marchi": [],
-              "watermark_riquadro": NONE, "blocchi": [dict(x) for x in blocks]}
+              "watermark_riquadro": (marchio[1:] or [NONE])[0], "blocchi": [dict(x) for x in blocks]}
         try:
             img, ok, pr = images.render_slide(b.getvalue(), sl, brand, "codice")
         except Exception as e:
