@@ -25,7 +25,7 @@ from pathlib import Path
 import yaml
 from PIL import Image, ImageDraw
 
-from . import config, textslide, writer
+from . import config, costi, textslide, writer
 
 log = logging.getLogger(__name__)
 
@@ -277,13 +277,42 @@ def scrivi(brand: dict, tema: str, tipo: str | None, rules: list[dict]) -> dict:
     }[tipo]
     out = writer._tool_call(_system(brand, rules),
                             [{"type": "text", "text": f"Tema: {tema}\n{richiesta}\nScrivi con lo strumento serie_storie."}],
-                            STORIE_TOOL, model=config.CAPTION_MODEL, max_tokens=4000)
+                            STORIE_TOOL, model=config.STORIE_MODEL, max_tokens=4000)
+    out = _revisione(brand, rules, out, STORIE_TOOL, f"Tema: {tema}\n{richiesta}")
     out["tipo"] = tipo
     out["struttura"] = struttura or ""
     out["cta"] = cta
     out["slides"] = (out.get("slides") or [])[:1 if tipo == "domande" else 4]
     _pulisci(out, brand)
     return out
+
+
+def _revisione(brand: dict, rules: list[dict], bozza: dict, tool: dict, richiesta: str) -> dict:
+    """Secondo passaggio da editor: rilegge la serie come un copywriter italiano e la riscrive dove suona da AI,
+    non scorre o ha errori (Gabriele, 8/11). Se fallisce si tiene la bozza."""
+    import json as _json
+    try:
+        testo = ("Sei l'EDITOR della pagina. Qui sotto c'è la bozza di una serie di storie scritta da un collega. "
+                 "Rileggila come la leggerebbe un follower e riscrivila dove serve, seguendo il prompt (soprattutto "
+                 "RITMO E VOCE e PROFONDITÀ):\n"
+                 "- elimina tutto ciò che suona da AI: frasi da libro, metafore accumulate, aforismi in fila, formule "
+                 "ripetute, aperture meccaniche;\n"
+                 "- deve essere un discorso unico e fluido dalla prima all'ultima slide, con un'idea forte e chiara;\n"
+                 "- a capo dopo ogni frase (\\n), righe corte, parole rosse **…** sui concetti chiave;\n"
+                 "- correggi ogni errore di italiano e ogni salto logico;\n"
+                 "- tieni la stessa struttura, lo stesso numero di slide, lo stesso tipo di chiusura, sfondo e "
+                 "domanda (se c'è). Se una frase è già perfetta, lasciala.\n\n"
+                 f"RICHIESTA ORIGINALE: {richiesta}\n\nBOZZA:\n{_json.dumps(bozza, ensure_ascii=False)}\n\n"
+                 f"Restituisci la versione finale con lo strumento {tool['name']}.")
+        nuova = writer._tool_call(_system(brand, rules), [{"type": "text", "text": testo}], tool,
+                                  model=config.STORIE_MODEL, max_tokens=4000)
+        if nuova.get("slides"):
+            return {**bozza, **nuova}
+    except costi.TettoSpesa:
+        raise
+    except Exception as e:
+        log.warning("Revisione delle storie non riuscita, tengo la bozza: %s", e)
+    return bozza
 
 
 def _pulisci(out: dict, brand: dict) -> None:
@@ -293,7 +322,8 @@ def _pulisci(out: dict, brand: dict) -> None:
 
 def _pulisci_blocco(testo: str, brand: dict) -> str:
     """Pulisce e censura il testo tenendo i ** delle parole chiave (la pulizia normale toglierebbe gli asterischi)."""
-    pezzi = (testo or "").split("**")
+    testo = (testo or "").replace("\\n", "\n")            # a volte il modello scrive "\n" alla lettera
+    pezzi = testo.split("**")
     def pulito(p: str) -> str:            # la pulizia toglie gli spazi ai bordi: si rimettono (servono tra le parole)
         if not p.strip():
             return p
@@ -349,16 +379,22 @@ def _testo(parola: list[tuple[str, bool]]) -> str:
 
 
 def _righe(draw, testo: str, font, max_w: int) -> list[list[list[tuple[str, bool]]]]:
-    righe, cur = [], []
-    for p in _parole(testo):
-        prova = " ".join(_testo(w) for w in cur + [p])
-        if cur and draw.textlength(prova, font=font) > max_w:
+    """A capo dove lo scrive il testo (\\n: una frase per riga, come nelle storie vere) e quando la riga è piena."""
+    righe = []
+    aperti = 0                                        # ** aperti nelle righe prima (parola rossa a cavallo)
+    for pezzo in (testo or "").split("\n"):
+        riga_txt = ("**" if aperti % 2 else "") + pezzo
+        aperti += pezzo.count("**")
+        cur = []
+        for p in _parole(riga_txt):
+            prova = " ".join(_testo(w) for w in cur + [p])
+            if cur and draw.textlength(prova, font=font) > max_w:
+                righe.append(cur)
+                cur = [p]
+            else:
+                cur.append(p)
+        if cur:
             righe.append(cur)
-            cur = [p]
-        else:
-            cur.append(p)
-    if cur:
-        righe.append(cur)
     return righe
 
 
@@ -632,7 +668,8 @@ def rispondi(brand: dict, slug: str, rules: list[dict], jdir: Path, foto: bytes 
                     "didattica aperta ('Finché non capirai…, continuerai a…') oppure, se vendita, la chiusura di vendita "
                     "indicata sotto. Tono duro e lucido, mai moralizzante, mai "
                     "motivazionale, mai da coach gentile. " + forza + " Usa lo strumento risposta_storia."})
-    out = writer._tool_call(_system(brand, rules), content, RISPOSTA_TOOL, model=config.CAPTION_MODEL, max_tokens=4000)
+    out = writer._tool_call(_system(brand, rules), content, RISPOSTA_TOOL, model=config.STORIE_MODEL, max_tokens=4000)
+    out = _revisione(brand, rules, out, RISPOSTA_TOOL, "Risposta a una domanda del box: " + str(out.get("domanda", "")))
     if chiusura:
         out["chiusura"] = chiusura
     out["slides"] = (out.get("slides") or [])[:3]

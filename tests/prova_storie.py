@@ -70,3 +70,14 @@ print("prima storia:", Path(T) / "attraiseduci" / "storia_01.jpg")
 assert storie.capisci_richiesta("marketing gelosia") == ("vendita", "gelosia")
 assert storie.capisci_richiesta("box gelosia") == ("domande", "gelosia")
 print("storie ok")
+
+# a capo voluti (\n) rispettati, parola rossa a cavallo di due righe compresa; "\\n" scritto alla lettera ripulito
+from PIL import Image, ImageDraw
+d = ImageDraw.Draw(Image.new("RGB", (10, 10)))
+f = storie._font(storie.FONT_BOLD, 50) if hasattr(storie, "_font") else None
+if f is not None:
+    r = storie._righe(d, "Risponde quando **vuole**,\ncambia tono,\na volte è **coinvolta\na volte** distante.", f, 900)
+    assert len(r) == 4, r
+    assert r[3][1][0][1] is True and r[3][2][0][1] is False, r[3]      # "volte" rosso, "distante." no
+assert "\n" in storie._pulisci_blocco("Prima frase.\\nSeconda frase.", writer.load_brand())
+print("a capo ok")

@@ -41,6 +41,36 @@ PROFONDITÀ (Gabriele, 6/11: "un livello di profondità leggermente maggiore")
   · l'ultima frase lascia un collegamento aperto che lui chiude da solo con la sua vita.
 - Profondo non vuol dire lungo: stessi blocchi brevi, ma ogni frase porta un pezzo di ragionamento.
 
+RITMO E VOCE (Gabriele, 8/11: "si sente che è fatto dall'AI, non è fluido")
+- Vai a capo dopo ogni frase o pezzo di frase (scrivi \n nel blocco): righe corte, al massimo 8-9 parole, come
+  nelle storie vere della pagina. Mai un paragrafo unico che va a capo da solo.
+- Al massimo 3 frasi per blocco e 2-3 blocchi per slide; la prima slide ha un blocco solo.
+- Italiano parlato, come lo direbbe un uomo sveglio a un amico: parole semplici e concrete. Niente frasi da libro,
+  niente aforismi in fila, niente metafore accumulate (al massimo UNA immagine in tutta la serie, solo se è
+  semplice e forte).
+- Non chiudere ogni slide con una massima: alterna la frase secca e la sospensione con "…".
+- Non usare due volte nella stessa serie la stessa formula ("Non è X. È Y.", "La verità è questa:", "Il punto è…").
+- Le tecniche della PROFONDITÀ sono ingredienti, non formule da incollare: non aprire per forza con "Pensa
+  all'ultima volta che…" o "Ti sei mai chiesto…".
+- È UN DISCORSO UNICO: ogni slide riprende il filo della precedente (una parola, una situazione), niente frasi
+  staccate né cambi di argomento. Se accusi il lettore, spiega subito perché.
+- Ortografia, concordanze e punteggiatura italiana perfette. Le parole rosse (**…**) non vanno spezzate su due righe.
+
+ESEMPI VERI DELLA PAGINA (per ritmo e tono: NON copiarli, non riusarne le frasi)
+Serie "rispetto", slide 1:
+  Ti è mai capitato di **sentire** che lei c'è…\nma non ti **rispetta** davvero?\nNon sparisce…\nma qualcosa **non torna**.
+Slide 2:
+  Risponde quando **vuole**,\ncambia tono,\na volte è coinvolta, a volte distante.
+  E tu resti lì a cercare di **sistemare** tutto,\ndi riportare la situazione a com'era **prima**.
+Slide 3:
+  Il punto che quasi nessuno capisce è questo:\n**l'attrazione** non nasce da quello che fai per lei.
+  Nasce da quanto **lei** inizia a **investire** in te.\nSe sei sempre tu a scrivere, a **cercare**, a portare avanti…
+  stai costruendo interesse da una parte **sola**.
+Risposta al box "Cosa significa quando ti provoca, però non vuole fare nulla?":
+  Significa che sta **giocando** con la **tensione**, non con te.
+  Ti avvicina, poi si ferma. Ti accende, poi si tira indietro.\nE in quel momento non vuole portarti da nessuna parte…\nvuole vedere cosa fai quando non hai il **controllo**.
+  Se resti **lucido** o se perdi la testa.
+
 REGOLE DI SCRITTURA
 - Frasi brevi, mai subordinate complesse. Seconda persona singolare (tu), presente: immedesimazione.
 - Mai nozioni accademiche o linguaggio da libro.

@@ -1312,7 +1312,7 @@ def main():
     app.add_handler(CommandHandler("stile", cmd_stile))
     app.add_handler(CommandHandler("studio", cmd_studio))
     app.add_handler(CommandHandler("crea", cmd_crea))
-    app.add_handler(CommandHandler("storie", cmd_storie))
+    app.add_handler(CommandHandler(["storie", "storia"], cmd_storie))     # /storia: errore di battitura comune
     app.add_handler(CommandHandler("risposta", cmd_risposta))
     app.add_handler(CommandHandler("strutture", cmd_strutture))
     app.add_handler(CommandHandler("sfondi", cmd_sfondi))
