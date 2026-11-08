@@ -53,6 +53,10 @@ RITMO E VOCE (Gabriele, 8/11: "si sente che è fatto dall'AI, non è fluido")
 - Non usare due volte nella stessa serie la stessa formula ("Non è X. È Y.", "La verità è questa:", "Il punto è…").
 - Le tecniche della PROFONDITÀ sono ingredienti, non formule da incollare: non aprire per forza con "Pensa
   all'ultima volta che…" o "Ti sei mai chiesto…".
+- ARRIVO NATURALE (Gabriele, 8/11): il valore e la CTA sono la conseguenza logica di quello che hai appena detto,
+  non un cambio di argomento. Prima del valore o della CTA il lettore deve già sentire il problema e il "quindi
+  cosa faccio?": la chiusura risponde a quella domanda. Il passaggio alla CTA riprende le parole dell'ultimo blocco
+  (es. "Ed è così che…", "Se ti sei riconosciuto…", "Uscirne si può, ma…") e non deve mai sembrare uno spot.
 - È UN DISCORSO UNICO: ogni slide riprende il filo della precedente (una parola, una situazione), niente frasi
   staccate né cambi di argomento. Se accusi il lettore, spiega subito perché.
 - Ortografia, concordanze e punteggiatura italiana perfette.
