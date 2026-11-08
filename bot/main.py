@@ -191,9 +191,23 @@ async def cmd_pagina(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # ---------------------------------------------------------------- comandi
 
+async def _manda_lungo(msg, testo: str, limite: int = 3900):
+    """Telegram rifiuta i messaggi oltre 4096 caratteri: si spezza ai capoversi (8/11: /comandi non rispondeva più)."""
+    pezzi, cur = [], ""
+    for riga in testo.split("\n"):
+        if len(cur) + len(riga) + 1 > limite and cur:
+            pezzi.append(cur)
+            cur = ""
+        cur += riga + "\n"
+    if cur.strip():
+        pezzi.append(cur)
+    for p in pezzi:
+        await msg.reply_text(p.rstrip())
+
+
 async def cmd_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if await _authorized(update):
-        await update.effective_message.reply_text(HELP)
+        await _manda_lungo(update.effective_message, HELP)
 
 
 async def cmd_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -1040,7 +1054,7 @@ async def on_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if job:
         await process_revision(update, context, job, text)
     else:
-        await msg.reply_text(HELP)
+        await _manda_lungo(msg, HELP)
 
 
 # ---------------------------------------------------------------- avvio
