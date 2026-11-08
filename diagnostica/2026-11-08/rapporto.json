@@ -1,18 +1,34 @@
 {
  "giorno": "2026-11-08",
- "post_preparati": 5,
- "slide_totali": 45,
+ "post_preparati": 17,
+ "slide_totali": 159,
  "slide_fallite": 2,
  "lavorazione": {
+  "openai-testo": {
+   "totali": 29,
+   "fallite": 0
+  },
+  "cta-alone": {
+   "totali": 3,
+   "fallite": 0
+  },
   "blocchi-ricostruzione-codice": {
-   "totali": 4,
+   "totali": 6,
    "fallite": 0
   },
   "testo-su-sfondo-uniforme": {
-   "totali": 31,
+   "totali": 97,
    "fallite": 0
   },
   "cta-stile-post": {
+   "totali": 12,
+   "fallite": 0
+  },
+  "cta-illustrata": {
+   "totali": 2,
+   "fallite": 0
+  },
+  "blocchi-pulizia-codice": {
    "totali": 4,
    "fallite": 0
   },
@@ -20,17 +36,526 @@
    "totali": 2,
    "fallite": 2
   },
-  "openai-testo": {
-   "totali": 3,
-   "fallite": 0
-  },
-  "cta-alone": {
-   "totali": 1,
+  "blocchi-sfondo-pieno": {
+   "totali": 4,
    "fallite": 0
   }
  },
- "segnalazioni": [],
+ "segnalazioni": [
+  {
+   "job_id": 80,
+   "testo": "completamente sbagliata",
+   "quando": "2026-11-06T10:08:57+00:00"
+  },
+  {
+   "job_id": 87,
+   "testo": "rimangono le sfumature dietro lo sfondo e sono brutte",
+   "quando": "2026-11-08T16:52:43+00:00"
+  }
+ ],
  "post_con_problemi": [
+  {
+   "job_id": 80,
+   "fonte": "https://www.instagram.com/p/DbY0PhtAoI4/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Dominatemanhood_ @Dominatemanhood_\nBefore You Catch Feelings,\nAsk Her This First",
+     "testo": "Prima di perdere la testa per lei,\nfalle queste domande",
+     "blocchi": [
+      {
+       "x": 138,
+       "y": 405,
+       "w": 615,
+       "h": 100,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "1. What kind of relationship are you actually open to right now?\n\nNo vague answers. No \"we'll see.\" You want clarity.\n\n2. When conflict happens, how do you usually respond?\n\nDoes she work through it or shut down and run?",
+     "testo": "1. Che tipo di relazione cerchi davvero,\nadesso?\n\nNiente risposte vaghe. Niente \"vediamo\".\nTi serve chiarezza.\n\n2. Quando litigate, di solito\ncome reagisci?\n\nAffronta il problema o si chiude\ne scappa?",
+     "blocchi": [
+      {
+       "x": 61,
+       "y": 195,
+       "w": 845,
+       "h": 83,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 61,
+       "y": 342,
+       "w": 845,
+       "h": 78,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 61,
+       "y": 540,
+       "w": 800,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 61,
+       "y": 688,
+       "w": 845,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "3. What does commitment look like to you?\n\nPeople use the same word, but mean very different things.\n\n4. Have you ever been unfaithful in a relationship?\n\nPay attention to her energy, not just her words.",
+     "testo": "3. Per te cosa vuol dire impegnarsi?\n\nTutti usano la stessa parola, ma ognuno\nintende una cosa diversa.\n\n4. Hai mai tradito qualcuno?\n\nGuarda come reagisce, non solo\ncosa dice.",
+     "blocchi": [
+      {
+       "x": 67,
+       "y": 310,
+       "w": 800,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 67,
+       "y": 398,
+       "w": 830,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 67,
+       "y": 520,
+       "w": 780,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 67,
+       "y": 640,
+       "w": 800,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "5. What are your dealbreakers in a relationship?\n\nSee if they're based on values or emotional baggage.\n\n6. How do you usually show love?\n\nWords, actions, time, touch, or gifts—people give love differently.",
+     "testo": "5. Cosa non accetteresti mai\nin una relazione?\n\nCapisci se nasce dai suoi valori o dalle\nferite del passato.\n\n6. Come dimostri amore, di solito?\n\nParole, gesti, tempo, contatto o regali:\nognuno ama a modo suo.",
+     "blocchi": [
+      {
+       "x": 55,
+       "y": 270,
+       "w": 680,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 55,
+       "y": 410,
+       "w": 830,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 55,
+       "y": 555,
+       "w": 640,
+       "h": 42,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 55,
+       "y": 645,
+       "w": 850,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "7. What makes you feel respected in a relationship?\n\nRespect means different things to different people. Find out early.\n\n8. What role do you think trust plays in a relationship?\n\nListen for consistency, honesty, and accountability—not just nice answers.",
+     "testo": "7. Cosa ti fa sentire rispettata\nin una coppia?\n\nIl rispetto non vuol dire la stessa cosa\nper tutti. Scoprilo subito.\n\n8. Quanto conta per te la fiducia\nin una coppia?\n\nCerca coerenza, sincerità e senso di\nresponsabilità, non belle parole.",
+     "blocchi": [
+      {
+       "x": 52,
+       "y": 270,
+       "w": 750,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 52,
+       "y": 410,
+       "w": 830,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 52,
+       "y": 548,
+       "w": 780,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 52,
+       "y": 685,
+       "w": 800,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "9. How do you view providing in a relationship?\n\nListen for maturity, not entitlement.\n\n10. What do you want most from a man?\n\nIs she looking for a teammate or just validation?",
+     "testo": "9. Secondo te, in una coppia,\nchi deve provvedere e come?\n\nCerca maturità, non pretese.\n\n10. Cosa vuoi più di tutto da un uomo?\n\nCerca un compagno di squadra o solo\nqualcuno che la applauda?",
+     "blocchi": [
+      {
+       "x": 64,
+       "y": 270,
+       "w": 680,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 64,
+       "y": 412,
+       "w": 680,
+       "h": 42,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 64,
+       "y": 508,
+       "w": 790,
+       "h": 42,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 64,
+       "y": 597,
+       "w": 800,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "11. How do you handle jealousy?\n\nThis tells you a lot about emotional maturity.\n\n12. What's something you regret in past relationships?\n\nLook for self-awareness, not finger-pointing.",
+     "testo": "11. Come gestisci la gelosia?\n\nTi dice molto sulla sua maturità\nemotiva.\n\n12. Cosa rimpiangi delle tue relazioni\npassate?\n\nCerca consapevolezza, non il dito\npuntato sempre sugli altri.",
+     "blocchi": [
+      {
+       "x": 82,
+       "y": 270,
+       "w": 620,
+       "h": 42,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 82,
+       "y": 368,
+       "w": 700,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 82,
+       "y": 508,
+       "w": 780,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 82,
+       "y": 647,
+       "w": 780,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "13. How important is personal growth to you?\n\nThe right person grows with you—not against you.\n\n14. What boundaries are non-negotiable for you?\n\nHealthy boundaries create healthy relationships.",
+     "testo": "13. Quanto conta per te crescere\ncome persona?\n\nLa persona giusta cresce con te,\nnon contro di te.\n\n14. Su quali limiti\nnon transigi?\n\nLimiti sani,\nrelazioni sane.",
+     "blocchi": [
+      {
+       "x": 80,
+       "y": 270,
+       "w": 780,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 410,
+       "w": 740,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 548,
+       "w": 790,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 685,
+       "w": 680,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "15. What does emotional support look like to you?\n\nMake sure your expectations aren't completely different.\n\n16. What's one lesson every relationship has taught you?\n\nExperience only matters if it leads to growth.",
+     "testo": "15. Per te cosa vuol dire sostenersi\na vicenda?\n\nAssicurati che non vi aspettiate\ndue cose opposte.\n\n16. Cosa ti ha insegnato ogni relazione\nche hai avuto?\n\nL'esperienza conta solo se ti ha fatto\ncrescere.",
+     "blocchi": [
+      {
+       "x": 64,
+       "y": 270,
+       "w": 830,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 64,
+       "y": 410,
+       "w": 720,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 64,
+       "y": 548,
+       "w": 800,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 64,
+       "y": 685,
+       "w": 730,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 10,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "17. How do you act when you realize you were wrong?\n\nThe ability to own mistakes matters a lot.\n\n18. What does loyalty mean to you?\n\nNever assume your definitions match.",
+     "testo": "17. Come ti comporti quando ti accorgi\ndi aver sbagliato?\n\nSaper ammettere i propri errori conta, e tanto.\n\n18. Per te cosa vuol dire lealtà?\n\nNon dare mai per scontato che intendiate\nla stessa cosa.",
+     "blocchi": [
+      {
+       "x": 80,
+       "y": 270,
+       "w": 800,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 410,
+       "w": 820,
+       "h": 42,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 508,
+       "w": 760,
+       "h": 42,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 597,
+       "w": 800,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 11,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se anche una sola di queste 18 domande\nti ha fatto pensare a lei…\ne vuoi davvero smettere di inseguire\ne capire cosa porta una donna a sceglierti\ninvece di usarti finché le fai comodo…\ndevi cambiare il modo in cui interpreti\nogni interazione.\n\nNel mio manuale\n\"Diventa l'uomo a cui nessuna donna sa resistere\"\ntrovi le dinamiche psicologiche che spiegano\nperché alcune attenzioni aumentano l'attrazione\ne altre la distruggono, anche se sembrano giuste.\n\nDai un'occhiata al link in bio\no commenta con ",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Prima di innamorarti di una donna, falle delle domande precise per capire se siete compatibili davvero e non solo attratti. Per ogni domanda il post ti dice cosa ascoltare nella risposta: chiarezza, maturità emotiva, capacità di riconoscere i propri errori, lealtà, valori. Il messaggio di fondo: prima del cuore viene il carattere. Registro diretto, pratico, da fratello maggiore.",
+   "descrizione": "Un uomo mi ha scritto dopo otto mesi con lei: «Non so chi ho accanto». Alla prima vera discussione lei era sparita per tre giorni. Solo lì si è accorto di non averle mai chiesto come reagisce quando le cose si complicano.\n\nSuccede a molti. C'è chimica, lei ti cerca, e in tre settimane hai già deciso che è quella giusta. Le domande serie le rimandi per non rompere la magia. Mesi dopo scopri cose che potevi sapere al terzo appuntamento, e le paghi in tempo e in stima di te.\n\nNel 2005 l'antropologa Helen Fisher ha osservato con la risonanza magnetica il cervello di persone appena innamorate: si accendono i circuiti della ricompensa legati alla dopamina, gli stessi coinvolti nelle dipendenze. Già nel 1972 Dion, Berscheid e Walster avevano mostrato che a chi ci attrae attribuiamo qualità che nessuno ha verificato. Quando sei preso, il tuo cervello compila da solo le risposte che lei non ti ha mai dato.\n\nEd è qui che molti uomini commettono l'errore: credono che fare domande serie li renda pesanti, poco attraenti. Succede l'opposto. Chi aspetta di essere approvato non chiede niente. Chi sa di poter scegliere osserva, e lei quella calma la sente come sicurezza.\n\nQueste domande non sono un interrogatorio. Vanno lasciate cadere nelle conversazioni, una alla volta, guardando come risponde più di cosa risponde. Un'idea vaga di impegno, la colpa sempre agli ex, la gelosia spacciata per amore: sono informazioni.\n\nLa chimica ti dice che la vuoi. Il carattere ti dice se puoi costruirci qualcosa.\n\nQuale di queste domande non hai mai avuto il coraggio di fare alla donna che ti piace?\n\nSe anche una sola di queste 18 domande ti ha fatto pensare a una donna precisa, sai già dove rischi di perdere lucidità. Ho scritto un manuale che ti insegna a creare attrazione senza perdere la testa e il tuo valore. Si chiama \"Diventa l'uomo a cui nessuna donna sa resistere\": lo trovi nel link in bio, oppure commenta ATTRAZIONE e te lo mando in DM.\n\n#attrazione #psicologiafemminile #relazioni #seduzione",
+   "segnalazioni": [
+    "completamente sbagliata"
+   ]
+  },
   {
    "job_id": 85,
    "fonte": "https://www.instagram.com/p/Denksm5E8rF/",
@@ -1336,6 +1861,313 @@
    "concetto": "Una lista di 40 comportamenti da \"zerbino\" che un uomo fa pensando di conquistare una donna e che invece lo rendono meno attraente: troppa disponibilità, insicurezza, niente guida, intenzioni vaghe, attenzioni regalate senza che lei abbia fatto nulla per meritarle. Il messaggio è: smettila di elemosinare la sua approvazione, prendi l'iniziativa, sii chiaro e fai in modo che sia lei a guadagnarsi la tua presenza. Il tono è diretto, un po' provocatorio, da fratello maggiore che ti fa notare gli errori.",
    "descrizione": "Nessuna donna si è mai allontanata da te perché eri poco gentile. Molte si sono allontanate perché eri sempre disponibile.\n\nLe scrivi per tenerla vicina. Le dai ragione per evitare tensioni. Aspetti un segnale chiaro prima di baciarla. Ogni gesto ti sembra rispetto, ma lei ci vede un uomo che ha paura di perderla prima ancora di averla. E tu resti lì, umiliato, senza capire dove hai sbagliato, perché non hai fatto niente di male.\n\nNon la perdi in un colpo solo. Perdi valore un messaggio alla volta, finché diventi quello che c'è sempre e che nessuno sceglie.\n\nNel 2007 Paul Eastwick ed Eli Finkel hanno studiato centinaia di incontri di speed dating alla Northwestern University. Chi mostrava interesse per tutti indistintamente veniva desiderato meno. L'interesse attrae quando è selettivo, quando lei sente di essere stata scelta e non semplicemente accettata. Jennifer Crocker ha spiegato l'altra metà: se la tua stima dipende dall'approvazione di lei, ogni sua reazione diventa un verdetto, e i tuoi messaggi cominciano a sapere di ansia.\n\nEd è qui che molti uomini commettono l'errore: provano a correggere questi quaranta comportamenti uno per uno, come fossero copioni. Ma nascono quasi tutti dalla stessa radice. La faccina a cuore, il paletto messo in punta di piedi, il \"forse\" in ogni frase: è sempre un uomo che chiede il permesso di stare accanto a lei.\n\nQuando la tua vita ha un centro che non dipende da lei, la frecciatina smette di bruciare, il bacio non ha bisogno di autorizzazioni e un suo no diventa un'informazione, non una condanna.\n\nUna donna non si allontana dall'uomo che sa dirle di no. Si allontana da quello che non ne ha mai il coraggio.\n\nSe ti sei riconosciuto anche in uno solo di questi 40 comportamenti, il problema non è cosa fai ma da dove parti. Ho scritto un manuale che ti spiega cosa accende il desiderio femminile e quali attenzioni lo spengono, anche quando sembrano giuste. Si chiama \"Diventa l'uomo a cui nessuna donna sa resistere\": lo trovi nel link in bio, oppure commenta \"ATTRAZIONE\" e te lo mando in DM.\n\n#attrazione #psicologiafemminile #seduzione #relazioni",
    "segnalazioni": []
+  },
+  {
+   "job_id": 87,
+   "fonte": "https://www.instagram.com/p/DfcgxiPElsp/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "\"He has a body count of 20.\"\n\nMeans he convinced 20 women he was worth choosing.\n\n\"She has a body count of 20.\"\n\nMeans 20 men convinced her they were worth choosing.",
+     "testo": "\"Lui è stato con 20 donne.\"\n\nVuol dire che 20 donne\nle ha convinte a scegliere lui.\n\n\"Lei è stata con 20 uomini.\"\n\nVuol dire che 20 uomini hanno\nconvinto lei a scegliere loro.",
+     "blocchi": [
+      {
+       "x": 101,
+       "y": 308,
+       "w": 723,
+       "h": 45,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 437,
+       "w": 763,
+       "h": 100,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 627,
+       "w": 723,
+       "h": 45,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 757,
+       "w": 723,
+       "h": 108,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Same number. Completely different road.\n\nFor him,\n\naccess usually required attraction, confidence, timing, and opportunity.\n\nFor her,\n\nthe gate was hers to open.\n\nSave for later",
+     "testo": "Stesso numero. Strada tutta diversa.\n\nPer lui,\n\ndi solito servivano attrazione, sicurezza,\ntempismo e l'occasione giusta.\n\nPer lei,\n\nla porta la apriva lei.\n\nSalva per dopo",
+     "blocchi": [
+      {
+       "x": 101,
+       "y": 293,
+       "w": 796,
+       "h": 32,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 383,
+       "w": 160,
+       "h": 30,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 464,
+       "w": 753,
+       "h": 75,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 593,
+       "w": 160,
+       "h": 32,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 682,
+       "w": 487,
+       "h": 30,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 393,
+       "y": 937,
+       "w": 205,
+       "h": 25,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "That's why men hear the same number and judge it differently.\n\nOne sees proof of repeated success.\nThe other sees repeated permission.\n\nSame scoreboard.\nDifferent game.\n\nSave for later",
+     "testo": "Ecco perché gli uomini, davanti allo stesso\nnumero, lo giudicano in due modi opposti.\n\nIn lui vedono successi conquistati uno per uno.\nIn lei, permessi concessi uno per uno.\n\nIl punteggio è lo stesso.\nLa partita no.\n\nSalva per dopo",
+     "blocchi": [
+      {
+       "x": 101,
+       "y": 337,
+       "w": 741,
+       "h": 72,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 467,
+       "w": 694,
+       "h": 72,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 596,
+       "w": 337,
+       "h": 70,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 393,
+       "y": 937,
+       "w": 205,
+       "h": 25,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Men usually have to create the opportunity.\n\nWomen more often decide which opportunity gets accepted.\n\nOne knocks. One opens.\n\nCounting doors without asking who had the keys misses the entire argument.\n\nSave for later",
+     "testo": "Di solito l'occasione l'uomo\ndeve crearsela.\n\nLa donna, più spesso, sceglie\nquale accettare.\n\nUno bussa. L'altra apre.\n\nChi conta le porte senza chiedersi chi aveva\nle chiavi non ha capito niente.\n\nSalva per dopo",
+     "blocchi": [
+      {
+       "x": 101,
+       "y": 291,
+       "w": 576,
+       "h": 72,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 420,
+       "w": 638,
+       "h": 75,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 551,
+       "w": 456,
+       "h": 32,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 634,
+       "w": 760,
+       "h": 72,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 393,
+       "y": 937,
+       "w": 205,
+       "h": 25,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "So when someone says:\n\"20 is 20.\"\n\nNumerically? Absolutely.\nSocially? That's where the war starts.\n\nSame destination.\nDifferent admission process.\n\nSave for later",
+     "testo": "Quindi, quando qualcuno ti dice:\n\"20 sono 20.\"\n\nPer la matematica? Certo.\nNella vita reale? È lì che scoppia la guerra.\n\nStessa meta.\nDiversa la selezione all'ingresso.\n\nSalva per dopo",
+     "blocchi": [
+      {
+       "x": 101,
+       "y": 335,
+       "w": 456,
+       "h": 70,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 467,
+       "w": 714,
+       "h": 72,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 593,
+       "w": 539,
+       "h": 72,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 393,
+       "y": 937,
+       "w": 205,
+       "h": 25,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "cta-alone",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se questo confronto ti ha fatto pensare\na tutte le porte rimaste chiuse…\nse anche tu stai ancora aspettando\nche qualcuna ti apra,\ndevi cambiare il modo in cui interpreti\nogni interazione.\n\nNel mio manuale\n\"Diventa l'uomo a cui nessuna donna sa resistere\"\ntrovi le dinamiche psicologiche che spiegano\nperché alcune attenzioni aumentano l'attrazione\ne altre la distruggono, anche se sembrano giuste.\n\nDai un'occhiata al link in bio\no commenta con \"ATTRAZIONE\"\ne te lo invio in DM.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Il numero di partner è lo stesso, ma la strada per arrivarci è completamente diversa. Un uomo con 20 donne ha dovuto convincerne 20 a sceglierlo, quindi ci sono voluti attrazione, sicurezza e occasioni. Una donna con 20 uomini è stata convinta 20 volte, perché decideva lei chi far entrare. Per questo gli uomini giudicano in modo diverso lo stesso numero: in un caso vedono successi ripetuti, nell'altro permessi ripetuti. Il tono è provocatorio e polarizzante, sul doppio standard uomo/donna.",
+   "descrizione": "Quante porte hai dovuto bussare prima che se ne aprisse una?\n\nPensa all'ultima donna che è uscita con te. Prima di lei, quante conversazioni morte dopo tre messaggi, quanti \"sono impegnata\", quante serate in cui hai trovato il coraggio di avvicinarti e sei tornato a casa a mani vuote. Dietro ogni sì che un uomo ottiene ci sono rifiuti che nessuno conta.\n\nIl confronto del post serve a questo. Non a giudicare chi ha avuto più partner, ma a capire quanto ti costa ogni singolo incontro. E a capire perché tanti uomini, dopo l'ennesimo no, smettono di provarci e si convincono di valere poco.\n\nNel 1972 il biologo Robert Trivers ha formulato la teoria dell'investimento parentale: il ses*o che investe di più nei figli è anche quello più selettivo nella scelta del partner. Anni dopo, alla Florida State University, Russell Clark ed Elaine Hatfield fecero avvicinare studenti e studentesse da sconosciuti che proponevano di passare la notte insieme. Circa tre uomini su quattro accettarono. Nessuna donna.\n\nQuasi sempre, quindi, lei sceglie tra le occasioni che le arrivano. Tu quelle occasioni le devi creare. Non è un'ingiustizia da denunciare, è il terreno su cui giochi.\n\nEd è qui che molti uomini commettono l'errore: passano il tempo ad arrabbiarsi per le regole invece di imparare a giocare. Contano i numeri di lei, si sentono vittime di un sistema che non hanno scelto, e intanto restano fermi davanti alla porta ad aspettare che qualcuno la apra da dentro. Non succede.\n\nOgni rifiuto che hai preso non misura quanto vali. Ti dice solo che bussavi senza sapere come.\n\nLa porta la apre lei. Ma decide se aprirla in base a chi sente dall'altra parte.\n\nQuante volte hai smesso di bussare solo perché l'ultima porta era rimasta chiusa?\n\nSe questo confronto ti ha fatto pensare a tutti i no che ti porti dietro, il problema non è il numero ma il modo in cui ti presenti a quella porta. Ho scritto un manuale che ti spiega cosa accende l'attrazione in una donna prima ancora che tu apra bocca. Si chiama \"Diventa l'uomo a cui nessuna donna sa resistere\": lo trovi nel link in bio, oppure commenta ATTRAZIONE e te lo mando in DM.",
+   "segnalazioni": [
+    "rimangono le sfumature dietro lo sfondo e sono brutte"
+   ]
   }
  ]
 }
