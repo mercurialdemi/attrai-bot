@@ -13,7 +13,7 @@ FORMATO
   "Fai caso a questo.", "E quindi cosa succede, nella pratica?". Costrutti: "Non è X. È Y.", "Non perché… ma perché…".
 
 SLIDE 1 (GANCIO)
-- Un solo blocco, più breve delle altre slide (2-3 righe, esce scritto più grande), al centro della slide come tutte le altre (solo la storia che apre il box domande
+- Un solo blocco, il più breve della serie (1-2 frasi, esce scritto più grande), che ferma lo scroll, al centro della slide come tutte le altre (solo la storia che apre il box domande
   lascia libera la metà alta per lo sticker). Il gancio segue la formula della struttura.
 
 CHIUSURA
@@ -42,9 +42,10 @@ PROFONDITÀ (Gabriele, 6/11: "un livello di profondità leggermente maggiore")
 - Profondo non vuol dire lungo: stessi blocchi brevi, ma ogni frase porta un pezzo di ragionamento.
 
 RITMO E VOCE (Gabriele, 8/11: "si sente che è fatto dall'AI, non è fluido")
-- Vai a capo dopo ogni frase o pezzo di frase (scrivi \n nel blocco): righe corte, al massimo 8-9 parole, come
-  nelle storie vere della pagina. Mai un paragrafo unico che va a capo da solo.
-- Al massimo 3 frasi per blocco e 2-3 blocchi per slide; la prima slide ha un blocco solo.
+- FORMATO A BLOCCHI (piace così a Gabriele, 8/11): ogni slide ha 2-3 blocchi; ogni blocco è un pezzo di
+  ragionamento scritto di seguito (va a capo da solo, NON scrivere  ), al massimo 3 frasi brevi.
+- LA PRIMA SLIDE è più breve di tutte e deve FERMARE LO SCROLL: un blocco solo, 1-2 frasi, intrigante,
+  che apre una domanda o tocca un nervo scoperto senza spiegare niente. La spiegazione arriva dopo.
 - Italiano parlato, come lo direbbe un uomo sveglio a un amico: parole semplici e concrete. Niente frasi da libro,
   niente aforismi in fila, niente metafore accumulate (al massimo UNA immagine in tutta la serie, solo se è
   semplice e forte).
@@ -54,21 +55,21 @@ RITMO E VOCE (Gabriele, 8/11: "si sente che è fatto dall'AI, non è fluido")
   all'ultima volta che…" o "Ti sei mai chiesto…".
 - È UN DISCORSO UNICO: ogni slide riprende il filo della precedente (una parola, una situazione), niente frasi
   staccate né cambi di argomento. Se accusi il lettore, spiega subito perché.
-- Ortografia, concordanze e punteggiatura italiana perfette. Le parole rosse (**…**) non vanno spezzate su due righe.
+- Ortografia, concordanze e punteggiatura italiana perfette.
 
 ESEMPI VERI DELLA PAGINA (per ritmo e tono: NON copiarli, non riusarne le frasi)
 Serie "rispetto", slide 1:
-  Ti è mai capitato di **sentire** che lei c'è…\nma non ti **rispetta** davvero?\nNon sparisce…\nma qualcosa **non torna**.
+  Ti è mai capitato di **sentire** che lei c'è… ma non ti **rispetta** davvero? Non sparisce… ma qualcosa **non torna**.
 Slide 2:
-  Risponde quando **vuole**,\ncambia tono,\na volte è coinvolta, a volte distante.
-  E tu resti lì a cercare di **sistemare** tutto,\ndi riportare la situazione a com'era **prima**.
+  Risponde quando **vuole**, cambia tono, a volte è coinvolta, a volte distante.
+  E tu resti lì a cercare di **sistemare** tutto, di riportare la situazione a com'era **prima**.
 Slide 3:
-  Il punto che quasi nessuno capisce è questo:\n**l'attrazione** non nasce da quello che fai per lei.
-  Nasce da quanto **lei** inizia a **investire** in te.\nSe sei sempre tu a scrivere, a **cercare**, a portare avanti…
+  Il punto che quasi nessuno capisce è questo: **l'attrazione** non nasce da quello che fai per lei.
+  Nasce da quanto **lei** inizia a **investire** in te. Se sei sempre tu a scrivere, a **cercare**, a portare avanti…
   stai costruendo interesse da una parte **sola**.
 Risposta al box "Cosa significa quando ti provoca, però non vuole fare nulla?":
   Significa che sta **giocando** con la **tensione**, non con te.
-  Ti avvicina, poi si ferma. Ti accende, poi si tira indietro.\nE in quel momento non vuole portarti da nessuna parte…\nvuole vedere cosa fai quando non hai il **controllo**.
+  Ti avvicina, poi si ferma. Ti accende, poi si tira indietro. E in quel momento non vuole portarti da nessuna parte… vuole vedere cosa fai quando non hai il **controllo**.
   Se resti **lucido** o se perdi la testa.
 
 REGOLE DI SCRITTURA
