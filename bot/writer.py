@@ -679,7 +679,25 @@ def _scuole(brand: dict) -> str:
             "(niente 'DHV', 'neediness', 'inner game' ecc.): il lettore deve sentire solo la voce di " + brand["nome"] + ".\n")
 
 
+def guida_pagina(brand: dict | None = None) -> str:
+    """Guida editoriale della pagina scritta da Gabriele (brands/comuni/guide/<pagina>.md): posizionamento, voce,
+    pain point, manuali e CTA giuste. Ha la precedenza sul tono generico."""
+    from . import pagine
+    p = config.ROOT / "brands" / "comuni" / "guide" / f"{pagine.corrente()}.md"
+    try:
+        return p.read_text(encoding="utf-8").strip()
+    except Exception:
+        return ""
+
+
 def _caption_system(brand: dict, rules: list[dict], recent: dict) -> str:
+    guida_p = guida_pagina(brand)
+    return _caption_system_base(brand, rules, recent) + (
+        "\n\nGUIDA EDITORIALE DELLA PAGINA (scritta da Gabriele: ha la precedenza su tono, pubblico e CTA generici; "
+        "le regole di formato della descrizione restano quelle sopra). IMPORTANTE: proponi SOLO i manuali dell'elenco MANUALI della pagina; quelli citati nella guida ma non in elenco non sono ancora in vendita, non nominarli. \n" + guida_p if guida_p else "")
+
+
+def _caption_system_base(brand: dict, rules: list[dict], recent: dict) -> str:
     manuali = "\n".join(
         f"- id: {m['id']} | {m['nome']} | TITOLO DA SCRIVERE (sempre tra virgolette): "
         + ('il bundle "AttraiSeduci" + "Potere Sociale"' if m['id'] == "potere-sociale"

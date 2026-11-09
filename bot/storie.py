@@ -78,7 +78,10 @@ def _profilo(brand: dict) -> str:
             + (f"VOCE DELLE STORIE (ha la precedenza sul tono qui sopra): {' '.join(str(brand['storie_voce']).split())}\n"
                if brand.get("storie_voce") else "")
             + f"MANUALI IN VENDITA:\n{manuali or '- nessuno: niente storie di vendita; chiudi con condividi o rispondi'}\n"
-            f"PAROLE DA CENSURARE (penultima lettera con *): {', '.join(brand.get('parole_censurate') or [])}")
+            f"PAROLE DA CENSURARE (penultima lettera con *): {', '.join(brand.get('parole_censurate') or [])}"
+            + (f"\n\nGUIDA EDITORIALE DELLA PAGINA (scritta da Gabriele: ha la precedenza su voce, pubblico, temi e "
+               f"scelta del manuale; il FORMATO delle storie e la chiusura col link restano quelli del prompt qui sotto, "
+               f"niente sondaggi né 'link in bio'). IMPORTANTE: proponi SOLO i manuali dell'elenco MANUALI della pagina; quelli citati nella guida ma non in elenco non sono ancora in vendita, non nominarli. \n{writer.guida_pagina(brand)}" if writer.guida_pagina(brand) else ""))
 
 
 # ---------------------------------------------------------------- temi
@@ -280,7 +283,7 @@ def scrivi(brand: dict, tema: str, tipo: str | None, rules: list[dict]) -> dict:
     }[tipo]
     out = writer._tool_call(_system(brand, rules),
                             [{"type": "text", "text": f"Tema: {tema}\n{richiesta}\nScrivi con lo strumento serie_storie."}],
-                            STORIE_TOOL, model=config.STORIE_MODEL, max_tokens=4000)
+                            STORIE_TOOL, model=config.STORIE_MODEL, max_tokens=4000, cache_ora=True)
     out = _revisione(brand, rules, out, STORIE_TOOL, f"Tema: {tema}\n{richiesta}")
     out["tipo"] = tipo
     out["struttura"] = struttura or ""
@@ -316,7 +319,7 @@ def _revisione(brand: dict, rules: list[dict], bozza: dict, tool: dict, richiest
                  f"RICHIESTA ORIGINALE: {richiesta}\n\nBOZZA:\n{_json.dumps(bozza, ensure_ascii=False)}\n\n"
                  f"Restituisci la versione finale con lo strumento {tool['name']}.")
         nuova = writer._tool_call(_system(brand, rules), [{"type": "text", "text": testo}], tool,
-                                  model=config.STORIE_MODEL, max_tokens=4000)
+                                  model=config.STORIE_MODEL, max_tokens=4000, cache_ora=True)
         if nuova.get("slides"):
             return {**bozza, **nuova}
     except costi.TettoSpesa:
@@ -681,7 +684,7 @@ def rispondi(brand: dict, slug: str, rules: list[dict], jdir: Path, foto: bytes 
                     "didattica aperta ('Finché non capirai…, continuerai a…') oppure, se vendita, la chiusura di vendita "
                     "indicata sotto. Tono duro e lucido, mai moralizzante, mai "
                     "motivazionale, mai da coach gentile. " + forza + " Usa lo strumento risposta_storia."})
-    out = writer._tool_call(_system(brand, rules), content, RISPOSTA_TOOL, model=config.STORIE_MODEL, max_tokens=4000)
+    out = writer._tool_call(_system(brand, rules), content, RISPOSTA_TOOL, model=config.STORIE_MODEL, max_tokens=4000, cache_ora=True)
     out = _revisione(brand, rules, out, RISPOSTA_TOOL, "Risposta a una domanda del box: " + str(out.get("domanda", "")))
     if chiusura:
         out["chiusura"] = chiusura
