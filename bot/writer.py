@@ -259,7 +259,50 @@ def load_brand() -> dict:
     for key, extra in (("pagine_monitorate", "monitorate"), ("pagine_studio", "studio")):
         base = [h.lower().lstrip("@") for h in brand.get(key) or [] if h]
         brand[key] = [h for h in dict.fromkeys(base + list(ch.get(extra) or [])) if h not in removed]
+    # manuali del catalogo comune attivati per questa pagina (file o /manuali attiva)
+    presenti = {m.get("id") for m in brand.get("manuali") or []}
+    for mid, m in catalogo_manuali().items():
+        if m.get("attivo") and mid not in presenti:
+            brand.setdefault("manuali", []).append({"id": mid, "nome": m.get("nome", mid), "titoli": m.get("titoli") or [m.get("nome", mid)],
+                                                    "dolori": m.get("dolori", ""), "vendita": m.get("vendita", "")})
     return brand
+
+
+def _attivazioni_file() -> Path:
+    from . import pagine
+    return pagine._base_data() / "manuali_attivi.json"
+
+
+def catalogo_manuali(slug: str | None = None) -> dict:
+    """Manuali del catalogo comune (brands/comuni/manuali.yaml) per la pagina, con lo stato attivo/in arrivo
+    (l'attivazione dal bot ha la precedenza sul file)."""
+    from . import pagine
+    slug = slug or pagine.corrente()
+    try:
+        cat = yaml.safe_load((config.ROOT / "brands" / "comuni" / "manuali.yaml").read_text(encoding="utf-8")) or {}
+    except Exception:
+        return {}
+    try:
+        att = json.loads(_attivazioni_file().read_text(encoding="utf-8"))
+    except Exception:
+        att = {}
+    out = {}
+    for mid, m in cat.items():
+        if m.get("pagina") != slug:
+            continue
+        out[mid] = {**m, "attivo": att.get(mid, m.get("stato") == "attivo")}
+    return out
+
+
+def attiva_manuale(mid: str, attivo: bool) -> None:
+    f = _attivazioni_file()
+    try:
+        att = json.loads(f.read_text(encoding="utf-8"))
+    except Exception:
+        att = {}
+    att[mid] = attivo
+    f.parent.mkdir(parents=True, exist_ok=True)
+    f.write_text(json.dumps(att, indent=1), encoding="utf-8")
 
 
 def load_cta_models() -> dict:

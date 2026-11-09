@@ -28,6 +28,9 @@ COMMANDS = [
         ("storie", "Storie: temi proposti o su un tema (es. /storie vendita gelosia)",
          "/storie propone 6 temi; /storie 3 crea il tema 3; /storie <tema> o /storie didattica|vendita|domande <tema>; "
          "struttura a scelta: /storie vendita pas|bab|epifania|mito <tema>, /storie scqa|ciclo <tema> (altrimenti a rotazione)"),
+        ("manuali", "Manuali della pagina: in vendita e in arrivo",
+         "/manuali mostra i manuali della pagina; /manuali attiva <id> quando un manuale esce (da lì descrizioni, CTA "
+         "e storie lo propongono); /manuali disattiva <id>"),
         ("sfondi", "Foto di sfondo delle storie di questa pagina",
          "/sfondi mostra quante foto ha la pagina per categoria. Per aggiungerne: manda le foto (anche in album) con "
          "didascalia \"sfondo\" (categoria scelta dal bot) o \"sfondo distante\" / sicura / elegante / primo piano / complice"),
@@ -597,6 +600,34 @@ async def _rispondi_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, 
             log.exception("Risposta alla domanda non creata")
             await status.edit_text("Non sono riuscito a preparare la risposta. Riprova tra poco.")
     context.application.create_task(go())
+
+
+async def cmd_manuali(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not await _authorized(update):
+        return
+    args = [a.lower() for a in context.args or []]
+    cat = writer.catalogo_manuali()
+    if len(args) >= 2 and args[0] in ("attiva", "disattiva"):
+        if args[1] not in cat:
+            await update.effective_message.reply_text(
+                f"Non trovo il manuale {args[1]} per questa pagina. Quelli disponibili: {', '.join(cat) or 'nessuno'}.")
+            return
+        writer.attiva_manuale(args[1], args[0] == "attiva")
+        await update.effective_message.reply_text(
+            f"{cat[args[1]]['nome']}: " + ("ATTIVO. Da ora descrizioni, CTA e storie di vendita di questa pagina lo "
+                                           "propongono quando il tema è il suo." if args[0] == "attiva" else
+                                           "tolto dai manuali in vendita (il bot lo conosce ancora)."))
+        return
+    b = writer.load_brand()
+    righe = [f"Manuali di {b.get('nome')}:"]
+    for m in b.get("manuali") or []:
+        righe.append(f"✅ in vendita · {m.get('nome')}")
+    for mid, m in cat.items():
+        if not m.get("attivo"):
+            righe.append(f"⏳ in arrivo · {m.get('nome')} (quando esce: /manuali attiva {mid})")
+    if len(righe) == 1:
+        righe.append("nessuno: storie e descrizioni chiudono senza vendere.")
+    await update.effective_message.reply_text("\n".join(righe))
 
 
 async def cmd_sfondi(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -1330,6 +1361,7 @@ def main():
     app.add_handler(CommandHandler("risposta", cmd_risposta))
     app.add_handler(CommandHandler("strutture", cmd_strutture))
     app.add_handler(CommandHandler("sfondi", cmd_sfondi))
+    app.add_handler(CommandHandler("manuali", cmd_manuali))
     app.add_handler(MessageHandler(filters.PHOTO | filters.Document.IMAGE, on_media))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_text))
     async def notify_restart(context: ContextTypes.DEFAULT_TYPE):

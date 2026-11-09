@@ -1,0 +1,120 @@
+# CATALOGO DEI MANUALI (letti da Claude il 9/11 dai PDF di Gabriele).
+# stato: in_arrivo = il bot lo conosce ma NON lo propone; attivo = entra tra i manuali in vendita della pagina.
+# Si attiva anche dal bot, nel gruppo della pagina: /manuali attiva <id>  (e /manuali disattiva <id>).
+# I manuali già scritti nella scheda della pagina (brands/<pagina>.yaml) restano dove sono.
+
+arte-sedurre-chat:
+  pagina: attraiseduci
+  stato: in_arrivo
+  nome: L'arte di sedurre in chat
+  titoli: ["L'arte di sedurre in chat"]
+  dolori: >-
+    Per l'uomo che scrive a una donna e viene ignorato, riceve risposte fredde o monosillabi, finisce in
+    visualizzato, fa interrogatori invece di conversazioni, non sa come aprire né come passare dalla chat
+    all'appuntamento. Insegna: come nasce l'attrazione attraverso uno schermo e cosa comunica il modo di
+    scrivere (valore percepito, bisogno di approvazione); il primo messaggio (perché "ciao come stai" non
+    funziona, apertura contestuale, ironia); conversazioni che si alimentano da sole (affermazioni invece di
+    domande); il flirt in chat (teasing, comunicazione implicita, intensità graduale, capire quando fermarsi);
+    il ritmo (quanto scrivere, quando chiudere, perché essere sempre disponibile sbilancia l'investimento);
+    quando lei perde interesse (visualizzato, doppio messaggio, recuperare una chat spenta, riconoscere
+    quando non è reciproco); gli errori che uccidono l'attrazione (complimenti e dichiarazioni premature,
+    messaggi lunghi, gelosia, fingere disinteresse, diventare il confidente); come ottenere l'appuntamento
+    (proposta specifica, gestire "vediamo/forse") e cosa fare dopo. Bonus: 100 messaggi pronti.
+    Non promette che lei risponda o accetti: insegna a comunicare interesse senza elemosinare attenzioni.
+  vendita: >-
+    Si propone quando il contenuto tocca chat, messaggi, visualizzato, risposte fredde, primo messaggio,
+    conversazioni che muoiono, passare dalla chat all'appuntamento.
+
+perche-lei-ti-ha-lasciato:
+  pagina: resetrelazionale
+  stato: in_arrivo
+  nome: Perché lei ti ha lasciato (e cosa fare adesso)
+  titoli: ["Perché lei ti ha lasciato"]
+  dolori: >-
+    Per l'uomo lasciato che rilegge i messaggi alle tre di notte, controlla il suo profilo, scrive e cancella,
+    vuole capire cosa è cambiato e cosa fare adesso. Sei pilastri: perché all'inizio era lei a cercarlo e come
+    la dinamica si è invertita (ammorbidimento, mondo che si rimpicciolisce, paura di perderla); perché
+    inseguirla o sparire per farla tornare sono la stessa richiesta (agire per la sua reazione); accettare la
+    fine, il lutto di una persona viva, smettere di negoziare con la realtà, ritrovare chi sei senza di lei;
+    il no contact come strumento per sé e non come tattica, le ricadute, cosa fare quando lei si fa viva,
+    smettere di idealizzarla; diventare un uomo centrato, con una vita piena e standard più alti, e cosa
+    fare se lei torna davvero. Non promette che lei torni.
+  vendita: >-
+    Si propone sui contenuti di rottura: perché ti ha lasciato, non riesci a dimenticarla, controlli i suoi
+    social, vuoi riscriverle, ti senti sostituito, no contact e ricadute. Non per la friendzone (amore mai
+    iniziato).
+
+dipendenza-emotiva:
+  pagina: ilpensatore
+  stato: in_arrivo
+  nome: Uscire dalla dipendenza emotiva
+  titoli: ["Uscire dalla dipendenza emotiva"]
+  dolori: >-
+    Per chi ha l'umore appeso ai messaggi di una persona, chiede rassicurazioni continue, interpreta i
+    silenzi, controlla, si annulla per non perdere qualcuno, anche dentro una relazione apparentemente
+    normale. Insegna: differenza tra amore, attaccamento e bisogno; segnali della dipendenza; stili di
+    attaccamento e schemi che si ripetono, perché si scelgono persone indisponibili; iperanalisi, gelosia,
+    controllo; rinforzo intermittente, idealizzazione, trappola dell'investimento; riconoscere i trigger e
+    gestire l'ansia quando l'altro si allontana; separare fatti e interpretazioni; tollerare l'incertezza;
+    smettere di compiacere, dire no e mettere confini; stare bene da soli e ricostruire un'identità propria;
+    scegliere persone disponibili e amare senza perdere autonomia. Bonus: percorso di 30 giorni di esercizi.
+    Non è una terapia e non garantisce guarigione.
+  vendita: >-
+    Si propone quando il contenuto parla di umore che dipende da qualcuno, bisogno di rassicurazioni,
+    controllo del telefono, annullarsi per essere amati, paura di essere lasciati, schemi che si ripetono.
+
+lasciare-andare:
+  pagina: ilpensatore
+  stato: in_arrivo
+  nome: Il potere di lasciare andare
+  titoli: ["Il potere di lasciare andare"]
+  dolori: >-
+    Per chi sa che un legame lo consuma o che non può più viverlo come vorrebbe, ma non riesce a staccarsi:
+    riscrive dopo aver deciso di chiudere, ricade a ogni "come stai?", spera che l'altro cambi. Insegna:
+    come nasce l'attaccamento e la differenza tra amore, attaccamento e dipendenza; perché si continua ad
+    amare chi fa soffrire (attenzioni intermittenti, rifiuto che intensifica il desiderio, idealizzazione);
+    riconoscere una relazione che consuma; le illusioni che bloccano ("cambierà", "non troverò nessun altro",
+    "ho investito troppo") e come capire se vale la pena restare; accettare ciò che non si controlla e
+    smettere di cercare spiegazioni; interrompere le abitudini che tengono vivo il legame, gestire l'impulso
+    di ricontattare, confini quando il contatto è inevitabile; nostalgia, rabbia, ricadute, cosa fare se
+    l'altro ritorna; ricostruire identità e amare senza perdersi. Bonus: strumenti pratici.
+    Non è un ordine universale di rompere.
+  vendita: >-
+    Si propone quando il contenuto parla di non riuscire a lasciare andare, tornare indietro dopo aver
+    chiuso, sperare che l'altro cambi, ricadute, legami intermittenti o non corrisposti.
+
+partner-narcisista:
+  pagina: amoreinfedele
+  stato: in_arrivo
+  nome: Nella mente del partner narcisista
+  titoli: ["Nella mente del partner narcisista"]
+  dolori: >-
+    Per la donna dentro (o appena uscita da) una relazione con un uomo affascinante che la fa sentire mai
+    abbastanza, che controlla cosa dire per non farlo arrabbiare, che non riconosce più se stessa. Insegna:
+    come ragiona il narcisista e i primi segnali; love bombing e differenza tra interesse autentico e
+    manipolazione; il ciclo idealizzazione-svalutazione; gaslighting, silenzio punitivo, sensi di colpa,
+    triangolazioni; trauma bond e rinforzo intermittente, l'illusione che cambi, perché lasciarlo sembra
+    impossibile; il ritorno (hoovering) e come distinguere un cambiamento autentico; confini, uscire dal
+    senso di colpa, proteggersi se la relazione non è finita; contatto zero e ricadute, superare
+    l'ossessione, ricostruire autostima e riconoscere i segnali nelle relazioni future.
+  vendita: >-
+    Si propone quando il contenuto tocca manipolazione, svalutazione, gaslighting, sensi di colpa, lui che
+    torna e promette di cambiare, non riuscire a staccarsi da chi fa male.
+
+magnetismo-femminile:
+  pagina: amoreinfedele
+  stato: in_arrivo
+  nome: Magnetismo femminile
+  titoli: ["Magnetismo femminile"]
+  dolori: >-
+    Per la donna che attira attenzioni ma vede le storie spegnersi dopo pochi mesi, o che vuole capire
+    perché un uomo la desidera senza sceglierla. Insegna: come pensa un uomo e i tre stadi del legame
+    maschile (desiderio, attaccamento, scelta); come un uomo distingue la donna da desiderare da quella con
+    cui costruire; curiosità, anticipazione e mistero senza giochi; valore percepito, indipendenza emotiva e
+    confini; i comportamenti che abbassano il valore ai suoi occhi; presenza, sguardo e femminilità;
+    l'investimento (lasciargli spazio di iniziativa); memoria emotiva, vulnerabilità e complicità; come nasce
+    l'innamoramento maschile e cosa lo spegne; come un uomo decide che sei tu e accompagnarlo verso
+    l'impegno senza pressione. Bonus: percorso di 30 giorni.
+  vendita: >-
+    Si propone quando il contenuto parla di uomini che si raffreddano, essere desiderata ma non scelta,
+    come pensa un uomo quando si innamora, impegno.
