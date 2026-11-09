@@ -126,3 +126,5 @@ testo_overlay:
   colore: "#FFFFFF"
   contorno: "#000000"
   posizione: centro
+# colore delle parole chiave nelle storie (Gabriele, 9/11: blu)
+storie_colore: "#4DA3FF"

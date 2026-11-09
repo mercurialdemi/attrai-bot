@@ -350,6 +350,15 @@ def _pulisci_blocco(testo: str, brand: dict) -> str:
 # ---------------------------------------------------------------- grafica
 
 ROSSO = (230, 57, 70)            # #E63946
+
+
+def colore_chiave(brand: dict) -> tuple:
+    """Colore delle parole chiave delle storie per pagina (scheda: storie_colore, es. "#4DA3FF"); default rosso."""
+    h = str(brand.get("storie_colore") or "").strip().lstrip("#")
+    try:
+        return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4)) if len(h) == 6 else ROSSO
+    except ValueError:
+        return ROSSO
 GRIGIO = (221, 221, 221)          # #DDDDDD
 FONT_BOLD = config.ROOT / "assets" / "carlito_bold.ttf"
 FONT_CORSIVO = config.ROOT / "assets" / "carlito_italic.ttf"
@@ -558,7 +567,7 @@ def disegna(blocchi: list[str], prima: bool, brand: dict, base: Image.Image,
             runs = []
             for k, parola in enumerate(r):
                 for j, (t, rosso) in enumerate(parola):
-                    col = ROSSO if rosso else (255, 255, 255)
+                    col = colore_chiave(brand) if rosso else (255, 255, 255)
                     draw.text((x, ty), t, font=f, fill=col)
                     x += draw.textlength(t, font=f)
                     ultimo = j == len(parola) - 1
