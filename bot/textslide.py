@@ -1046,9 +1046,59 @@ def inpaint_boxes(img: Image.Image, boxes: list[tuple[int, int, int, int]], pad:
     if not mask.any():
         return img.convert("RGB")
     out = cv2.inpaint(a, mask, 6, cv2.INPAINT_TELEA)
+    out = _liscia_su_carta(a, out, mask)
     if texture:
         out = _retexture(a, out, mask)
     return Image.fromarray(cv2.cvtColor(out, cv2.COLOR_BGR2RGB))
+
+
+def _liscia_su_carta(a: np.ndarray, telea: np.ndarray, mask: np.ndarray) -> np.ndarray:
+    """Sfondi lisci (carta, cartoncino, sfumature morbide): la ricostruzione TELEA copia nel buco i pixel del
+    bordo delle lettere (aloni grigi, puntini chiari) e lascia macchie chiare e scure lungo le righe cancellate
+    (8/11, post 87: "rimangono le sfumature dietro lo sfondo"). Lì si riempie con la media dello sfondo vicino,
+    scartando aloni e pixel anomali; su foto con dettagli (bordi, oggetti) resta la ricostruzione TELEA."""
+    import cv2
+    H, W = mask.shape
+    af = a.astype(np.float32)
+    g = cv2.cvtColor(a, cv2.COLOR_BGR2GRAY).astype(np.float32)
+    gm = cv2.cvtColor(cv2.medianBlur(a, 31), cv2.COLOR_BGR2GRAY).astype(np.float32)
+    big = cv2.dilate(mask, np.ones((5, 5), np.uint8), iterations=2)
+    regolare = np.abs(g - gm) < 18                   # pixel "normali" dello sfondo (non aloni, non dettagli)
+    valid = (big == 0) & regolare
+    v = valid.astype(np.float32)
+    fill = np.zeros_like(af)
+    done = np.zeros((H, W), bool)
+    for s in (8, 16, 32, 64):
+        den = cv2.GaussianBlur(v, (0, 0), s)
+        est = cv2.GaussianBlur(af * v[..., None], (0, 0), s) / np.maximum(den, 1e-4)[..., None]
+        ok = (den > 0.05) & ~done
+        fill[ok] = est[ok]
+        done |= ok
+    gs = cv2.GaussianBlur(gm, (0, 0), 4)
+    grad = np.hypot(cv2.Sobel(gs, cv2.CV_32F, 1, 0, ksize=3), cv2.Sobel(gs, cv2.CV_32F, 0, 1, ksize=3)) / 8
+    out = telea.copy()
+    n, lab, st, _ = cv2.connectedComponentsWithStats((big > 0).astype(np.uint8), connectivity=8)
+    for k in range(1, n):
+        x, y, w, h, _a = st[k]
+        r = max(10, int(min(W, H) * 0.012))
+        X0, Y0, X1, Y1 = max(0, x - r), max(0, y - r), min(W, x + w + r), min(H, y + h + r)
+        comp = lab[Y0:Y1, X0:X1] == k
+        ring = (cv2.dilate(comp.astype(np.uint8), np.ones((2 * r + 1, 2 * r + 1), np.uint8)) > 0) \
+            & (big[Y0:Y1, X0:X1] == 0)
+        if ring.sum() < 50:
+            continue
+        # sfondo liscio: quasi tutto l'anello attorno è "normale" e il fondo cambia solo piano piano (la carta
+        # può schiarirsi da un lato all'altro, ma senza bordi netti come in una foto)
+        pend = float(np.percentile(grad[Y0:Y1, X0:X1][ring], 95))
+        # anche attorno alle lettere deve esserci solo sfondo: se restano contorni o ombre delle lettere
+        # (titoli con bordo chiaro) la media li lascerebbe in vista come lettere "fantasma"
+        gap = comp & (mask[Y0:Y1, X0:X1] == 0)
+        fondo_gap = float(regolare[Y0:Y1, X0:X1][gap].mean()) if gap.sum() > 30 else 1.0
+        if regolare[Y0:Y1, X0:X1][ring].mean() < 0.8 or pend > 0.8 or fondo_gap < 0.8:
+            continue
+        sel = comp & (mask[Y0:Y1, X0:X1] > 0) & done[Y0:Y1, X0:X1]
+        out[Y0:Y1, X0:X1][sel] = np.clip(fill[Y0:Y1, X0:X1][sel], 0, 255).astype(np.uint8)
+    return out
 
 
 def _retexture(orig: np.ndarray, filled: np.ndarray, mask: np.ndarray) -> np.ndarray:
@@ -1065,7 +1115,13 @@ def _retexture(orig: np.ndarray, filled: np.ndarray, mask: np.ndarray) -> np.nda
         if area < 200:
             continue
         best, best_e = None, None
-        for dy in (-h - 4, h + 4, -2 * h - 8, 2 * h + 8, -h // 2 - 4, h // 2 + 4):
+        vicini = (-h - 4, h + 4, -2 * h - 8, 2 * h + 8, -h // 2 - 4, h // 2 + 4)
+        # righe fitte (blocchi di testo uno sotto l'altro): se sopra e sotto c'è altro testo si cerca la grana
+        # un po' più lontano, altrimenti la zona resta una macchia liscia senza grana (8/11, post 87)
+        lontani = tuple(s * (m * h + 4 * m) for m in (3, 4, 5, 6) for s in (-1, 1))
+        for dy in vicini + lontani:
+            if best is not None and dy in lontani and dy not in vicini:
+                break
             sy = y + dy
             if sy < 0 or sy + h > H:
                 continue

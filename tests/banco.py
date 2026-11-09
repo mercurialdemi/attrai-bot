@@ -104,6 +104,22 @@ CASI = {
     "cover_simp_marchio.jpg": ("foto", "40 SIMP BEHAVIORS\nTHAT MAKE YOU LESS\nATTRACTIVE TO WOMEN", [
         dict(testo="[[40 COMPORTAMENTI DA ZERBINO]]\nCHE AGLI OCCHI DI UNA DONNA\nTI RENDONO MENO ATTRAENTE", x=67, y=688, w=867, h=278, colore="#FFFFFF", colore_evidenziato="#1EA7DD", allineamento="center", maiuscolo=True, carattere=T)],
         "al centro: avatar rotondo con due linee e @themasculinecreed sotto", {"x": 430, "y": 556, "w": 137, "h": 111}),
+    # post dell'8/11 (post 87): testo scuro su carta con grana; segnalato "rimangono le sfumature dietro lo sfondo"
+    "carta_porta.jpg": ("foto", 'Same number. Completely different road.\n\nFor him,\n\naccess usually required attraction, confidence, timing, and opportunity.\n\nFor her,\n\nthe gate was hers to open.\n\nSave for later', [
+        dict(testo='Stesso numero. Strada tutta diversa.', x=101, y=293, w=796, h=32, colore="#1A1A1A", allineamento="left", carattere=S),
+        dict(testo='Per lui,', x=101, y=383, w=160, h=30, colore="#1A1A1A", allineamento="left", carattere=S),
+        dict(testo="di solito servivano attrazione, sicurezza,\ntempismo e l'occasione giusta.", x=101, y=464, w=753, h=75, colore="#1A1A1A", allineamento="left", carattere=S),
+        dict(testo='Per lei,', x=101, y=593, w=160, h=32, colore="#1A1A1A", allineamento="left", carattere=S),
+        dict(testo='la porta la apriva lei.', x=101, y=682, w=487, h=30, colore="#1A1A1A", allineamento="left", carattere=S),
+        dict(testo='Salva per dopo', x=393, y=937, w=205, h=25, colore="#1A1A1A", allineamento="center", carattere=S),
+    ]),
+    "carta_chiavi.jpg": ("foto", 'Men usually have to create the opportunity.\n\nWomen more often decide which opportunity gets accepted.\n\nOne knocks. One opens.\n\nCounting doors without asking who had the keys misses the entire argument.\n\nSave for later', [
+        dict(testo="Di solito l'occasione l'uomo\ndeve crearsela.", x=101, y=291, w=576, h=72, colore="#1A1A1A", allineamento="left", carattere=S),
+        dict(testo='La donna, più spesso, sceglie\nquale accettare.', x=101, y=420, w=638, h=75, colore="#1A1A1A", allineamento="left", carattere=S),
+        dict(testo="Uno bussa. L'altra apre.", x=101, y=551, w=456, h=32, colore="#1A1A1A", allineamento="left", carattere=S),
+        dict(testo='Chi conta le porte senza chiedersi chi aveva\nle chiavi non ha capito niente.', x=101, y=634, w=760, h=72, colore="#1A1A1A", allineamento="left", carattere=S),
+        dict(testo='Salva per dopo', x=393, y=937, w=205, h=25, colore="#1A1A1A", allineamento="center", carattere=S),
+    ]),
 }
 
 
