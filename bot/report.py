@@ -104,6 +104,9 @@ def _baselines(posts: list[instagram.SourcePost]) -> dict[str, float]:
     return out
 
 
+VIRALE_FORTE = 3.0     # volte sopra la mediana della nicchia: oltre questa soglia il post è virale "a prescindere"
+
+
 def rank_candidates(posts: list[instagram.SourcePost], hours: int, limit: int) -> list[instagram.SourcePost]:
     """Salva i numeri per la media storica e restituisce i post recenti in ordine di punteggio."""
     rows = []
@@ -136,6 +139,10 @@ def rank_candidates(posts: list[instagram.SourcePost], hours: int, limit: int) -
             # tetto 2.5: entrano nel report, ma non scavalcano i post davvero eccezionali delle altre pagine
             # (altrimenti le pagine grandi tornerebbero sempre in cima)
             p.score = max(p.score, min(2.5, (p.score * p.score_nicchia) ** 0.5))
+        if p.score_nicchia >= VIRALE_FORTE:
+            # numeri assoluti da virale vero (es. migliaia di like contro poche centinaia della nicchia): vale quanto
+            # è sopra la nicchia, senza tetto. Gabriele 10/11: "un post da 2000 like non può perdere contro uno da 200"
+            p.score = max(p.score, p.score_nicchia)
         recent.append(p)
     done = storage.processed_urls([p.url for p in recent])
     recent = [p for p in recent if p.url not in done]
@@ -380,6 +387,12 @@ def _fit_filter(cands: list, brand: dict) -> tuple[list, bool]:
             if not (r.get("adatto") and migliore == brand["nome"]):
                 log.info("Report %s: scartato @%s %.1fx (%s): %s", brand["nome"], p.owner, p.score or 0,
                          "va a " + migliore if migliore != brand["nome"] else "non in tema", r.get("motivo", ""))
+            if (not r.get("adatto") and migliore == brand["nome"]
+                    and getattr(p, "score_nicchia", 0) >= VIRALE_FORTE and r.get("pagina_migliore") != "nessuna"):
+                # virale fortissimo nel nostro mondo: non lo si scarta per un dubbio sul taglio (resta fuori solo se
+                # il controllo dice che non è adatto a NESSUNA delle nostre pagine)
+                log.info("Report %s: tenuto @%s %.1fx la nicchia (virale forte)", brand["nome"], p.owner, p.score_nicchia)
+                r["adatto"] = True
             if r.get("adatto") and migliore == brand["nome"]:
                 p.pagina = brand["nome"]
                 prima = p.motivo if (p.motivo or "").startswith("📈") else ""
