@@ -286,7 +286,9 @@ def _post_font(post: dict) -> Path:
     from . import textslide
     blocks = [b for sl in post.get("slides", []) for b in (sl.get("blocchi") or [])]
     if any(b.get("carattere") == "fumetto" for b in blocks):
-        return textslide.FONTS["fumetto"]
+        # niente lettering da fumetto (Chewy) nella CTA: Gabriele l'ha bocciato più volte ("non è bello").
+        # Un bastoni pulito e pesante si legge meglio sopra il disegno.
+        return config.ROOT / "assets" / "montserrat_bold.ttf"
     w = post.get("_peso_testo") or ""
     if w:
         base, _, fam = w.partition("_")
