@@ -331,14 +331,15 @@ def _fit_filter(cands: list, brand: dict) -> tuple[list, bool]:
                   "adatti a noi e altri a un'altra nostra pagina; ogni post va SOLO alla pagina a cui è più adatto):\n"
                   + contrasto + "\n\n")
                  if contrasto else "")
-              + "Regole (Gabriele, 10/11: il filtro scartava quasi tutto): conta a CHI parla il post e se il TEMA sta "
-              "nel mondo della pagina, inteso in modo LARGO (relazioni, donne, attrazione, rotture, tradimenti, "
-              "mentalità e valore, a seconda della pagina). I post VIRALI NON devono insegnare: frasi d'impatto, "
+              + "Regole (Gabriele, 10/11): si decide sul TEMA, non sulla forma. Il tema deve essere uno di quelli della "
+              "pagina (vedi DI COSA PARLA: per AttraiSeduci donne, seduzione, attrazione, dinamiche di coppia, "
+              "psicologia maschile e femminile); un tema che non c'entra si scarta anche se il post è fortissimo. "
+              "Ma un post IN TEMA non si scarta per la forma: i post VIRALI NON devono insegnare: frasi d'impatto, "
               "verità scomode, meme, slogan provocatori e scene vanno benissimo se il tema è della pagina. "
               "Una CTA dell'autore verso la sua bio o un suo prodotto NON è un motivo per scartare (la togliamo noi). "
               "Non adatti SOLO: pubblico sbagliato (es. parla alle donne per una pagina di uomini), sport, auto, "
               "notizie, giveaway, pubblicità di un prodotto senza contenuto, temi che con le relazioni non c'entrano "
-              "(famiglia d'origine, figli, animali, lutto, soldi). Nel dubbio: ADATTO.\n"
+              "(famiglia d'origine, figli, animali, lutto, soldi, motivazione generica su lavoro o palestra).\n"
               "Per ogni post dì anche se è DIDATTICO o VIRALE.")
     keep, ok = [], True
     tutte = pagine_nostre(brand)
