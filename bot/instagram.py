@@ -231,7 +231,12 @@ def fetch_profiles_giorno(handles: list[str], per_page: int, giorni: int) -> lis
                                                and _cache[h][1] >= per_page and _cache[h][2] >= giorni)]
         extra = []
         if mancanti:
-            nuovi = fetch_profiles(mancanti, per_page, giorni)
+            # pagine mai lette (archivio vuoto): la prima volta si legge una settimana intera, poi solo i post nuovi
+            nell_archivio = _owner_archivio()
+            prime = [h for h in mancanti if h not in nell_archivio]
+            altre = [h for h in mancanti if h in nell_archivio]
+            nuovi = (fetch_profiles(prime, max(per_page, 8), 7) if prime else []) \
+                + (fetch_profiles(altre, per_page, giorni) if altre else [])
             per_h: dict = {h: [] for h in mancanti}
             for p in nuovi:
                 o = (p.owner or "").lower()
@@ -245,7 +250,55 @@ def fetch_profiles_giorno(handles: list[str], per_page: int, giorni: int) -> lis
         for h in handles:
             if h in _cache:
                 out += [SourcePost(**{**p.__dict__}) for p in _cache[h][3]]   # copie: ogni pagina scrive i suoi motivi
-        return out
+        return _con_archivio(out, handles)
+
+
+ARCHIVIO_GIORNI = int(os.getenv("ARCHIVIO_GIORNI", "8"))
+
+
+def _archivio_file():
+    from . import pagine
+    return pagine._base_data() / "archivio_post.json"
+
+
+def _owner_archivio() -> set:
+    import json
+    try:
+        return {(v.get("owner") or "").lower() for v in json.loads(_archivio_file().read_text(encoding="utf-8")).values()}
+    except Exception:
+        return set()
+
+
+def _con_archivio(nuovi: list[SourcePost], handles: list[str]) -> list[SourcePost]:
+    """Ogni giorno si leggono solo i post nuovi (pochi per pagina, per il tetto di Apify), ma si TENGONO quelli
+    letti nei giorni prima: il report confronta così una settimana di post per pagina, gratis (Gabriele 10/11:
+    "su 15 pagine trovi solo 3 post"). Like e commenti si aggiornano quando un post viene riletto."""
+    import json
+    from dataclasses import asdict
+    from datetime import datetime, timedelta, timezone
+    f = _archivio_file()
+    try:
+        arch = json.loads(f.read_text(encoding="utf-8"))
+    except Exception:
+        arch = {}
+    ora = datetime.now(timezone.utc)
+    for p in nuovi:
+        arch[p.url] = {**asdict(p), "_letto": ora.isoformat()}
+    limite = (ora - timedelta(days=ARCHIVIO_GIORNI)).isoformat()
+    arch = {u: v for u, v in arch.items() if (v.get("timestamp") or v.get("_letto", "")) >= limite}
+    try:
+        f.parent.mkdir(parents=True, exist_ok=True)
+        f.write_text(json.dumps(arch), encoding="utf-8")
+    except OSError as e:
+        log.warning("Archivio post non salvato: %s", e)
+    campi = set(SourcePost.__dataclass_fields__)
+    voluti = set(handles)
+    visti = {p.url for p in nuovi}
+    out = list(nuovi)
+    for u, v in arch.items():
+        if u not in visti and (v.get("owner") or "").lower() in voluti:
+            out.append(SourcePost(**{k: v[k] for k in campi if k in v}))
+    return out
 
 
 def _contatore_file():
