@@ -1,0 +1,153 @@
+# Scheda della pagina Potere Sociale (Gabriele, 10/11/2026). Base: documento di posizionamento editoriale,
+# tutto il documento è in brands/comuni/guide/poteresociale.md e il bot lo legge per descrizioni e storie.
+# Le parti segnate DA COMPLETARE aspettano i dati di Gabriele.
+
+nome: Potere Sociale
+handle: poteresociale
+
+pubblico: uomini adulti e giovani adulti che vengono interrotti, sottovalutati o dati per scontati nei gruppi, al lavoro e nelle relazioni
+
+temi_report: >
+  Psicologia delle dinamiche sociali applicata alla vita quotidiana: rispetto e confini, saper dire no,
+  frame, status e presenza, essere interrotti o non ascoltati, idee prese sul serio solo se le dice un altro,
+  bisogno di approvazione, giustificarsi troppo, prese in giro nel gruppo, reagire alle provocazioni,
+  autocontrollo, reputazione, influenza, leadership informale, riprova sociale, conformismo, persuasione
+  contro pressione, leggere pattern e opportunismo nelle persone. In modo secondario: rispetto e confini
+  nelle relazioni uomo-donna. Non seduzione pura, non motivazionale generico, non contenuti misogini o
+  di dominio.
+
+# Collaboratori di Potere Sociale: DA COMPLETARE (si aggiungono anche dal gruppo con /aggiungi @pagina)
+collaboratori_versione: 2026-11-10
+pagine_monitorate: []
+
+pagine_studio: []
+
+report:
+  ora: "08:00"           # il report arriva nel gruppo della pagina (se il gruppo non è collegato, non parte)
+  fuso: Europe/Rome
+  finestra_ore: 72
+  candidati: 15
+  quanti_post: 5
+  post_per_pagina: 12
+  punteggio_minimo: 1.5
+  completa_sempre: false
+  prepara_post: false
+
+# Caroselli originali da zero ogni mattina: spenti finché la pagina non è pronta (metti 2 per accenderli)
+crea:
+  al_giorno: 0
+  ora: "08:30"
+
+studio:                  # spento per risparmiare crediti
+  attivo: false
+  ora: "04:00"
+
+traduzione_slide: fedele
+
+posizionamento: >
+  Pagina sulla psicologia del comportamento umano applicata alla vita sociale quotidiana: come le persone
+  valutano gli altri, attribuiscono autorevolezza, reagiscono ai confini e decidono a chi dare attenzione,
+  credito e fiducia. Il centro è una tensione concreta: valore reale e valore percepito non coincidono sempre.
+  Promessa in tre livelli: vedere la dinamica in corso, comprenderne il meccanismo, agire con confini chiari,
+  calma, iniziativa e gestione dell'immagine. Non promette controllo sulle persone né rispetto automatico:
+  più capacità di lettura e più margine di scelta. Non è una pagina motivazionale, non è seduzione, non è
+  ostilità verso le donne né un catalogo di tecniche per dominare. È un osservatorio pratico su rapporti di
+  forza, percezione sociale, influenza e confini.
+
+tono:
+  - "Lucido, diretto, analitico, fermo, leggermente provocatorio ma mai isterico: una persona che vede la situazione più chiaramente, non qualcuno che urla per farsi notare."
+  - "Parla a un uomo adulto come a un interlocutore intelligente. Forza comportamentale, non ostilità: mai disprezzo verso le donne, mai fantasie di dominio."
+  - "Parte sempre da una scena riconoscibile (riunione, chat di gruppo, cena tra amici, palestra, appuntamento, famiglia) o da una contraddizione del lettore (vuole rispetto ma evita ogni disaccordo), poi spiega il meccanismo."
+  - "Lessico della pagina: frame, ruolo, confini, dinamica, segnale, pattern, status, approvazione, percezione, coerenza, contesto, reputazione, iniziativa, autorevolezza."
+  - "Niente slogan alla 'sii alfa' o 'nessuno ti rispetta finché non ti rispetti': ogni frase forte va sostenuta da una scena o da una spiegazione."
+  - "Mai paranoia: un gesto isolato non dimostra manipolazione, si osserva la ripetizione. Quando la certezza non c'è: 'può', 'tende a', 'in alcuni contesti'."
+  - "Italiano fluido e naturale: mai una traduzione parola per parola."
+
+regole_formato:
+  - Descrizione massimo 2200 caratteri.
+  - Niente grassetto, niente asterischi, niente trattini lunghi.
+  - Testo delle slide breve e leggibile su telefono, con la stessa divisione in frasi e lo stesso peso dell'originale.
+  - Mai cifre, percentuali o numeri di partecipanti di studi che non si possono verificare.
+
+hook:
+  regola: >
+    Apertura controintuitiva o scena precisa, mai una massima motivazionale. Ruota tra: contraddizione del
+    lettore, scena quotidiana, provocazione intelligente, domanda di osservazione, contrasto tra due uomini
+    nella stessa situazione. Due descrizioni consecutive non aprono mai con la stessa struttura.
+  struttura: >
+    Apertura controintuitiva, episodio specifico, meccanismo possibile, conseguenza del comportamento,
+    ribaltamento, una domanda o un'azione concreta. Non ogni post deve essere didattico.
+
+cta:
+  regola: |
+    Post singolo, virale o di sola scena: CTA "segui la pagina".
+    Post didattico che tocca un dolore preciso del manuale (frame, ruolo, dire no, calma, reputazione, contesto,
+    iniziativa nel gruppo): CTA al manuale, ma non su ogni post.
+    La CTA del post originale va sempre tolta e sostituita con la nostra (anche dentro le slide).
+  stile: |
+    Scritta da copywriter professionista, mai banale. Richiama il problema preciso e il pezzo del manuale che lo
+    tratta (es. "Se in ogni gruppo diventi quello che si adatta, il manuale parte proprio dal frame e dal ruolo
+    che assumi"). Mai descrizione del manuale, mai risultati garantiti. Niente emoji nella CTA.
+  dove_si_compra: "link in bio"
+
+scuole_di_pensiero:
+  - fonte: Robert Cialdini
+    principi: >
+      Riprova sociale, coerenza, autorità e scarsità orientano le decisioni delle persone, soprattutto nell'incertezza.
+  - fonte: Darley e Latané (effetto testimone)
+    principi: >
+      In un gruppo ognuno aspetta che sia un altro a muoversi: chi propone una direzione cambia la scena.
+  - fonte: Seneca e Marco Aurelio (stoicismo)
+    principi: >
+      Tra lo stimolo e la risposta c'è uno spazio: la calma non è debolezza, è non consegnare agli altri il proprio ritmo.
+
+parole_censurate: [sesso, cazzo, cazzi, cazzate, cazzata, incazzato, incazzata, fottuto, fottuta, fottere, fottiti,
+                   merda, puttana, puttane, stronzo, stronza, stronzate, coglione, coglioni, troia, troie, figa,
+                   scopare, scopata]
+
+# I due manuali della pagina (Gabriele, 10/11): il bundle e il manuale da solo.
+manuali:
+  - id: potere-sociale-solo
+    nome: "Manuale di Potere Sociale"
+    titoli: ["Potere Sociale", "Manuale di Potere Sociale"]
+    vendita: >
+      Il manuale principale di questa pagina. Si propone sui post che toccano rispetto, confini, dire no, frame,
+      ruolo, status, presenza, calma davanti alle provocazioni, reputazione, contesto, iniziativa nel gruppo.
+      Non promettere capitoli su seduzione, lettura del pensiero, interrogatori o analisi della personalità:
+      il manuale ha due campi, interiore (la posizione che assumi) ed esterno (il contesto in cui vieni letto).
+    dolori: >
+      Per l'uomo competente ma invisibile: lo interrompono, le sue idee valgono solo se le ripete un altro,
+      dice sì e lo caricano di richieste, si giustifica prima che glielo chiedano, cerca conferme con lo sguardo,
+      reagisce troppo in fretta alle provocazioni, aspetta che il gruppo decida, è rispettato solo quando serve.
+      Campo interiore: frame, postura spazio e ritmo, guidare la scena, dire no, calma e non reattività,
+      polarizzazione. Campo esterno: contesto e cornice, riprova sociale, reputazione, coerenza scarsità e
+      perimetro, sequenza dei tre sì, iniziativa nel vuoto di gruppo, ambiguità controllata.
+  - id: bundle-attrazione-potere
+    nome: "Bundle Attrazione + Potere Sociale"
+    titoli: ["Bundle Attrazione e Potere", "Attrazione + Potere Sociale"]
+    vendita: >
+      Si propone solo quando il post unisce rispetto sociale e attrazione: confini e rispetto con una donna,
+      disponibilità eccessiva che spegne l'attrazione, approvazione cercata negli appuntamenti. Spiega che
+      dinamiche sociali e attrazione seguono le stesse logiche di frame e valore percepito. Mai su post solo
+      sociali (lì il manuale da solo).
+    dolori: >
+      Per l'uomo che non riesce a farsi prendere sul serio né nel gruppo né da una donna: cerca rispetto con
+      la disponibilità, confonde attrazione e gentilezza, chiede conferme invece di mantenere la sua posizione.
+
+watermark:
+  solo_se_presente: true
+  testo: Potere Sociale
+  posizione: basso-destra
+  larghezza_logo: 0.075
+  stessa_grandezza: true
+  colore_testo: auto
+
+testo_overlay:
+  colore: "#FFFFFF"
+  contorno: "#000000"
+  posizione: centro
+
+storie_voce: "Lucido e fermo, analitico, leggermente provocatorio. Porta il lettore in una scena sociale precisa (riunione, gruppo di amici, una richiesta, una battuta), nomina la dinamica che lui subiva senza vederla e gli lascia una scelta concreta. Mai motivazionale, mai urlato, mai ostile verso le donne, mai promesse di controllo sugli altri. Seconda persona, presente, frasi brevi."
+
+# colore delle parole chiave nelle storie: DA CONFERMARE con Gabriele (il brand è in bianco e nero)
+storie_colore: "#D4AF37"
