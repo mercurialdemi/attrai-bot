@@ -641,10 +641,8 @@ def _apri_sfondi(chat: int) -> None:
 
 
 def _testo_modo_sfondi(slug: str) -> str:
-    return (f"Ok, modalità sfondi aperta. Ora manda le foto, anche tutte insieme e senza didascalia: diventano "
-            f"sfondi delle storie di {writer.load_brand().get('nome', slug)} e NON vengono lette come post "
-            f"(la categoria la sceglie il bot). Sfondi attuali: {storie.conta_sfondi(slug)}.\n"
-            f"Quando hai finito scrivi /sfondi fine (si chiude da sola dopo {SFONDI_MODO_MINUTI} minuti senza foto).")
+    return (f"Ok, mandami le foto che vuoi usare come sfondi delle storie di {writer.load_brand().get('nome', slug)}, "
+            "anche tutte insieme in un unico messaggio. Le salvo e chiudo il comando da solo.")
 
 
 async def cmd_sfondi(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -920,29 +918,48 @@ _sfondi_esito: dict[str, dict] = {}
 async def _salva_sfondo(update: Update, context: ContextTypes.DEFAULT_TYPE, file_id: str, cat: str, gruppo: str):
     """Aggiunge la foto agli sfondi delle storie della pagina del gruppo; un solo messaggio di riepilogo per album."""
     slug = pagine.corrente()
-    f = await context.bot.get_file(file_id)
-    data = bytes(await f.download_as_bytearray())
-    try:
-        categoria, scritte = await asyncio.to_thread(storie.aggiungi_sfondo, slug, data,
-                                                     cat if cat in storie.SFONDI else None)
-    except Exception as e:
-        await update.effective_message.reply_text(f"Foto non salvata: {e}")
-        return
-    es = _sfondi_esito.setdefault(gruppo, {"n": {}, "scritte": 0, "task": None, "msg": update.effective_message})
-    es["n"][categoria] = es["n"].get(categoria, 0) + 1
-    es["scritte"] += int(scritte)
+    es = _sfondi_esito.setdefault(gruppo, {"n": {}, "scritte": 0, "task": None, "attese": 0,
+                                           "msg": update.effective_message})
+    es["attese"] += 1                        # foto ancora in lavorazione: il riepilogo aspetta anche queste
     if es["task"]:
         es["task"].cancel()
+        es["task"] = None
+    try:
+        await _salva_una(context, slug, file_id, cat, es)
+    except Exception as e:
+        await update.effective_message.reply_text(f"Foto non salvata: {e}")
+    finally:
+        es["attese"] -= 1
+    if es["attese"] > 0:
+        return
+    _programma_riepilogo(context, slug, gruppo, es)
 
+
+async def _salva_una(context, slug: str, file_id: str, cat: str, es: dict):
+    f = await context.bot.get_file(file_id)
+    data = bytes(await f.download_as_bytearray())
+    categoria, scritte = await asyncio.to_thread(storie.aggiungi_sfondo, slug, data,
+                                                 cat if cat in storie.SFONDI else None)
+    es["n"][categoria] = es["n"].get(categoria, 0) + 1
+    es["scritte"] += int(scritte)
+
+
+def _programma_riepilogo(context, slug: str, gruppo: str, es: dict):
     async def riepilogo():
         try:
-            await asyncio.sleep(4)
+            await asyncio.sleep(8 if gruppo.startswith("modo-") else 4)
         except asyncio.CancelledError:
             return
         e = _sfondi_esito.pop(gruppo, None)
         _sfondi_album.pop(gruppo, None)
         if not e:
             return
+        if not e["n"]:
+            return
+        chiuso = ""
+        if gruppo.startswith("modo-"):          # /sfondi: arrivate le foto, il comando si chiude da solo
+            _sfondi_modo.pop(int(gruppo[5:]), None)
+            chiuso = "\nComando chiuso: le prossime foto tornano a essere post. Per altri sfondi riscrivi /sfondi."
         tot = sum(e["n"].values())
         parti = ", ".join(f"{n} {c.replace('_', ' ')}" for c, n in e["n"].items())
         testo = (f"Aggiunte {tot} foto agli sfondi delle storie di {writer.load_brand().get('nome', slug)}: {parti}.\n"
@@ -950,7 +967,7 @@ async def _salva_sfondo(update: Update, context: ContextTypes.DEFAULT_TYPE, file
         if e["scritte"]:
             testo += (f"\n⚠️ In {e['scritte']} foto ci sono scritte o @ di altre pagine: escono sotto il testo delle "
                       "storie, meglio sostituirle.")
-        await e["msg"].reply_text(testo)
+        await e["msg"].reply_text(testo + chiuso)
 
     es["task"] = context.application.create_task(riepilogo())
 
@@ -985,7 +1002,11 @@ async def on_media(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 _sfondi_album[mg] = cat
         else:
             cat = _sfondi_album[mg]
-        await _salva_sfondo(update, context, file_id, cat, mg or str(msg.message_id))
+        if modo and not sm and not (mg and mg in _sfondi_album):
+            gruppo = f"modo-{update.effective_chat.id}"     # tutte le foto dopo /sfondi = un solo riepilogo
+        else:
+            gruppo = mg or str(msg.message_id)
+        await _salva_sfondo(update, context, file_id, cat, gruppo)
         return
     cm = re.match(r"^\s*cta\s*:?\s*([\w-]+)\s*$", msg.caption or "", re.IGNORECASE)
     if cm:   # slide CTA di AttraiSeduci da mettere in fondo ai caroselli
