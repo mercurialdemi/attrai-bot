@@ -33,7 +33,7 @@ COMMANDS = [
          "/manuali mostra i manuali della pagina; /manuali attiva <id> quando un manuale esce (da lì descrizioni, CTA "
          "e storie lo propongono); /manuali disattiva <id>"),
         ("sfondi", "Foto di sfondo delle storie di questa pagina",
-         "/sfondi mostra quante foto ha la pagina per categoria; /sfondi aggiungi e poi manda le foto senza didascalia "
+         "/sfondi (o anche solo \"sfondi\") e poi manda le foto senza didascalia, non vengono lette come post "
          "(/sfondi fine per chiudere); oppure foto con "
          "didascalia \"sfondo\" (categoria scelta dal bot) o \"sfondo distante\" / sicura / elegante / primo piano / complice"),
         ("strutture", "Le 6 strutture delle storie e le ultime serie fatte",
@@ -636,18 +636,26 @@ _sfondi_modo: dict[int, float] = {}         # chat -> scadenza della "modalità 
 SFONDI_MODO_MINUTI = 15
 
 
+def _apri_sfondi(chat: int) -> None:
+    _sfondi_modo[chat] = time.time() + SFONDI_MODO_MINUTI * 60
+
+
+def _testo_modo_sfondi(slug: str) -> str:
+    return (f"Ok, modalità sfondi aperta. Ora manda le foto, anche tutte insieme e senza didascalia: diventano "
+            f"sfondi delle storie di {writer.load_brand().get('nome', slug)} e NON vengono lette come post "
+            f"(la categoria la sceglie il bot). Sfondi attuali: {storie.conta_sfondi(slug)}.\n"
+            f"Quando hai finito scrivi /sfondi fine (si chiude da sola dopo {SFONDI_MODO_MINUTI} minuti senza foto).")
+
+
 async def cmd_sfondi(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not await _authorized(update):
         return
     slug = pagine.corrente()
     chat = update.effective_chat.id
     arg = (context.args[0].lower() if context.args else "")
-    if arg in ("aggiungi", "aggiungere", "add", "si", "sì", "on"):
-        _sfondi_modo[chat] = time.time() + SFONDI_MODO_MINUTI * 60
-        await update.effective_message.reply_text(
-            f"Ok: per i prossimi {SFONDI_MODO_MINUTI} minuti tutte le foto che mandi qui, anche senza didascalia, "
-            f"diventano sfondi delle storie di {writer.load_brand().get('nome', slug)} (la categoria la sceglie il bot).\n"
-            "Quando hai finito scrivi /sfondi fine.")
+    if arg in ("", "aggiungi", "aggiungere", "add", "si", "sì", "on"):     # /sfondi da solo apre già la modalità
+        _apri_sfondi(chat)
+        await update.effective_message.reply_text(_testo_modo_sfondi(slug))
         return
     if arg in ("fine", "stop", "basta", "off"):
         _sfondi_modo.pop(chat, None)
@@ -1062,6 +1070,15 @@ async def on_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
     msg = update.effective_message
     text = (msg.text or msg.caption or "").strip()
+
+    if re.match(r"^\s*sfond[oi]( aggiungi)?\s*$", text, re.IGNORECASE):   # "sfondi" scritto senza la barra
+        _apri_sfondi(update.effective_chat.id)
+        await msg.reply_text(_testo_modo_sfondi(pagine.corrente()))
+        return
+    if re.match(r"^\s*sfond[oi] fine\s*$", text, re.IGNORECASE):
+        _sfondi_modo.pop(update.effective_chat.id, None)
+        await msg.reply_text(f"Fatto. Sfondi delle storie: {storie.conta_sfondi(pagine.corrente())}.")
+        return
 
     sm = re.match(r"^\s*(segnala|problema)\s*:?\s*(.+)$", text, re.IGNORECASE | re.DOTALL)
     if sm:
