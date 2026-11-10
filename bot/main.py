@@ -4,6 +4,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import re
+import time
 from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -32,7 +33,8 @@ COMMANDS = [
          "/manuali mostra i manuali della pagina; /manuali attiva <id> quando un manuale esce (da lì descrizioni, CTA "
          "e storie lo propongono); /manuali disattiva <id>"),
         ("sfondi", "Foto di sfondo delle storie di questa pagina",
-         "/sfondi mostra quante foto ha la pagina per categoria. Per aggiungerne: manda le foto (anche in album) con "
+         "/sfondi mostra quante foto ha la pagina per categoria; /sfondi aggiungi e poi manda le foto senza didascalia "
+         "(/sfondi fine per chiudere); oppure foto con "
          "didascalia \"sfondo\" (categoria scelta dal bot) o \"sfondo distante\" / sicura / elegante / primo piano / complice"),
         ("strutture", "Le 6 strutture delle storie e le ultime serie fatte",
          "/strutture mostra le 6 strutture, quale tocca a rotazione e le ultime serie; /strutture pas il dettaglio di una"),
@@ -630,13 +632,33 @@ async def cmd_manuali(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.effective_message.reply_text("\n".join(righe))
 
 
+_sfondi_modo: dict[int, float] = {}         # chat -> scadenza della "modalità sfondi" (/sfondi aggiungi)
+SFONDI_MODO_MINUTI = 15
+
+
 async def cmd_sfondi(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not await _authorized(update):
         return
     slug = pagine.corrente()
+    chat = update.effective_chat.id
+    arg = (context.args[0].lower() if context.args else "")
+    if arg in ("aggiungi", "aggiungere", "add", "si", "sì", "on"):
+        _sfondi_modo[chat] = time.time() + SFONDI_MODO_MINUTI * 60
+        await update.effective_message.reply_text(
+            f"Ok: per i prossimi {SFONDI_MODO_MINUTI} minuti tutte le foto che mandi qui, anche senza didascalia, "
+            f"diventano sfondi delle storie di {writer.load_brand().get('nome', slug)} (la categoria la sceglie il bot).\n"
+            "Quando hai finito scrivi /sfondi fine.")
+        return
+    if arg in ("fine", "stop", "basta", "off"):
+        _sfondi_modo.pop(chat, None)
+        await update.effective_message.reply_text(
+            f"Fatto. Sfondi delle storie di {writer.load_brand().get('nome', slug)}: {storie.conta_sfondi(slug)}.")
+        return
     await update.effective_message.reply_text(
         f"Sfondi delle storie di {writer.load_brand().get('nome', slug)}: {storie.conta_sfondi(slug)}.\n"
-        "Per aggiungerne: manda le foto in questo gruppo, anche tutte insieme in un album, con didascalia \"sfondo\" "
+        "Per aggiungerne: scrivi /sfondi aggiungi e poi manda le foto, anche senza didascalia e tutte insieme; "
+        "/sfondi fine quando hai finito.\n"
+        "Oppure manda le foto con didascalia \"sfondo\" "
         "(la categoria la sceglie il bot) oppure \"sfondo distante\", \"sfondo sicura\", \"sfondo elegante\", "
         "\"sfondo primo piano\", \"sfondo complice\".")
 
@@ -943,8 +965,12 @@ async def on_media(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # foto per gli sfondi delle storie: didascalia "sfondo" (o "sfondo distante"); in un album basta sulla prima
     sm = re.match(r"^\s*sfond[oi]\b\s*:?\s*([\w ]*)$", msg.caption or "", re.IGNORECASE)
     mg = msg.media_group_id
-    if sm or (mg and mg in _sfondi_album):
-        if sm:
+    modo = _sfondi_modo.get(update.effective_chat.id, 0) > time.time() and not (msg.caption or "").strip()
+    if sm or (mg and mg in _sfondi_album) or modo:
+        if modo and not sm and not (mg and mg in _sfondi_album):
+            cat = ""
+            _sfondi_modo[update.effective_chat.id] = time.time() + SFONDI_MODO_MINUTI * 60   # ogni foto allunga
+        elif sm:
             cat = sm.group(1).strip().lower().replace(" ", "_")
             cat = {"primo": "primo_piano", "primopiano": "primo_piano", "amica": "complice"}.get(cat, cat)
             if mg:
