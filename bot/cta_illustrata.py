@@ -216,6 +216,16 @@ def _texts(img: Image.Image, text: str, font_path: Path = COMIC) -> Image.Image:
         return img
     # dentro i riquadri il testo scorre su righe pari (gli "a capo" del testo lasciavano righe orfane)
     paras = [" ".join(p.split()) for p in paras]
+    if len(paras) == 1:
+        # un solo paragrafo finiva tutto nel riquadro in alto e lasciava vuoto il fondo (10/11): si divide
+        # alla fine di una frase (o ai due punti) più vicina alla metà, la seconda parte va nel riquadro in basso
+        import re as _re
+        t = paras[0]
+        tagli = [m.end() for m in _re.finditer(r"[.!?:](?=\s)", t)]
+        if tagli:
+            cut = min(tagli, key=lambda i: abs(i - len(t) * 0.5))
+            if 0.2 * len(t) < cut < 0.85 * len(t):
+                paras = [t[:cut].strip(), t[cut:].strip()]
     head = paras[0].upper()
     body = "\n".join(paras[1:-1]) if len(paras) > 2 else ""
     if Path(font_path) == COMIC:
