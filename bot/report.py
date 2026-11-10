@@ -331,10 +331,14 @@ def _fit_filter(cands: list, brand: dict) -> tuple[list, bool]:
                   "adatti a noi e altri a un'altra nostra pagina; ogni post va SOLO alla pagina a cui è più adatto):\n"
                   + contrasto + "\n\n")
                  if contrasto else "")
-              + "Regole: conta a CHI parla il post e QUALE dolore tocca. Se il pubblico non è quello della pagina "
-              "(es. un post che parla alle donne per una pagina di uomini, o viceversa) non è adatto. Se il tema è "
-              "fuori dai temi della pagina non è adatto, anche se il post è virale. Mai adatti: meme senza contenuto, "
-              "sport, auto, pubblicità, notizie, giveaway, motivazionali generici non legati ai temi della pagina.\n"
+              + "Regole (Gabriele, 10/11: il filtro scartava quasi tutto): conta a CHI parla il post e se il TEMA sta "
+              "nel mondo della pagina, inteso in modo LARGO (relazioni, donne, attrazione, rotture, tradimenti, "
+              "mentalità e valore, a seconda della pagina). I post VIRALI NON devono insegnare: frasi d'impatto, "
+              "verità scomode, meme, slogan provocatori e scene vanno benissimo se il tema è della pagina. "
+              "Una CTA dell'autore verso la sua bio o un suo prodotto NON è un motivo per scartare (la togliamo noi). "
+              "Non adatti SOLO: pubblico sbagliato (es. parla alle donne per una pagina di uomini), sport, auto, "
+              "notizie, giveaway, pubblicità di un prodotto senza contenuto, temi che con le relazioni non c'entrano "
+              "(famiglia d'origine, figli, animali, lutto, soldi). Nel dubbio: ADATTO.\n"
               "Per ogni post dì anche se è DIDATTICO o VIRALE.")
     keep, ok = [], True
     tutte = pagine_nostre(brand)
@@ -516,7 +520,7 @@ def _link_lines(items: list, start: int, min_score: float, perche: dict | None =
     out = []
     for i, p in enumerate(items, start):
         anteprima = " ".join((p.caption or "").split())[:70]
-        nums = f"❤️ {p.likes or 0} · 💬 {p.comments or 0}"
+        nums = (f"❤️ {p.likes}" if (p.likes or 0) >= 0 else "❤️ like nascosti") + f" · 💬 {p.comments or 0}"
         principale = bool(writer.load_brand().get("manuali"))   # CTA al manuale solo se la pagina ha manuali
         tipo_txt = ({"didattico": "📚 DIDATTICO (CTA manuale)", "virale": "🔥 VIRALE (segui la pagina)"} if principale
                 else {"didattico": "📚 didattico", "virale": "🔥 virale"}).get(p.natura, "")
@@ -558,7 +562,8 @@ def _pool(cands: list[instagram.SourcePost], st: dict) -> list[instagram.SourceP
     return cands if st["completa"] else [p for p in cands if p.score >= st["min_score"]]
 
 
-def _page_summary(posts: list, handles: list[str], hours: int, min_score: float, own: set) -> str:
+def _page_summary(posts: list, handles: list[str], hours: int, min_score: float, own: set,
+                  nel_report: set | None = None) -> str:
     """Una riga per pagina: quanti post letti, quanti recenti con immagini, il migliore rispetto alla sua media.
     Così si vede che ogni pagina è stata letta, anche quando nessun suo post entra nel report."""
     since = datetime.now(timezone.utc) - timedelta(hours=hours)
@@ -577,7 +582,11 @@ def _page_summary(posts: list, handles: list[str], hours: int, min_score: float,
         if rec and not img:
             txt += " (solo video/reel)"
         elif img:
-            txt += f", il migliore {best:.1f}x" + (" ✅" if best >= min_score else "")
+            txt += f", il migliore {best:.1f}x"
+            if nel_report is not None and h in nel_report:
+                txt += " ✅ nel report"
+            elif best >= min_score:
+                txt += " (scartati: fuori tema per questa pagina o già mandati)"
         righe.append(txt)
     return "Pagine controllate:\n" + "\n".join(righe)
 
@@ -651,14 +660,15 @@ async def run_report(bot, chat_ids: list[int]) -> None:
                     cands = _tieni(cands, st)
                 if len(cands) >= st["link"]:
                     break
-            riepilogo = _page_summary(posts, handles, ore, st["min_score"], own)
             if not cands:
+                riepilogo = _page_summary(posts, handles, ore, st["min_score"], own, set())
                 await _broadcast(bot, chat_ids, f"Report: negli ultimi {ore // 24} giorni nessun post nuovo dei "
                                                 f"collaboratori ha superato {st['min_score']:.1f}x la media della "
                                                 "sua pagina. Niente da segnalare oggi.\n\n" + riepilogo)
                 return
             _salva_settimana(cands)                                     # il perché della domenica li riusa: zero Apify
             first = _bilancia(cands, st["link"])
+            riepilogo = _page_summary(posts, handles, ore, st["min_score"], own, {p.owner for p in first})
             cands = first + [p for p in cands if p not in first]      # /altri riparte da dove finisce il report
             storage.save_ranking([_to_dict(p) for p in cands])
             _offset_file().write_text(str(len(first)))
