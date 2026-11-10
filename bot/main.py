@@ -971,7 +971,7 @@ async def on_media(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await _rispondi_domanda(update, context, bytes(await f.download_as_bytearray()), extra)
         return
     # foto per gli sfondi delle storie: didascalia "sfondo" (o "sfondo distante"); in un album basta sulla prima
-    sm = re.match(r"^\s*sfond[oi]\b\s*:?\s*([\w ]*)$", msg.caption or "", re.IGNORECASE)
+    sm = re.match(r"^\s*/?sfond[oi](?:@\w+)?\b\s*:?\s*([\w ]*)$", msg.caption or "", re.IGNORECASE)
     mg = msg.media_group_id
     modo = _sfondi_modo.get(update.effective_chat.id, 0) > time.time() and not (msg.caption or "").strip()
     if sm or (mg and mg in _sfondi_album) or modo:
@@ -1403,7 +1403,7 @@ def main():
     app.add_handler(CommandHandler(["storie", "storia"], cmd_storie))     # /storia: errore di battitura comune
     app.add_handler(CommandHandler("risposta", cmd_risposta))
     app.add_handler(CommandHandler("strutture", cmd_strutture))
-    app.add_handler(CommandHandler("sfondi", cmd_sfondi))
+    app.add_handler(CommandHandler(["sfondi", "sfondo"], cmd_sfondi))
     app.add_handler(CommandHandler("manuali", cmd_manuali))
     app.add_handler(MessageHandler(filters.PHOTO | filters.Document.IMAGE, on_media))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_text))
