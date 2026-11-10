@@ -66,6 +66,16 @@
    "job_id": 96,
    "testo": "parte bassa rimane completamente vuota",
    "quando": "2026-11-10T11:54:16+00:00"
+  },
+  {
+   "job_id": 100,
+   "testo": "alcune frasi sono scritte in un certo font, altre con altro font etc....",
+   "quando": "2026-11-10T11:55:57+00:00"
+  },
+  {
+   "job_id": 102,
+   "testo": "Font sbagliato",
+   "quando": "2026-11-10T11:59:17+00:00"
   }
  ],
  "post_con_problemi": [
@@ -2300,7 +2310,700 @@
    "concetto": "Il carosello usa una provocazione: le donne sono come bambine. Poi però chiarisce che non vuol dire che siano immature o inferiori: parla della loro natura emotiva, che cambia in fretta. L'uomo non deve reagire a ogni sbalzo d'umore, prenderlo sul personale o cedere per farla contenta. Quando lei lo contesta, sta mettendo alla prova la sua solidità, quindi lui deve restare calmo e coerente come una montagna nella tempesta. Così lei si sente al sicuro e si lascia andare. Il registro è provocatorio in apertura e poi da coach diretto.",
    "descrizione": "Ogni volta che cambi idea solo per calmarla, le insegni che basta un po' di broncio per spostarti.\n\nLei si irrigidisce per una cosa da niente e la serata si incrina. Tu, invece di lasciar passare l'onda, ti senti sotto processo: spieghi, ti giustifichi, e alla fine dici sì a quello che un'ora prima era un no. Torna la pace. Ma nel modo in cui ti guarda qualcosa scende di un gradino, perché ti sente meno solido.\n\nLe emozioni si attaccano. Elaine Hatfield ha descritto nel 1994 il contagio emotivo: senza accorgercene riprendiamo il tono e l'agitazione di chi abbiamo davanti. John Gottman, osservando per anni coppie in conflitto nel suo laboratorio, ha visto che molti uomini vengono travolti dall'agitazione e a quel punto attaccano o si chiudono. Se entri nella sua tempesta, siete in due senza un appiglio.\n\nEd è qui che molti uomini commettono l'errore: scambiano la gentilezza per resa. Ma un no che diventa sì appena lei si arrabbia non è più un confine, è una trattativa. E chi tratta sempre viene messo alla prova sempre.\n\nRestare saldo non vuol dire ignorarla. Vuol dire ascoltarla senza prendere ogni parola come un verdetto su di te e tenere ferma la decisione presa a mente lucida. Quando capisce che il suo umore non sposta il terreno su cui state, smette di metterlo alla prova. E diventa più leggera, più giocosa, più affettuosa.\n\nUna donna non si innamora dell'uomo che la calma a ogni costo. Si fida di quello che resta uguale mentre lei cambia.\n\nL'ultima volta che hai detto sì per farla smettere, lo pensavi davvero?\n\nSe questa frase ti ha colpito, se anche tu cedi ogni volta che il suo umore cambia, il problema non è lei ma il punto da cui reagisci. Ho scritto un manuale che ti spiega perché alcune attenzioni aumentano l'attrazione e altre la distruggono, anche quando sembrano giuste. Si chiama \"Diventa l'uomo a cui nessuna donna sa resistere\": lo trovi nel link in bio, oppure commenta \"ATTRAZIONE\" e te lo mando in DM.",
    "segnalazioni": [
-    "il testo è molto piccolo e sfalsato, il logo troppo grande"
+    "il testo è molto piccolo e sfalsato, il logo troppo grande",
+    "alcune frasi sono scritte in un certo font, altre con altro font etc...."
+   ]
+  },
+  {
+   "job_id": 102,
+   "fonte": "https://www.instagram.com/p/DfiFk3QkkpZ/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "blocchi-pulizia-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "10/10 TOXIC BEHAVIORS EVERY MAN SHOULD FUCKING MASTER:",
+     "testo": "10 COMPORTAMENTI TOSSICI\nDA 10 E LODE CHE OGNI UOMO\nDEVE IMPARARE, CAZ*O:",
+     "blocchi": [
+      {
+       "x": 43,
+       "y": 605,
+       "w": 867,
+       "h": 275,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "1. Become selfish as fuck. Your money. Your time. Your future. Stop sacrificing your life for people who wouldn't sacrifice a fucking weekend for you.",
+     "testo": "1. Diventa egoista da far paura.\n\nI tuoi soldi. Il tuo tempo.\nIl tuo futuro.\n\nSmetti di sacrificare la vita\nper gente che per te non rinuncerebbe\nneanche a un caz*o di weekend.",
+     "blocchi": [
+      {
+       "x": 40,
+       "y": 244,
+       "w": 790,
+       "h": 50,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 38,
+       "y": 312,
+       "w": 705,
+       "h": 98,
+       "carattere": "normale",
+       "colore": "#8A8A8A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 35,
+       "y": 444,
+       "w": 740,
+       "h": 196,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "2. Cut people off like they never existed. No closure. No farewell speech. No tenth chance.",
+     "testo": "2. Cancella le persone\ncome se non fossero mai esistite.\n\nNiente chiarimenti.\nNiente discorsi d'addio.\n\nNiente decima possibilità.",
+     "blocchi": [
+      {
+       "x": 35,
+       "y": 298,
+       "w": 615,
+       "h": 93,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 35,
+       "y": 415,
+       "w": 595,
+       "h": 127,
+       "carattere": "normale",
+       "colore": "#8A8A8A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 35,
+       "y": 547,
+       "w": 515,
+       "h": 44,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Disrespect is a one-way ticket out of your fucking life.",
+     "testo": "Ti manca di rispetto?\nBiglietto di sola andata\n\nfuori dalla tua\ncaz*o di vita.",
+     "blocchi": [
+      {
+       "x": 35,
+       "y": 356,
+       "w": 720,
+       "h": 49,
+       "carattere": "normale",
+       "colore": "#8A8A8A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 35,
+       "y": 435,
+       "w": 510,
+       "h": 97,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "3. Stop giving a fuck about being liked. Let them hate you. Let them talk shit. Let them call you arrogant. Approval is a drug for men with no fucking backbone.",
+     "testo": "3. Sbattitene\ndi piacere a tutti.\n\nLascia che ti odino.\nChe sparlino.\nChe ti diano dell'arrogante.\n\nL'approvazione è la droga degli uomini\nsenza un caz*o di spina dorsale.",
+     "blocchi": [
+      {
+       "x": 35,
+       "y": 249,
+       "w": 620,
+       "h": 88,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 35,
+       "y": 356,
+       "w": 810,
+       "h": 137,
+       "carattere": "normale",
+       "colore": "#8A8A8A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 35,
+       "y": 513,
+       "w": 805,
+       "h": 127,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "4. Become impossible to guilt-trip. \"No\" is a complete fucking sentence.",
+     "testo": "4. Diventa immune\nai ricatti morali.\n\n\"No\" è già una risposta\ncompleta, caz*o.",
+     "blocchi": [
+      {
+       "x": 35,
+       "y": 308,
+       "w": 675,
+       "h": 88,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 35,
+       "y": 430,
+       "w": 575,
+       "h": 127,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Your boundaries aren't up for negotiation just because somebody got offended.",
+     "testo": "I tuoi limiti non si trattano\nsolo\n\nperché qualcuno\nsi è offeso.",
+     "blocchi": [
+      {
+       "x": 35,
+       "y": 366,
+       "w": 785,
+       "h": 88,
+       "carattere": "normale",
+       "colore": "#8A8A8A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 35,
+       "y": 478,
+       "w": 605,
+       "h": 79,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "5. Stop chasing p*ssy. She flakes? Gone. She plays games? Gone. She acts entitled? Gone. A pretty face doesn't buy unlimited access to your dignity.",
+     "testo": "5. Smetti di correre dietro alla f*ga.\n\nTi dà buca? Fuori.\nFa giochetti? Fuori.\nPretende tutto? Fuori.\n\nUn bel faccino non è\nun abbonamento illimitato\nalla tua dignità.",
+     "blocchi": [
+      {
+       "x": 35,
+       "y": 249,
+       "w": 700,
+       "h": 44,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 35,
+       "y": 312,
+       "w": 720,
+       "h": 93,
+       "carattere": "normale",
+       "colore": "#8A8A8A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 35,
+       "y": 420,
+       "w": 760,
+       "h": 127,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "6. Learn to walk away without flinching. From women. From friendships. From shitty deals.",
+     "testo": "6. Impara ad andartene\nsenza battere ciglio.\n\nDalle donne.\nDalle amicizie.\n\nDagli affari di mer*a.",
+     "blocchi": [
+      {
+       "x": 35,
+       "y": 308,
+       "w": 650,
+       "h": 83,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 35,
+       "y": 415,
+       "w": 430,
+       "h": 98,
+       "carattere": "normale",
+       "colore": "#8A8A8A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 35,
+       "y": 547,
+       "w": 540,
+       "h": 49,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 10,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "The man who's terrified of losing people will tolerate damn near anything.",
+     "testo": "L'uomo che ha il terrore\ndi perdere qualcuno si fa andare bene\n\nquasi tutto.",
+     "blocchi": [
+      {
+       "x": 35,
+       "y": 366,
+       "w": 790,
+       "h": 83,
+       "carattere": "normale",
+       "colore": "#8A8A8A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 35,
+       "y": 478,
+       "w": 625,
+       "h": 45,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 11,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "7. Become dangerously unavailable. Stop answering every call. Stop entertaining every idiot. Stop being everybody's free fucking therapist.",
+     "testo": "7. Diventa pericolosamente\nirraggiungibile.\n\nSmetti di rispondere a ogni chiamata.\nSmetti di dare corda\na ogni idiota.\n\nSmetti di fare il caz*o\ndi psicologo gratis di tutti.",
+     "blocchi": [
+      {
+       "x": 35,
+       "y": 337,
+       "w": 725,
+       "h": 83,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 35,
+       "y": 439,
+       "w": 800,
+       "h": 132,
+       "carattere": "normale",
+       "colore": "#8A8A8A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 35,
+       "y": 581,
+       "w": 720,
+       "h": 83,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 12,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Your attention is a privilege, not a public service.",
+     "testo": "La tua attenzione è\n\nun privilegio, non un\nservizio pubblico.",
+     "blocchi": [
+      {
+       "x": 35,
+       "y": 358,
+       "w": 495,
+       "h": 45,
+       "carattere": "normale",
+       "colore": "#8A8A8A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 35,
+       "y": 435,
+       "w": 500,
+       "h": 97,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 13,
+     "via": "blocchi-pulizia-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "8. Never explain yourself to people beneath your standards. Let them misunderstand. Let them gossip. Let them invent bullshit.",
+     "testo": "8. Non giustificarti mai\ncon chi non è\nal tuo livello.\n\nLascia che fraintendano.\nChe spettegolino.\n\nChe si inventino stron*a*e.",
+     "blocchi": [
+      {
+       "x": 35,
+       "y": 288,
+       "w": 745,
+       "h": 132,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 35,
+       "y": 439,
+       "w": 760,
+       "h": 103,
+       "carattere": "normale",
+       "colore": "#8A8A8A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 35,
+       "y": 576,
+       "w": 725,
+       "h": 44,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 14,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "A LION DOESN'T HOLD A PRESS CONFERENCE EVERY TIME A DOG BARKS.",
+     "testo": "IL LEONE NON INDICE\nUNA CONFERENZA STAMPA\nOGNI VOLTA CHE\nABBAIA UN CANE.",
+     "blocchi": [
+      {
+       "x": 43,
+       "y": 356,
+       "w": 720,
+       "h": 284,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 15,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "9. Become obsessed with winning. Train when you're tired. Work when nobody's watching. Save while everybody's flexing.",
+     "testo": "9. Diventa ossessionato\ndal vincere.\n\nAllenati quando sei stanco.\nLavora quando nessuno\nti guarda.\n\nRisparmia mentre gli altri\nostentano.",
+     "blocchi": [
+      {
+       "x": 35,
+       "y": 249,
+       "w": 635,
+       "h": 83,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 35,
+       "y": 352,
+       "w": 740,
+       "h": 107,
+       "carattere": "normale",
+       "colore": "#8A8A8A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 35,
+       "y": 464,
+       "w": 715,
+       "h": 83,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 16,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Your competition is busy getting drunk and chasing ass. Let them.",
+     "testo": "I tuoi rivali sono occupati\na ubriacarsi e a correre\ndietro al primo culo.\n\nLasciali fare.",
+     "blocchi": [
+      {
+       "x": 35,
+       "y": 356,
+       "w": 760,
+       "h": 123,
+       "carattere": "normale",
+       "colore": "#8A8A8A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 35,
+       "y": 503,
+       "w": 280,
+       "h": 44,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 17,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "10. Be willing to lose fucking everybody. The girl. The friends. The applause. The invitations.",
+     "testo": "10. Sii pronto a perdere\ntutti, caz*o.\n\nLa ragazza.\nGli amici.\nGli applausi.\nGli inviti.",
+     "blocchi": [
+      {
+       "x": 35,
+       "y": 288,
+       "w": 625,
+       "h": 88,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 35,
+       "y": 386,
+       "w": 465,
+       "h": 215,
+       "carattere": "normale",
+       "colore": "#8A8A8A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 18,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "The moment you need someone more than you respect yourself, they've got you by the balls.",
+     "testo": "Quando hai bisogno\ndi qualcuno più di quanto\nrispetti te stesso,\n\nti tiene\nper le palle.",
+     "blocchi": [
+      {
+       "x": 35,
+       "y": 312,
+       "w": 745,
+       "h": 137,
+       "carattere": "normale",
+       "colore": "#8A8A8A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 35,
+       "y": 478,
+       "w": 465,
+       "h": 93,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 19,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Call it toxic. Call it arrogant. Call it selfish.",
+     "testo": "Chiamalo tossico.\nChiamalo arrogante.\n\nChiamalo egoista.",
+     "blocchi": [
+      {
+       "x": 35,
+       "y": 410,
+       "w": 460,
+       "h": 88,
+       "carattere": "normale",
+       "colore": "#8A8A8A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 35,
+       "y": 518,
+       "w": 400,
+       "h": 44,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 20,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "I'D RATHER BE THE ASSHOLE WHO OWNS HIS LIFE THAN THE NICE GUY EVERYBODY FUCKING USES.",
+     "testo": "PREFERISCO ESSERE\nLO STRON*O PADRONE\nDELLA SUA VITA\nCHE IL BRAVO RAGAZZO\nCHE TUTTI SFRUTTANO,\nCAZ*O.",
+     "blocchi": [
+      {
+       "x": 43,
+       "y": 254,
+       "w": 781,
+       "h": 449,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 21,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se ti sei riconosciuto anche in uno solo\ndi questi 10 comportamenti,\nsegui @attraiseduci.\n\nOgni giorno parliamo di relazioni,\nseduzione e psicologia femminile.\n\nPer smettere di essere quello\nche si fa andare bene tutto.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Il carosello presenta dieci comportamenti che la gente chiama tossici ma che, secondo l'autore, ogni uomo dovrebbe imparare. Pensa a te stesso, taglia chi non ti rispetta, sbattitene dell'approvazione, di' di no senza sensi di colpa, non correre dietro alle donne, sappi andartene, non essere sempre disponibile, non giustificarti, ossessionati con la vittoria e sii pronto a perdere tutti. Chiude con una provocazione: meglio lo stronzo che ha in mano la sua vita del bravo ragazzo che tutti sfruttano. Il tono è provocatorio e aggressivo, con parolacce usate per dare forza alle frasi.",
+   "descrizione": "Un uomo che ha paura di perdere qualcuno ha già perso la trattativa, ancora prima di sedersi al tavolo.\n\nLo vedi nelle piccole cose. Rispondi alla chiamata anche quando sei distrutto, accetti l'ennesima buca con un \"tranquilla, figurati\", rinunci al tuo weekend per un amico che il suo non te lo cederebbe mai. Ogni volta ti dici che è gentilezza. Poi la sera ti senti svuotato e non capisci perché.\n\nIl prezzo non è il tempo che regali. È il rispetto che perdi, prima negli occhi degli altri e poi nei tuoi. E il ciclo si ripete perché ogni sì detto per paura rende più facile il successivo.\n\nNel 2001 Jennifer Crocker e Connie Wolfe hanno studiato cosa succede quando la stima di sé poggia sull'approvazione degli altri: hanno osservato che più il proprio valore dipende dal giudizio esterno, più l'umore sale e crolla a ogni commento. In pratica consegni il telecomando della tua stabilità a chiunque passi.\n\nEd è qui che molti uomini commettono l'errore: credono che la via d'uscita sia diventare duri, freddi, cattivi. Il post li chiama comportamenti \"tossici\" per provocare, ma nessuno di questi dieci punti parla di cattiveria. Parlano di una cosa sola: smettere di avere bisogno. Una donna lo percepisce subito quando un uomo non può permettersi di perderla, e da lì il desiderio comincia a spegnersi, perché nessuno desidera davvero ciò che è già garantito.\n\nChi è pronto a perdere tutti smette di usare i propri limiti come merce di scambio. E diventa proprio l'uomo da cui gli altri non vogliono allontanarsi.\n\nNon sei troppo buono. Sei troppo disposto a sparire pur di restare.\n\nQuale di questi dieci punti tradisci ogni volta che hai paura di rimanere solo?\n\nSe anche uno solo di questi comportamenti ti ha punto nell'orgoglio, segui @attraiseduci: qui ogni giorno parliamo di uomini che smettono di farsi andare bene tutto.\n\n#attrazione #psicologiafemminile #relazioni #seduzione #rispettodise",
+   "segnalazioni": [
+    "Font sbagliato"
    ]
   },
   {
