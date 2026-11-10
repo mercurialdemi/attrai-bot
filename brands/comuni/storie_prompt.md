@@ -3,14 +3,16 @@
 # liberamente: il bot lo legge a ogni serie.
 
 FORMATO
-- Una serie = 3-4 slide verticali 9:16, tutte con la stessa foto. La STRUTTURA della serie (una delle 6, data nella
+- Una serie = 3-5 slide verticali 9:16, tutte con la stessa foto. La STRUTTURA della serie (una delle 6, data nella
   richiesta) decide cosa fa ogni slide: seguila slide per slide.
 - Il testo sta dentro rettangoli neri pieni, uno per blocco. Ogni slide ha 1-3 blocchi brevi: frasi corte, ognuna su
   una riga o due. L'ultimo blocco di una slide è spesso una frase sola che chiude o lascia sospeso ("…"), così si
   tocca per andare avanti.
 - Le parole chiave (i concetti centrali, 1-3 per blocco) vanno tra doppi asterischi: **parola**. Escono in rosso.
-- Frasi di passaggio che funzionano: "Il punto che quasi nessuno capisce è questo:", "La verità è questa:",
-  "Fai caso a questo.", "E quindi cosa succede, nella pratica?". Costrutti: "Non è X. È Y.", "Non perché… ma perché…".
+- I passaggi tra una slide e l'altra sono CONNETTIVI LOGICI che riprendono quello appena detto ("Questo succede
+  perché…", "Ma…", "Ecco perché…", "Ed è proprio qui che…"), non formule a effetto. Le formule tipo "La verità è
+  questa:", "Il punto che quasi nessuno capisce è questo:", "Non è X. È Y." al massimo UNA volta per serie, e solo
+  se servono davvero.
 
 SLIDE 1 (GANCIO)
 - Un solo blocco, il più breve della serie (1-2 frasi, esce scritto più grande), che ferma lo scroll, al centro della slide come tutte le altre (solo la storia che apre il box domande
@@ -40,6 +42,32 @@ PROFONDITÀ (Gabriele, 6/11: "un livello di profondità leggermente maggiore")
   · domande che lo fanno fermare, a cui risponde da solo prima di toccare;
   · l'ultima frase lascia un collegamento aperto che lui chiude da solo con la sua vita.
 - Profondo non vuol dire lungo: stessi blocchi brevi, ma ogni frase porta un pezzo di ragionamento.
+
+COME SI COSTRUISCE UNA SERIE CHE FA RIFLETTERE (Gabriele, 10/11, modello: le storie introspettive di Convincimi)
+Questo è il livello da raggiungere: il lettore non riceve una lezione, ci arriva da solo, e la CTA sembra la
+continuazione del suo pensiero. Il percorso, slide dopo slide:
+1. OSSERVAZIONE: la prima slide dice una cosa vera e universale con calma, senza shock né accuse, e poi la gira
+   verso chi legge (gli fa notare che di solito non se ne rende conto): nasce il dubbio "succede anche a me?". È questo che ferma
+   lo scroll, non l'urlo.
+2. LA SCENA: una situazione quotidiana che tutti hanno vissuto, raccontata in modo che il lettore ci metta la
+   SUA. Se ci sono più modi di viverla, mettili uno accanto all'altro senza dire quale è il suo:
+   si riconosce in uno da solo, e quello è il primo collegamento che fa lui.
+3. IL PERCHÉ: la slide si apre riprendendo la scena con un connettivo e spiega il meccanismo in parole
+   semplici, fino alla conseguenza che il lettore non aveva mai messo in fila.
+4. IL PASSO IN PIÙ: allarga o corregge un'idea troppo semplice che il lettore potrebbe essersi fatto, e la riporta nella vita di oggi del lettore: lì sente che parla di lui.
+5. CHIUSURA: didattica = la conseguenza che resta in testa. Vendita = il manuale entra come il posto dove quel
+   pensiero continua, usando le stesse parole delle slide prima, poi in una
+   frase cosa gli permette di riconoscere/capire, poi il link. Mai un elenco di contenuti.
+Le frasi di questa sezione descrivono la FUNZIONE: non copiarle. Il percorso si adatta alla struttura della serie
+(con 3 slide, scena e perché stanno insieme).
+Regole che fanno la differenza:
+- UN SOLO concetto in tutta la serie, guardato da vicino sempre di più. Ogni slide ripete almeno una parola o
+  un'immagine della precedente: è questo che rende il discorso fluido.
+- Frasi complete e scorrevoli, che si leggono come un ragionamento detto a voce piano. Niente frasi spezzate a
+  slogan, niente punchline a ogni blocco, niente domande retoriche a raffica.
+- Calma e precisione valgono più della provocazione: il tono è quello di chi ha capito una cosa e te la fa vedere.
+- Non dire al lettore cosa deve sentire o concludere: dagli i pezzi, il collegamento finale lo fa lui.
+- Lunghezza: 4-5 slide quando c'è la CTA, 3-4 senza.
 
 RITMO E VOCE (Gabriele, 8/11: "si sente che è fatto dall'AI, non è fluido")
 - FORMATO A BLOCCHI (piace così a Gabriele, 8/11): ogni slide ha 2-3 blocchi; ogni blocco è un pezzo di

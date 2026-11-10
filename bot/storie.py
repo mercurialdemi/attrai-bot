@@ -232,7 +232,7 @@ _SLIDE = {"type": "object", "properties": {
 
 STORIE_TOOL = {
     "name": "serie_storie",
-    "description": "Una serie di storie Instagram pronte (3-4 slide secondo la struttura; 1 slide per il box domande).",
+    "description": "Una serie di storie Instagram pronte (3-5 slide secondo la struttura; 1 slide per il box domande).",
     "input_schema": {"type": "object", "properties": {
         "tesi": {"type": "string", "description": "PRIMA di scrivere: l'UNICA idea che il lettore deve portarsi via, in una frase semplice. Tutta la serie serve a farcelo arrivare da solo."},
         "filo": {"type": "array", "items": {"type": "string"}, "description": "PRIMA di scrivere: una riga per slide, in ordine: cosa fa capire quella slide e quale domanda lascia nella testa del lettore, a cui risponde la slide dopo. Nessuna slide introduce un argomento nuovo."},
