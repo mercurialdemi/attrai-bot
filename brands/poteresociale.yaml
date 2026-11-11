@@ -5,9 +5,7 @@
 nome: Potere Sociale
 handle: poteresociale
 
-# Gabriele, 10/11: niente report per questa pagina. Spenti solo report, caroselli automatici e studio:
-# post dal link, storie, descrizioni e manuali funzionano normalmente nel gruppo.
-in_pausa: true
+# Gabriele 11/11: report acceso con le pagine aggiunte dal gruppo (/aggiungi). Caroselli da zero e studio restano spenti.
 
 pubblico: uomini adulti e giovani adulti che vengono interrotti, sottovalutati o dati per scontati nei gruppi, al lavoro e nelle relazioni
 
@@ -20,7 +18,7 @@ temi_report: >
   nelle relazioni uomo-donna. Non seduzione pura, non motivazionale generico, non contenuti misogini o
   di dominio.
 
-# Nessun collaboratore monitorato: la pagina non ha il report
+# Collaboratori: si aggiungono dal gruppo con /aggiungi @pagina
 collaboratori_versione: 2026-11-10
 pagine_monitorate: []
 
