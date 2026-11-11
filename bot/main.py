@@ -32,6 +32,8 @@ COMMANDS = [
         ("manuali", "Manuali della pagina: in vendita e in arrivo",
          "/manuali mostra i manuali della pagina; /manuali attiva <id> quando un manuale esce (da lì descrizioni, CTA "
          "e storie lo propongono); /manuali disattiva <id>"),
+        ("riserva", "Foto di riserva per i post",
+         "/riserva e poi manda le foto tutte insieme: le usa al posto dell'immagine quando OpenAI rifiuta una slide"),
         ("sfondi", "Foto di sfondo delle storie di questa pagina",
          "/sfondi (o anche solo \"sfondi\") e poi manda le foto senza didascalia, non vengono lette come post "
          "(/sfondi fine per chiudere); oppure foto con "
@@ -636,8 +638,34 @@ _sfondi_modo: dict[int, float] = {}         # chat -> scadenza della "modalità 
 SFONDI_MODO_MINUTI = 15
 
 
-def _apri_sfondi(chat: int) -> None:
+_riserva_chat: set[int] = set()            # chat in cui la modalità aperta è /riserva (foto di riserva dei post)
+
+
+def _apri_sfondi(chat: int, riserva: bool = False) -> None:
     _sfondi_modo[chat] = time.time() + SFONDI_MODO_MINUTI * 60
+    (_riserva_chat.add if riserva else _riserva_chat.discard)(chat)
+
+
+def _conta_riserva() -> int:
+    d = images.cartella_riserva()
+    return len([p for p in d.glob("*") if p.suffix.lower() in (".jpg", ".jpeg", ".png", ".webp")]) if d.exists() else 0
+
+
+async def cmd_riserva(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """/riserva: foto da usare al posto dell'immagine quando OpenAI rifiuta una slide (11/11)."""
+    if not await _authorized(update):
+        return
+    chat = update.effective_chat.id
+    nome = writer.load_brand().get("nome", pagine.corrente())
+    if context.args and context.args[0].lower() in ("fine", "stop", "basta"):
+        _sfondi_modo.pop(chat, None)
+        _riserva_chat.discard(chat)
+        await update.effective_message.reply_text(f"Fatto. Foto di riserva di {nome}: {_conta_riserva()}.")
+        return
+    _apri_sfondi(chat, riserva=True)
+    await update.effective_message.reply_text(
+        f"Ok, mandami le foto di riserva per {nome}, anche tutte insieme in un unico messaggio: le uso al posto "
+        f"dell'immagine quando OpenAI rifiuta una slide. Ora ne hai {_conta_riserva()}. Le salvo e chiudo il comando da solo.")
 
 
 def _testo_modo_sfondi(slug: str) -> str:
@@ -919,7 +947,8 @@ async def _salva_sfondo(update: Update, context: ContextTypes.DEFAULT_TYPE, file
     """Aggiunge la foto agli sfondi delle storie della pagina del gruppo; un solo messaggio di riepilogo per album."""
     slug = pagine.corrente()
     es = _sfondi_esito.setdefault(gruppo, {"n": {}, "scritte": 0, "task": None, "attese": 0,
-                                           "msg": update.effective_message})
+                                           "msg": update.effective_message,
+                                           "riserva": update.effective_chat.id in _riserva_chat})
     es["attese"] += 1                        # foto ancora in lavorazione: il riepilogo aspetta anche queste
     if es["task"]:
         es["task"].cancel()
@@ -938,6 +967,12 @@ async def _salva_sfondo(update: Update, context: ContextTypes.DEFAULT_TYPE, file
 async def _salva_una(context, slug: str, file_id: str, cat: str, es: dict):
     f = await context.bot.get_file(file_id)
     data = bytes(await f.download_as_bytearray())
+    if es.get("riserva"):
+        d = images.cartella_riserva()
+        d.mkdir(parents=True, exist_ok=True)
+        (d / f"{int(time.time() * 1000)}_{file_id[-6:]}.jpg").write_bytes(data)
+        es["n"]["riserva"] = es["n"].get("riserva", 0) + 1
+        return
     categoria, scritte = await asyncio.to_thread(storie.aggiungi_sfondo, slug, data,
                                                  cat if cat in storie.SFONDI else None)
     es["n"][categoria] = es["n"].get(categoria, 0) + 1
@@ -957,6 +992,13 @@ def _programma_riepilogo(context, slug: str, gruppo: str, es: dict):
         if not e["n"]:
             return
         chiuso = ""
+        if e.get("riserva"):
+            _sfondi_modo.pop(int(gruppo[5:]), None) if gruppo.startswith("modo-") else None
+            _riserva_chat.discard(e["msg"].chat_id)
+            await e["msg"].reply_text(f"Aggiunte {sum(e['n'].values())} foto di riserva per "
+                                      f"{writer.load_brand().get('nome', slug)}. Ora ne hai {_conta_riserva()}.\n"
+                                      "Comando chiuso: le prossime foto tornano a essere post.")
+            return
         if gruppo.startswith("modo-"):          # /sfondi: arrivate le foto, il comando si chiude da solo
             _sfondi_modo.pop(int(gruppo[5:]), None)
             chiuso = "\nComando chiuso: le prossime foto tornano a essere post. Per altri sfondi riscrivi /sfondi."
@@ -1425,6 +1467,7 @@ def main():
     app.add_handler(CommandHandler("risposta", cmd_risposta))
     app.add_handler(CommandHandler("strutture", cmd_strutture))
     app.add_handler(CommandHandler(["sfondi", "sfondo"], cmd_sfondi))
+    app.add_handler(CommandHandler("riserva", cmd_riserva))
     app.add_handler(CommandHandler("manuali", cmd_manuali))
     app.add_handler(MessageHandler(filters.PHOTO | filters.Document.IMAGE, on_media))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_text))

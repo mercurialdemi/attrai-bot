@@ -834,32 +834,23 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
     best: Image.Image | None = None
     slide["_via"] = (f"{_motore().lower()}-pulizia+blocchi" if (mode == "codice" and blocks0)
                     else f"{_motore().lower()}-{mode}")
-    solo_gemini = False          # 11/11: se OpenAI rifiuta la foto, la stessa slide la ripulisce Gemini
-    for attempt in range(max(1, config.SLIDE_ATTEMPTS) + 1):
-        if attempt >= max(1, config.SLIDE_ATTEMPTS) and not solo_gemini:
-            break                # il giro in più serve solo al passaggio a Gemini
+    rifiutata = False
+    for attempt in range(max(1, config.SLIDE_ATTEMPTS)):
         slide["_tentativi"] = attempt + 1
         try:
             has_blocks = any((b.get("testo") or "").strip() for b in (slide.get("blocchi") or []))
             # con OpenAI il testo italiano lo scrive direttamente il modello (è molto bravo con il testo);
             # con Gemini, che sbaglia le lettere, Gemini pulisce e il testo lo scrive il codice
-            gmode = ("openai-testo" if (_openai_scrive(slide) and mode in ("codice", "gemini") and not solo_gemini)
+            gmode = ("openai-testo" if (_openai_scrive(slide) and mode in ("codice", "gemini"))
                      else "overlay" if (mode == "codice" and has_blocks) else ("gemini" if mode == "codice" else mode))
-            if solo_gemini:
-                _ULTIMO_MOTORE["nome"] = "Gemini"
-                edited = _gemini_only(original, _prompt(slide, gmode, feedback))
-            else:
-                edited = _gemini_edit(original, _prompt(slide, gmode, feedback))
+            edited = _gemini_edit(original, _prompt(slide, gmode, feedback))
         except Exception as e:  # rete, quota, filtri di sicurezza
             log.warning("Gemini tentativo %s fallito: %s", attempt + 1, e)
             problems = f"{_motore()} non ha risposto ({str(e)[:140]})"
             if "safety" in str(e).lower() or "moderation" in str(e).lower():
                 # rifiuto per contenuto (es. foto sensuale): riprovare la stessa immagine non serve
                 problems = f"{_motore()} rifiuta questa immagine per i suoi filtri sui contenuti"
-                if _motore() == "OpenAI" and config.GEMINI_API_KEY and not solo_gemini:
-                    log.info("Slide %s rifiutata da OpenAI: la ripulisce Gemini", slide.get("numero"))
-                    solo_gemini, feedback = True, ""
-                    continue
+                rifiutata = True
                 break
             continue
         if edited is None:
@@ -890,11 +881,59 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
                 continue
         img = add_brand_mark(img, brand, _avoid_boxes(slide, *img.size), textslide.wm_box(slide, *img.size), slide.get('_wm_alto')) if needs_logo(slide, brand) else img
         return img, True, ""
+    if rifiutata and blocks0:
+        # 11/11 (Gabriele): foto rifiutata -> una foto di riserva della pagina; il testo italiano lo scrive il codice negli stessi riquadri dell'originale
+        try:
+            sost = _immagine_sostitutiva(slide, orig_fit, blocks0, original_jpeg)
+        except Exception as e:
+            log.warning("Immagine sostitutiva non riuscita: %s", e)
+            sost = None
+        if sost is not None:
+            base, via = sost
+            W_, H_ = base.size
+            areas = [textslide.estendi_su_testo(orig_fit, textslide.block_box(b, W_, H_),
+                                                [c for c in (textslide._hex(b.get("colore")),) if c])
+                     for b in blocks0]
+            base = textslide.dark_fade(base, orig_fit, areas)
+            placements = []
+            img = textslide.render_blocks(base, orig_fit, blocks0, placements)
+            slide["_canva"] = {"tipo": "testo", "righe": placements}
+            slide["_via"] = via
+            slide["_sfondo"] = (add_brand_mark(base, brand, _avoid_boxes(slide, *base.size), None, slide.get('_wm_alto'))
+                                if needs_logo(slide, brand) else base)
+            img = (add_brand_mark(img, brand, _avoid_boxes(slide, *img.size), None, slide.get('_wm_alto'))
+                   if needs_logo(slide, brand) else img)
+            return img, True, ""
     # Nessun tentativo valido: restituiamo l'ultima prova (o l'originale) solo per riferimento, segnata come fallita.
     img = best or _fit(original, size)
     if slide.get("_motivo_codice"):
         problems = f"{slide['_motivo_codice']} | poi: {problems}" if problems else slide["_motivo_codice"]
     return img, False, problems or "non verificata"
+
+
+def _cover(img: Image.Image, size: tuple[int, int]) -> Image.Image:
+    """Riempie tutta la slide (ritaglio centrale), senza bande."""
+    W, H = size
+    s = max(W / img.width, H / img.height)
+    im = img.convert("RGB").resize((max(W, round(img.width * s)), max(H, round(img.height * s))), Image.LANCZOS)
+    x, y = (im.width - W) // 2, (im.height - H) // 2
+    return im.crop((x, y, x + W, y + H))
+
+
+def cartella_riserva() -> Path:
+    return config.DATA_DIR / "riserva"
+
+
+def _immagine_sostitutiva(slide: dict, orig_fit: Image.Image, blocks0: list, original_jpeg: bytes):
+    """Quando OpenAI rifiuta la foto: una foto a caso tra quelle di riserva della pagina (/riserva).
+    Niente immagine nuova da OpenAI: costerebbe quanto un'altra slide (Gabriele 11/11: abbassare i costi)."""
+    import random
+    foto = [p for p in cartella_riserva().glob("*") if p.suffix.lower() in (".jpg", ".jpeg", ".png", ".webp")]
+    if foto:
+        return _cover(Image.open(random.choice(foto)), orig_fit.size), "foto-di-riserva"
+    # nessuna foto di riserva: la stessa foto sfocata e scurita, così il post esce comunque completo (costo zero)
+    sf = orig_fit.convert("RGB").filter(ImageFilter.GaussianBlur(radius=max(12, orig_fit.width // 40)))
+    return Image.blend(sf, Image.new("RGB", sf.size, (0, 0, 0)), 0.35), "foto-sfocata"
 
 
 _SEM: asyncio.Semaphore | None = None
