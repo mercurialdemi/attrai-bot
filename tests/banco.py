@@ -120,6 +120,27 @@ CASI = {
         dict(testo='Chi conta le porte senza chiedersi chi aveva\nle chiavi non ha capito niente.', x=101, y=634, w=760, h=72, colore="#1A1A1A", allineamento="left", carattere=S),
         dict(testo='Salva per dopo', x=393, y=937, w=205, h=25, colore="#1A1A1A", allineamento="center", carattere=S),
     ]),
+    # post del 10/11 (post 102 @thementalpower e post 100 @stefdating): interlinea serratissima, le righe si toccano;
+    # segnalato "testo molto più piccolo/grande delle altre slide, font diversi"
+    "nero_umore.jpg": ("tinta_unita", "Her mood can change. She can be playful one moment and frustrated the next.\n\nYour job isn't to react to every emotion. It's to stay grounded through it.", [
+        dict(testo="L'umore le cambia in fretta. Un attimo prima scherza, quello dopo è nervosa.", x=156, y=395, w=686, h=80, colore="#FFFFFF", allineamento="left", carattere=S),
+        dict(testo="Il tuo compito non è reagire a ogni emozione. È restare saldo finché passa.", x=156, y=480, w=686, h=62, colore="#FFFFFF", allineamento="left", carattere=S),
+    ], "in basso: logo SDA e @stefdating", {"x": 403, "y": 857, "w": 190, "h": 80}),
+    "nero_frame.jpg": ("tinta_unita", "She needs a man who can handle her emotions without losing his frame.\n\nIf she's upset, stay calm.\nIf she disagrees, don't get defensive.\nIf she pushes back, don't immediately give in.\n\nDon't let the storm shake the mountain.", [
+        dict(testo="Le serve un uomo che regga le sue emozioni senza perdere il proprio frame.", x=156, y=317, w=680, h=88, colore="#FFFFFF", allineamento="left", carattere=S),
+        dict(testo="Se è arrabbiata, resta calmo.\nSe non è d'accordo, non metterti sulla difensiva.\nSe si oppone, non cedere subito.", x=156, y=422, w=690, h=120, colore="#FFFFFF", allineamento="left", carattere=S),
+        dict(testo="Una montagna non trema per una tempesta.", x=156, y=586, w=680, h=64, colore="#FFFFFF", allineamento="left", carattere=S),
+    ], "in basso: logo SDA e @stefdating", {"x": 403, "y": 857, "w": 190, "h": 80}),
+    "nero_serrato_3.jpg": ("tinta_unita", "3. Stop giving a fuck about being liked. Let them hate you. Let them talk shit. Let them call you arrogant. Approval is a drug for men with no fucking backbone.", [
+        dict(testo="3. Sbattitene\ndi piacere a tutti.", x=35, y=249, w=620, h=88, colore="#FFFFFF", allineamento="left", carattere=S),
+        dict(testo="Lascia che ti odino.\nChe sparlino.\nChe ti diano dell'arrogante.", x=35, y=356, w=810, h=137, colore="#8A8A8A", allineamento="left", carattere=S),
+        dict(testo="L'approvazione è la droga degli uomini\nsenza un caz*o di spina dorsale.", x=35, y=513, w=805, h=127, colore="#FFFFFF", allineamento="left", carattere=S),
+    ], "@thementalpower in basso", {"x": 372, "y": 921, "w": 255, "h": 38}),
+    "nero_serrato_7.jpg": ("tinta_unita", "7. Become dangerously unavailable. Stop answering every call. Stop entertaining every idiot. Stop being everybody's free fucking therapist.", [
+        dict(testo="7. Diventa pericolosamente\nirraggiungibile.", x=35, y=337, w=725, h=83, colore="#FFFFFF", allineamento="left", carattere=S),
+        dict(testo="Smetti di rispondere a ogni chiamata.\nSmetti di dare corda\na ogni idiota.", x=35, y=439, w=800, h=132, colore="#8A8A8A", allineamento="left", carattere=S),
+        dict(testo="Smetti di fare il caz*o\ndi psicologo gratis di tutti.", x=35, y=581, w=720, h=83, colore="#FFFFFF", allineamento="left", carattere=S),
+    ], "@thementalpower in basso", {"x": 372, "y": 921, "w": 255, "h": 38}),
 }
 
 

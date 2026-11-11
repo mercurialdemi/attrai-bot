@@ -98,6 +98,65 @@ def _runs(flags: np.ndarray, min_gap: int = 1) -> list[tuple[int, int]]:
     return out
 
 
+def _cut_run(seg: np.ndarray, thr: float):
+    """Tagli dentro un blocco di righe che si toccano (posizioni relative) e altezze delle fasce piene."""
+    strong = seg >= thr * float(np.percentile(seg, 90))
+    bands = [b for b in _runs(strong, min_gap=1) if b[1] - b[0] + 1 >= 4]
+    if len(bands) < 2:
+        return [], []
+    hmax = max(b[1] - b[0] + 1 for b in bands)
+    bands = [b for b in bands if b[1] - b[0] + 1 >= 0.5 * hmax]
+    cuts = [e + int(np.argmin(seg[e:s + 1])) for (_, e), (s, _) in zip(bands, bands[1:]) if s - e >= 3]
+    return cuts, ([b[1] - b[0] + 1 for b in bands] if cuts else [])
+
+
+def _pieces(y0: int, y1: int, cuts: list) -> list[tuple[int, int]]:
+    out, start = [], y0
+    for c in cuts:
+        out.append((start, y0 + c - 1))
+        start = y0 + c + 1
+    out.append((start, y1))
+    return out
+
+
+def _split_touching(raw: list[tuple[int, int]], prof: np.ndarray, bande: list | None = None) -> list[tuple[int, int]]:
+    """Interlinea serratissima: le gambe di g/p/y di una riga toccano le aste della riga sotto e tutto il
+    paragrafo sembra una riga sola, alta quanto tre o quattro righe (il testo italiano usciva enorme: post 100
+    e 102, segnalati da Gabriele il 10/11). Dentro ogni blocco si cercano le fasce "piene" (il corpo delle
+    lettere minuscole); tra due fasce piene c'è una valle quasi vuota: lì si taglia.
+    In `bande` (se data) si aggiungono le altezze delle fasce piene dei blocchi tagliati: servono a misurare il corpo."""
+    found: list = []
+    out = []
+    for y0, y1 in raw:
+        seg = prof[y0:y1 + 1].astype(float)
+        cuts, bh = _cut_run(seg, 0.35) if len(seg) >= 12 else ([], [])
+        found += bh
+        out += _pieces(y0, y1, cuts)
+    if found:
+        # seconda passata: un pezzo ancora alto quasi due righe si riprova con un'altra soglia (più alta: valle
+        # piena di aste e gambe; più bassa: l'ultima riga del paragrafo è corta, es. "the next.").
+        # Solo se altrove nella slide si sono già viste righe che si toccano.
+        riga = float(np.median(found)) / 0.546
+        again = []
+        for y0, y1 in out:
+            if y1 - y0 + 1 > 1.7 * riga:
+                seg = prof[y0:y1 + 1].astype(float)
+                for thr in (0.5, 0.25, 0.15):
+                    c2, _ = _cut_run(seg, thr)
+                    pezzi = np.diff([0] + c2 + [len(seg)])
+                    if c2 and all(0.6 * riga <= h <= 1.6 * riga for h in pezzi):
+                        again += _pieces(y0, y1, c2)
+                        break
+                else:
+                    again.append((y0, y1))
+            else:
+                again.append((y0, y1))
+        out = again
+    if bande is not None:
+        bande += found
+    return out
+
+
 def _size_from_text(text_lines, original_text: str, weight: str) -> int | None:
     """Corpo del carattere ricavato confrontando la larghezza delle righe misurate con il testo letto da Claude."""
     orig = [ln.strip() for ln in (original_text or "").split("\n") if ln.strip()]
@@ -213,7 +272,8 @@ def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False,
         return None
     lines = []
     prof = ink.sum(axis=1)
-    raw = _runs(prof >= 2, min_gap=1)
+    bande: list = []
+    raw = _split_touching(_runs(prof >= 2, min_gap=1), prof, bande)
     # quante righe di testo ha l'originale (dalla trascrizione di Claude, che mantiene gli a capo)
     n_orig = len([ln for ln in (original_text or "").split("\n") if ln.strip()])
     text_runs = [r for r in raw if r[0] < H * 0.9 and r[1] - r[0] >= 6]
@@ -320,12 +380,25 @@ def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False,
                 size = cand
                 break
         weight = weight
+        if len(bande) >= 3:
+            # righe che si toccavano: l'altezza dei pezzi tagliati comprende anche la valle tra le righe (corpo
+            # sovrastimato e interlinea schiacciata). Vale l'altezza del corpo delle lettere: occhio delle minuscole
+            # (circa 0.55 del corpo) o, se il testo è tutto maiuscolo, l'altezza delle maiuscole (circa 0.73)
+            lett = [c for c in (original_text or "") if c.isalpha()]
+            minusc = sum(c.islower() for c in lett) > 0.3 * max(1, len(lett))
+            size = int(round(float(np.median(bande)) / (0.546 if minusc else 0.727)))
 
     # interlinea misurata: distanza tipica tra l'inizio di due righe consecutive
     tops = [l[0] for l in text_lines]
     gaps = np.diff(tops) if len(tops) > 1 else np.array([size * 1.32])
     pitch = float(np.percentile(gaps, 30)) if len(gaps) else size * 1.32
     step0 = float(np.min(gaps)) if len(tops) > 1 else pitch
+    if len(bande) >= 3 and len(tops) > 2:
+        # righe tagliate: l'inizio di ogni pezzo cade nella valle e la distanza minima esce più corta del vero;
+        # si prende la distanza tipica tra righe dello stesso paragrafo
+        stretti = [g for g in gaps if g < 1.5 * size]
+        if stretti:
+            step0 = float(np.median(stretti))
     # interlinea vera (anche serratissima, righe che quasi si toccano) e stacco vero tra i paragrafi
     line_ratio = float(np.clip(step0 / max(size, 1), 0.95, 1.8))
     big = [g - step0 for g in gaps if g > step0 * 1.22]
