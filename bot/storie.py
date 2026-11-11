@@ -540,12 +540,13 @@ def disegna(blocchi: list[str], prima: bool, brand: dict, base: Image.Image,
     max_w = W - 2 * MARGINE_X - 2 * PAD_X
     # testo centrato in verticale su tutte le slide (Gabriele, 6/11); solo la storia che apre il box domande
     # tiene libera la metà alta per lo sticker DOMANDA
-    zona_alta = H // 2 + 40 if sticker else TOP_SAFE
+    zona_alta = int(H * 0.34) if sticker else TOP_SAFE   # lo sticker DOMANDA occupa circa il terzo alto
     zona_bassa = H - BOTTOM_SAFE
     if prima and domanda:
         # risposta al box domande: domanda del follower in alto (25%), gancio al centro (45-50%)
         zona_alta, zona_bassa = int(H * 0.36), int(H * 0.64)
-    size = 68 if prima else 50                # il gancio è più breve: scritto più grande (Gabriele, 6/11)
+    corto = sum(len(b) for b in blocchi) < 160
+    size = 68 if (prima and corto) else 50    # gancio breve: più grande (6/11); slide piene tipo AscesaMentale (11/11): 50
     while True:
         f = _font(FONT_BOLD, size)
         lh = int(size * 1.22)
