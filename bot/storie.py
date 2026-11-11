@@ -576,7 +576,8 @@ def disegna(blocchi: list[str], prima: bool, brand: dict, base: Image.Image,
                 if k < len(r) - 1:
                     x += draw.textlength("a a", font=f) - draw.textlength("aa", font=f)   # lo spazio da solo misura 0
             righe_out.append({"testo": " ".join(_testo(w) for w in r), "x": float(MARGINE_X + PAD_X), "y": float(ty),
-                              "size": size, "weight": "bold_carlito", "color": (255, 255, 255), "runs": runs})
+                              "size": size, "weight": "bold_carlito", "color": (255, 255, 255), "runs": runs,
+                              "spazi": True})
             ty += lh
         y += h_blocco + GAP
     if prima and domanda:

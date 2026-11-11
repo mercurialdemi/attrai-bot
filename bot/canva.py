@@ -120,7 +120,9 @@ def _casella(s, g: dict, W: int) -> None:
             word, col = item[0], item[1]
             strong = bool(item[2]) if len(item) > 2 else False
             run = par.add_run()
-            run.text = word + (" " if k < len(runs) - 1 else "")
+            # 11/11: nelle storie i pezzi hanno già gli spazi giusti (anche "cercando" + "." senza spazio):
+            # aggiungerne altri faceva sforare il bordo in Canva
+            run.text = word if r.get("spazi") else word + (" " if k < len(runs) - 1 else "")
             f = run.font
             f.name = FONT_NAMES.get(r["weight"], "Inter")
             f.size = Pt(r["size"] * 0.75)          # pixel -> punti
