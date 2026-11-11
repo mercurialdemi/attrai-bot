@@ -1660,3 +1660,36 @@ def allarga_marchio(img: Image.Image, box: tuple, evita: list | None = None) -> 
     # margine: le scritte sottili lasciano un'ombra se il riquadro le taglia appena
     py, px = int(H * 0.012), int(W * 0.01)
     return (max(0, xa - px), max(0, y0 - py), min(W, xb + px), min(max(y1, yb2) + py, max(yb, y1)))
+
+
+def estendi_su_testo(img: Image.Image, box: tuple[int, int, int, int], colors: list,
+                     soglia: float = 0.03) -> tuple[int, int, int, int]:
+    """Allarga il riquadro in alto e in basso finché le righe appena fuori contengono ancora lettere del colore del
+    testo (11/11: Claude misurava la prima riga troppo in basso e ne restavano le punte sopra la fascia nera)."""
+    if not colors:
+        return box
+    import numpy as np
+    x0, y0, x1, y1 = box
+    W, H = img.size
+    a = np.asarray(img.convert("RGB")).astype(np.int16)
+    lim = max(4, min(int(0.04 * H), int(0.15 * (y1 - y0))))
+
+    def riga_testo(y: int) -> bool:
+        r = a[y, max(0, x0):min(W, x1)]
+        hit = np.zeros(r.shape[0], bool)
+        for c in colors:
+            hit |= np.abs(r - np.array(c[:3], np.int16)).sum(1) < 90
+        return hit.mean() > soglia
+
+    def spingi(y: int, passo: int, fine: int) -> int:
+        ultimo, vuote = y, 0
+        yy = y + passo
+        while 0 <= yy < H and abs(yy - y) <= lim and vuote < 3:
+            if riga_testo(yy):
+                ultimo, vuote = yy, 0
+            else:
+                vuote += 1
+            yy += passo
+        return ultimo
+
+    return (x0, spingi(y0, -1, 0), x1, spingi(y1 - 1, 1, H) + 1)

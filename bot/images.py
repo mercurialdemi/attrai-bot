@@ -799,6 +799,8 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
             testo_box = list(areas)
             marchi = ([textslide.allarga_marchio(orig_fit, wb, testo_box)] if wb else []) \
                 + [textslide.allarga_marchio(orig_fit, m, testo_box) for m in textslide.other_marks(slide, W_, H_)]
+            # se la prima o l'ultima riga è misurata troppo stretta, il riquadro scende/sale sulle lettere rimaste
+            areas = [textslide.estendi_su_testo(orig_fit, ar, c) for ar, c in zip(areas, cols)]
             clean = textslide.inpaint_boxes(orig_fit, areas, colors=cols)
             if marchi:
                 # marchi dell'altra pagina (avatar, @handle, filetti): ricostruzione liscia, senza riportare la
@@ -832,21 +834,32 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
     best: Image.Image | None = None
     slide["_via"] = (f"{_motore().lower()}-pulizia+blocchi" if (mode == "codice" and blocks0)
                     else f"{_motore().lower()}-{mode}")
-    for attempt in range(max(1, config.SLIDE_ATTEMPTS)):
+    solo_gemini = False          # 11/11: se OpenAI rifiuta la foto, la stessa slide la ripulisce Gemini
+    for attempt in range(max(1, config.SLIDE_ATTEMPTS) + 1):
+        if attempt >= max(1, config.SLIDE_ATTEMPTS) and not solo_gemini:
+            break                # il giro in più serve solo al passaggio a Gemini
         slide["_tentativi"] = attempt + 1
         try:
             has_blocks = any((b.get("testo") or "").strip() for b in (slide.get("blocchi") or []))
             # con OpenAI il testo italiano lo scrive direttamente il modello (è molto bravo con il testo);
             # con Gemini, che sbaglia le lettere, Gemini pulisce e il testo lo scrive il codice
-            gmode = ("openai-testo" if (_openai_scrive(slide) and mode in ("codice", "gemini"))
+            gmode = ("openai-testo" if (_openai_scrive(slide) and mode in ("codice", "gemini") and not solo_gemini)
                      else "overlay" if (mode == "codice" and has_blocks) else ("gemini" if mode == "codice" else mode))
-            edited = _gemini_edit(original, _prompt(slide, gmode, feedback))
+            if solo_gemini:
+                _ULTIMO_MOTORE["nome"] = "Gemini"
+                edited = _gemini_only(original, _prompt(slide, gmode, feedback))
+            else:
+                edited = _gemini_edit(original, _prompt(slide, gmode, feedback))
         except Exception as e:  # rete, quota, filtri di sicurezza
             log.warning("Gemini tentativo %s fallito: %s", attempt + 1, e)
             problems = f"{_motore()} non ha risposto ({str(e)[:140]})"
             if "safety" in str(e).lower() or "moderation" in str(e).lower():
                 # rifiuto per contenuto (es. foto sensuale): riprovare la stessa immagine non serve
                 problems = f"{_motore()} rifiuta questa immagine per i suoi filtri sui contenuti"
+                if _motore() == "OpenAI" and config.GEMINI_API_KEY and not solo_gemini:
+                    log.info("Slide %s rifiutata da OpenAI: la ripulisce Gemini", slide.get("numero"))
+                    solo_gemini, feedback = True, ""
+                    continue
                 break
             continue
         if edited is None:
