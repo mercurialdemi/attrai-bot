@@ -700,6 +700,13 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
                                 escludi=_marchi(original))
         if lay and slide.get("_peso_post"):
             lay.weight = slide["_peso_post"]          # stesso font e spessore in tutte le slide del post
+        if lay and slide.get("_size_post") and lay.size < 0.8 * slide["_size_post"]:
+            log.info("Slide %s: corpo misurato %s, molto sotto quello del post (%s): uso quello del post",
+                     slide.get("numero"), lay.size, slide["_size_post"])
+            W_o = original.width
+            lay.size = int(slide["_size_post"])
+            lay.width = min(max(lay.width, int(slide.get("_width_post") or 0)),
+                            W_o - max(lay.left, int(W_o * textslide.SAFE_X)) - int(W_o * textslide.SAFE_X))
         if lay:
             placements: list = []
             img = textslide.render(original, lay, testo, placements)
@@ -943,6 +950,7 @@ _SEM_LOOP = None
 def _post_weight(slides: list[dict], originals: list[bytes]) -> str | None:
     from collections import Counter
     votes = Counter()
+    misure: list[tuple[int, int]] = []
     for sl, data in zip(slides, originals):
         if not sl.get("da_modificare", True) or any(b.get("carattere") in ("titolo", "stretto")
                                                     for b in (sl.get("blocchi") or [])):
@@ -954,7 +962,15 @@ def _post_weight(slides: list[dict], originals: list[bytes]) -> str | None:
             lay = None
         if lay:
             votes[lay.weight] += 1
+            misure.append((lay.size, lay.width))
     _free_memory()
+    # 11/11: stesso corpo in tutto il post. Se su una slide la misura esce molto più piccola delle altre
+    # (post 108: una slide col testo minuscolo), quella slide usa il corpo e la larghezza tipici del post
+    if len(misure) >= 2:
+        sz = sorted(m[0] for m in misure)[len(misure) // 2]
+        wd = sorted(m[1] for m in misure)[len(misure) // 2]
+        for sl in slides:
+            sl["_size_post"], sl["_width_post"] = sz, wd
     return votes.most_common(1)[0][0] if sum(votes.values()) >= 2 else None
 
 

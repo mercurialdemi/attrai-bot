@@ -862,6 +862,13 @@ async def process_revision(update: Update, context: ContextTypes.DEFAULT_TYPE, j
             new["slides"] = new["slides"][:len(originals)]
             changed = {n for n in _changed_slides(old, new)
                        if n <= n_orig and "(slide CTA" not in (new["slides"][n - 1].get("testo") or "")}
+            m_sl = re.match(r"Slide (\d+) \(solo questa", instruction)
+            if m_sl:                                # risposta a una slide precisa: si rifà solo quella
+                n_sl = int(m_sl.group(1))
+                for k in range(len(new["slides"])):
+                    if k + 1 != n_sl and k < len(old["slides"]):
+                        new["slides"][k] = old["slides"][k]
+                changed = {n_sl} if 1 <= n_sl <= n_orig else changed
             for n in changed:                       # una slide che Gabriele vuole cambiare va rifatta anche se era già italiana
                 if 1 <= n <= len(new["slides"]):
                     new["slides"][n - 1]["da_modificare"] = True
@@ -1189,9 +1196,26 @@ async def on_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
             return
     job = job or storage.last_job(update.effective_chat.id)
     if job:
+        # 11/11: risposta a una slide precisa ("…_slide_03.jpg"): la correzione vale per QUELLA slide
+        n_sl = _slide_del_messaggio(msg.reply_to_message)
+        if n_sl and not re.search(r"\bslide\s*\d+|\b\d+[ªa°]?\s*slide", text, re.IGNORECASE):
+            text = f"Slide {n_sl} (solo questa, le altre restano com'sono): {text}"
         await process_revision(update, context, job, text)
     else:
         await _manda_lungo(msg, HELP)
+
+
+def _slide_del_messaggio(rep) -> int | None:
+    """Numero della slide del messaggio a cui si risponde: dal nome del file (…_slide_03.jpg) o dalla didascalia."""
+    if not rep:
+        return None
+    nomi = [getattr(rep.document, "file_name", "") or ""] if rep.document else []
+    nomi.append(rep.caption or "")
+    for t in nomi:
+        m = re.search(r"slide[_ ]?0*(\d+)", t, re.IGNORECASE)
+        if m:
+            return int(m.group(1))
+    return None
 
 
 # ---------------------------------------------------------------- avvio
