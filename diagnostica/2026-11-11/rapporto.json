@@ -1,43 +1,57 @@
 {
  "giorno": "2026-11-11",
- "post_preparati": 9,
- "slide_totali": 110,
- "slide_fallite": 1,
+ "post_preparati": 18,
+ "slide_totali": 190,
+ "slide_fallite": 2,
  "lavorazione": {
   "openai-testo": {
-   "totali": 36,
+   "totali": 54,
    "fallite": 1
   },
   "cta-illustrata": {
-   "totali": 3,
-   "fallite": 0
-  },
-  "cta-alone": {
-   "totali": 2,
-   "fallite": 0
-  },
-  "blocchi-ricostruzione-codice": {
-   "totali": 2,
-   "fallite": 0
-  },
-  "testo-su-sfondo-uniforme": {
-   "totali": 43,
-   "fallite": 0
-  },
-  "cta-stile-post": {
    "totali": 4,
    "fallite": 0
   },
-  "blocchi-sfondo-pieno": {
-   "totali": 17,
+  "cta-alone": {
+   "totali": 4,
    "fallite": 0
   },
   "blocchi-pulizia-codice": {
-   "totali": 3,
+   "totali": 5,
    "fallite": 0
+  },
+  "blocchi-sfondo-pieno": {
+   "totali": 25,
+   "fallite": 0
+  },
+  "testo-su-sfondo-uniforme": {
+   "totali": 81,
+   "fallite": 0
+  },
+  "cta-stile-post": {
+   "totali": 10,
+   "fallite": 0
+  },
+  "blocchi-ricostruzione-codice": {
+   "totali": 6,
+   "fallite": 0
+  },
+  "openai-pulizia+blocchi": {
+   "totali": 1,
+   "fallite": 1
   }
  },
  "segnalazioni": [
+  {
+   "job_id": 87,
+   "testo": "rimangono le sfumature dietro lo sfondo e sono brutte",
+   "quando": "2026-11-08T16:52:43+00:00"
+  },
+  {
+   "job_id": 91,
+   "testo": "il font e la dimensione non si leggono abbastanza bene",
+   "quando": "2026-11-08T17:02:36+00:00"
+  },
   {
    "job_id": 100,
    "testo": "il testo è molto piccolo e sfalsato, il logo troppo grande",
@@ -67,9 +81,274 @@
    "job_id": 102,
    "testo": "In questa slide come vedi il testo è molto piu piccolo delle altre slides. Male. Inoltre non è fluido proprio il post",
    "quando": "2026-11-10T17:48:53+00:00"
+  },
+  {
+   "job_id": 105,
+   "testo": ":",
+   "quando": "2026-11-11T08:58:08+00:00"
   }
  ],
  "post_con_problemi": [
+  {
+   "job_id": 91,
+   "fonte": "https://www.instagram.com/p/Dfd8ukbm5h3/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "YOU'LL NEVER FIND ANOTHER ME.\nTHAT'S THE PLAN.",
+     "testo": "NON TROVERAI MAI\nUN'ALTRA\nCOME ME.\n\nÈ QUELLO CHE SPERO.",
+     "blocchi": [
+      {
+       "x": 430,
+       "y": 15,
+       "w": 436,
+       "h": 152,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 387,
+       "y": 510,
+       "w": 590,
+       "h": 47,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "YOU REALLY THINK YOU'RE BETTER OFF WITHOUT ME?\nI'M BETTER OFF WITHOUT THE VERSION OF MYSELF I BECAME TRYING TO KEEP YOU.",
+     "testo": "CREDI DAVVERO\nDI STARE MEGLIO\nSENZA DI ME?\n\nSTO MEGLIO SENZA\nL'UOMO CHE ERO\nDIVENTATO\nPUR DI TENERTI.",
+     "blocchi": [
+      {
+       "x": 36,
+       "y": 93,
+       "w": 404,
+       "h": 142,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 479,
+       "y": 44,
+       "w": 500,
+       "h": 196,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "YOU SAY THAT LIKE I WAS THE PROBLEM.\nI SAY IT LIKE I FINALLY LEARNED THE PATTERN. APOLOGIES WITHOUT CHANGE. AFFECTION AFTER DISRESPECT. PROMISES ONLY WHEN I WAS READY TO LEAVE.",
+     "testo": "LO DICI COME SE\nIL PROBLEMA FOSSI IO.\n\nLO DICO PERCHÉ ORMAI\nIL COPIONE LO CONOSCO.\nSCUSE CHE NON CAMBIANO NIENTE.\nAFFETTO SUBITO DOPO\nOGNI MANCANZA DI RISPETTO.\nPROMESSE SOLO QUANDO\nAVEVO GIÀ UN PIEDE FUORI.",
+     "blocchi": [
+      {
+       "x": 23,
+       "y": 18,
+       "w": 396,
+       "h": 92,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 297,
+       "y": 78,
+       "w": 682,
+       "h": 286,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "NOBODY WILL EVER LOVE YOU LIKE I DID.\nTHEN I HOPE NOT. LOVE SHOULDN'T REQUIRE A MAN TO ABANDON HIS SELF-RESPECT JUST TO KEEP IT.",
+     "testo": "NESSUNA TI AMERÀ MAI\nCOME TI HO AMATO IO.\n\nSPERO PROPRIO DI NO.\nL'AMORE NON DOVREBBE\nCHIEDERE A UN UOMO\nDI SVENDERE LA PROPRIA DIGNITÀ\nPUR DI TENERSELO.",
+     "blocchi": [
+      {
+       "x": 33,
+       "y": 15,
+       "w": 579,
+       "h": 100,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 378,
+       "y": 125,
+       "w": 605,
+       "h": 193,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "SO YOU'RE REPLACING ME?\nI'M REPLACING CHAOS WITH PEACE. CONFUSION WITH CLARITY. ACCESS WITH DISTANCE.",
+     "testo": "QUINDI MI STAI\nSOSTITUENDO?\n\nSTO SOSTITUENDO IL CAOS\nCON LA PACE.\nLA CONFUSIONE CON LA LUCIDITÀ.\nLA PORTA SEMPRE APERTA\nCON LA DISTANZA.",
+     "blocchi": [
+      {
+       "x": 23,
+       "y": 88,
+       "w": 452,
+       "h": 112,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 443,
+       "y": 39,
+       "w": 536,
+       "h": 161,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "YOU THINK YOU CAN DO BETTER?\nBETTER ISN'T ALWAYS ANOTHER WOMAN. SOMETIMES BETTER IS SLEEPING WELL, THINKING CLEARLY, AND RESPECTING THE MAN IN THE MIRROR AGAIN.",
+     "testo": "PENSI DI POTER\nTROVARE DI MEGLIO?\n\nIL MEGLIO NON È PER FORZA\nUN'ALTRA DONNA.\nA VOLTE IL MEGLIO\nÈ DORMIRE LA NOTTE,\nAVERE LA TESTA LUCIDA\nE TORNARE A RISPETTARE\nL'UOMO ALLO SPECCHIO.",
+     "blocchi": [
+      {
+       "x": 39,
+       "y": 142,
+       "w": 410,
+       "h": 98,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 358,
+       "y": 15,
+       "w": 619,
+       "h": 327,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "WHAT IF I CHANGE?\nCHANGE IS SOMETHING YOU LIVE. NOT SOMETHING YOU ANNOUNCE WHEN CONSEQUENCES FINALLY ARRIVE.",
+     "testo": "E SE\nCAMBIASSI?\n\nIL CAMBIAMENTO\nSI VEDE NEI FATTI.\nNON SI ANNUNCIA\nSOLO QUANDO\nARRIVA IL CONTO.",
+     "blocchi": [
+      {
+       "x": 20,
+       "y": 73,
+       "w": 286,
+       "h": 142,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 406,
+       "y": 15,
+       "w": 571,
+       "h": 278,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "HE ISN'T LOOKING FOR ANOTHER HER. HE IS LOOKING FOR A LIFE THAT DOESN'T REQUIRE RECOVERING FROM HER. SOMETIMES THE UPGRADE ISN'T WHO COMES NEXT. IT'S WHO HE BECOMES AFTER HE LEAVES.",
+     "testo": "NON CERCA\nUN'ALTRA COME LEI.\nCERCA UNA VITA\nIN CUI NON DEBBA PIÙ\nRIPRENDERSI DA LEI.\nA VOLTE IL SALTO DI QUALITÀ\nNON È CHI ARRIVA DOPO.\nÈ L'UOMO CHE DIVENTA\nQUANDO SE NE VA.",
+     "blocchi": [
+      {
+       "x": 72,
+       "y": 15,
+       "w": 892,
+       "h": 405,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "cta-illustrata",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se ti sei rivisto in questa scena,\nsai già quanto ti è costato restare.\n\nA volte rispettarti significa andartene\nda dove vieni continuamente mancato di rispetto,\nsenza doverlo implorare.\n\nPerché più supplichi qualcuno di rispettarti,\npiù rischi di perdere il rispetto per te stesso.\n\nHo scritto due libri: \"AttraiSeduci\" + \"Potere Sociale\",\nper insegnarti come funzionano attrazione, rispetto e limiti,\ne come costruire una presenza che non si negozia.\n\nLa scelta è tua:\ncontinuare a elemosinare risp",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Una serie di vignette in cui lei, mentre lui se ne va, prova a trattenerlo con le classiche frasi a effetto ('non troverai mai un'altra come me', 'nessuno ti amerà come me', 'e se cambio?'). Lui risponde ogni volta calmo e spietato: non se ne va per un'altra donna, se ne va per riprendersi la pace, la lucidità e il rispetto per se stesso. Il succo: a volte il vero salto di qualità non è chi arriva dopo, ma l'uomo che diventi quando te ne vai. Registro: provocatorio, fiero, di rivalsa.",
+   "descrizione": "Lei ti dice che non troverai mai un'altra come lei. E per un attimo ci credi, perché per mesi ti ha fatto sentire che fuori da quella relazione non c'era niente.\n\nIl guaio è che quella frase non parla di te. Parla della paura di perdere l'uomo che le permetteva tutto. Quando un uomo resta troppo a lungo dove non viene rispettato, non paga solo in tempo. Paga in stima di sé. Smette di riconoscersi, si scusa per cose che non ha fatto e aspetta la versione dolce di lei come si aspetta una tregua.\n\nIl motivo per cui andarsene è così difficile ha un nome. Nel 1981 Donald Dutton e Susan Painter hanno descritto il legame traumatico: quando dolore e affetto si alternano, il legame non si indebolisce, si rafforza. L'abbraccio che arriva dopo la mancanza di rispetto pesa il doppio proprio perché arriva dopo. Caryl Rusbult, con il suo modello dell'investimento, ha aggiunto un altro pezzo: spesso non restiamo dove siamo felici, ma dove abbiamo investito troppo per ammettere che non funziona.\n\nEd è qui che molti uomini commettono l'errore: aspettano la risposta perfetta, quella che la metta finalmente davanti alle sue responsabilità. Ma le risposte di questo post non servono a vincere la discussione. Servono a lui, per ricordarsi chi era prima.\n\nLa promessa di cambiare che arriva solo quando hai già un piede fuori non è un cambiamento. È una trattativa. E ogni volta che la accetti, lei impara quanto costa trattenerti: quasi niente.\n\nAndarsene non vuol dire perdere. Vuol dire smettere di pagare con la tua dignità il diritto di restare.\n\nQuale di queste frasi ti ha tenuto dentro più a lungo del dovuto?\n\nSe ti sei rivisto in questa scena, sai già quanto ti è costato restare. Chi non sa farsi rispettare finisce per implorare di essere amato, con lei e con tutti gli altri. Per questo ho riunito \"AttraiSeduci\" e \"Potere Sociale\" in un unico bundle: come funzionano attrazione, rispetto e limiti, e come smettere di negoziare te stesso. Lo trovi nel link in bio, oppure commenta BUNDLE.",
+   "segnalazioni": [
+    "il font e la dimensione non si leggono abbastanza bene"
+   ]
+  },
   {
    "job_id": 96,
    "fonte": "https://www.instagram.com/p/DfhWEg3mkf0/",
@@ -2245,6 +2524,216 @@
    "concetto": "Un carosello provocatorio, da pagina di mascolinità, che mette a confronto uomini e donne. Parte da battute ad effetto (una volta i padri avevano tanti figli, oggi i figli hanno tanti padri) e arriva a frasi taglienti su doppi standard, divorzi e soldi. Poi ritrae l'uomo raro, disciplinato e impossibile da incasellare, e chiude con i segnali di un'aura maschile forte. Il registro è polarizzante, duro e motivazionale e punta sull'orgoglio maschile.",
    "descrizione": "C'è un momento in cui un uomo si accorge di essere diventato utile. Non amato, non desiderato: utile. Paga, risolve, sistema, accompagna. E una sera, mentre lei gli chiede l'ennesima cosa, capisce che da mesi nessuno gli domanda più come sta.\n\nÈ una sensazione che costa cara, perché ti toglie la stima di te: cominci a misurare quanto vali da quanto dai. E si ripete per un motivo semplice. Ogni volta che senti il rapporto raffreddarsi, l'unica risposta che conosci è dare ancora di più.\n\nLe frasi di questo post sono volutamente taglienti. Qualcuna ti avrà fatto sorridere, qualcun'altra arrabbiare. Ma sotto il sarcasmo c'è una cosa seria. Nel 1989 lo psicologo David Buss ha confrontato le preferenze di coppia in 37 culture diverse: quasi ovunque le donne davano più peso degli uomini alle prospettive economiche del partner. Nessuna accusa, solo una tendenza documentata. Il guaio comincia quando un uomo la scambia per l'unica cosa che ha da offrire.\n\nEd è qui che molti uomini commettono l'errore: pensano che per essere scelti debbano diventare indispensabili. Più soldi, più favori, più disponibilità. Ma un uomo che si presenta come una risorsa viene trattato come una risorsa: si usa finché serve e si sostituisce quando ne arriva una migliore. Nel tentativo di diventare insostituibile, finisce per diventare intercambiabile.\n\nQuello che una donna non riesce a rimpiazzare non è il tuo stipendio. È un uomo che ha un centro suo: standard che non tratta, una vita che non ruota attorno a lei, la calma di chi sa andarsene se viene mancato di rispetto. Gli altri uomini lo percepiscono, lei lo percepisce. Il rispetto che ricevi fuori è quasi sempre lo specchio di quello che hai per te.\n\nUna rendita si sostituisce.\nUn uomo con dei principi no.\n\nIn quale relazione hai smesso di essere un uomo per diventare un servizio?\n\nSe anche una sola di queste frasi ti ha punto, il problema non sono le donne ma la posizione da cui ti presenti. Ho riunito \"AttraiSeduci\" + \"Potere Sociale\" in un bundle che ti insegna a farti rispettare dagli uomini e desiderare dalle donne, senza comprarti il posto nella vita di nessuno. Lo trovi nel link in bio, oppure commenta BUNDLE.",
    "segnalazioni": []
+  },
+  {
+   "job_id": 105,
+   "fonte": "https://www.instagram.com/p/DfjsCF6EVm3/",
+   "fallite": [
+    1
+   ],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 1,
+     "fallita": true,
+     "problema": "Sopra la fascia nera si vedono ancora i pezzi tagliati della scritta inglese originale \"MOST WOMEN LOSE A\". Il testo italiano è corretto. | poi: OpenAI rifiuta questa immagine per i suoi filtri sui contenuti",
+     "testo_originale": "MOST WOMEN LOSE A GOOD MAN BY LISTENING TO THEIR LONELY, BITTER, H*E FRIENDS.",
+     "testo": "TANTE DONNE PERDONO UN BRAV'UOMO\nPER DARE RETTA ALLE AMICHE SOLE,\nACIDE E FACILI.",
+     "blocchi": [
+      {
+       "x": 104,
+       "y": 674,
+       "w": 845,
+       "h": 250,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#F05454",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "SHE'S GETTING ADVICE FROM WOMEN WHO CANT KEEP A MAN.\n\nFROM WOMEN WHO SLEEP AROUND.\nFROM WOMEN WHO ARE SECRETLY JEALOUS OF HER.",
+     "testo": "SI FA CONSIGLIARE DA DONNE\nCHE UN UOMO NON SANNO TENERSELO.\n\nDA DONNE CHE VANNO A LETTO\nCON CHIUNQUE.\nDA DONNE CHE, SOTTO SOTTO,\nLA INVIDIANO.",
+     "blocchi": [
+      {
+       "x": 85,
+       "y": 268,
+       "w": 760,
+       "h": 97,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 85,
+       "y": 423,
+       "w": 800,
+       "h": 185,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#F05454",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "THESE \"FRIENDS\" DON'T WANT HER HAPPY.\n\nTHEY WANT HER SINGLE LIKE THEM.\nTHEY WANT HER OUT ON FRIDAY NIGHTS, DRUNK, CRYING IN THE BATHROOM.\n\nTHIS IS PATTERN #09. LINK IN BIO.",
+     "testo": "QUESTE \"AMICHE\" NON VOGLIONO\nVEDERLA FELICE.\n\nLA VOGLIONO SOLA COME LORO:\nFUORI IL VENERDÌ SERA, UBRIACA,\nA PIANGERE CHIUSA IN BAGNO.\n\nÈ LO SCHEMA N. 9. LINK IN BIO.",
+     "blocchi": [
+      {
+       "x": 88,
+       "y": 231,
+       "w": 746,
+       "h": 80,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 369,
+       "w": 760,
+       "h": 188,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 586,
+       "w": 740,
+       "h": 40,
+       "carattere": "titolo",
+       "colore": "#FE585A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "THEY WHISPER IN HER EAR:\n\"GIRL, YOU CAN DO BETTER.\"\n\nTRANSLATION:\n\"COME JOIN OUR MISERY.",
+     "testo": "LE SUSSURRANO ALL'ORECCHIO:\n\"TESORO, TI MERITI DI MEGLIO.\"\n\nTRADUZIONE:\n\"VIENI A SOFFRIRE CON NOI.\"",
+     "blocchi": [
+      {
+       "x": 79,
+       "y": 308,
+       "w": 751,
+       "h": 95,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 79,
+       "y": 459,
+       "w": 680,
+       "h": 90,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#F05454",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "THEY'LL TELL HER TO LEAVE THE MAN WHO LOVES HER, THEN SLEEP WITH HIM BEHIND HER BACK.\n\nTHAT'S THE LEVEL OF \"SISTERHOOD\" SHES TRUSTING.",
+     "testo": "LE DICONO DI LASCIARE L'UOMO\nCHE LA AMA. POI CI VANNO A LETTO\nALLE SUE SPALLE.\n\nECCO LA \"SORELLANZA\"\nA CUI SI AFFIDA.",
+     "blocchi": [
+      {
+       "x": 88,
+       "y": 337,
+       "w": 822,
+       "h": 93,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 557,
+       "w": 745,
+       "h": 90,
+       "carattere": "titolo",
+       "colore": "#FE5859",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "openai-testo",
+     "tentativi": 2,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "A WISE WOMAN PROTECTS HER RELATIONSHIP FROM SINGLE FRIENDS.\n\nA FOOLISH ONE LETS THEM POISON IT UNTIL IT DIES.",
+     "testo": "UNA DONNA SAGGIA TIENE LA COPPIA\nLONTANA DALLE AMICHE SINGLE.\n\nUNA SCIOCCA LASCIA CHE LA\nAVVELENINO FINCHÉ NON MUORE.",
+     "blocchi": [
+      {
+       "x": 83,
+       "y": 283,
+       "w": 790,
+       "h": 125,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 83,
+       "y": 476,
+       "w": 677,
+       "h": 81,
+       "carattere": "titolo",
+       "colore": "#FE5859",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "cta-alone",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se quel \"ti meriti di meglio\" ti ha colpito,\nperché l'hai già sentito arrivare a casa tua…\ndevi cambiare il modo in cui interpreti ogni interazione.\n\nNel mio manuale \"Diventa l'uomo a cui nessuna donna sa resistere\"\ntrovi le dinamiche psicologiche che spiegano\nperché alcune attenzioni aumentano l'attrazione\ne altre la distruggono, anche se sembrano giuste.\n\nDai un'occhiata al link in bio\no commenta con \"ATTRAZIONE\"\ne te lo invio in DM.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Molte donne perdono un uomo valido perché si fanno consigliare da amiche sole, amareggiate e poco raccomandabili. Queste amiche non vogliono la sua felicità: la vogliono single e infelice come loro. Quando le dicono \"ti meriti di meglio\" in realtà intendono \"vieni a soffrire con noi\", e a volte poi ci provano proprio con l'uomo che le hanno fatto lasciare. Una donna saggia protegge la coppia da queste influenze, una sciocca lascia che la distruggano. Registro provocatorio, polarizzante, da verità scomoda.",
+   "descrizione": "Un uomo mi ha raccontato di aver capito tutto da una frase. Lei torna da una cena con le amiche, si toglie le scarpe in corridoio e dice: \"Forse ci stiamo accontentando.\" Erano parole non sue. Dopo quattro anni lui sapeva bene come parlava.\n\nDa quella sera lei è più fredda e litiga per cose piccole. Poi arriva il bisogno di \"spazio\", sempre dopo un weekend con loro. Lui intanto non vede da dove arriva il vento e si chiede cosa ha sbagliato. Comincia a scusarsi e a dare ancora di più. E più dà, meno lei lo guarda.\n\nLe amiche però da sole questo potere non lo hanno. Susan Sprecher e Diane Felmlee nel 1992 hanno seguito delle coppie nel tempo. Hanno visto che l'approvazione di amici e famiglia pesa sulla tenuta della relazione: quando le persone vicine a lei remano contro, l'impegno cala. Ma una voce da fuori attecchisce solo dove c'è già un vuoto: un desiderio spento, un uomo che lei sente prevedibile, scontato, sempre disponibile.\n\nEd è qui che molti uomini commettono l'errore più grave: entrano in guerra con le amiche. Le criticano, chiedono a lei di vederle meno, fanno scenate dopo ogni uscita. Così le danno la prova che aspettavano: \"Vedi? Ti controlla.\" Più tu attacchi loro, più lei le difende, perché difendere loro le sembra difendere la propria libertà.\n\nIl terreno su cui lavorare è un altro. Dopo quella cena lei deve tornare da un uomo che desidera ancora, non da uno che ha paura di perderla. Se lei sente attrazione, \"ti meriti di meglio\" le sembra una frase vuota, perché il meglio ce l'ha davanti. Se non la sente, quella stessa frase diventa un permesso. E se ci pensi, quante volte dopo un suo sabato con loro hai chiesto scusa invece di restare fermo?\n\nNessuna amica può portarti via una donna che ti desidera.\nPuò solo raccogliere quella che hai smesso di accendere.\n\nSe quel \"ti meriti di meglio\" l'hai già sentito arrivare a casa tua, il problema non sono le sue amiche ma lo spazio che hanno trovato. Ho scritto un manuale che ti spiega perché una donna smette di desiderarti e come non perdere valore dentro la coppia. Si chiama \"Diventa l'uomo a cui nessuna donna sa resistere\": lo trovi nel link in bio, oppure commenta \"ATTRAZIONE\" e te lo mando in DM.",
+   "segnalazioni": [
+    ":"
+   ]
   }
  ]
 }
