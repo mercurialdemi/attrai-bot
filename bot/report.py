@@ -257,7 +257,8 @@ def _settings(brand: dict) -> dict:
         # False = il report manda solo i link dei migliori post (nessun credito speso per tradurli)
         "prepara": bool(cfg.get("prepara_post", False)),
         "link": max(1, int(cfg.get("post_nel_report", 7))),   # quanti link nel report (metà didattici, metà virali)
-        "perche": int(cfg.get("perche_quanti", 0)),          # 0 = il perché non è nel report (arriva una volta a settimana)
+        "perche": int(cfg.get("perche_quanti", 0)),
+        "solo_link": bool(cfg.get("solo_link", False)),        # solo i post con il link, senza il riepilogo delle pagine          # 0 = il perché non è nel report (arriva una volta a settimana)
     }
 
 
@@ -682,7 +683,8 @@ async def run_report(bot, chat_ids: list[int]) -> None:
                 return
             _salva_settimana(cands)                                     # il perché della domenica li riusa: zero Apify
             first = _bilancia(cands, st["link"])
-            riepilogo = _page_summary(posts, handles, ore, st["min_score"], own, {p.owner for p in first})
+            riepilogo = ("" if st["solo_link"] else
+                         _page_summary(posts, handles, ore, st["min_score"], own, {p.owner for p in first}))
             cands = first + [p for p in cands if p not in first]      # /altri riparte da dove finisce il report
             storage.save_ranking([_to_dict(p) for p in cands])
             _offset_file().write_text(str(len(first)))
@@ -699,7 +701,7 @@ async def run_report(bot, chat_ids: list[int]) -> None:
                 + (f"I {len(first)} migliori, metà didattici e metà virali:" if len(first) > 1 else "Il migliore:")
                 + ("" if filtered else "\n(filtro di tema non riuscito: li vedi tutti)"),
                 _sezioni(first, st["min_score"], perche),
-                riepilogo + "\n\nMandami il link di quelli che ti piacciono e li preparo in italiano."
+                (riepilogo + "\n\n" if riepilogo else "") + "Mandami il link di quelli che ti piacciono e li preparo in italiano."
                 + (f"\nScrivi /altri per vederne altri {min(st['link'], len(cands) - len(first))}." if len(cands) > len(first) else ""))
             return
         cands = rank_candidates(posts, st["ore"], st["candidati"])

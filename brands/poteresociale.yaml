@@ -25,7 +25,8 @@ pagine_monitorate: []
 pagine_studio: []
 
 report:
-  ora: "08:00"           # il report arriva nel gruppo della pagina (se il gruppo non è collegato, non parte)
+  ora: "08:00"
+  solo_link: true        # Gabriele 11/11: solo i post virali dei collaboratori col link, niente riepilogo           # il report arriva nel gruppo della pagina (se il gruppo non è collegato, non parte)
   fuso: Europe/Rome
   finestra_ore: 72
   candidati: 15
