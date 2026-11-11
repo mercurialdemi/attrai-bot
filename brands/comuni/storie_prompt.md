@@ -7,8 +7,10 @@ FORMATO
   richiesta) decide cosa fa ogni slide: seguila slide per slide.
 - Il testo sta dentro rettangoli neri pieni, uno per blocco. Ogni slide ha 1-2 blocchi: un ragionamento in frasi
   COMPLETE e scorrevoli (25-50 parole a slide, la prima meno), non frasi spezzate a slogan. Niente "…" finali.
-- Le parole chiave vanno tra doppi asterischi: **parola** (escono colorate). Al massimo 1-2 per slide, solo il
-  concetto davvero centrale: troppe parole colorate fanno volantino.
+- Le parole chiave vanno tra doppi asterischi: **parole chiave** (escono colorate). 1-2 per BLOCCO (Gabriele 12/11:
+  "leggermente di più, ma solo dove serve"): pezzi di frase di 2-6 parole che portano il senso (il dolore detto,
+  la svolta, la scoperta, la conseguenza), così chi legge solo il rosso capisce il filo. Mai parole a caso o
+  generiche, mai frasi intere.
 - I passaggi tra una slide e l'altra sono CONNETTIVI LOGICI che riprendono quello appena detto ("Questo succede
   perché…", "Ma…", "Ecco perché…", "Ed è proprio qui che…"), non formule a effetto. Le formule tipo "La verità è
   questa:", "Il punto che quasi nessuno capisce è questo:", "Non è X. È Y." al massimo UNA volta per serie, e solo
