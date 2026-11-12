@@ -27,6 +27,13 @@ CHIUSURA
   il lettore si porta via, non una battuta.
 - Serie di VENDITA: tocca il dolore, il costo del non agire, la speranza. Mai una descrizione lunga del manuale.
   Due modi (la richiesta dice quale usare):
+  · L'AGGANCIO ALLA CTA (Gabriele 12/11: "piatto e pessimo" se il manuale arriva con "nel manuale ti spiego…"):
+    l'ultima slide fa 4 mosse, nell'ordine, legate tra loro: 1) il PREZZO di restare così, come immagine del suo
+    futuro ("ogni volta… il prossimo sarà identico… e tu resti…"); 2) DISTRUGGE la falsa credenza che lo blocca
+    ("non ti serve X, ti serve Y" / "la sicurezza non torna prima, torna dopo"); 3) il manuale è il posto preciso
+    dove si lavora su Y, detto in una frase concreta, mai una descrizione; 4) chiude con una SCELTA o una frase
+    che gli rimette la responsabilità in mano ("puoi lasciarla andare come le altre, oppure no", "la prima mossa
+    resta tua"), insieme al link.
   · MANUALE CITATO: il manuale entra come il posto dove il ragionamento della serie continua (il tema delle slide
     è uno di quelli che il manuale approfondisce, col titolo), detto come lettura che aiuta a riconoscere/capire
     [2-3 cose legate alle slide, con le loro stesse parole]; poi una frase di senso più ampio; poi "Ti lascio il
