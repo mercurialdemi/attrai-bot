@@ -59,9 +59,11 @@ COMMANDS = [
         ("studio", "Perché i post sono andati", "post per post: perché sono andati i post di competitor, collaboratori e nostri, più temi, hook e strutture vincenti (lo studio della nicchia arriva da solo ogni settimana)"),
         ("statistiche", "Numeri veri degli ultimi post", "copertura, salvataggi, condivisioni, clic (serve Meta)"),
         ("pagine", "Collaboratori e competitor", "le pagine dei collaboratori (report) e dei competitor (studio)"),
-        ("aggiungi", "Aggiungi un collaboratore (es. /aggiungi @pagina)", "pagina autorizzata: entra nel report del mattino"),
+        ("aggiungicollaboratori", "Aggiungi collaboratori (es. /aggiungicollaboratori @pagina1 @pagina2)",
+         "pagine autorizzate: entrano nel report del mattino (vale anche /aggiungi)"),
         ("studia", "Aggiungi un competitor da studiare", "solo per imparare temi, hook, strutture e CTA: mai nel report"),
-        ("rimuovi", "Togli una pagina", "la toglie sia dai collaboratori sia dai competitor"),
+        ("toglicollaboratori", "Togli collaboratori (es. /toglicollaboratori @pagina1 @pagina2)",
+         "escono dal report e dallo studio (vale anche /rimuovi)"),
         ("migliori", "Classifica dei collaboratori (es. /migliori 15)",
          "classifica i collaboratori di questa pagina in base ai post già letti; /migliori 15 tiene solo i 15 migliori"),
     ]),
@@ -275,7 +277,7 @@ async def _change_pages(update, context, kind: str):
         return
     hs = _handles(context.args or [])
     if not hs:
-        esempio = {"monitorate": "/aggiungi @pagina", "studio": "/studia @pagina", "rimosse": "/rimuovi @pagina"}[kind]
+        esempio = {"monitorate": "/aggiungicollaboratori @pagina", "studio": "/studia @pagina", "rimosse": "/toglicollaboratori @pagina"}[kind]
         await update.effective_message.reply_text(f"Scrivi il nome della pagina, es. {esempio} (anche più di una).")
         return
     ch = writer.load_page_changes()
@@ -1504,9 +1506,9 @@ def main():
     app.add_handler(CommandHandler("regole", cmd_regole))
     app.add_handler(CommandHandler("togli", cmd_togli))
     app.add_handler(CommandHandler("pagine", cmd_pagine))
-    app.add_handler(CommandHandler("aggiungi", cmd_aggiungi))
+    app.add_handler(CommandHandler(["aggiungi", "aggiungicollaboratori", "aggiungicollaboratore"], cmd_aggiungi))
     app.add_handler(CommandHandler("studia", cmd_studia))
-    app.add_handler(CommandHandler("rimuovi", cmd_rimuovi))
+    app.add_handler(CommandHandler(["rimuovi", "toglicollaboratori", "toglicollaboratore"], cmd_rimuovi))
     app.add_handler(CommandHandler("migliori", cmd_migliori))
     app.add_handler(CommandHandler("report", cmd_report))
     app.add_handler(CommandHandler("diagnosi", cmd_diagnosi))
