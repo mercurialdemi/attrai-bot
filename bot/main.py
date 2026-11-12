@@ -787,8 +787,11 @@ async def process_link(update: Update, context: ContextTypes.DEFAULT_TYPE, url: 
         await pipeline.send_post(context.bot, chat_id, job_id, post, paths, failed)
     except instagram.InstagramError as e:
         await status.edit_text(str(e))
-    except costi.TettoSpesa as e:
-        await status.edit_text(str(e))
+    except costi.TettoSpesa:
+        # 13/11 (Gabriele): il link non si perde, lo prepara da solo appena si azzera il tetto
+        _metti_in_coda(chat_id, update.effective_user.id if update.effective_user else 0, url)
+        await status.edit_text("Tetto di spesa di oggi raggiunto: ho messo il link in coda. Lo preparo da solo "
+                               "appena il tetto si azzera (verso l'1:05) e te lo mando qui.")
     except Exception as e:
         log.exception("Errore elaborando %s", url)
         await status.edit_text(_causa_errore(e, "il post"))
@@ -1222,6 +1225,49 @@ async def on_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await _manda_lungo(msg, HELP)
 
 
+def _coda_file() -> Path:
+    return config.DATA_DIR / "coda_tetto.json"
+
+
+def _metti_in_coda(chat_id: int, user_id: int, url: str) -> None:
+    import json
+    f = _coda_file()
+    try:
+        coda = json.loads(f.read_text()) if f.exists() else []
+    except Exception:
+        coda = []
+    if not any(c.get("url") == url and c.get("chat_id") == chat_id for c in coda):
+        coda.append({"chat_id": chat_id, "user_id": user_id, "url": url})
+    f.write_text(json.dumps(coda))
+
+
+async def _svuota_coda(context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Dopo l'azzeramento del tetto: prepara uno alla volta i link rimasti in coda, nel loro gruppo."""
+    import json
+    from types import SimpleNamespace
+    f = _coda_file()
+    if not f.exists():
+        return
+    try:
+        coda = json.loads(f.read_text())
+    except Exception:
+        coda = []
+    f.write_text("[]")
+    for c in coda:
+        if costi.tetto() > 0 and costi.speso_oggi() >= costi.tetto():
+            _metti_in_coda(c["chat_id"], c.get("user_id", 0), c["url"])     # ancora fermo: resta in coda
+            continue
+        try:
+            pagine.imposta(pagine.di_chat(c["chat_id"]))
+            m = await context.bot.send_message(c["chat_id"], f"Riprendo il link rimasto in coda: {c['url']}",
+                                               disable_web_page_preview=True)
+            finto = SimpleNamespace(effective_message=m, effective_chat=SimpleNamespace(id=c["chat_id"]),
+                                    effective_user=SimpleNamespace(id=c.get("user_id", 0)))
+            await process_link(finto, context, c["url"])
+        except Exception:
+            log.exception("Link in coda non preparato: %s", c.get("url"))
+
+
 def _causa_errore(e: Exception, cosa: str) -> str:
     """Messaggio chiaro con la causa vera, invece di "controlla i log su Render" (Gabriele 12/11)."""
     t = f"{type(e).__name__}: {e}".lower()
@@ -1408,6 +1454,10 @@ def _schedule_diagnostics(app: Application):
             log.exception("Rapporto notturno non caricato")
 
     app.job_queue.run_daily(job, time=at, name="rapporto_notturno")
+    # il tetto si azzera a mezzanotte dell'orologio del server (UTC): 5 minuti dopo si svuota la coda
+    from datetime import time as _t, timezone as _tz
+    app.job_queue.run_daily(_svuota_coda, time=_t(0, 5, tzinfo=_tz.utc), name="coda_tetto")
+    app.job_queue.run_once(_svuota_coda, when=90, name="coda_tetto_avvio")
     log.info("Studio della pagina programmato ogni settimana alle %s", at)
 
 

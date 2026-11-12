@@ -733,9 +733,17 @@ def guida_pagina(brand: dict | None = None) -> str:
         return ""
 
 
+HASHTAG_REGOLA = (
+    "\n\nHASHTAG (Gabriele 13/11, per andare più virali): chiudi SEMPRE la descrizione con una riga vuota e poi "
+    "ESATTAMENTE 5 hashtag sulla stessa riga, in italiano, in tema con QUESTO post e con il pubblico della pagina: "
+    "2-3 specifici del tema del post (es. #dipendenzaaffettiva, #frame, #friendzone) e 2-3 di nicchia della pagina. "
+    "Tutti minuscoli, senza accenti, niente hashtag generici o da spam (#love, #instagood, #viral, #fyp), mai il "
+    "nome di altre pagine. Contano nei 2200 caratteri.")
+
+
 def _caption_system(brand: dict, rules: list[dict], recent: dict) -> str:
     guida_p = guida_pagina(brand)
-    return _caption_system_base(brand, rules, recent) + (
+    return _caption_system_base(brand, rules, recent) + HASHTAG_REGOLA + (
         "\n\nGUIDA EDITORIALE DELLA PAGINA (scritta da Gabriele: ha la precedenza su tono, pubblico e CTA generici; "
         "le regole di formato della descrizione restano quelle sopra). IMPORTANTE: proponi SOLO i manuali dell'elenco MANUALI della pagina; quelli citati nella guida ma non in elenco non sono ancora in vendita, non nominarli. \n" + guida_p if guida_p else "")
 
