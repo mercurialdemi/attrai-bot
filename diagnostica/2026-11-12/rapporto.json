@@ -1,0 +1,259 @@
+{
+ "giorno": "2026-11-12",
+ "post_preparati": 8,
+ "slide_totali": 64,
+ "slide_fallite": 1,
+ "lavorazione": {
+  "openai-pulizia+blocchi": {
+   "totali": 1,
+   "fallite": 1
+  },
+  "blocchi-sfondo-pieno": {
+   "totali": 9,
+   "fallite": 0
+  },
+  "openai-testo": {
+   "totali": 10,
+   "fallite": 0
+  },
+  "cta-alone": {
+   "totali": 2,
+   "fallite": 0
+  },
+  "testo-su-sfondo-uniforme": {
+   "totali": 31,
+   "fallite": 0
+  },
+  "cta-stile-post": {
+   "totali": 5,
+   "fallite": 0
+  },
+  "blocchi-ricostruzione-codice": {
+   "totali": 5,
+   "fallite": 0
+  },
+  "cta-illustrata": {
+   "totali": 1,
+   "fallite": 0
+  }
+ },
+ "segnalazioni": [
+  {
+   "job_id": 105,
+   "testo": ":",
+   "quando": "2026-11-11T08:58:08+00:00"
+  }
+ ],
+ "post_con_problemi": [
+  {
+   "job_id": 105,
+   "fonte": "https://www.instagram.com/p/DfjsCF6EVm3/",
+   "fallite": [
+    1
+   ],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 1,
+     "fallita": true,
+     "problema": "Sopra la fascia nera si vedono ancora i pezzi tagliati della scritta inglese originale \"MOST WOMEN LOSE A\". Il testo italiano è corretto. | poi: OpenAI rifiuta questa immagine per i suoi filtri sui contenuti",
+     "testo_originale": "MOST WOMEN LOSE A GOOD MAN BY LISTENING TO THEIR LONELY, BITTER, H*E FRIENDS.",
+     "testo": "TANTE DONNE PERDONO UN BRAV'UOMO\nPER DARE RETTA ALLE AMICHE SOLE,\nACIDE E FACILI.",
+     "blocchi": [
+      {
+       "x": 104,
+       "y": 674,
+       "w": 845,
+       "h": 250,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#F05454",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "SHE'S GETTING ADVICE FROM WOMEN WHO CANT KEEP A MAN.\n\nFROM WOMEN WHO SLEEP AROUND.\nFROM WOMEN WHO ARE SECRETLY JEALOUS OF HER.",
+     "testo": "SI FA CONSIGLIARE DA DONNE\nCHE UN UOMO NON SANNO TENERSELO.\n\nDA DONNE CHE VANNO A LETTO\nCON CHIUNQUE.\nDA DONNE CHE, SOTTO SOTTO,\nLA INVIDIANO.",
+     "blocchi": [
+      {
+       "x": 85,
+       "y": 268,
+       "w": 760,
+       "h": 97,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 85,
+       "y": 423,
+       "w": 800,
+       "h": 185,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#F05454",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "THESE \"FRIENDS\" DON'T WANT HER HAPPY.\n\nTHEY WANT HER SINGLE LIKE THEM.\nTHEY WANT HER OUT ON FRIDAY NIGHTS, DRUNK, CRYING IN THE BATHROOM.\n\nTHIS IS PATTERN #09. LINK IN BIO.",
+     "testo": "QUESTE \"AMICHE\" NON VOGLIONO\nVEDERLA FELICE.\n\nLA VOGLIONO SOLA COME LORO:\nFUORI IL VENERDÌ SERA, UBRIACA,\nA PIANGERE CHIUSA IN BAGNO.\n\nÈ LO SCHEMA N. 9. LINK IN BIO.",
+     "blocchi": [
+      {
+       "x": 88,
+       "y": 231,
+       "w": 746,
+       "h": 80,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 369,
+       "w": 760,
+       "h": 188,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 586,
+       "w": 740,
+       "h": 40,
+       "carattere": "titolo",
+       "colore": "#FE585A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "THEY WHISPER IN HER EAR:\n\"GIRL, YOU CAN DO BETTER.\"\n\nTRANSLATION:\n\"COME JOIN OUR MISERY.",
+     "testo": "LE SUSSURRANO ALL'ORECCHIO:\n\"TESORO, TI MERITI DI MEGLIO.\"\n\nTRADUZIONE:\n\"VIENI A SOFFRIRE CON NOI.\"",
+     "blocchi": [
+      {
+       "x": 79,
+       "y": 308,
+       "w": 751,
+       "h": 95,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 79,
+       "y": 459,
+       "w": 680,
+       "h": 90,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#F05454",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "THEY'LL TELL HER TO LEAVE THE MAN WHO LOVES HER, THEN SLEEP WITH HIM BEHIND HER BACK.\n\nTHAT'S THE LEVEL OF \"SISTERHOOD\" SHES TRUSTING.",
+     "testo": "LE DICONO DI LASCIARE L'UOMO\nCHE LA AMA. POI CI VANNO A LETTO\nALLE SUE SPALLE.\n\nECCO LA \"SORELLANZA\"\nA CUI SI AFFIDA.",
+     "blocchi": [
+      {
+       "x": 88,
+       "y": 337,
+       "w": 822,
+       "h": 93,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 557,
+       "w": 745,
+       "h": 90,
+       "carattere": "titolo",
+       "colore": "#FE5859",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "openai-testo",
+     "tentativi": 2,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "A WISE WOMAN PROTECTS HER RELATIONSHIP FROM SINGLE FRIENDS.\n\nA FOOLISH ONE LETS THEM POISON IT UNTIL IT DIES.",
+     "testo": "UNA DONNA SAGGIA TIENE LA COPPIA\nLONTANA DALLE AMICHE SINGLE.\n\nUNA SCIOCCA LASCIA CHE LA\nAVVELENINO FINCHÉ NON MUORE.",
+     "blocchi": [
+      {
+       "x": 83,
+       "y": 283,
+       "w": 790,
+       "h": 125,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 83,
+       "y": 476,
+       "w": 677,
+       "h": 81,
+       "carattere": "titolo",
+       "colore": "#FE5859",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "cta-alone",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se quel \"ti meriti di meglio\" ti ha colpito,\nperché l'hai già sentito arrivare a casa tua…\ndevi cambiare il modo in cui interpreti ogni interazione.\n\nNel mio manuale \"Diventa l'uomo a cui nessuna donna sa resistere\"\ntrovi le dinamiche psicologiche che spiegano\nperché alcune attenzioni aumentano l'attrazione\ne altre la distruggono, anche se sembrano giuste.\n\nDai un'occhiata al link in bio\no commenta con \"ATTRAZIONE\"\ne te lo invio in DM.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Molte donne perdono un uomo valido perché si fanno consigliare da amiche sole, amareggiate e poco raccomandabili. Queste amiche non vogliono la sua felicità: la vogliono single e infelice come loro. Quando le dicono \"ti meriti di meglio\" in realtà intendono \"vieni a soffrire con noi\", e a volte poi ci provano proprio con l'uomo che le hanno fatto lasciare. Una donna saggia protegge la coppia da queste influenze, una sciocca lascia che la distruggano. Registro provocatorio, polarizzante, da verità scomoda.",
+   "descrizione": "Un uomo mi ha raccontato di aver capito tutto da una frase. Lei torna da una cena con le amiche, si toglie le scarpe in corridoio e dice: \"Forse ci stiamo accontentando.\" Erano parole non sue. Dopo quattro anni lui sapeva bene come parlava.\n\nDa quella sera lei è più fredda e litiga per cose piccole. Poi arriva il bisogno di \"spazio\", sempre dopo un weekend con loro. Lui intanto non vede da dove arriva il vento e si chiede cosa ha sbagliato. Comincia a scusarsi e a dare ancora di più. E più dà, meno lei lo guarda.\n\nLe amiche però da sole questo potere non lo hanno. Susan Sprecher e Diane Felmlee nel 1992 hanno seguito delle coppie nel tempo. Hanno visto che l'approvazione di amici e famiglia pesa sulla tenuta della relazione: quando le persone vicine a lei remano contro, l'impegno cala. Ma una voce da fuori attecchisce solo dove c'è già un vuoto: un desiderio spento, un uomo che lei sente prevedibile, scontato, sempre disponibile.\n\nEd è qui che molti uomini commettono l'errore più grave: entrano in guerra con le amiche. Le criticano, chiedono a lei di vederle meno, fanno scenate dopo ogni uscita. Così le danno la prova che aspettavano: \"Vedi? Ti controlla.\" Più tu attacchi loro, più lei le difende, perché difendere loro le sembra difendere la propria libertà.\n\nIl terreno su cui lavorare è un altro. Dopo quella cena lei deve tornare da un uomo che desidera ancora, non da uno che ha paura di perderla. Se lei sente attrazione, \"ti meriti di meglio\" le sembra una frase vuota, perché il meglio ce l'ha davanti. Se non la sente, quella stessa frase diventa un permesso. E se ci pensi, quante volte dopo un suo sabato con loro hai chiesto scusa invece di restare fermo?\n\nNessuna amica può portarti via una donna che ti desidera.\nPuò solo raccogliere quella che hai smesso di accendere.\n\nSe quel \"ti meriti di meglio\" l'hai già sentito arrivare a casa tua, il problema non sono le sue amiche ma lo spazio che hanno trovato. Ho scritto un manuale che ti spiega perché una donna smette di desiderarti e come non perdere valore dentro la coppia. Si chiama \"Diventa l'uomo a cui nessuna donna sa resistere\": lo trovi nel link in bio, oppure commenta \"ATTRAZIONE\" e te lo mando in DM.",
+   "segnalazioni": [
+    ":"
+   ]
+  }
+ ]
+}
