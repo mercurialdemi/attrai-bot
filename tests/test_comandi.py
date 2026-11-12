@@ -7,7 +7,7 @@ src = (Path(__file__).resolve().parents[1] / "bot" / "main.py").read_text()
 registrati = set()
 for m in re.finditer(r'CommandHandler\((\[[^\]]*\]|"[^"]+")', src):
     registrati |= set(re.findall(r'"([^"]+)"', m.group(1)))
-registrati -= {"start", "aiuto", "help", "storia"}   # storia = alias di storie
+registrati -= {"start", "aiuto", "help", "storia", "sfondo", "temi", "temi_storie", "aggiungi", "aggiungicollaboratore", "rimuovi", "toglicollaboratore"}   # alias
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from bot.main import COMMANDS, HELP  # noqa: E402
 nel_menu = {c for _g, cmds in COMMANDS for c, _s, _l in cmds}
