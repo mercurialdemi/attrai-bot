@@ -772,9 +772,9 @@ async def process_link(update: Update, context: ContextTypes.DEFAULT_TYPE, url: 
         await status.edit_text(str(e))
     except costi.TettoSpesa as e:
         await status.edit_text(str(e))
-    except Exception:
+    except Exception as e:
         log.exception("Errore elaborando %s", url)
-        await status.edit_text("Qualcosa è andato storto mentre preparavo il post. Riprova; se succede ancora, controlla i log su Render.")
+        await status.edit_text(_causa_errore(e, "il post"))
     finally:
         storage.end_work(work)
 
@@ -1128,9 +1128,9 @@ async def process_album(update: Update, context: ContextTypes.DEFAULT_TYPE, albu
         pipeline.after_save(job_id, src.url, post, paths, failed)
         await status.delete()
         await pipeline.send_post(context.bot, chat_id, job_id, post, paths, failed)
-    except Exception:
+    except Exception as e:
         log.exception("Errore elaborando le slide inviate")
-        await status.edit_text("Qualcosa è andato storto mentre preparavo le slide. Riprova; se succede ancora, controlla i log su Render.")
+        await status.edit_text(_causa_errore(e, "le slide"))
     finally:
         storage.end_work(work)
 
@@ -1203,6 +1203,22 @@ async def on_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await process_revision(update, context, job, text)
     else:
         await _manda_lungo(msg, HELP)
+
+
+def _causa_errore(e: Exception, cosa: str) -> str:
+    """Messaggio chiaro con la causa vera, invece di "controlla i log su Render" (Gabriele 12/11)."""
+    t = f"{type(e).__name__}: {e}".lower()
+    if "apify" in t and ("token" in t or "user was not found" in t):
+        return ("Non riesco a scaricare il post: Apify rifiuta la chiave (APIFY_TOKEN non valido o account Apify "
+                "scaduto). Va rigenerata su console.apify.com → Settings → API & Integrations e incollata su Render "
+                "in Environment → APIFY_TOKEN. Finché non si sistema, nessun link funziona.")
+    if "apify" in t and ("usage" in t or "limit" in t or "credit" in t or "payment" in t):
+        return "Non riesco a scaricare il post: il credito di Apify è finito. Va ricaricato su console.apify.com."
+    if "anthropic" in t and ("credit" in t or "billing" in t):
+        return "Non riesco a scrivere i testi: il credito di Claude (Anthropic) è finito. Va ricaricato su console.anthropic.com."
+    if "openai" in t and ("billing" in t or "quota" in t):
+        return "Non riesco a rifare le immagini: il credito di OpenAI è finito. Va ricaricato su platform.openai.com."
+    return f"Qualcosa è andato storto mentre preparavo {cosa} ({type(e).__name__}). Riprova tra un minuto."
 
 
 def _slide_del_messaggio(rep) -> int | None:
