@@ -6,7 +6,9 @@ FORMATO
 - Una serie = 3-5 slide verticali 9:16, tutte con la stessa foto. La STRUTTURA della serie (una delle 6, data nella
   richiesta) decide cosa fa ogni slide: seguila slide per slide.
 - Il testo sta dentro rettangoli neri pieni, uno per blocco. Ogni slide ha 1-2 blocchi: un ragionamento in frasi
-  COMPLETE e scorrevoli (25-50 parole a slide, la prima meno), non frasi spezzate a slogan. Niente "…" finali.
+  COMPLETE e scorrevoli, non frasi spezzate a slogan. Niente "…" finali. Misura (Gabriele 11-12/11, modello
+  AscesaMentale): la PRIMA slide è breve (90-120 caratteri, un blocco, sotto lo spazio dello sticker se è una
+  risposta); le ALTRE hanno 2-3 blocchi DENSI, 300-400 caratteri a slide. Mai una frase per blocco.
 - Le parole chiave vanno tra doppi asterischi: **parole chiave** (escono colorate). 1-2 per BLOCCO (Gabriele 12/11:
   "leggermente di più, ma solo dove serve"): pezzi di frase di 2-6 parole che portano il senso (il dolore detto,
   la svolta, la scoperta, la conseguenza), così chi legge solo il rosso capisce il filo. Mai parole a caso o
