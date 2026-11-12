@@ -32,6 +32,8 @@ COMMANDS = [
         ("manuali", "Manuali della pagina: in vendita e in arrivo",
          "/manuali mostra i manuali della pagina; /manuali attiva <id> quando un manuale esce (da lì descrizioni, CTA "
          "e storie lo propongono); /manuali disattiva <id>"),
+        ("temistorie", "I migliori temi per le storie",
+         "/temistorie: 8 temi presi da quello che rende di più sulla pagina; poi /storie 3, o /storie 1 4 6 per più insieme"),
         ("riserva", "Foto di riserva per i post",
          "/riserva e poi manda le foto tutte insieme: le usa al posto dell'immagine quando OpenAI rifiuta una slide"),
         ("sfondi", "Foto di sfondo delle storie di questa pagina",
@@ -538,6 +540,12 @@ async def _manda_storie(bot, chat_id: int, paths: list, canva_path, testo: str) 
     await bot.send_message(chat_id, testo)
 
 
+async def cmd_temi(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """/temi: i migliori temi su cui fare storie, da scegliere con /storie <numeri> (12/11)."""
+    context.args = []
+    await cmd_storie(update, context)
+
+
 async def cmd_storie(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not await _authorized(update):
         return
@@ -548,16 +556,23 @@ async def cmd_storie(update: Update, context: ContextTypes.DEFAULT_TYPE):
     async def go():
         try:
             if not arg:
-                status = await msg.reply_text("Cerco 6 temi per le storie…")
+                status = await msg.reply_text("Cerco i temi migliori per le storie…")
                 temi = await asyncio.to_thread(storie.proponi_temi, brand)
                 righe = [f"{i}. [{t['tipo']}] {t['tema']}\n   ↳ {t['perche']}" for i, t in enumerate(temi, 1)]
                 await status.edit_text(f"Temi per le storie di {brand['nome']}:\n\n" + "\n\n".join(righe)
-                                       + "\n\nScrivi /storie 3 per creare il tema 3, oppure /storie <tuo tema>.")
+                                       + "\n\nScegli: /storie 3 per il tema 3, /storie 1 4 6 per più temi insieme, "
+                                         "oppure /storie <tuo tema>.")
+                return
+            numeri = arg.replace(",", " ").split()
+            if len(numeri) > 1 and all(n.isdigit() for n in numeri):      # /storie 1 4 6: una serie per tema
+                for n in numeri:
+                    context.args = [n]
+                    await cmd_storie(update, context)
                 return
             if arg.isdigit():
                 p = storie.proposta(int(arg))
                 if not p:
-                    await msg.reply_text("Non trovo quel tema: scrivi /storie per vedere le proposte.")
+                    await msg.reply_text("Non trovo quel tema: scrivi /temistorie per vedere le proposte.")
                     return
                 tipo, tema = p["tipo"], p["tema"]
             else:
@@ -1508,6 +1523,7 @@ def main():
     app.add_handler(CommandHandler("strutture", cmd_strutture))
     app.add_handler(CommandHandler(["sfondi", "sfondo"], cmd_sfondi))
     app.add_handler(CommandHandler("riserva", cmd_riserva))
+    app.add_handler(CommandHandler(["temistorie", "temi_storie", "temi"], cmd_temi))
     app.add_handler(CommandHandler("manuali", cmd_manuali))
     app.add_handler(MessageHandler(filters.PHOTO | filters.Document.IMAGE, on_media))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_text))

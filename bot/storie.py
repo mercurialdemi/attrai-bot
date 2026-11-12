@@ -99,13 +99,21 @@ TEMI_TOOL = {
 
 def proponi_temi(brand: dict) -> list[dict]:
     fatti = [f"{s.get('tipo')}: {s.get('tema')}" for s in _storico()[-25:]]
-    vendita = 2 if brand.get("manuali") else 0
-    richiesta = (f"Proponi 6 temi per serie di storie: {3 + (2 - vendita)} didattica, {vendita} vendita, "
-                 "1 domande (box domande). Temi concreti, sui dolori veri di questo pubblico, tutti diversi tra loro"
-                 + (" e diversi da quelli già fatti:\n" + "\n".join(fatti) if fatti else "."))
+    vendita = 3 if brand.get("manuali") else 0
+    # 12/11 (Gabriele): i temi partono da quello che rende davvero (studio dei caroselli virali della pagina)
+    try:
+        sv = writer.load_style().get("studio_virali") or {}
+    except Exception:
+        sv = {}
+    dati = ("\nTEMI E DOLORI CHE RENDONO DI PIÙ SU QUESTA PAGINA (dai post virali, dal più forte):\n"
+            + "\n".join(f"- {t}" for t in (sv.get("temi") or [])[:12])) if sv.get("temi") else ""
+    richiesta = (f"Proponi 8 temi per serie di storie: {7 - vendita} didattica, {vendita} vendita, 1 domande "
+                 "(box domande). Parti dai dolori che rendono di più (sotto, se ci sono): ogni tema è una situazione "
+                 "precisa che il lettore riconosce come sua, con dentro un meccanismo che può sorprenderlo. Tutti "
+                 "diversi tra loro" + (" e diversi da quelli già fatti:\n" + "\n".join(fatti) if fatti else ".") + dati)
     out = writer._tool_call("Sei lo stratega delle storie Instagram di una pagina italiana.\n" + _profilo(brand),
-                            [{"type": "text", "text": richiesta}], TEMI_TOOL, model=config.CLAUDE_MODEL, max_tokens=2000)
-    temi = [t for t in out.get("temi") or [] if t.get("tipo") in TIPI and (t.get("tema") or "").strip()][:6]
+                            [{"type": "text", "text": richiesta}], TEMI_TOOL, model=config.CLAUDE_MODEL, max_tokens=2500)
+    temi = [t for t in out.get("temi") or [] if t.get("tipo") in TIPI and (t.get("tema") or "").strip()][:8]
     config.DATA_DIR.mkdir(parents=True, exist_ok=True)
     _proposte_file().write_text(json.dumps(temi, ensure_ascii=False), encoding="utf-8")
     return temi

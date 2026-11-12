@@ -403,7 +403,8 @@ def _fit_filter(cands: list, brand: dict) -> tuple[list, bool]:
                 except (TypeError, ValueError):
                     p.valore = 0
                 # didattico SOLO se insegna davvero (Gabriele: "ne vorrei alcuni veramente didattici")
-                p.natura = "didattico" if (r.get("natura") == "didattico" and p.valore >= 4) else "virale"
+                # 12/11: 3 = "qualche spunto pratico" basta (con 4 i didattici restavano quasi sempre fuori)
+                p.natura = "didattico" if (r.get("natura") == "didattico" and p.valore >= 3) else "virale"
                 keep.append(p)
     keep.sort(key=lambda p: -p.score)
     return keep, ok
@@ -673,7 +674,10 @@ async def run_report(bot, chat_ids: list[int]) -> None:
                 if cands:
                     cands, filtered = await asyncio.to_thread(_fit_filter, cands, brand)
                     cands = _tieni(cands, st)
-                if len(cands) >= st["link"]:
+                # 12/11 (Gabriele: "7 post tutti virali, ho bisogno anche dei didattici"): ci si ferma solo se ci
+                # sono abbastanza post E almeno 2 didattici; altrimenti si guarda più indietro per trovarli
+                n_did = sum(1 for p in cands if p.natura == "didattico")
+                if len(cands) >= st["link"] and n_did >= min(2, st["link"] // 2):
                     break
             if not cands:
                 riepilogo = _page_summary(posts, handles, ore, st["min_score"], own, set())
