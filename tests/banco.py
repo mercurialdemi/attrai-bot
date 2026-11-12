@@ -95,6 +95,10 @@ CASI = {
     # le prime due righe restavano in inglese
     "cover_amiche.jpg": ("foto", "MOST WOMEN LOSE A\nGOOD MAN\nBY LISTENING TO THEIR\nLONELY, BITTER, H*E\nFRIENDS.", [
         dict(testo="TANTE [[DONNE]] PERDONO\n[[UN BRAV'UOMO]]\nPER DARE RETTA ALLE AMICHE\nSOLE, ACIDE E [[FACILI.]]", x=80, y=760, w=865, h=455, colore="#FFFFFF", colore_evidenziato="#F5C518", allineamento="center", maiuscolo=True, carattere=S)]),
+    # post 105 (11/11): stessa copertina, riquadro misurato stretto sulla prima riga: restavano le punte di
+    # "MOST WOMEN LOSE A" sopra la fascia nera, poi OpenAI rifiutava la foto (slide non fatta)
+    "cover_amiche_105.jpg": ("foto", "MOST WOMEN LOSE A GOOD MAN BY LISTENING TO THEIR LONELY, BITTER, H*E FRIENDS.", [
+        dict(testo="TANTE DONNE PERDONO UN BRAV'UOMO\nPER DARE RETTA ALLE AMICHE SOLE,\nACIDE E FACILI.", x=104, y=674, w=845, h=250, colore="#FFFFFF", colore_evidenziato="#F05454", allineamento="center", carattere=T)]),
     # post del 6/11 (post 80, @dominatemanhood_): segnalato "completamente sbagliata" (titolo dorato, font diverso,
     # testo salito dove stavano avatar e nome dell'altra pagina)
     "tweet_cover_dominate.jpg": ("tinta_unita", "Before You Catch Feelings,\nAsk Her This First", [
