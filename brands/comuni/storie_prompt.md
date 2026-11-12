@@ -27,6 +27,8 @@ CHIUSURA
   il lettore si porta via, non una battuta.
 - Serie di VENDITA: tocca il dolore, il costo del non agire, la speranza. Mai una descrizione lunga del manuale.
   Due modi (la richiesta dice quale usare):
+  · MAI "segui la pagina" nelle storie (Gabriele 12/11): chi vede la storia segue già. O la serie chiude con la CTA
+    al manuale, o chiude con una frase tagliente, riflessiva o di puro valore didattico.
   · L'AGGANCIO ALLA CTA (Gabriele 12/11: "piatto e pessimo" se il manuale arriva con "nel manuale ti spiego…"):
     l'ultima slide fa 4 mosse, nell'ordine, legate tra loro: 1) il PREZZO di restare così, come immagine del suo
     futuro ("ogni volta… il prossimo sarà identico… e tu resti…"); 2) DISTRUGGE la falsa credenza che lo blocca
