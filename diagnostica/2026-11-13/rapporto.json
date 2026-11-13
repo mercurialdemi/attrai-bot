@@ -1,7 +1,7 @@
 {
  "giorno": "2026-11-13",
- "post_preparati": 29,
- "slide_totali": 217,
+ "post_preparati": 33,
+ "slide_totali": 242,
  "slide_fallite": 15,
  "lavorazione": {
   "originale": {
@@ -9,23 +9,23 @@
    "fallite": 0
   },
   "cta-illustrata": {
-   "totali": 5,
+   "totali": 7,
    "fallite": 0
   },
   "cta-alone": {
-   "totali": 12,
+   "totali": 13,
    "fallite": 0
   },
   "openai-testo": {
-   "totali": 68,
+   "totali": 81,
    "fallite": 1
   },
   "testo-su-sfondo-uniforme": {
-   "totali": 39,
+   "totali": 45,
    "fallite": 0
   },
   "cta-stile-post": {
-   "totali": 9,
+   "totali": 10,
    "fallite": 0
   },
   "blocchi-pulizia-codice": {
@@ -33,11 +33,11 @@
    "fallite": 0
   },
   "blocchi-sfondo-pieno": {
-   "totali": 22,
+   "totali": 23,
    "fallite": 0
   },
   "blocchi-ricostruzione-codice": {
-   "totali": 7,
+   "totali": 8,
    "fallite": 0
   },
   "openai-pulizia+blocchi": {
@@ -60,6 +60,11 @@
    "job_id": 29,
    "testo": "usa un font più elegante o autorevole (non basic come quello che hai usato) e che occupi più spazio e si legga bene",
    "quando": "2026-11-13T09:17:51+00:00"
+  },
+  {
+   "job_id": 32,
+   "testo": "entrambe le questa slide ha la cta al manuale anche se è la penultima, non possiamo mettere 2 cta nello stesso post",
+   "quando": "2026-11-13T14:51:06+00:00"
   }
  ],
  "post_con_problemi": [
@@ -1863,6 +1868,305 @@
    "descrizione": "Le frasi che ti spostano di più quasi mai alzano la voce.\n\nUna discussione qualsiasi, in famiglia o in coppia. Arriva un \"dopo tutto quello che ho fatto per te\" e dieci minuti dopo sei tu a chiedere scusa, senza ricordare bene per cosa. La conversazione si chiude, ma la posizione che hai perso resta lì.\n\nIl costo è sottile. Ogni volta che accetti il compito che quella frase ti assegna, che sia pagare un debito mai firmato, dimostrare affetto o dubitare della tua memoria, il confine arretra di un passo. Ripetuto nel tempo diventa un ruolo, e il ruolo regge proprio perché non lo vedi.\n\nGuarda le coppie del carosello: la versione sana dice cosa prova chi parla, quella manipolatoria ti consegna un incarico. Nel 1971 Dennis Regan, a Cornell, mostrò che un piccolo favore non richiesto rendeva le persone più disposte a dire sì subito dopo. Il senso di debito si attiva da solo, anche quando nessuno l'ha chiesto, ed è la leva su cui poggia \"dopo tutto quello che ho fatto\". John Gottman, osservando per decenni coppie in laboratorio, ha distinto la lamentela, che riguarda un comportamento, dalla critica, che attacca la persona. \"Perché non sei come tua sorella\" ti costringe a difenderti, \"mi dai una mano?\" ti chiede solo di fare qualcosa.\n\nUna frase isolata non prova nulla: sotto pressione tutti dicono la cosa sbagliata. Conta la ripetizione. Chi finisce sempre a portare la colpa? Chi chiede scusa solo per chiudere il discorso?\n\nIl passaggio pratico è rifiutare il compito, non contestare l'accusa. Puoi riconoscere l'emozione dell'altro senza prenderti il debito: \"Capisco che ci sei rimasto male. La decisione resta mia.\" Breve, calmo, senza dieci minuti di spiegazioni, perché un no giustificato troppo diventa una trattativa.\n\nRiconoscere la frase è metà del lavoro. L'altra metà è non cambiare posizione mentre la ascolti.\n\nQuale di queste frasi ti ha fatto chiedere scusa più volte di quante ne meritasse?\n\nSe finisci sempre a giustificarti, il manuale \"Potere Sociale\" lavora proprio su questo: il frame con cui stai nella conversazione, la calma sotto pressione e il no che non chiede permesso. Link in bio.",
    "segnalazioni": [
     "usa un font più elegante o autorevole (non basic come quello che hai usato) e che occupi più spazio e si legga bene"
+   ]
+  },
+  {
+   "job_id": 32,
+   "fonte": "https://www.instagram.com/p/DfiYp6Kj3ju/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "\"A slave is he who cannot speak his thoughts.\" — Seneca",
+     "testo": "\"Schiavo è chi non può\ndire ciò che pensa.\"\n\nSeneca",
+     "blocchi": [
+      {
+       "x": 128,
+       "y": 410,
+       "w": 745,
+       "h": 103,
+       "carattere": "normale",
+       "colore": "#F5F0E6",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 407,
+       "y": 581,
+       "w": 188,
+       "h": 30,
+       "carattere": "normale",
+       "colore": "#F5F0E6",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "You know what you think.\n\nThen you look around the room and change the sentence.\n\nAn honest answer becomes the answer least likely to upset anyone.",
+     "testo": "Sai benissimo cosa pensi.\n\nPoi ti guardi intorno\ne cambi la frase.\n\nE la risposta sincera diventa\nquella che non urta nessuno.",
+     "blocchi": [
+      {
+       "x": 236,
+       "y": 315,
+       "w": 528,
+       "h": 35,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 132,
+       "y": 410,
+       "w": 737,
+       "h": 90,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 105,
+       "y": 561,
+       "w": 790,
+       "h": 86,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "At first, the cost seems small.\n\nYou agree when you disagree.\nYou laugh when you feel uneasy.\nYou make a promise you already resent.\n\nEach time, speaking plainly feels a little harder.",
+     "testo": "All'inizio sembra un prezzo da poco.\n\nDici di sì anche quando non sei d'accordo.\nRidi anche se sei a disagio.\nPrometti qualcosa che già ti pesa.\n\nE ogni volta parlare chiaro\ndiventa un po' più difficile.",
+     "blocchi": [
+      {
+       "x": 199,
+       "y": 290,
+       "w": 595,
+       "h": 37,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 195,
+       "y": 366,
+       "w": 635,
+       "h": 161,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 149,
+       "y": 600,
+       "w": 702,
+       "h": 98,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "When keeping approval requires you to hide every objection, approval has become expensive.\n\nYou get through the conversation.\n\nThen spend the evening wishing you had said one honest thing.",
+     "testo": "Se per tenerti l'approvazione\ndevi nascondere ogni obiezione,\nquell'approvazione la stai pagando troppo.\n\nLa conversazione la superi.\n\nPoi passi la serata a rimpiangere\ndi non aver detto almeno una cosa sincera.",
+     "blocchi": [
+      {
+       "x": 125,
+       "y": 288,
+       "w": 752,
+       "h": 134,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 154,
+       "y": 522,
+       "w": 692,
+       "h": 33,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 131,
+       "y": 586,
+       "w": 741,
+       "h": 88,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Freedom in speech still requires judgment.\n\nChoose the right time. Check your facts. Leave out the insult.\n\nA clear disagreement does not need cruelty to make it strong.",
+     "testo": "Anche parlare liberamente\nrichiede giudizio.\n\nScegli il momento giusto. Verifica\ni fatti. Lascia perdere l'insulto.\n\nPer essere forte, un disaccordo chiaro\nnon ha bisogno di cattiveria.",
+     "blocchi": [
+      {
+       "x": 172,
+       "y": 290,
+       "w": 656,
+       "h": 86,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 153,
+       "y": 437,
+       "w": 696,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 136,
+       "y": 583,
+       "w": 727,
+       "h": 89,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Practice with one sentence you can stand behind.\n\nState your decision. Name your limit. Admit what you do not know.\n\nLet the other person respond without taking your words back just to end the discomfort.",
+     "testo": "Comincia da una sola frase\nche sei disposto a difendere.\n\nDi' cosa hai deciso. Chiarisci il tuo limite.\nAmmetti quello che non sai.\n\nLascia che l'altro risponda, senza\nrimangiarti le parole solo per\nuscire dal disagio.",
+     "blocchi": [
+      {
+       "x": 144,
+       "y": 288,
+       "w": 713,
+       "h": 88,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 120,
+       "y": 437,
+       "w": 762,
+       "h": 83,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 110,
+       "y": 583,
+       "w": 781,
+       "h": 115,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "It is easy to value honesty after a conversation is over.\n\nThe reminder matters before you speak.\n\nStoic Widgets brings daily Stoic quotes to your lock and home screens, keeping that practice in view.",
+     "testo": "È facile essere sinceri\na conversazione finita.\n\nIl lavoro va fatto\nprima di aprire bocca.\n\nNel manuale \"Potere Sociale\" lavori\nsul frame e sul dire no, senza\ncedere né attaccare. Link in bio.",
+     "blocchi": [
+      {
+       "x": 165,
+       "y": 290,
+       "w": 671,
+       "h": 86,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 162,
+       "y": 434,
+       "w": 680,
+       "h": 88,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 99,
+       "y": 566,
+       "w": 798,
+       "h": 129,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se questa frase di Seneca ti ha colpito,\npensa all'ultima cosa\nche ti sei tenuto dentro.\n\nIl manuale \"Potere Sociale\"\nparte dal frame e dal dire no:\ntenere la tua posizione\nsenza cedere e senza attaccare.\n\nLo trovi al link in bio.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Seneca diceva che è schiavo chi non può dire quello che pensa. Il carosello mostra come ci autocensuriamo: sappiamo cosa pensiamo ma cambiamo la frase per non dare fastidio, e ogni volta parlare chiaro diventa più difficile. Poi spiega come uscirne: scegliere il momento, verificare i fatti, niente insulti, dire la propria decisione e il proprio limite, e non rimangiarsi le parole per sfuggire al disagio. Il registro è riflessivo e asciutto, con un tono stoico.",
+   "descrizione": "La frase che non dici non sparisce. Sei a cena, qualcuno sostiene una cosa che trovi sbagliata e la tua risposta è già pronta. Poi guardi le facce intorno al tavolo e ti esce un \"mah, può darsi\". La serata va avanti tranquilla. Tu un po' meno.\n\nQuella frase ingoiata non la paghi subito. La paghi nel tempo, perché ogni sì detto controvoglia insegna agli altri cosa aspettarsi da te: che la tua opinione si adatta, che il tuo limite si sposta appena qualcuno insiste. E più lo fai, più la volta dopo parlare costa.\n\nNegli anni Cinquanta Solomon Asch mostrò a gruppi di studenti delle linee di lunghezza evidente. Una parte consistente, almeno in qualche prova, dava la risposta sbagliata solo perché il resto del gruppo, d'accordo con lo sperimentatore, l'aveva data prima. Ma bastava un solo alleato che rompesse l'unanimità perché la pressione calasse di colpo. Vent'anni dopo Elisabeth Noelle-Neumann descrisse la spirale del silenzio: chi si crede in minoranza tace, e il suo silenzio fa sembrare quella posizione ancora più isolata. Spesso a quel tavolo c'è qualcun altro che la pensa come te e aspetta che qualcuno cominci.\n\nEd è qui che la libertà di cui parla Seneca diventa un comportamento. Non vuol dire dire tutto a tutti, né trasformare ogni disaccordo in uno scontro: chi alza il tono per dimostrare di essere sincero sta ancora reagendo agli altri, solo nella direzione opposta. Vuol dire scegliere una frase sola, detta con calma, che sei disposto a sostenere anche quando cala il silenzio. \"Io la vedo diversamente, e ti spiego perché.\" Poi lasci rispondere, senza rimangiarti niente per chiudere il disagio.\n\nL'approvazione comprata col silenzio costa sempre più di quanto sembri, e il rispetto non si compra così. Qual è l'ultima frase che ti sei tenuto dentro, e chi ha deciso al posto tuo che non andava detta?\n\nSe ti riconosci in quel sì detto per non urtare nessuno, il manuale \"Potere Sociale\" lavora proprio sul frame, sul dire no e sulla calma quando sale la tensione. Link in bio.\n\n#direno #assertivita #confini #frame #poteresociale",
+   "segnalazioni": [
+    "entrambe le questa slide ha la cta al manuale anche se è la penultima, non possiamo mettere 2 cta nello stesso post"
    ]
   }
  ]
