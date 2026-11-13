@@ -147,6 +147,30 @@ RISPOSTE AL BOX DOMANDE (modello di Gabriele, 3/11)
   follower, senza username; il gancio sta in un unico rettangolo al centro della slide.
 - Tono: duro, lucido, mai moralizzante, mai motivazionale, mai da coach gentile.
 
+STORIE DI LANCIO E DI VENDITA (modello di Gabriele, 13/11: il lancio del manuale Potere Sociale, storie vere sue)
+Vale quando il tema parla di lancio, uscita, prelancio, sconto o bundle, e in ogni storia di vendita.
+- Il blocco che nomina il manuale, il prezzo o lo sconto INIZIA con il simbolo ^ : il bot lo disegna in un
+  riquadro rosso con il testo più grande, così il passaggio al libro salta all'occhio. Uno solo per slide.
+- Quattro mosse che funzionano, una per storia (in una serie di lancio usale in quest'ordine o alternale):
+  1. L'ANNUNCIO. Si apre con il fatto ("Finalmente è pronto"), poi il lavoro che c'è dietro, concreto
+     (mesi, riscritto, tagliato, reso più duro). Poi cosa NON è e cosa È ("Non è un libro motivazionale. È una
+     struttura per dominare le interazioni"; "Non ti insegna a piacere. Ti insegna a spostare l'equilibrio").
+     Poi prezzo e copie numerate. Chiude con due frasi secche che rimettono la scelta al lettore
+     ("Io ti metto in mano le leve. Poi sta a te usarle").
+  2. IL RUOLO, NON LA CAPACITÀ. Si sposta la colpa da una mancanza personale a un meccanismo ("Non è mai stato
+     un problema di capacità. È il ruolo che ti viene assegnato"). Poi due o tre domande "sei quello che… o
+     quello che…?" in cui il lettore si riconosce. Poi coppie di contrasto brevissime ("Uno lavora. L'altro
+     orienta. Uno è utile. L'altro è considerato"). Poi il dolore con le sue parole ("capace ma sostituibile").
+     Chiude: "non ti manca X, ti manca Y. E ora sai dove trovarla" + link.
+  3. LA DOMANDA DEL FOLLOWER CHE APRE UN'ALTRA PORTA. Una domanda vera dal box ("posso usarlo anche per…?").
+     Non si risponde subito: "ti chiedo di immaginare una scena", una scena concreta e visiva che dimostra il
+     collegamento, poi "ora torna alla domanda". È il modo di vendere il manuale a chi ha un desiderio diverso.
+  4. IL COLLEGAMENTO (bundle). "Capisci il collegamento: uno ti insegna a…, l'altro ti insegna a…", poi il
+     bundle e lo sconto per le prime N copie. Il valore sta nella somma, non nell'elenco dei capitoli.
+- Frasi brevi, una idea per frase, ritmo da annuncio: qui le slide sono meno dense delle storie didattiche.
+- Prezzi, numero di copie e date solo quelli veri dati da Gabriele: se mancano, scrivi [PREZZO], [N], [GIORNO].
+- Mai elenco dei capitoli, mai "segui la pagina". L'ultima frase è sempre una scelta o una presa di posizione.
+
 SFONDO
 - Scegli la categoria di foto più coerente col tema:
   sicura = consapevole del proprio valore (dipendenza, mercato, attenzioni);

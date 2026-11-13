@@ -32,7 +32,7 @@ log = logging.getLogger(__name__)
 W, H = 1080, 1920
 TOP_SAFE, BOTTOM_SAFE = 270, 420          # zone coperte dall'interfaccia di Instagram (nome in alto, risposte in basso)
 TIPI = ["didattica", "vendita", "domande"]
-SINONIMI = {"didattico": "didattica", "didattiche": "didattica", "marketing": "vendita", "manuale": "vendita",
+SINONIMI = {"didattico": "didattica", "didattiche": "didattica", "marketing": "vendita", "lancio": "vendita", "prelancio": "vendita", "manuale": "vendita",
             "vendite": "vendita", "domanda": "domande", "box": "domande", "qa": "domande", "risposte": "domande"}
 
 # colori per pagina (sfondo a tinta unita, accento per i titoli)
