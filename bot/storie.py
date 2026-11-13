@@ -558,14 +558,15 @@ def disegna(blocchi: list[str], prima: bool, brand: dict, base: Image.Image,
     # blocco che inizia con "^" = citazione del libro/manuale: riquadro rosso, testo più grande (Gabriele 13/11)
     # altri stili per far risaltare il libro senza ripetere sempre il rosso (13/11): "°" riquadro bianco con testo
     # nero, "§" riquadro nero con barra rossa a sinistra
-    STILI = {"^": "rosso", "°": "bianco", "§": "barra"}
+    STILI = {"^": "rosso", "°": "bianco", "§": "barra", "!": "titolo"}   # "!" = titolo grande in maiuscolo
     stile = [STILI.get(b[:1]) for b in blocchi]
     risalto = [bool(x) for x in stile]
     blocchi = [b[1:].strip() if r else b for b, r in zip(blocchi, risalto)]
+    blocchi = [b.upper() if st == "titolo" else b for b, st in zip(blocchi, stile)]
     while True:
         tutte, misure = [], []
-        for b, r in zip(blocchi, risalto):
-            sz = size + 8 if r else size
+        for b, r, st in zip(blocchi, risalto, stile):
+            sz = int(size * 1.7) if st == "titolo" else (size + 8 if r else size)
             fb = _font(FONT_BOLD, sz)
             tutte.append(_righe(draw, b, fb, max_w))
             misure.append((sz, fb, int(sz * 1.22)))

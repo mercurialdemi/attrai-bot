@@ -155,6 +155,8 @@ Vale quando il tema parla di lancio, uscita, prelancio, sconto o bundle, e in og
       al massimo 2 storie in tutto un lancio);
   ° = riquadro bianco con testo nero;  § = riquadro nero con barra rossa a sinistra.
   Alterna ° e § nelle altre storie, così il libro si nota senza che sembrino tutte uguali.
+  ! = titolo grande in maiuscolo, da mettere come blocco breve (2-5 parole) subito prima del blocco col libro,
+      per far cadere l'occhio sul libro: "Stiamo scrivendo un **libro**", "Il **libro** è finito", "Manca **pochissimo**".
 - La copertina del libro non si mostra prima dell'ultima storia di prelancio (poi lancio e post-lancio).
 - Quattro mosse che funzionano, una per storia (in una serie di lancio usale in quest'ordine o alternale):
   1. L'ANNUNCIO. Si apre con il fatto ("Finalmente è pronto"), poi il lavoro che c'è dietro, concreto
