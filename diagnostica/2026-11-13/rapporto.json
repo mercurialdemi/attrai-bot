@@ -1,0 +1,354 @@
+{
+ "giorno": "2026-11-13",
+ "post_preparati": 4,
+ "slide_totali": 37,
+ "slide_fallite": 1,
+ "lavorazione": {
+  "openai-testo": {
+   "totali": 14,
+   "fallite": 1
+  },
+  "cta-illustrata": {
+   "totali": 1,
+   "fallite": 0
+  },
+  "testo-su-sfondo-uniforme": {
+   "totali": 13,
+   "fallite": 0
+  },
+  "cta-stile-post": {
+   "totali": 2,
+   "fallite": 0
+  },
+  "blocchi-ricostruzione-codice": {
+   "totali": 1,
+   "fallite": 0
+  },
+  "blocchi-sfondo-pieno": {
+   "totali": 5,
+   "fallite": 0
+  },
+  "cta-alone": {
+   "totali": 1,
+   "fallite": 0
+  }
+ },
+ "segnalazioni": [],
+ "post_con_problemi": [
+  {
+   "job_id": 113,
+   "fonte": "https://www.instagram.com/p/DfgyhfqmjF1/",
+   "fallite": [
+    11
+   ],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "12 RULES FOR MEN:",
+     "testo": "12 REGOLE\n\nDA\n\nUOMO:",
+     "blocchi": [
+      {
+       "x": 150,
+       "y": 45,
+       "w": 510,
+       "h": 145,
+       "carattere": "normale",
+       "colore": "#5A2E1A",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 305,
+       "y": 182,
+       "w": 165,
+       "h": 52,
+       "carattere": "normale",
+       "colore": "#5A2E1A",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 195,
+       "y": 245,
+       "w": 400,
+       "h": 125,
+       "carattere": "normale",
+       "colore": "#5A2E1A",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "1. NEVER GO BACK TO A WOMAN WHO CHEATED.",
+     "testo": "1. NON TORNARE MAI\nDA UNA DONNA\nCHE TI HA TRADITO.",
+     "blocchi": [
+      {
+       "x": 35,
+       "y": 340,
+       "w": 320,
+       "h": 260,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "2. DRESS WELL NO MATTER THE OCCASION.",
+     "testo": "2. VESTITI BENE,\nIN QUALSIASI\nOCCASIONE.",
+     "blocchi": [
+      {
+       "x": 45,
+       "y": 305,
+       "w": 285,
+       "h": 370,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "3. NEVER GO BROKE TRYING TO IMPRESS OTHERS.",
+     "testo": "3. NON RESTARE MAI\nAL VERDE\nPER FARE COLPO\nSUGLI ALTRI.",
+     "blocchi": [
+      {
+       "x": 75,
+       "y": 115,
+       "w": 330,
+       "h": 370,
+       "carattere": "normale",
+       "colore": "#FFF8E7",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "4. NEVER EAT THE LAST PIECE OF SOMETHING YOU DIDN'T BUY.",
+     "testo": "4. NON PRENDERE MAI\nL'ULTIMO PEZZO\nSE NON L'HAI\nPAGATO TU.",
+     "blocchi": [
+      {
+       "x": 40,
+       "y": 125,
+       "w": 345,
+       "h": 375,
+       "carattere": "normale",
+       "colore": "#2B1A12",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "5. LISTEN, OBSERVE, AND MOST OF ALL, MAKE EYE CONTACT.",
+     "testo": "5. ASCOLTA,\nOSSERVA\nE SOPRATTUTTO\nGUARDA\nNEGLI OCCHI.",
+     "blocchi": [
+      {
+       "x": 40,
+       "y": 125,
+       "w": 320,
+       "h": 395,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "6. PROTECT WHO IS BEHIND YOU, AND RESPECT WHO IS BESIDE YOU.",
+     "testo": "6. PROTEGGI CHI\nHAI ALLE SPALLE\nE RISPETTA CHI\nHAI ACCANTO.",
+     "blocchi": [
+      {
+       "x": 35,
+       "y": 155,
+       "w": 310,
+       "h": 405,
+       "carattere": "normale",
+       "colore": "#FFF8E7",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "7. DON'T BEG FOR A RELATIONSHIP.",
+     "testo": "7. UNA RELAZIONE\nNON SI ELEMOSINA.",
+     "blocchi": [
+      {
+       "x": 30,
+       "y": 290,
+       "w": 335,
+       "h": 155,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "openai-testo",
+     "tentativi": 2,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "8. WORK OUT AT LEAST 4X A WEEK.",
+     "testo": "8. ALLENATI\nALMENO 4 VOLTE\nA SETTIMANA.",
+     "blocchi": [
+      {
+       "x": 35,
+       "y": 395,
+       "w": 265,
+       "h": 215,
+       "carattere": "normale",
+       "colore": "#FFF8E7",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 10,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "9. IF YOU'RE NOT INVITED, DON'T ASK TO GO.",
+     "testo": "9. SE NON TI\nHANNO INVITATO,\nNON CHIEDERE\nDI ESSERCI.",
+     "blocchi": [
+      {
+       "x": 45,
+       "y": 280,
+       "w": 300,
+       "h": 305,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 11,
+     "via": "openai-testo",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "Il testo è corretto, ma la riga \"RESTANDO\" tocca la parte alta dello schienale della sedia, che nell'originale era libera. Anche \"MAI\" arriva quasi a sfiorare la testa del personaggio in piedi.",
+     "testo_originale": "10. NEVER SHAKE A HAND SITTING DOWN.",
+     "testo": "10. NON DARE MAI\nLA MANO\nRESTANDO\nSEDUTO.",
+     "blocchi": [
+      {
+       "x": 30,
+       "y": 300,
+       "w": 270,
+       "h": 255,
+       "carattere": "normale",
+       "colore": "#FFF8E7",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 12,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "11. ALWAYS HAVE THE AMBITION TO BE BETTER.",
+     "testo": "11. ABBI SEMPRE\nLA FAME\nDI MIGLIORARE.",
+     "blocchi": [
+      {
+       "x": 30,
+       "y": 300,
+       "w": 315,
+       "h": 380,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 13,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "12. FIND MULTIPLE WAYS TO MAKE MONEY.",
+     "testo": "12. NON VIVERE\nDI UNA SOLA\nENTRATA.",
+     "blocchi": [
+      {
+       "x": 35,
+       "y": 395,
+       "w": 275,
+       "h": 235,
+       "carattere": "normale",
+       "colore": "#FFF8E7",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 14,
+     "via": "cta-illustrata",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se ti sei riconosciuto anche in una sola di queste 12 regole,\nperché l'hai rispettata\no perché l'hai tradita,\nsegui @attraiseduci.\nOgni giorno parliamo di relazioni,\nseduzione e psicologia femminile.\nPer smettere di essere quello che torna,\nche elemosina e che chiede di esserci.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Dodici regole di vita per un uomo che si rispetta: niente ritorni da chi ti ha tradito, cura di sé, soldi gestiti con testa, educazione, rispetto per chi ti sta vicino, dignità nelle relazioni e nei rapporti sociali, ambizione e più entrate. È una lista di massime secche, motivazionali e un po' provocatorie, sullo stile del codice d'onore maschile.",
+   "descrizione": "Conosco un uomo che è tornato da lei dopo averla scoperta. Si è detto che perdonare era da persone mature, che tutti sbagliano, che quello che avevano costruito valeva più di una chat trovata per caso. Sei mesi dopo le controllava il telefono mentre lei era sotto la doccia.\n\nNon si era ripreso la sua donna. Aveva perso il rispetto per se stesso, e ogni giorno ne pagava una rata.\n\nQueste dodici regole sembrano galateo da nonno: i vestiti, la mano data in piedi, l'ultimo pezzo che non prendi. In realtà parlano tutte della stessa cosa, cioè di quanto vali ai tuoi occhi quando nessuno ti guarda.\n\nNel 2001 Jennifer Crocker e Connie Wolfe hanno descritto l'autostima contingente: quando il tuo valore dipende dall'approvazione degli altri, sale e crolla insieme a quella. È quello che succede all'uomo che chiede di essere invitato, che spende soldi che non ha per fare colpo, che elemosina attenzioni dentro una relazione. Ogni sì gli dà sollievo per un giorno, ogni no lo svuota per una settimana. E una donna se ne accorge subito, perché è difficile desiderare un uomo che ha bisogno del tuo sì per stare in piedi.\n\nEd è qui che molti uomini commettono l'errore più costoso. Credono che la dignità sia rigidità, che chi non torna sia un orgoglioso e chi resta sia buono. Ma ogni volta che resti dove ti hanno tradito, bussi dove non ti hanno chiamato o chiedi amore invece di riceverlo, mostri a chi ti guarda quanto poco basta per tenerti.\n\nPalestra, vestiti, più di un'entrata: non è vanità. È così che un uomo si costruisce un centro che non dipende da lei. Quando hai una vita tua, andartene non è più una minaccia che non riesci a mantenere. Diventa una scelta che puoi fare davvero.\n\nUn uomo che sa andarsene raramente ha bisogno di farlo.\n\nQuale di queste dodici regole hai tradito per paura di restare solo?\n\nSe mentre leggevi ti è venuta in mente subito, segui @attraiseduci: qui ogni giorno parliamo di donne, relazioni e di quella dignità che molti uomini svendono un pezzo alla volta.\n\n#attrazione #psicologiafemminile #relazioni #seduzione #AttraiSeduci",
+   "segnalazioni": []
+  }
+ ]
+}
