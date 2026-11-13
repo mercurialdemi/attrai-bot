@@ -556,7 +556,11 @@ def disegna(blocchi: list[str], prima: bool, brand: dict, base: Image.Image,
     corto = sum(len(b) for b in blocchi) < 160
     size = 68 if (prima and corto) else 50    # gancio breve: più grande (6/11); slide piene tipo AscesaMentale (11/11): 50
     # blocco che inizia con "^" = citazione del libro/manuale: riquadro rosso, testo più grande (Gabriele 13/11)
-    risalto = [b.startswith("^") for b in blocchi]
+    # altri stili per far risaltare il libro senza ripetere sempre il rosso (13/11): "°" riquadro bianco con testo
+    # nero, "§" riquadro nero con barra rossa a sinistra
+    STILI = {"^": "rosso", "°": "bianco", "§": "barra"}
+    stile = [STILI.get(b[:1]) for b in blocchi]
+    risalto = [bool(x) for x in stile]
     blocchi = [b[1:].strip() if r else b for b, r in zip(blocchi, risalto)]
     while True:
         tutte, misure = [], []
@@ -572,17 +576,21 @@ def disegna(blocchi: list[str], prima: bool, brand: dict, base: Image.Image,
     y = zona_alta + max(0, (zona_bassa - zona_alta - alto) // 2)
     sfondo = base.copy()
     righe_out = []
-    for righe, (bsize, f, lh), ris in zip(tutte, misure, risalto):
+    for righe, (bsize, f, lh), ris, st in zip(tutte, misure, risalto, stile):
         h_blocco = len(righe) * lh + 2 * PAD_Y
+        fondo = {"rosso": colore_chiave(brand), "bianco": (255, 255, 255)}.get(st, (0, 0, 0))
+        testo_col = (0, 0, 0) if st == "bianco" else (255, 255, 255)
         for d in (draw, ImageDraw.Draw(sfondo)):
-            d.rectangle((MARGINE_X, y, W - MARGINE_X, y + h_blocco), fill=colore_chiave(brand) if ris else (0, 0, 0))
+            d.rectangle((MARGINE_X, y, W - MARGINE_X, y + h_blocco), fill=fondo)
+            if st == "barra":
+                d.rectangle((MARGINE_X, y, MARGINE_X + 14, y + h_blocco), fill=colore_chiave(brand))
         ty = y + PAD_Y - int(bsize * 0.08)
         for r in righe:
             x = MARGINE_X + PAD_X
             runs = []
             for k, parola in enumerate(r):
                 for j, (t, rosso) in enumerate(parola):
-                    col = ((0, 0, 0) if ris else colore_chiave(brand)) if rosso else (255, 255, 255)
+                    col = ((0, 0, 0) if st == "rosso" else colore_chiave(brand)) if rosso else testo_col
                     draw.text((x, ty), t, font=f, fill=col)
                     x += draw.textlength(t, font=f)
                     ultimo = j == len(parola) - 1
@@ -590,7 +598,7 @@ def disegna(blocchi: list[str], prima: bool, brand: dict, base: Image.Image,
                 if k < len(r) - 1:
                     x += draw.textlength("a a", font=f) - draw.textlength("aa", font=f)   # lo spazio da solo misura 0
             righe_out.append({"testo": " ".join(_testo(w) for w in r), "x": float(MARGINE_X + PAD_X), "y": float(ty),
-                              "size": bsize, "weight": "bold_carlito", "color": (255, 255, 255), "runs": runs,
+                              "size": bsize, "weight": "bold_carlito", "color": testo_col, "runs": runs,
                               "spazi": True})
             ty += lh
         y += h_blocco + GAP

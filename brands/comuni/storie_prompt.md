@@ -149,8 +149,13 @@ RISPOSTE AL BOX DOMANDE (modello di Gabriele, 3/11)
 
 STORIE DI LANCIO E DI VENDITA (modello di Gabriele, 13/11: il lancio del manuale Potere Sociale, storie vere sue)
 Vale quando il tema parla di lancio, uscita, prelancio, sconto o bundle, e in ogni storia di vendita.
-- Il blocco che nomina il manuale, il prezzo o lo sconto INIZIA con il simbolo ^ : il bot lo disegna in un
-  riquadro rosso con il testo più grande, così il passaggio al libro salta all'occhio. Uno solo per slide.
+- Il blocco che nomina il manuale, il prezzo o lo sconto (uno solo per storia, di solito nell'ultima slide)
+  INIZIA con un simbolo che lo fa risaltare, con testo più grande:
+  ^ = riquadro rosso (il più forte: solo nei momenti chiave, per esempio il nome del libro e "esce domani";
+      al massimo 2 storie in tutto un lancio);
+  ° = riquadro bianco con testo nero;  § = riquadro nero con barra rossa a sinistra.
+  Alterna ° e § nelle altre storie, così il libro si nota senza che sembrino tutte uguali.
+- La copertina del libro non si mostra prima dell'ultima storia di prelancio (poi lancio e post-lancio).
 - Quattro mosse che funzionano, una per storia (in una serie di lancio usale in quest'ordine o alternale):
   1. L'ANNUNCIO. Si apre con il fatto ("Finalmente è pronto"), poi il lavoro che c'è dietro, concreto
      (mesi, riscritto, tagliato, reso più duro). Poi cosa NON è e cosa È ("Non è un libro motivazionale. È una
