@@ -781,8 +781,19 @@ POSIZIONAMENTO
 TONO
 {chr(10).join('- ' + t for t in brand.get('tono', []))}
 
+QUALITÀ PRIMA DI TUTTO (Gabriele 13/11: le descrizioni uscivano tutte con lo stesso scheletro e le stesse formule)
+- Lunghezza: 1100-1700 caratteri prima della CTA. Meglio corta e densa che lunga e prevedibile.
+- Gli ingredienti qui sotto NON sono una scaletta da seguire in ordine: scegli la forma più adatta a QUESTO post
+  (una scena che si apre e si spiega, una tesi provocatoria difesa, un ribaltamento, una lettera al lettore,
+  un "cosa succede nella testa di lei minuto per minuto"). Se la descrizione sembra la sorella delle altre, rifalla.
+- Studi: uno, al massimo due, solo se rafforzano davvero il punto. Non aprire paragrafi con "Nel 19xx X ha…".
+- Il lettore è sempre TU. Mai chiamarlo "lui" o "molti uomini" quando stai parlando a lui.
+- FORMULE VIETATE perché le abbiamo già usurate: "ed è qui che", "commettono l'errore", "il guaio è",
+  "ha un nome", "se ti sei rivisto", "sai già quanto", "ecco perché", "il punto è", "la verità è", e la
+  costruzione "Non è X. È Y." più di una volta.
+
 SOSTANZA (la descrizione deve far sentire, poi insegnare: il lettore deve uscirne capendo qualcosa di sé)
-Percorso (non uno schema fisso: varia la forma da un post all'altro):
+Ingredienti (usali nell'ordine e nella misura che il post chiede):
 1. APERTURA EMOTIVA (2-3 righe): una scena o una sensazione precisa che il lettore ha vissuto, al tu, al presente
    ("Le scrivi per primo. Di nuovo. E mentre aspetti la risposta senti che qualcosa non torna."). Deve far dire
    "parla di me". Mai aprire con una definizione o con una statistica.
@@ -818,7 +829,7 @@ FLUIDITÀ E FORMA (deve sembrare scritta da un autore autorevole, non da un gene
   frase: niente colonne di frasi singole, niente effetto "elenco di slogan". Al massimo una o due frasi isolate
   in tutta la descrizione, solo dove serve un colpo.
 - Tono di chi spiega con calma e sicurezza, da esperto: ragionamento che scorre, collegamenti logici
-  ("il motivo è…", "ed è qui che…"), non frasi a effetto una dietro l'altra.
+  naturali, non frasi a effetto una dietro l'altra.
 - Vietate le frasi fatte e le formule da social: "non è debolezza, è…", "non sei tu, è…", "la verità è che",
   "e qui sta il punto", "spoiler:", "fidati", "leggi bene", "nessuno te lo dice", "cambia tutto",
   "senza favole", "il gioco cambia", "questo cambia tutto".
@@ -838,6 +849,15 @@ Gli ultimi tipi di hook usati e gli autori citati di recente sono nel messaggio:
 Cita solo autori e studi reali che conosci con certezza; se non sei sicuro, non citare.
 
 {_scuole(brand)}
+CTA NELLA DESCRIZIONE (3-4 frasi, scritte da copywriter, mai una scheda del prodotto)
+1. un'ultima intuizione legata a QUESTO post che distrugge una falsa credenza del lettore;
+2. il prezzo concreto di restare come è adesso (urgenza vera, niente countdown inventati);
+3. il manuale nominato tra virgolette come il posto preciso dove quella cosa si risolve, detto con il
+   risultato che ottiene il lettore, non con l'elenco di cosa contiene;
+4. l'azione (link in bio / commenta la parola).
+Mai aprire la CTA con "Se ti sei rivisto", "Se questo post", "Se ti sei riconosciuto": entra dentro il discorso.
+CTA "segui la pagina": stessa logica, 2-3 frasi, il motivo concreto per cui seguire (cosa troverà nei prossimi post).
+
 CTA
 {brand['cta']['regola'].strip()}
 {brand['cta']['stile'].strip()}
@@ -901,10 +921,50 @@ def write_caption(slides_out: dict, caption: str, brand: dict, rules: list[dict]
     liv = str(brand.get("modello_descrizione") or ("alto" if brand.get("manuali") else "medio")).lower()
     modello = config.CLAUDE_MODEL if liv == "medio" else config.CAPTION_MODEL
     try:
-        return _tool_call(system, content, CAPTION_TOOL, model=modello, max_tokens=6000, cache_ora=True)
+        res = _tool_call(system, content, CAPTION_TOOL, model=modello, max_tokens=6000, cache_ora=True)
+        trovate = formule_usurate(res.get("descrizione", ""))
+        if trovate:
+            log.info("Descrizione con formule usurate %s: ritocco", trovate)
+            res["descrizione"] = ritocca_descrizione(res["descrizione"], trovate)
+        return res
     except (anthropic.NotFoundError, anthropic.PermissionDeniedError) as e:
         log.warning("Modello %s non disponibile, uso %s: %s", config.CAPTION_MODEL, config.CLAUDE_MODEL, e)
         return _tool_call(system, content, CAPTION_TOOL, max_tokens=6000)
+
+
+FORMULE_USURATE = [r"\bed è qui che\b", r"commett\w* l'errore", r"\bil guaio è\b", r"\bha un nome\b",
+                   r"\bse ti sei rivisto\b", r"\bsai già quanto\b", r"\becco perché\b", r"\bil punto è\b",
+                   r"\bla verità è\b"]
+
+RITOCCO_TOOL = {
+    "name": "descrizione_ritoccata",
+    "description": "Restituisce la descrizione con le sole frasi indicate riscritte.",
+    "input_schema": {"type": "object", "properties": {"descrizione": {"type": "string"}}, "required": ["descrizione"]},
+}
+
+
+def formule_usurate(testo: str) -> list[str]:
+    t = (testo or "").lower()
+    trovate = [m.group(0) for pat in FORMULE_USURATE for m in [re.search(pat, t)] if m]
+    if len(re.findall(r"\bnon è [^.]{1,60}\. è\b", t)) > 1:
+        trovate.append("Non è X. È Y. ripetuto")
+    return trovate
+
+
+def ritocca_descrizione(desc: str, trovate: list[str]) -> str:
+    """Riscrive solo le frasi con formule usurate (Sonnet, pochi centesimi); il resto resta identico."""
+    try:
+        out = _tool_call(
+            "Sei l'editor della pagina. Riscrivi SOLO le frasi che contengono le formule indicate, con parole "
+            "naturali e più precise, stesso senso, stessa persona (il lettore è sempre 'tu'). Tutto il resto "
+            "della descrizione resta identico, compresi CTA, titoli tra virgolette e hashtag finali.",
+            [{"type": "text", "text": "Formule da eliminare: " + "; ".join(trovate) + "\n\nDescrizione:\n" + desc}],
+            RITOCCO_TOOL, model=config.CLAUDE_MODEL, max_tokens=3000)
+        nuova = (out.get("descrizione") or "").strip()
+        return nuova if len(nuova) > 0.7 * len(desc) else desc
+    except Exception as e:
+        log.warning("Ritocco descrizione non riuscito: %s", e)
+        return desc
 
 
 def apply_cta_texts(slides_out: dict, new: list[dict]) -> None:
