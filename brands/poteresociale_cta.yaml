@@ -1,0 +1,34 @@
+# CTA modello di Potere Sociale (15/11/2026, dal tono delle storie di lancio e della salespage di Gabriele).
+# Il bot parte SEMPRE da una di queste per la slide CTA finale: tiene la leva e la chiusura e riscrive l'aggancio
+# iniziale sul post. Niente parola da commentare: solo link in bio.
+
+potere-sociale-solo:
+  parola: ""
+  modelli:
+    - |
+      Non ti manca talento. Ti manca struttura.
+      Finché non capisci come gli altri ti leggono nei primi secondi, resterai quello capace ma sostituibile: utile, presente, mai ascoltato davvero.
+      In "Potere Sociale" trovi le leve che spostano la tua posizione in una stanza, prima ancora che tu apra bocca.
+      Il link è in bio. Usarle, poi, sta a te.
+    - |
+      Ogni volta che ti giustifichi senza motivo, perdi posizione.
+      Ogni volta che dici sì quando volevi dire no, perdi posizione.
+      Non è il tuo carattere: è un linguaggio che nessuno ti ha mai insegnato a leggere.
+      In "Potere Sociale" lo smontiamo pezzo per pezzo. Lo trovi nel link in bio.
+    - |
+      Le persone non ti trattano per quanto vali. Ti trattano per quanto vali ai loro occhi.
+      Puoi continuare ad aspettare che se ne accorgano da sole, oppure imparare a cambiare quello che vedono.
+      Il manuale "Potere Sociale" è nel link in bio.
+
+bundle-attrazione-potere:
+  parola: ""
+  modelli:
+    - |
+      Rispetto e attrazione non sono due problemi diversi: sono lo stesso problema visto da due lati.
+      Una donna non sceglie chi la insegue, sceglie chi nel mondo ha già una posizione.
+      Per questo abbiamo unito "AttraiSeduci" e "Potere Sociale" in un unico bundle: uno ti insegna a costruire la posizione, l'altro a trasformarla in attrazione.
+      Lo trovi nel link in bio.
+    - |
+      Lei non legge le tue tecniche. Legge la tua posizione: chi ti ascolta, chi ti interrompe, come reagisci quando qualcuno ti provoca.
+      Se in un gruppo ti adatti, con lei farai lo stesso.
+      Nel bundle "AttraiSeduci" + "Potere Sociale" trovi tutte e due le metà del gioco. Link in bio.

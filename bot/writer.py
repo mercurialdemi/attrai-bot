@@ -330,7 +330,8 @@ def _cta_models_block() -> str:
         return ""
     out = ["MODELLI CTA SCRITTI DA GABRIELE (la slide CTA finale per un manuale parte SEMPRE da uno di questi):"]
     for mid, m in mods.items():
-        out.append(f"- manuale {mid} · parola da commentare: \"{m.get('parola', '')}\"")
+        out.append(f"- manuale {mid} · " + (f"parola da commentare: \"{m['parola']}\"" if m.get("parola")
+                                              else "niente parola da commentare: solo link in bio"))
         for i, t in enumerate(m.get("modelli") or [], 1):
             out.append(f"  {mid}#{i}: " + " / ".join(x.strip() for x in t.strip().splitlines() if x.strip()))
     return "\n".join(out) + "\n"

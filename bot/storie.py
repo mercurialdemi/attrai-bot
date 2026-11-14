@@ -409,6 +409,9 @@ def _testo(parola: list[tuple[str, bool]]) -> str:
     return "".join(t for t, _ in parola)
 
 
+CENTRATO = False   # True: righe centrate (storie di lancio)
+
+
 def _righe(draw, testo: str, font, max_w: int) -> list[list[list[tuple[str, bool]]]]:
     """A capo dove lo scrive il testo (\\n: una frase per riga, come nelle storie vere) e quando la riga è piena."""
     righe = []
@@ -588,6 +591,11 @@ def disegna(blocchi: list[str], prima: bool, brand: dict, base: Image.Image,
         ty = y + PAD_Y - int(bsize * 0.08)
         for r in righe:
             x = MARGINE_X + PAD_X
+            if CENTRATO:                      # righe centrate come nelle storie di lancio di Potere Sociale
+                spazio = draw.textlength("a a", font=f) - draw.textlength("aa", font=f)
+                lw = sum(draw.textlength(t, font=f) for parola in r for t, _ in parola) + spazio * (len(r) - 1)
+                x = (W - lw) / 2
+            x0 = x
             runs = []
             for k, parola in enumerate(r):
                 for j, (t, rosso) in enumerate(parola):
@@ -598,7 +606,7 @@ def disegna(blocchi: list[str], prima: bool, brand: dict, base: Image.Image,
                     runs.append([t + (" " if ultimo and k < len(r) - 1 else ""), col])
                 if k < len(r) - 1:
                     x += draw.textlength("a a", font=f) - draw.textlength("aa", font=f)   # lo spazio da solo misura 0
-            righe_out.append({"testo": " ".join(_testo(w) for w in r), "x": float(MARGINE_X + PAD_X), "y": float(ty),
+            righe_out.append({"testo": " ".join(_testo(w) for w in r), "x": float(x0), "y": float(ty),
                               "size": bsize, "weight": "bold_carlito", "color": testo_col, "runs": runs,
                               "spazi": True})
             ty += lh

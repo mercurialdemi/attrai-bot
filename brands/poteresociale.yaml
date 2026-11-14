@@ -100,9 +100,14 @@ cta:
     iniziativa nel gruppo): CTA al manuale, ma non su ogni post.
     La CTA del post originale va sempre tolta e sostituita con la nostra (anche dentro le slide).
   stile: |
-    Scritta da copywriter professionista, mai banale. Richiama il problema preciso e il pezzo del manuale che lo
-    tratta (es. "Se in ogni gruppo diventi quello che si adatta, il manuale parte proprio dal frame e dal ruolo
-    che assumi"). Mai descrizione del manuale, mai risultati garantiti. Niente emoji nella CTA.
+    Scritta da copywriter di alto livello, mai tirata via (Gabriele 15/11). Voce: lucida, fredda, da chi conosce
+    il gioco. Leve che funzionano su questa pagina: sposta la colpa dal carattere al ruolo ("non ti manca talento,
+    ti manca struttura"); dà un nome al dolore ("capace ma sostituibile", "quello che si adatta"); coppie di
+    contrasto brevi ("uno lavora, l'altro orienta"); costo concreto di restare così; chiusura che rimette la
+    scelta a lui ("io ti metto in mano le leve, poi sta a te usarle"). Il manuale arriva come il posto preciso
+    dove quella leva si impara, mai come elenco di contenuti, mai risultati garantiti. Post di seduzione o
+    attrazione -> il bundle "AttraiSeduci" + "Potere Sociale". Niente emoji nella CTA. Base: i modelli
+    in poteresociale_cta.yaml.
   dove_si_compra: "link in bio"
 
 scuole_di_pensiero:
