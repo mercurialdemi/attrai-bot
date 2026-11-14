@@ -1,0 +1,30 @@
+{
+ "giorno": "2026-11-14",
+ "post_preparati": 8,
+ "slide_totali": 67,
+ "slide_fallite": 0,
+ "lavorazione": {
+  "testo-su-sfondo-uniforme": {
+   "totali": 52,
+   "fallite": 0
+  },
+  "cta-stile-post": {
+   "totali": 8,
+   "fallite": 0
+  },
+  "blocchi-ricostruzione-codice": {
+   "totali": 4,
+   "fallite": 0
+  },
+  "blocchi-pulizia-codice": {
+   "totali": 2,
+   "fallite": 0
+  },
+  "openai-testo": {
+   "totali": 1,
+   "fallite": 0
+  }
+ },
+ "segnalazioni": [],
+ "post_con_problemi": []
+}
