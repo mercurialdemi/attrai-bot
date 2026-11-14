@@ -631,17 +631,40 @@ def disegna(blocchi: list[str], prima: bool, brand: dict, base: Image.Image,
     return img, sfondo
 
 
+def _manuale_citato(serie: dict, brand: dict) -> str | None:
+    """Il manuale nominato nell'ultima slide della serie di vendita (per metterne il mockup)."""
+    ultima = " ".join((serie.get("slides") or [{}])[-1].get("blocchi") or []).lower().replace("**", "")
+    for m in sorted(brand.get("manuali") or [], key=lambda m: -max((len(t) for t in m.get("titoli") or [""]), default=0)):
+        if any(t and t.lower() in ultima for t in (m.get("titoli") or []) + [m.get("nome", "")]):
+            return m["id"]
+    return None
+
+
 def _disegna_serie(serie: dict, brand: dict, slug: str, jdir: Path, nome: str) -> tuple[list[Path], Path | None]:
     foto = scegli_sfondo(slug, serie.get("sfondo") or "sicura")
     base = _base(slug, foto)
     serie["sfondo_file"] = foto.name if foto else ""
     jdir.mkdir(parents=True, exist_ok=True)
     paths, slides = [], []
-    for i, s in enumerate(serie.get("slides") or [], 1):
+    global TOP_SAFE
+    tutte = serie.get("slides") or []
+    mid = _manuale_citato(serie, brand) if serie.get("tipo") == "vendita" else None
+    for i, s in enumerate(tutte, 1):
         pl: list = []
-        img, sf = disegna(s.get("blocchi") or [], i == 1, brand, base, pl,
+        base_i, top_prima = base, TOP_SAFE
+        if mid and i == len(tutte):          # ultima slide di vendita: mockup del manuale in alto (Gabriele 15/11)
+            try:
+                from . import mockup
+                fatto = mockup.su_sfondo(base, mid, altezza=620, colore=colore_chiave(brand))
+                if fatto:
+                    base_i, fine = fatto
+                    TOP_SAFE = fine + 30
+            except Exception as e:
+                log.warning("Mockup del manuale non riuscito: %s", e)
+        img, sf = disegna(s.get("blocchi") or [], i == 1, brand, base_i, pl,
                           domanda=(serie.get("domanda") or "").strip() if serie.get("_mostra_domanda") else "",
                           sticker=i == 1 and serie.get("tipo") == "domande")
+        TOP_SAFE = top_prima
         p = jdir / f"{nome}_{i:02d}.jpg"
         img.save(p, quality=95)
         bg = jdir / f"{nome}_{i:02d}_sfondo.jpg"

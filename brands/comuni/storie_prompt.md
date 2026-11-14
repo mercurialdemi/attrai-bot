@@ -158,6 +158,9 @@ Vale quando il tema parla di lancio, uscita, prelancio, sconto o bundle, e in og
   ! = titolo grande in maiuscolo, da mettere come blocco breve (2-5 parole) subito prima del blocco col libro,
       per far cadere l'occhio sul libro: "Stiamo scrivendo un **libro**", "Il **libro** è finito", "Manca **pochissimo**".
 - La copertina del libro non si mostra prima dell'ultima storia di prelancio (poi lancio e post-lancio).
+- Nelle serie di vendita col manuale citato, il bot mette il MOCKUP del libro nella metà alta dell'ultima slide:
+  l'ultima slide ha poco spazio, quindi massimo 2 blocchi brevi (circa 250 caratteri in tutto), col titolo del
+  manuale scritto esatto.
 - Quattro mosse che funzionano, una per storia (in una serie di lancio usale in quest'ordine o alternale):
   1. L'ANNUNCIO. Si apre con il fatto ("Finalmente è pronto"), poi il lavoro che c'è dietro, concreto
      (mesi, riscritto, tagliato, reso più duro). Poi cosa NON è e cosa È ("Non è un libro motivazionale. È una
