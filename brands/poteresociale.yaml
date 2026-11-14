@@ -17,12 +17,22 @@ temi_report: >
   contro pressione, leggere pattern e opportunismo nelle persone. In modo secondario: rispetto e confini
   nelle relazioni uomo-donna. Anche SEDUZIONE e attrazione (Gabriele 15/11: su questa pagina vendiamo anche il
   manuale sulla seduzione e il bundle seduzione + potere): ogni giorno almeno qualche post su seduzione,
-  attrazione e psicologia femminile vista dal lato dello status e della presenza. Non motivazionale
+  attrazione e psicologia femminile vista dal lato dello status e della presenza. Un post di seduzione
+  può venire qui anche se andrebbe bene pure per AttraiSeduci: non scartarlo per questo. Non motivazionale
   generico, non contenuti misogini o di dominio.
 
 # Collaboratori: si aggiungono dal gruppo con /aggiungi @pagina
 collaboratori_versione: 2026-11-10
-pagine_monitorate: []
+pagine_monitorate:
+  # 15/11: dai collaboratori di AttraiSeduci, quelli su status, presenza e seduzione maschile
+  - masculineprints
+  - masculinecreed
+  - masculineriots
+  - masculinemind
+  - badboyscode
+  - masculinecraze
+  - thementalpower
+  - manly_pinnacle
 
 pagine_studio: []
 
