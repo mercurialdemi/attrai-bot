@@ -809,8 +809,8 @@ Ingredienti (usali nell'ordine e nella misura che il post chiede):
    se il post stesso è un elenco o se servono davvero dei passaggi in sequenza: nella maggior parte delle
    descrizioni NIENTE punti numerati.
 5. CHIUSURA CHE RESTA: una frase forte che fissa il concetto e ridà speranza ("Non sei tu che vali poco. È la
-   posizione che hai accettato."), poi una domanda introspettiva specifica sul tema (mai "Sei d'accordo?",
-   "Cosa ne pensi?"), poi la CTA.
+   posizione che hai accettato."), poi (solo nei post col manuale) una domanda introspettiva specifica sul tema, poi la CTA.
+   Nei post senza manuale si chiude con "Sei d'accordo con il post?" (vedi POST SENZA MANUALE).
 Tono:
 - Autorevole: parla da chi studia questa materia da anni e l'ha vista succedere mille volte. Affermazioni nette e
   motivate, niente "forse", "potrebbe", "in alcuni casi". Niente frasi motivazionali vuote ("credi in te stesso",
@@ -856,7 +856,9 @@ CTA NELLA DESCRIZIONE (3-4 frasi, scritte da copywriter, mai una scheda del prod
    risultato che ottiene il lettore, non con l'elenco di cosa contiene;
 4. l'azione (link in bio / commenta la parola).
 Mai aprire la CTA con "Se ti sei rivisto", "Se questo post", "Se ti sei riconosciuto": entra dentro il discorso.
-CTA "segui la pagina": stessa logica, 2-3 frasi, il motivo concreto per cui seguire (cosa troverà nei prossimi post).
+POST SENZA MANUALE (cta tipo "segui", Gabriele 15/11): niente invito a seguire nella descrizione. Il post resta
+didattico e scientifico, brutale, quasi machiavellico; la descrizione chiude con la frase forte finale, poi
+ESATTAMENTE la riga "Sei d'accordo con il post?" e poi gli hashtag. (La slide finale del post resta "segui la pagina".)
 
 CTA
 {brand['cta']['regola'].strip()}
@@ -922,6 +924,8 @@ def write_caption(slides_out: dict, caption: str, brand: dict, rules: list[dict]
     modello = config.CLAUDE_MODEL if liv == "medio" else config.CAPTION_MODEL
     try:
         res = _tool_call(system, content, CAPTION_TOOL, model=modello, max_tokens=6000, cache_ora=True)
+        if (res.get("cta") or {}).get("tipo") != "manuale":
+            res["descrizione"] = chiudi_con_domanda(res.get("descrizione", ""))
         trovate = formule_usurate(res.get("descrizione", ""))
         if trovate:
             log.info("Descrizione con formule usurate %s: ritocco", trovate)
@@ -941,6 +945,20 @@ RITOCCO_TOOL = {
     "description": "Restituisce la descrizione con le sole frasi indicate riscritte.",
     "input_schema": {"type": "object", "properties": {"descrizione": {"type": "string"}}, "required": ["descrizione"]},
 }
+
+
+def chiudi_con_domanda(desc: str) -> str:
+    """Post senza manuale: l'ultima riga prima degli hashtag è "Sei d'accordo con il post?" (Gabriele 15/11)."""
+    DOM = "Sei d'accordo con il post?"
+    if not desc or DOM.lower() in desc.lower():
+        return desc
+    righe = desc.rstrip().split("\n")
+    tag = []
+    while righe and (not righe[-1].strip() or righe[-1].strip().startswith("#")):
+        tag.insert(0, righe.pop())
+    corpo = "\n".join(righe).rstrip()
+    coda = "\n".join(tag).strip()
+    return corpo + "\n\n" + DOM + (("\n\n" + coda) if coda else "")
 
 
 def formule_usurate(testo: str) -> list[str]:
