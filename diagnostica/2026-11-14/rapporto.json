@@ -1,30 +1,2601 @@
 {
  "giorno": "2026-11-14",
- "post_preparati": 8,
- "slide_totali": 67,
- "slide_fallite": 0,
+ "post_preparati": 32,
+ "slide_totali": 238,
+ "slide_fallite": 15,
  "lavorazione": {
-  "testo-su-sfondo-uniforme": {
-   "totali": 52,
+  "openai-testo": {
+   "totali": 70,
    "fallite": 0
   },
-  "cta-stile-post": {
-   "totali": 8,
+  "blocchi-sfondo-pieno": {
+   "totali": 30,
+   "fallite": 0
+  },
+  "cta-alone": {
+   "totali": 12,
    "fallite": 0
   },
   "blocchi-ricostruzione-codice": {
-   "totali": 4,
+   "totali": 16,
    "fallite": 0
   },
   "blocchi-pulizia-codice": {
-   "totali": 2,
+   "totali": 14,
    "fallite": 0
   },
-  "openai-testo": {
+  "testo-su-sfondo-uniforme": {
+   "totali": 63,
+   "fallite": 0
+  },
+  "cta-stile-post": {
+   "totali": 12,
+   "fallite": 0
+  },
+  "openai-pulizia+blocchi": {
+   "totali": 15,
+   "fallite": 15
+  },
+  "cta-illustrata": {
+   "totali": 5,
+   "fallite": 0
+  },
+  "cta-stile-post-foto": {
    "totali": 1,
    "fallite": 0
   }
  },
- "segnalazioni": [],
- "post_con_problemi": []
+ "segnalazioni": [
+  {
+   "job_id": 19,
+   "testo": "scritte troppo piccole e non fedeli alloriginale",
+   "quando": "2026-11-12T12:52:39+00:00"
+  },
+  {
+   "job_id": 29,
+   "testo": "usa un font più elegante o autorevole (non basic come quello che hai usato) e che occupi più spazio e si legga bene",
+   "quando": "2026-11-13T09:17:51+00:00"
+  },
+  {
+   "job_id": 32,
+   "testo": "entrambe le questa slide ha la cta al manuale anche se è la penultima, non possiamo mettere 2 cta nello stesso post",
+   "quando": "2026-11-13T14:51:06+00:00"
+  },
+  {
+   "job_id": 44,
+   "testo": "tono non fluido e non abbastanza autoritario",
+   "quando": "2026-11-14T22:56:31+00:00"
+  }
+ ],
+ "post_con_problemi": [
+  {
+   "job_id": 19,
+   "fonte": "https://www.instagram.com/p/DfcJLYok9zE/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Make Anyone Say Yes\n3 phrases from an\nFBI Hostage Negotiator",
+     "testo": "Come farti dire sì\nda chiunque\n\n3 frasi di un\n\nnegoziatore dell'FBI",
+     "blocchi": [
+      {
+       "x": 75,
+       "y": 115,
+       "w": 860,
+       "h": 290,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 245,
+       "y": 445,
+       "w": 510,
+       "h": 50,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 100,
+       "y": 520,
+       "w": 800,
+       "h": 60,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "1 Mirroring\nRepeat the last 1-3 key words they just said, in a calm and curious tone.\nExample\nManager: \"The current budget is tight right now.\"\nYou: \"Tight right now?\"\nResult\nIt makes them explain further, which opens the door for your request.",
+     "testo": "Mirroring\n\nRipeti le ultime 1-3 parole chiave che ha detto, con tono calmo e curioso.\n\nEsempio\n\nCapo:\n\n\"Per ora il budget è un po' stretto.\"\n\nTu:\n\n\"Un po' stretto?\"\n\nRisultato\n\nLo spingi a spiegarsi meglio, e si apre lo spazio per la tua richiesta.",
+     "blocchi": [
+      {
+       "x": 225,
+       "y": 125,
+       "w": 540,
+       "h": 90,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 118,
+       "y": 240,
+       "w": 800,
+       "h": 95,
+       "carattere": "normale",
+       "colore": "#222222",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 428,
+       "w": 200,
+       "h": 45,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 105,
+       "y": 517,
+       "w": 180,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 335,
+       "y": 505,
+       "w": 570,
+       "h": 95,
+       "carattere": "normale",
+       "colore": "#222222",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 110,
+       "y": 620,
+       "w": 90,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 265,
+       "y": 610,
+       "w": 400,
+       "h": 50,
+       "carattere": "normale",
+       "colore": "#222222",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 85,
+       "y": 775,
+       "w": 175,
+       "h": 50,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 308,
+       "y": 760,
+       "w": 620,
+       "h": 90,
+       "carattere": "normale",
+       "colore": "#222222",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "blocchi-pulizia-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "2 Matching\nReflect their pace, energy, and level of detail in the conversation.\nExample\nThem: \"I'm just exploring my options.\"\nYou: \"That makes sense. I'm open to exploring a few options too.\"\nResult:\nIt builds comfort and makes the conversation feel natural.",
+     "testo": "Matching\n\nAdeguati al suo ritmo, alla sua energia e a quanto scende nei dettagli.\n\nEsempio\n\nLui:\n\n\"Sto solo valutando le opzioni.\"\n\nTu:\n\n\"Capisco. Anch'io sto valutando qualche alternativa.\"\n\nRisultato:\n\nSi sente a suo agio e la conversazione scorre naturale.",
+     "blocchi": [
+      {
+       "x": 222,
+       "y": 125,
+       "w": 460,
+       "h": 90,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 113,
+       "y": 255,
+       "w": 760,
+       "h": 90,
+       "carattere": "normale",
+       "colore": "#222222",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 90,
+       "y": 430,
+       "w": 200,
+       "h": 45,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 90,
+       "y": 508,
+       "w": 130,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 258,
+       "y": 503,
+       "w": 620,
+       "h": 45,
+       "carattere": "normale",
+       "colore": "#222222",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 90,
+       "y": 573,
+       "w": 90,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 243,
+       "y": 560,
+       "w": 640,
+       "h": 95,
+       "carattere": "normale",
+       "colore": "#222222",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 790,
+       "w": 175,
+       "h": 50,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 322,
+       "y": 768,
+       "w": 560,
+       "h": 90,
+       "carattere": "normale",
+       "colore": "#222222",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "3 Reframing\nRestate their concern in a new, positive way that keeps the goal in focus.\nExample\nThem: \"I'm worried it might be too expensive.\"\nYou: \"I understand cost is a concern. What if we look at a simpler option that still meets your needs?\"\nResult:\nIt shifts the conversation from \"no\" to \"how we can make it work.\"",
+     "testo": "Reframing\n\nRiformula la sua obiezione in chiave positiva, senza perdere di vista l'obiettivo.\n\nEsempio\n\nLui:\n\n\"Ho paura che costi troppo.\"\n\nTu:\n\n\"Capisco, il prezzo conta. E se partissimo da una soluzione più semplice che risponda comunque alle tue esigenze?\"\n\nRisultato:\n\nLa conversazione passa dal \"no\" al \"vediamo come farlo\".",
+     "blocchi": [
+      {
+       "x": 205,
+       "y": 135,
+       "w": 490,
+       "h": 90,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 90,
+       "y": 250,
+       "w": 850,
+       "h": 90,
+       "carattere": "normale",
+       "colore": "#222222",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 88,
+       "y": 410,
+       "w": 200,
+       "h": 45,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 85,
+       "y": 498,
+       "w": 125,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 235,
+       "y": 490,
+       "w": 710,
+       "h": 45,
+       "carattere": "normale",
+       "colore": "#222222",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 90,
+       "y": 565,
+       "w": 90,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 235,
+       "y": 552,
+       "w": 710,
+       "h": 140,
+       "carattere": "normale",
+       "colore": "#222222",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 72,
+       "y": 800,
+       "w": 175,
+       "h": 50,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 305,
+       "y": 773,
+       "w": 600,
+       "h": 90,
+       "carattere": "normale",
+       "colore": "#222222",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "cta-alone",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se ti sei riconosciuto\nin chi, davanti a un no,\naggiunge argomenti\ninvece di usare una di queste 3 frasi,\n\nil problema non sono le parole.\nÈ la posizione da cui chiedi.\n\nNel manuale \"Potere Sociale\"\ntrovi la calma e come guidare la scena.\n\nLink in bio.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Un negoziatore dell'FBI usa tre tecniche per portare chiunque al sì: il mirroring (ripeti le ultime parole dell'altro così si apre e spiega), il matching (ti adegui al suo ritmo e alla sua energia così si sente a suo agio) e il reframing (riformuli la sua obiezione in positivo, così si passa dal no al \"come facciamo\"). Ogni tecnica ha un esempio pratico e il risultato che ottieni. Il tono è didattico e concreto.",
+   "descrizione": "Quante volte hai preparato la richiesta perfetta, l'hai detta tutta d'un fiato e ti sei sentito rispondere \"vediamo più avanti\"? Il capo ti dice che il budget è stretto e tu, invece di fermarti, aggiungi argomenti. Più parli, più la tua richiesta somiglia a una supplica.\n\nTi costa due volte: perdi quello che chiedevi e insegni all'altro che basta un'obiezione per farti agitare o arretrare. Lo schema si ripete perché ti hanno insegnato che convincere significa argomentare meglio. In una trattativa, invece, la posizione più solida spesso è quella di chi fa parlare l'altro.\n\nLe tre frasi del carosello vengono dal lavoro di Chris Voss, ex negoziatore dell'FBI, e reggono per una ragione precisa. Nel 1999 Tanya Chartrand e John Bargh hanno mostrato che tendiamo a provare più simpatia per chi riprende, senza farlo notare, i nostri gesti e il nostro modo di parlare. Nel 2008 William Maddux e Adam Galinsky hanno portato la stessa idea al tavolo delle trattative: chi rispecchiava con discrezione la controparte arrivava più spesso a un accordo. Chi si sente ascoltato abbassa la guardia, e chi abbassa la guardia ti dà informazioni. \"Un po' stretto?\" non è una frase magica: costringe l'altro a dire cosa c'è davvero dietro quel no.\n\nEd è qui che quasi tutti sbagliano, perché le usano come trucchi. Uno specchio ripetuto tre volte di fila suona da copione, e chi si accorge di essere gestito si chiude più di prima. Queste frasi funzionano solo se sotto c'è calma: fai la domanda e poi taci, lasci il silenzio all'altro invece di riempirlo con una giustificazione. In quella pausa la direzione della conversazione passa a te.\n\nNessuna frase ti garantisce un sì da chiunque. Cambia la posizione da cui chiedi: smetti di essere quello che insiste e diventi quello che guida la conversazione con le domande.\n\nAlla prossima obiezione riesci a reggere tre secondi di silenzio, o senti subito il bisogno di spiegarti?\n\nSe davanti a un no tendi a giustificarti e a insistere, nel manuale \"Potere Sociale\" trovi la parte sulla calma e quella su come guidare la scena. Link in bio.",
+   "segnalazioni": [
+    "scritte troppo piccole e non fedeli alloriginale"
+   ]
+  },
+  {
+   "job_id": 23,
+   "fonte": "https://www.instagram.com/p/DfLAUh-CEUJ/",
+   "fallite": [
+    5,
+    6,
+    7
+   ],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "THE PSYCHOLOGY OF PEOPLE WHO CAN'T BE MANIPULATED\n(SWIPE LEFT)",
+     "testo": "LA PSICOLOGIA DELLE\nPERSONE CHE NON SI\nLASCIANO MANIPOLARE\n\n(SCORRI)",
+     "blocchi": [
+      {
+       "x": 110,
+       "y": 457,
+       "w": 781,
+       "h": 197,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#E5191C",
+       "allineamento": "center"
+      },
+      {
+       "x": 327,
+       "y": 767,
+       "w": 344,
+       "h": 45,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "1- They don't react instantly. They pause before giving you a reaction.\n(SWIPE LEFT)",
+     "testo": "1- Non reagiscono a caldo. Prima\ndi risponderti, si fermano un attimo.\n\n(SCORRI)",
+     "blocchi": [
+      {
+       "x": 92,
+       "y": 459,
+       "w": 818,
+       "h": 88,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 327,
+       "y": 842,
+       "w": 344,
+       "h": 43,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "2- They ask for clarity. They don't assume-they question.\n(SWIPE LEFT)",
+     "testo": "2- Vogliono chiarezza. Non danno\nnulla per scontato: chiedono.\n\n(SCORRI)",
+     "blocchi": [
+      {
+       "x": 112,
+       "y": 454,
+       "w": 777,
+       "h": 86,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 327,
+       "y": 842,
+       "w": 344,
+       "h": 43,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "3- They're comfortable saying \"no.\" They don't need everyone's approval.\n(SWIPE LEFT)",
+     "testo": "3- Dire \"no\" non li mette in difficoltà.\nNon cercano l'approvazione di tutti.\n\n(SCORRI)",
+     "blocchi": [
+      {
+       "x": 63,
+       "y": 459,
+       "w": 871,
+       "h": 88,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 327,
+       "y": 842,
+       "w": 344,
+       "h": 43,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Tetto di spesa di oggi raggiunto (9.02 € su 9.00 €). Riparte domani, oppure alza il tetto con /tetto.)",
+     "testo_originale": "4- They watch actions, not promises. Consistency matters more than words.\n(SWIPE LEFT)",
+     "testo": "4- Guardano i fatti, non le promesse.\nConta la coerenza, non le parole.\n\n(SCORRI)",
+     "blocchi": [
+      {
+       "x": 49,
+       "y": 440,
+       "w": 903,
+       "h": 102,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 327,
+       "y": 842,
+       "w": 344,
+       "h": 43,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Tetto di spesa di oggi raggiunto (9.10 € su 9.00 €). Riparte domani, oppure alza il tetto con /tetto.)",
+     "testo_originale": "5- They don't over-explain themselves. They know their boundaries without needing to defend every choice.\n(SWIPE LEFT)",
+     "testo": "5- Non si giustificano di continuo.\nConoscono i propri confini e non sentono\nil bisogno di difendere ogni scelta.\n\n(SCORRI)",
+     "blocchi": [
+      {
+       "x": 43,
+       "y": 437,
+       "w": 916,
+       "h": 132,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 327,
+       "y": 842,
+       "w": 344,
+       "h": 43,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Tetto di spesa di oggi raggiunto (9.10 € su 9.00 €). Riparte domani, oppure alza il tetto con /tetto.)",
+     "testo_originale": "E-BOOK\nLINK IN BIO\nHOW TO ATTRACT ANYONE\nPsychologydepth\n(dorso) HOW TO ATTRACT ANYONE",
+     "testo": "MANUALE\n\nLINK IN BIO\n\n\"POTERE\nSOCIALE\"",
+     "blocchi": [
+      {
+       "x": 305,
+       "y": 80,
+       "w": 503,
+       "h": 67,
+       "carattere": "titolo",
+       "colore": "#1F3E9A",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 308,
+       "y": 207,
+       "w": 378,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#1F3E9A",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 470,
+       "y": 444,
+       "w": 214,
+       "h": 92,
+       "carattere": "stretto",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    }
+   ],
+   "concetto": "Chi non si lascia manipolare ha alcune abitudini precise: non reagisce d'istinto ma si prende un momento, chiede chiarimenti invece di dare cose per scontate, sa dire di no senza cercare l'approvazione di tutti, giudica dai fatti e non dalle promesse, e non si giustifica di continuo per le proprie scelte. Il tono è quello di un elenco psicologico semplice e diretto, quasi da manuale di autodifesa mentale.",
+   "descrizione": "Quante volte hai detto sì e solo dopo, da solo in macchina, ti sei chiesto come ci sei arrivato? Il collega che alle sei ti chiede \"una cosa velocissima\", l'amico che ti mette fretta, la richiesta che arriva proprio quando non hai il tempo di pensarci.\n\nIl singolo favore pesa poco. Pesa il ruolo che ti stai costruendo: quello a cui basta un po' di pressione per ottenere qualcosa. E si ripete perché funziona. Chi ottiene un sì in quel modo si ricorda la strada e la usa di nuovo.\n\nLa pressione lavora quasi sempre sul tempo. Negli anni '80 Richard Petty e John Cacioppo hanno mostrato che una persona distratta o sotto carico giudica una proposta dai segnali di superficie, come il tono, l'urgenza e la sicurezza di chi parla, e trascura il contenuto. Chi pretende una risposta immediata ti spinge proprio in quella zona. Per questo i primi due punti sono la pausa e la domanda di chiarimento: riportano la conversazione su quello che ti stanno davvero chiedendo.\n\nIl terzo e il quinto punto toccano la parte più scomoda. Negli anni '50 Solomon Asch osservò persone che davano risposte palesemente sbagliate pur di non restare le uniche in disaccordo con il gruppo. Il bisogno di approvazione è una leva che può tirare chiunque. Ogni giustificazione non richiesta la rende ancora più visibile, perché comunica all'altro che il tuo no si può trattare: basta trovare l'argomento giusto.\n\nIl quarto punto ti protegge sul lungo periodo. Promettere costa poco, ripetere un comportamento costa molto di più. Un gesto isolato non dimostra niente, un pattern sì.\n\nQuesto non significa diventare sospettoso con tutti. Significa riprenderti il tuo ritmo: un \"ci penso e ti faccio sapere\", una domanda in più prima di accettare, un no detto in una frase sola. Qualcuno ci resterà male, perché era abituato alla tua disponibilità. Prendila come una reazione da osservare, non come un giudizio su di te.\n\nChi è difficile da manipolare non è più duro degli altri. Ha smesso di lasciare il proprio ritmo a chi ha fretta.\n\nQual è l'ultima volta che hai detto sì solo perché non ti hanno lasciato il tempo di pensare?",
+   "segnalazioni": []
+  },
+  {
+   "job_id": 25,
+   "fonte": "https://www.instagram.com/p/DfRHYKRj_bn/",
+   "fallite": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Tetto di spesa di oggi raggiunto (9.17 € su 9.00 €). Riparte domani, oppure alza il tetto con /tetto.)",
+     "testo_originale": "WHEN THE NICE GUY LOSES HIS PATIENCE THE DEVIL SHIVERS.",
+     "testo": "QUANDO IL BRAVO RAGAZZO\nPERDE\nLA PAZIENZA,\nANCHE IL DIAVOLO\nTREMA.",
+     "blocchi": [
+      {
+       "x": 240,
+       "y": 625,
+       "w": 520,
+       "h": 250,
+       "carattere": "fumetto",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#E31E24",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Tetto di spesa di oggi raggiunto (9.17 € su 9.00 €). Riparte domani, oppure alza il tetto con /tetto.)",
+     "testo_originale": "DON'T TRY ME, I'M THE KINDEST RUDE PERSON YOU WILL EVER MEET.",
+     "testo": "NON METTERMI ALLA PROVA:\nSONO IL MALEDUCATO\nPIÙ GENTILE\nCHE INCONTRERAI\nMAI.",
+     "blocchi": [
+      {
+       "x": 214,
+       "y": 674,
+       "w": 567,
+       "h": 205,
+       "carattere": "fumetto",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#E31E24",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Tetto di spesa di oggi raggiunto (9.17 € su 9.00 €). Riparte domani, oppure alza il tetto con /tetto.)",
+     "testo_originale": "CUTTING PEOPLE OFF GETS EASIER AND EASIER..",
+     "testo": "CHIUDERE CON LA GENTE\nDIVENTA\nSEMPRE PIÙ\nFACILE..",
+     "blocchi": [
+      {
+       "x": 232,
+       "y": 652,
+       "w": 535,
+       "h": 168,
+       "carattere": "fumetto",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#E31E24",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Tetto di spesa di oggi raggiunto (9.17 € su 9.00 €). Riparte domani, oppure alza il tetto con /tetto.)",
+     "testo_originale": "I HATE SNAKES. ESPECIALLY HUMAN ONES.",
+     "testo": "ODIO I SERPENTI.\nSOPRATTUTTO QUELLI\nA DUE GAMBE.",
+     "blocchi": [
+      {
+       "x": 253,
+       "y": 684,
+       "w": 494,
+       "h": 122,
+       "carattere": "fumetto",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Tetto di spesa di oggi raggiunto (9.17 € su 9.00 €). Riparte domani, oppure alza il tetto con /tetto.)",
+     "testo_originale": "ONLY A FEW PEOPLE CARE. THE REST ARE JUST CURIOUS.",
+     "testo": "A POCHI IMPORTA\nDAVVERO.\nGLI ALTRI SONO\nSOLO CURIOSI.",
+     "blocchi": [
+      {
+       "x": 238,
+       "y": 659,
+       "w": 525,
+       "h": 201,
+       "carattere": "fumetto",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#E31E24",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Tetto di spesa di oggi raggiunto (9.17 € su 9.00 €). Riparte domani, oppure alza il tetto con /tetto.)",
+     "testo_originale": "RUMORS ARE MADE BY UNHAPPY SOULS.",
+     "testo": "I PETTEGOLEZZI NASCONO\nDA GENTE\nINFELICE.",
+     "blocchi": [
+      {
+       "x": 250,
+       "y": 713,
+       "w": 531,
+       "h": 147,
+       "carattere": "fumetto",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#E31E24",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Tetto di spesa di oggi raggiunto (9.17 € su 9.00 €). Riparte domani, oppure alza il tetto con /tetto.)",
+     "testo_originale": "I DISTANCE MYSELF FROM PEOPLE FOR A REASON.",
+     "testo": "SE STO ALLA LARGA\nDALLA\nGENTE,\nUN MOTIVO C'È.",
+     "blocchi": [
+      {
+       "x": 259,
+       "y": 674,
+       "w": 483,
+       "h": 146,
+       "carattere": "fumetto",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#E31E24",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Tetto di spesa di oggi raggiunto (9.17 € su 9.00 €). Riparte domani, oppure alza il tetto con /tetto.)",
+     "testo_originale": "DON'T TEST MY PATIENCE. I DELETE PEOPLE LIKE MESSAGES.",
+     "testo": "NON FARMI PERDERE LA PAZIENZA.\nLE PERSONE LE CANCELLO\nCOME I MESSAGGI.",
+     "blocchi": [
+      {
+       "x": 177,
+       "y": 701,
+       "w": 653,
+       "h": 119,
+       "carattere": "fumetto",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#E31E24",
+       "allineamento": "center"
+      }
+     ]
+    }
+   ],
+   "concetto": "Una raccolta di frasi d'atteggiamento: l'uomo calmo e paziente che, quando lo provochi troppo, diventa pericoloso. Taglia fuori le persone false senza pensarci, odia i serpenti, sa che a pochi importa davvero di lui e che i pettegolezzi nascono da gente infelice. Il registro è duro, provocatorio e pieno di orgoglio.",
+   "descrizione": "Quante volte hai sorriso a una battuta che ti dava fastidio, per poi ripensarci a letto alle due di notte? Rispondi che va bene, lasci correre, ti adatti. Poi un giorno, per una cosa minima, esplodi. E tutti ti guardano come se fossi cambiato all'improvviso.\n\nQueste frasi piacciono perché danno voce a quel momento. Ma ne mostrano anche il prezzo: anni di disponibilità senza confini, in cui gli altri hanno imparato che con te si può tirare la corda e tu hai imparato a tacere finché non ce la fai più.\n\nIl bravo ragazzo che perde la pazienza non fa paura perché è forte. Sorprende perché nessuno aveva mai visto un suo limite. Il gruppo non ha letto la tua pazienza come una scelta, l'ha letta come il tuo ruolo. Timothy Judge, Beth Livingston e Charlice Hurst, in una ricerca pubblicata nel 2012, hanno osservato che gli uomini molto accomodanti tendono a guadagnare meno dei colleghi meno accomodanti, a parità di lavoro. La gentilezza non viene punita in sé: viene data per scontata quando non ha un perimetro.\n\nAnche i pettegolezzi meritano una lettura più lucida. L'antropologo Robin Dunbar ha mostrato che parlare degli altri è una delle funzioni più antiche del linguaggio: serve a capire di chi fidarsi, a stringere alleanze, a costruire reputazioni. Non nasce solo dall'infelicità. Quando parlano di te mentre non ci sei, stanno aggiornando l'immagine che hanno di te, e quell'immagine la scrivono i tuoi comportamenti ripetuti, non le tue uscite occasionali.\n\nPer questo cancellare le persone come i messaggi è l'ultima risorsa di chi non ha mai detto un no al momento giusto. La freddezza totale e l'esplosione sono due facce della stessa assenza di confini. Ciò che sposta la dinamica è più semplice e più difficile: nominare il limite la prima volta, con calma, senza giustificarti per dieci minuti. Chi era abituato alla tua disponibilità può reagire male. È un segnale da osservare, non una sentenza.\n\nNon ti serve diventare il cattivo della storia. Ti serve smettere di essere quello che nessuno ha mai sentito dire no.\n\nQual è il fastidio che stai lasciando correre adesso, sapendo già che prima o poi esploderà?",
+   "segnalazioni": []
+  },
+  {
+   "job_id": 29,
+   "fonte": "https://www.instagram.com/p/Dee_DFtFNiP/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "“After everything I’ve done for you…”\n“I’m disappointed. But I respect your answer.”\n@NO.MORE.PLEASING",
+     "testo": "“Dopo tutto quello che ho fatto per te...”\n\n“Ci sono rimasto male. Ma rispetto la tua risposta.”",
+     "blocchi": [
+      {
+       "x": 183,
+       "y": 63,
+       "w": 630,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#F2EDE4",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 110,
+       "y": 530,
+       "w": 782,
+       "h": 42,
+       "carattere": "normale",
+       "colore": "#F2EDE4",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "“I’m sorry you feel that way.”\n“I’m sorry I said that. It was hurtful.”\n@NO.MORE.PLEASING",
+     "testo": "“Mi dispiace che tu la prenda così.”\n\n“Scusa per quello che ho detto. Ti ho ferito.”",
+     "blocchi": [
+      {
+       "x": 250,
+       "y": 63,
+       "w": 500,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#F2EDE4",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 150,
+       "y": 530,
+       "w": 700,
+       "h": 42,
+       "carattere": "normale",
+       "colore": "#F2EDE4",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "“I was only joking.”\n“I thought it was funny. It wasn’t. I won’t say it again.”\n@NO.MORE.PLEASING",
+     "testo": "“Stavo solo scherzando.”\n\n“Pensavo fosse divertente.\nNon lo era. Non la ripeterò.”",
+     "blocchi": [
+      {
+       "x": 330,
+       "y": 63,
+       "w": 340,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#F2EDE4",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 240,
+       "y": 507,
+       "w": 520,
+       "h": 75,
+       "carattere": "normale",
+       "colore": "#F2EDE4",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "“You’re remembering it wrong.”\n“I remember it differently. I still want to hear your side.”\n@NO.MORE.PLEASING",
+     "testo": "“Ti ricordi male.”\n\n“Io la ricordo diversamente.\nMa voglio sentire la tua versione.”",
+     "blocchi": [
+      {
+       "x": 245,
+       "y": 63,
+       "w": 510,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#F2EDE4",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 245,
+       "y": 507,
+       "w": 510,
+       "h": 75,
+       "carattere": "normale",
+       "colore": "#F2EDE4",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "“Everyone thinks you’ve changed.”\n“We haven’t talked much lately. Is something going on?”\n@NO.MORE.PLEASING",
+     "testo": "“Tutti dicono che sei cambiato.”\n\n“Ultimamente ci sentiamo poco.\nC'è qualcosa che non va?”",
+     "blocchi": [
+      {
+       "x": 205,
+       "y": 63,
+       "w": 590,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#F2EDE4",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 245,
+       "y": 507,
+       "w": 510,
+       "h": 75,
+       "carattere": "normale",
+       "colore": "#F2EDE4",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "“Why can’t you be more like your sister?”\n“Could you help me with dinner tonight?”\n@NO.MORE.PLEASING",
+     "testo": "“Perché non sei un po' più come tua sorella?”\n\n“Stasera mi dai una mano con la cena?”",
+     "blocchi": [
+      {
+       "x": 145,
+       "y": 63,
+       "w": 710,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#F2EDE4",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 150,
+       "y": 530,
+       "w": 700,
+       "h": 42,
+       "carattere": "normale",
+       "colore": "#F2EDE4",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "“If you really loved me, you wouldn’t go.”\n“I wish you could stay. But I understand.”\n@NO.MORE.PLEASING",
+     "testo": "“Se mi amassi davvero, non te ne andresti.”\n\n“Vorrei che restassi. Ma ti capisco.”",
+     "blocchi": [
+      {
+       "x": 140,
+       "y": 63,
+       "w": 720,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#F2EDE4",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 145,
+       "y": 530,
+       "w": 710,
+       "h": 42,
+       "carattere": "normale",
+       "colore": "#F2EDE4",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "“Let’s just move on.”\n“Can we talk about what happened first?”\n@NO.MORE.PLEASING",
+     "testo": "“Mettiamoci una pietra sopra e basta.”\n\n“Prima però possiamo parlare di quello che è successo?”",
+     "blocchi": [
+      {
+       "x": 335,
+       "y": 63,
+       "w": 330,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#F2EDE4",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 150,
+       "y": 530,
+       "w": 700,
+       "h": 42,
+       "carattere": "normale",
+       "colore": "#F2EDE4",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "“Look what you made me do.”\n“I was angry. What I did was still my choice.”\n@NO.MORE.PLEASING",
+     "testo": "“Guarda cosa mi hai fatto fare.”\n\n“Ero arrabbiato. Ma quello che ho fatto l'ho scelto io.”",
+     "blocchi": [
+      {
+       "x": 270,
+       "y": 63,
+       "w": 460,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#F2EDE4",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 110,
+       "y": 530,
+       "w": 780,
+       "h": 42,
+       "carattere": "normale",
+       "colore": "#F2EDE4",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 10,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se ti sei riconosciuto\nanche in una sola di queste frasi,\nnon ti serve una risposta più brillante.\nTi serve una posizione che non si sposta.\n\nNel manuale \"Potere Sociale\"\ntrovi frame, calma e confini\nper dire no senza giustificarti.\n\nLo trovi al link in bio.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Ogni slide mette a confronto due frasi che si dicono in un litigio o in un momento delicato: in alto quella manipolatoria (l'agnellino con le zanne), in basso quella sana che esprime la stessa emozione (l'agnellino tranquillo). La manipolazione non alza per forza la voce: a volte basta una frase calma che ti scarica addosso la colpa, il debito o il dubbio su quello che ricordi. Imparando a riconoscere la differenza capisci che non sei troppo sensibile: stai solo cogliendo il trucco. Il tono è sobrio e un po' ironico, con l'immagine del lupo travestito da agnello.",
+   "descrizione": "Le frasi che ti spostano di più quasi mai alzano la voce.\n\nUna discussione qualsiasi, in famiglia o in coppia. Arriva un \"dopo tutto quello che ho fatto per te\" e dieci minuti dopo sei tu a chiedere scusa, senza ricordare bene per cosa. La conversazione si chiude, ma la posizione che hai perso resta lì.\n\nIl costo è sottile. Ogni volta che accetti il compito che quella frase ti assegna, che sia pagare un debito mai firmato, dimostrare affetto o dubitare della tua memoria, il confine arretra di un passo. Ripetuto nel tempo diventa un ruolo, e il ruolo regge proprio perché non lo vedi.\n\nGuarda le coppie del carosello: la versione sana dice cosa prova chi parla, quella manipolatoria ti consegna un incarico. Nel 1971 Dennis Regan, a Cornell, mostrò che un piccolo favore non richiesto rendeva le persone più disposte a dire sì subito dopo. Il senso di debito si attiva da solo, anche quando nessuno l'ha chiesto, ed è la leva su cui poggia \"dopo tutto quello che ho fatto\". John Gottman, osservando per decenni coppie in laboratorio, ha distinto la lamentela, che riguarda un comportamento, dalla critica, che attacca la persona. \"Perché non sei come tua sorella\" ti costringe a difenderti, \"mi dai una mano?\" ti chiede solo di fare qualcosa.\n\nUna frase isolata non prova nulla: sotto pressione tutti dicono la cosa sbagliata. Conta la ripetizione. Chi finisce sempre a portare la colpa? Chi chiede scusa solo per chiudere il discorso?\n\nIl passaggio pratico è rifiutare il compito, non contestare l'accusa. Puoi riconoscere l'emozione dell'altro senza prenderti il debito: \"Capisco che ci sei rimasto male. La decisione resta mia.\" Breve, calmo, senza dieci minuti di spiegazioni, perché un no giustificato troppo diventa una trattativa.\n\nRiconoscere la frase è metà del lavoro. L'altra metà è non cambiare posizione mentre la ascolti.\n\nQuale di queste frasi ti ha fatto chiedere scusa più volte di quante ne meritasse?\n\nSe finisci sempre a giustificarti, il manuale \"Potere Sociale\" lavora proprio su questo: il frame con cui stai nella conversazione, la calma sotto pressione e il no che non chiede permesso. Link in bio.",
+   "segnalazioni": [
+    "usa un font più elegante o autorevole (non basic come quello che hai usato) e che occupi più spazio e si legga bene"
+   ]
+  },
+  {
+   "job_id": 32,
+   "fonte": "https://www.instagram.com/p/DfiYp6Kj3ju/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "\"A slave is he who cannot speak his thoughts.\" — Seneca",
+     "testo": "\"Schiavo è chi non può\ndire ciò che pensa.\"\n\nSeneca",
+     "blocchi": [
+      {
+       "x": 128,
+       "y": 410,
+       "w": 745,
+       "h": 103,
+       "carattere": "normale",
+       "colore": "#F5F0E6",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 407,
+       "y": 581,
+       "w": 188,
+       "h": 30,
+       "carattere": "normale",
+       "colore": "#F5F0E6",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "You know what you think.\n\nThen you look around the room and change the sentence.\n\nAn honest answer becomes the answer least likely to upset anyone.",
+     "testo": "Sai benissimo cosa pensi.\n\nPoi ti guardi intorno\ne cambi la frase.\n\nE la risposta sincera diventa\nquella che non urta nessuno.",
+     "blocchi": [
+      {
+       "x": 236,
+       "y": 315,
+       "w": 528,
+       "h": 35,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 132,
+       "y": 410,
+       "w": 737,
+       "h": 90,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 105,
+       "y": 561,
+       "w": 790,
+       "h": 86,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "At first, the cost seems small.\n\nYou agree when you disagree.\nYou laugh when you feel uneasy.\nYou make a promise you already resent.\n\nEach time, speaking plainly feels a little harder.",
+     "testo": "All'inizio sembra un prezzo da poco.\n\nDici di sì anche quando non sei d'accordo.\nRidi anche se sei a disagio.\nPrometti qualcosa che già ti pesa.\n\nE ogni volta parlare chiaro\ndiventa un po' più difficile.",
+     "blocchi": [
+      {
+       "x": 199,
+       "y": 290,
+       "w": 595,
+       "h": 37,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 195,
+       "y": 366,
+       "w": 635,
+       "h": 161,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 149,
+       "y": 600,
+       "w": 702,
+       "h": 98,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "When keeping approval requires you to hide every objection, approval has become expensive.\n\nYou get through the conversation.\n\nThen spend the evening wishing you had said one honest thing.",
+     "testo": "Se per tenerti l'approvazione\ndevi nascondere ogni obiezione,\nquell'approvazione la stai pagando troppo.\n\nLa conversazione la superi.\n\nPoi passi la serata a rimpiangere\ndi non aver detto almeno una cosa sincera.",
+     "blocchi": [
+      {
+       "x": 125,
+       "y": 288,
+       "w": 752,
+       "h": 134,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 154,
+       "y": 522,
+       "w": 692,
+       "h": 33,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 131,
+       "y": 586,
+       "w": 741,
+       "h": 88,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Freedom in speech still requires judgment.\n\nChoose the right time. Check your facts. Leave out the insult.\n\nA clear disagreement does not need cruelty to make it strong.",
+     "testo": "Anche parlare liberamente\nrichiede giudizio.\n\nScegli il momento giusto. Verifica\ni fatti. Lascia perdere l'insulto.\n\nPer essere forte, un disaccordo chiaro\nnon ha bisogno di cattiveria.",
+     "blocchi": [
+      {
+       "x": 172,
+       "y": 290,
+       "w": 656,
+       "h": 86,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 153,
+       "y": 437,
+       "w": 696,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 136,
+       "y": 583,
+       "w": 727,
+       "h": 89,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Practice with one sentence you can stand behind.\n\nState your decision. Name your limit. Admit what you do not know.\n\nLet the other person respond without taking your words back just to end the discomfort.",
+     "testo": "Comincia da una sola frase\nche sei disposto a difendere.\n\nDi' cosa hai deciso. Chiarisci il tuo limite.\nAmmetti quello che non sai.\n\nLascia che l'altro risponda, senza\nrimangiarti le parole solo per\nuscire dal disagio.",
+     "blocchi": [
+      {
+       "x": 144,
+       "y": 288,
+       "w": 713,
+       "h": 88,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 120,
+       "y": 437,
+       "w": 762,
+       "h": 83,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 110,
+       "y": 583,
+       "w": 781,
+       "h": 115,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "It is easy to value honesty after a conversation is over.\n\nThe reminder matters before you speak.\n\nStoic Widgets brings daily Stoic quotes to your lock and home screens, keeping that practice in view.",
+     "testo": "È facile essere sinceri\na conversazione finita.\n\nIl lavoro va fatto\nprima di aprire bocca.\n\nNel manuale \"Potere Sociale\" lavori\nsul frame e sul dire no, senza\ncedere né attaccare. Link in bio.",
+     "blocchi": [
+      {
+       "x": 165,
+       "y": 290,
+       "w": 671,
+       "h": 86,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 162,
+       "y": 434,
+       "w": 680,
+       "h": 88,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 99,
+       "y": 566,
+       "w": 798,
+       "h": 129,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se questa frase di Seneca ti ha colpito,\npensa all'ultima cosa\nche ti sei tenuto dentro.\n\nIl manuale \"Potere Sociale\"\nparte dal frame e dal dire no:\ntenere la tua posizione\nsenza cedere e senza attaccare.\n\nLo trovi al link in bio.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Seneca diceva che è schiavo chi non può dire quello che pensa. Il carosello mostra come ci autocensuriamo: sappiamo cosa pensiamo ma cambiamo la frase per non dare fastidio, e ogni volta parlare chiaro diventa più difficile. Poi spiega come uscirne: scegliere il momento, verificare i fatti, niente insulti, dire la propria decisione e il proprio limite, e non rimangiarsi le parole per sfuggire al disagio. Il registro è riflessivo e asciutto, con un tono stoico.",
+   "descrizione": "La frase che non dici non sparisce. Sei a cena, qualcuno sostiene una cosa che trovi sbagliata e la tua risposta è già pronta. Poi guardi le facce intorno al tavolo e ti esce un \"mah, può darsi\". La serata va avanti tranquilla. Tu un po' meno.\n\nQuella frase ingoiata non la paghi subito. La paghi nel tempo, perché ogni sì detto controvoglia insegna agli altri cosa aspettarsi da te: che la tua opinione si adatta, che il tuo limite si sposta appena qualcuno insiste. E più lo fai, più la volta dopo parlare costa.\n\nNegli anni Cinquanta Solomon Asch mostrò a gruppi di studenti delle linee di lunghezza evidente. Una parte consistente, almeno in qualche prova, dava la risposta sbagliata solo perché il resto del gruppo, d'accordo con lo sperimentatore, l'aveva data prima. Ma bastava un solo alleato che rompesse l'unanimità perché la pressione calasse di colpo. Vent'anni dopo Elisabeth Noelle-Neumann descrisse la spirale del silenzio: chi si crede in minoranza tace, e il suo silenzio fa sembrare quella posizione ancora più isolata. Spesso a quel tavolo c'è qualcun altro che la pensa come te e aspetta che qualcuno cominci.\n\nEd è qui che la libertà di cui parla Seneca diventa un comportamento. Non vuol dire dire tutto a tutti, né trasformare ogni disaccordo in uno scontro: chi alza il tono per dimostrare di essere sincero sta ancora reagendo agli altri, solo nella direzione opposta. Vuol dire scegliere una frase sola, detta con calma, che sei disposto a sostenere anche quando cala il silenzio. \"Io la vedo diversamente, e ti spiego perché.\" Poi lasci rispondere, senza rimangiarti niente per chiudere il disagio.\n\nL'approvazione comprata col silenzio costa sempre più di quanto sembri, e il rispetto non si compra così. Qual è l'ultima frase che ti sei tenuto dentro, e chi ha deciso al posto tuo che non andava detta?\n\nSe ti riconosci in quel sì detto per non urtare nessuno, il manuale \"Potere Sociale\" lavora proprio sul frame, sul dire no e sulla calma quando sale la tensione. Link in bio.\n\n#direno #assertivita #confini #frame #poteresociale",
+   "segnalazioni": [
+    "entrambe le questa slide ha la cta al manuale anche se è la penultima, non possiamo mettere 2 cta nello stesso post"
+   ]
+  },
+  {
+   "job_id": 44,
+   "fonte": "https://www.instagram.com/p/DfaF9tyCMOP/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "How To Punish Disrespect",
+     "testo": "Come punire\nchi ti manca\ndi rispetto",
+     "blocchi": [
+      {
+       "x": 217,
+       "y": 332,
+       "w": 482,
+       "h": 244,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "1. The Blank Stare:\n\nNo emotion. No blink. Like you're watching dead talk.",
+     "testo": "1. Lo sguardo vuoto:\n\nNessuna emozione. Nemmeno un battito di ciglia. Come se ti stesse parlando un morto.",
+     "blocchi": [
+      {
+       "x": 149,
+       "y": 389,
+       "w": 354,
+       "h": 29,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 149,
+       "y": 480,
+       "w": 650,
+       "h": 83,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "2. The Silence After:\n\nThey insult you. You say nothing. Silence makes their words rot in the air.",
+     "testo": "2. Il silenzio dopo:\n\nTi insulta. Tu non rispondi. Nel silenzio, le sue parole marciscono a mezz'aria.",
+     "blocchi": [
+      {
+       "x": 149,
+       "y": 389,
+       "w": 378,
+       "h": 29,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 149,
+       "y": 480,
+       "w": 665,
+       "h": 122,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "3. The Slow Distance:\n\nYou don't block them. You just disappear piece by piece. Humans fear fading more than rejection.",
+     "testo": "3. Il distacco graduale:\n\nNon lo blocchi. Sparisci, un pezzo alla volta. Essere dimenticati piano fa più paura di un rifiuto.",
+     "blocchi": [
+      {
+       "x": 149,
+       "y": 389,
+       "w": 403,
+       "h": 29,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 149,
+       "y": 477,
+       "w": 630,
+       "h": 117,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "4. The Memory Kill:\n\nNext time you meet, act like you forgot what they said—and almost forgot them.",
+     "testo": "4. L'amnesia calcolata:\n\nLa prossima volta che lo incontri, comportati come se avessi dimenticato cosa ha detto. E quasi anche chi è.",
+     "blocchi": [
+      {
+       "x": 149,
+       "y": 389,
+       "w": 488,
+       "h": 29,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 149,
+       "y": 480,
+       "w": 655,
+       "h": 117,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "5. The Replacement Move:\n\nBe happy without them. Loudly. Naturally. Nothing hurts like being unnecessary.",
+     "testo": "5. Il rimpiazzo:\n\nSii felice senza di lui. Che si veda, ma senza sforzo. Niente ferisce come scoprirsi superflui.",
+     "blocchi": [
+      {
+       "x": 149,
+       "y": 389,
+       "w": 488,
+       "h": 29,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 149,
+       "y": 480,
+       "w": 655,
+       "h": 117,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Final Rule:\n\nDisrespect wants reaction. Starve it. Indifference isn't kindness—it's execution.",
+     "testo": "Regola finale:\n\nLa mancanza di rispetto cerca una reazione. Lasciala a digiuno. L'indifferenza non è gentilezza: è un'esecuzione.",
+     "blocchi": [
+      {
+       "x": 149,
+       "y": 389,
+       "w": 250,
+       "h": 29,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 149,
+       "y": 480,
+       "w": 667,
+       "h": 117,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Willpower is unreliable.\n\nYour environment isn't.\n\nYour habits shouldn't depend on whether you feel like it today.\n\nThe Lazy Genius Habit System teaches you how to build systems that make good behaviors easier and repeated actions more automatic.\n\nInstead of constantly asking:\n\n\"How can I force myself to do this?\"\n\nAsk:\n\n\"How can I make this easier to do?\"\n\nThat's the Lazy Genius approach.\n\nLink in bio @habitclimb",
+     "testo": "La provocazione cerca una reazione.\n\nLa calma non la dà.\n\nCome rispondi non può dipendere dall'umore del giorno.\n\nIl manuale di Potere Sociale ti insegna a tenere confini e calma come una posizione stabile, non come uno sforzo da rinnovare ogni volta.\n\nInvece di chiederti ogni volta:\n\n\"Come gli rispondo adesso?\"\n\nChiediti:\n\n\"Che cosa gli sto insegnando?\"\n\nÈ questo l'approccio di Potere Sociale.\n\nLink in bio @poteresociale",
+     "blocchi": [
+      {
+       "x": 149,
+       "y": 142,
+       "w": 420,
+       "h": 27,
+       "carattere": "normale",
+       "colore": "#080200",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 149,
+       "y": 186,
+       "w": 330,
+       "h": 27,
+       "carattere": "normale",
+       "colore": "#080200",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 149,
+       "y": 228,
+       "w": 708,
+       "h": 54,
+       "carattere": "normale",
+       "colore": "#090300",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 149,
+       "y": 332,
+       "w": 672,
+       "h": 112,
+       "carattere": "normale",
+       "colore": "#080200",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 149,
+       "y": 491,
+       "w": 458,
+       "h": 27,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 149,
+       "y": 534,
+       "w": 556,
+       "h": 27,
+       "carattere": "normale",
+       "colore": "#080300",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 149,
+       "y": 578,
+       "w": 120,
+       "h": 27,
+       "carattere": "normale",
+       "colore": "#090300",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 149,
+       "y": 620,
+       "w": 494,
+       "h": 27,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 149,
+       "y": 664,
+       "w": 556,
+       "h": 27,
+       "carattere": "normale",
+       "colore": "#090400",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 149,
+       "y": 707,
+       "w": 378,
+       "h": 27,
+       "carattere": "normale",
+       "colore": "#090300",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se anche una sola di queste 5 mosse\nti sembra impossibile\nquando ti provocano davvero,\nil problema non è la volontà.\n\nÈ che la tua calma\ndipende dall'umore.\n\nIn \"Potere Sociale\"\nimpari a tenere confini e calma\ncome una posizione stabile.\n\nLink in bio.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Quando qualcuno ti manca di rispetto, la punizione più efficace non è reagire ma togliergli ciò che cerca: la tua reazione. Sguardo vuoto, silenzio dopo l'insulto, allontanamento graduale, fingere di aver dimenticato quello che ha detto, essere felice senza di lui. L'indifferenza è l'arma finale. Registro: freddo, tagliente, da manuale di strategia.",
+   "descrizione": "Chi ti manca di rispetto raramente vuole ferirti davvero. Vuole vedere cosa fai. La battuta davanti agli altri, il commento a mezza voce in riunione, il messaggio lasciato senza risposta e poi la richiesta come se niente fosse: ogni volta c'è una piccola prova, e la tua reazione è il risultato che l'altro legge.\n\nSe ti agiti, ti giustifichi o ridi per smorzare, gli confermi due cose: che quel tasto funziona e che il ritmo della scena lo decide lui. Il conto lo paghi dopo, quando rimugini per ore su una frase che lui ha già dimenticato e il gruppo comincia a trattarti come quello su cui si può scherzare.\n\nLe cinque mosse del carosello hanno nomi forti, ma la logica sotto è semplice: smetti di pagare il pedaggio. Un comportamento che non ottiene nulla tende a spegnersi. Kipling Williams, psicologo sociale alla Purdue, ha studiato per anni l'esclusione con un gioco banale: una pallina virtuale che a un certo punto smette di arrivarti. Bastava quello per far calare nei partecipanti il senso di appartenenza e di controllo, anche sapendo che dall'altra parte c'era solo un computer. L'indifferenza pesa più di qualsiasi risposta, e proprio per questo va usata con lucidità, mai per vendetta.\n\nPrima di toglierla a qualcuno, guarda la ripetizione. Una battuta storta resta una battuta storta. Lo stesso schema tre volte, con la stessa persona, davanti allo stesso pubblico, è un ruolo che ti stanno assegnando. Lì lo sguardo neutro, la pausa, la distanza che cresce senza drammi diventano confini che non hanno bisogno di spiegazioni. E se serve parlare, una frase calma e breve vale più di dieci minuti di difesa.\n\nNon vince chi risponde meglio. Vince chi non consegna il proprio ritmo. Pensa all'ultima volta che ti hanno sminuito: la tua reazione ha chiuso la questione o ha dato all'altro esattamente ciò che cercava?\n\nRestare calmo una volta, a denti stretti, è facile. Il difficile è che la calma regga nel giorno sbagliato: finché dipende dall'umore alternerai silenzi e sfuriate, e gli altri impareranno quale delle due provocare. In \"Potere Sociale\" la calma e il dire no diventano una posizione stabile, non uno sforzo da rinnovare ogni volta. Lo trovi al link in bio.",
+   "segnalazioni": [
+    "tono non fluido e non abbastanza autoritario"
+   ]
+  },
+  {
+   "job_id": 45,
+   "fonte": "https://www.instagram.com/p/DfNQ68kH7UV/",
+   "fallite": [
+    5,
+    6,
+    7
+   ],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "6 Powerful\nBody Language Tricks",
+     "testo": "Linguaggio del corpo:\n6 trucchi che si fanno sentire",
+     "blocchi": [
+      {
+       "x": 57,
+       "y": 146,
+       "w": 887,
+       "h": 139,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "1. When you walk into a room, never turn back to close the door, it shows control and quiet dominance.",
+     "testo": "1. Quando entri in una stanza, non voltarti\nmai a chiudere la porta: è un segnale\ndi controllo e di dominanza silenziosa.",
+     "blocchi": [
+      {
+       "x": 100,
+       "y": 293,
+       "w": 782,
+       "h": 80,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "2. Smile less. Too much smiling gives off submission.",
+     "testo": "2. Sorridi meno. Chi sorride troppo\nsembra sottomesso.",
+     "blocchi": [
+      {
+       "x": 100,
+       "y": 293,
+       "w": 680,
+       "h": 62,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "3. Don't walk with your hands in your pockets - it signals uncertainty and unpreparedness.",
+     "testo": "3. Non camminare con le mani\nin tasca: dai l'idea di uno\ninsicuro e impreparato.",
+     "blocchi": [
+      {
+       "x": 100,
+       "y": 293,
+       "w": 705,
+       "h": 107,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Tetto di spesa di oggi raggiunto (9.16 € su 9.00 €). Riparte domani, oppure alza il tetto con /tetto.)",
+     "testo_originale": "4. Speak slowly, calmly, and with intent. Avoid filler words like \"umm\" or \"like.\"",
+     "testo": "4. Parla piano, con calma, e sappi\ncosa vuoi dire. Niente riempitivi\ncome \"ehm\" o \"cioè\".",
+     "blocchi": [
+      {
+       "x": 100,
+       "y": 293,
+       "w": 685,
+       "h": 107,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Tetto di spesa di oggi raggiunto (9.16 € su 9.00 €). Riparte domani, oppure alza il tetto con /tetto.)",
+     "testo_originale": "5. Stop fidgeting. It doesn't just make you look nervous, it makes you feel it.\n(cartelli disegnati: STOP STOP / WHY WHY WHY)",
+     "testo": "5. Smetti di giocherellare. Non ti fa\nsolo sembrare nervoso:\nti rende nervoso davvero.\n\nSTOP\nSTOP\n\nPERCHÉ\nPERCHÉ\nPERCHÉ",
+     "blocchi": [
+      {
+       "x": 100,
+       "y": 293,
+       "w": 620,
+       "h": 107,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 283,
+       "y": 527,
+       "w": 73,
+       "h": 59,
+       "carattere": "fumetto",
+       "colore": "#222222",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 808,
+       "y": 474,
+       "w": 62,
+       "h": 80,
+       "carattere": "fumetto",
+       "colore": "#222222",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Tetto di spesa di oggi raggiunto (9.16 € su 9.00 €). Riparte domani, oppure alza il tetto con /tetto.)",
+     "testo_originale": "6. Hold eye contact just long enough to make them break it, that's silent authority.",
+     "testo": "6. Reggi lo sguardo finché non è\nl'altro a distoglierlo:\nquesta è autorità silenziosa.",
+     "blocchi": [
+      {
+       "x": 100,
+       "y": 293,
+       "w": 680,
+       "h": 107,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se ti sei riconosciuto\nanche in uno solo di questi 6 gesti,\nil problema non è il corpo.\nÈ la posizione da cui entri nella stanza.\n\nIn \"Potere Sociale\"\nsi parte proprio da lì:\nframe, spazio, ritmo e calma.\n\nLink in bio.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Il carosello spiega sei trucchi di linguaggio del corpo per trasmettere sicurezza e autorità senza dire una parola: entrare in una stanza senza voltarsi a chiudere la porta, sorridere meno, non tenere le mani in tasca, parlare piano e senza riempitivi, smettere di agitarsi, reggere lo sguardo finché è l'altro ad abbassarlo. Il tono è secco, da consigli di dominanza silenziosa, con un finale che fa sentire chi legge parte di una cerchia ristretta.",
+   "descrizione": "Due colleghi entrano nella stessa riunione, con la stessa preparazione. Il primo si scusa sulla soglia, cerca un sorriso da ognuno, si siede sul bordo della sedia e tormenta la penna. Il secondo saluta, prende posto e aspetta. Nessuno dei due ha ancora detto una parola, eppure la stanza ha già deciso a chi passare la palla.\n\nSe ti riconosci nel primo, conosci il prezzo. Le tue idee devono faticare il doppio, perché partono da una percezione che le sminuisce. E più provi a rimediare parlando, spiegando e ammorbidendo, più confermi l'impressione iniziale.\n\nA Princeton, Janine Willis e Alexander Todorov hanno mostrato che basta una frazione di secondo davanti a un volto per farsi un'idea su affidabilità e competenza. Avere più tempo serve soprattutto a sentirsi più sicuri dello stesso giudizio. Il corpo arriva prima delle parole. Però c'è anche il rovescio: le famose pose di potere, che in due minuti avrebbero dovuto cambiare gli ormoni, non hanno retto alle repliche, e una delle autrici dello studio originale ha preso le distanze. Un gesto da solo non trasforma nessuno.\n\nQuello che gli altri leggono è la coerenza dei segnali, ripetuta nel tempo. Un sorriso concesso vale qualcosa. Un sorriso usato dopo ogni frase per chiedere approvazione dice che stai aspettando un verdetto. Parlare piano funziona perché comunica che non hai paura di essere interrotto. Reggere lo sguardo serve a non scappare, non a vincere una gara. E le mani che tormentano qualcosa alimentano proprio l'agitazione che vorresti nascondere.\n\nUsa queste sei regole come uno specchio, non come un copione. Prendi quella che ti costa di più e osservala per una settimana nei posti dove ti senti meno legittimato. Il cambiamento più grande lo vedrai nel ritmo: smetti di rincorrere la stanza.\n\nIn quale stanza ti accorgi di chiedere il permesso con il corpo prima ancora di aprire bocca?\n\nCorreggere i gesti uno alla volta senza toccare il ruolo da cui entri è come ridipingere una porta che resta chiusa. Finché in ogni stanza ti senti un ospite, il corpo ti tradirà proprio quando conta. \"Potere Sociale\" ti insegna a entrare come chi ha uno scopo, non come chi chiede il permesso. Lo trovi al link in bio.",
+   "segnalazioni": []
+  },
+  {
+   "job_id": 46,
+   "fonte": "https://www.instagram.com/p/DfiBYmaEhkH/",
+   "fallite": [
+    1
+   ],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Tetto di spesa di oggi raggiunto (9.23 € su 9.00 €). Riparte domani, oppure alza il tetto con /tetto.)",
+     "testo_originale": "10/10 TOXIC BEHAVIORS EVERY MAN SHOULD FUCKING MASTER.",
+     "testo": "10/10 COMPORTAMENTI TOSSICI\nCHE OGNI UOMO DEVE\nIMPARARE, CAZ*O.",
+     "blocchi": [
+      {
+       "x": 98,
+       "y": 772,
+       "w": 806,
+       "h": 137,
+       "carattere": "normale",
+       "colore": "#1A1A1A",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "1. BECOME SELFISH AS FUCK. Your money. Your time. Your future. Stop sacrificing your life for people who wouldn't sacrifice a fucking weekend for you.",
+     "testo": "1.\n\nDIVENTA EGOISTA\nDA FAR PAURA.\n\nI tuoi soldi. Il tuo tempo. Il tuo futuro.\n\nSmetti di buttare la tua vita per gente\nche per te non rinuncerebbe\nnemmeno a un caz*o di weekend.",
+     "blocchi": [
+      {
+       "x": 80,
+       "y": 262,
+       "w": 25,
+       "h": 20,
+       "carattere": "normale",
+       "colore": "#934E35",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 327,
+       "w": 810,
+       "h": 132,
+       "carattere": "normale",
+       "colore": "#211D15",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 506,
+       "w": 790,
+       "h": 34,
+       "carattere": "normale",
+       "colore": "#191309",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 586,
+       "w": 730,
+       "h": 146,
+       "carattere": "normale",
+       "colore": "#19140A",
+       "colore_evidenziato": "#A84A32",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "2. CUT PEOPLE OFF LIKE THEY NEVER EXISTED. No closure. No farewell speech. No tenth chance. Disrespect is a one-way ticket out of your fucking life.",
+     "testo": "2.\n\nCANCELLA LE PERSONE\nCOME SE NON FOSSERO\nMAI ESISTITE.\n\nNessun chiarimento.\nNessun discorso d'addio.\nNessuna decima possibilità.\n\nMancarti di rispetto è un biglietto di sola\nandata fuori dalla tua caz*o di vita.",
+     "blocchi": [
+      {
+       "x": 80,
+       "y": 200,
+       "w": 25,
+       "h": 20,
+       "carattere": "normale",
+       "colore": "#954D33",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 264,
+       "w": 786,
+       "h": 210,
+       "carattere": "normale",
+       "colore": "#211D16",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 518,
+       "w": 460,
+       "h": 135,
+       "carattere": "normale",
+       "colore": "#19140A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 703,
+       "w": 650,
+       "h": 95,
+       "carattere": "normale",
+       "colore": "#19140A",
+       "colore_evidenziato": "#A84A32",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "3. STOP GIVING A FUCK ABOUT BEING LIKED. Let them hate you. Let them talk shit. Let them call you arrogant. Approval is a drug for men with no fucking backbone.",
+     "testo": "3.\n\nSBATTITENE\nDI PIACERE\nAGLI ALTRI.\n\nChe ti odino pure.\nChe sparlino.\nChe ti diano dell'arrogante.\n\nL'approvazione è la droga degli uomini\nsenza un caz*o di spina dorsale.",
+     "blocchi": [
+      {
+       "x": 80,
+       "y": 200,
+       "w": 25,
+       "h": 20,
+       "carattere": "normale",
+       "colore": "#954C35",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 268,
+       "w": 800,
+       "h": 207,
+       "carattere": "normale",
+       "colore": "#211D16",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 518,
+       "w": 600,
+       "h": 135,
+       "carattere": "normale",
+       "colore": "#191409",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 703,
+       "w": 650,
+       "h": 95,
+       "carattere": "normale",
+       "colore": "#181409",
+       "colore_evidenziato": "#A84A32",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "4. BECOME IMPOSSIBLE TO GUILT-TRIP. \"No\" is a complete fucking sentence. Your boundaries aren't up for negotiation just because somebody got offended.",
+     "testo": "4.\n\nDIVENTA\nIMMUNE AI\nSENSI DI COLPA.\n\n\"No\" basta e avanza, caz*o.\n\nI tuoi limiti non si trattano\nsolo perché qualcuno\nsi è offeso.",
+     "blocchi": [
+      {
+       "x": 80,
+       "y": 225,
+       "w": 25,
+       "h": 20,
+       "carattere": "normale",
+       "colore": "#944D35",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 288,
+       "w": 750,
+       "h": 205,
+       "carattere": "normale",
+       "colore": "#211D15",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 540,
+       "w": 820,
+       "h": 32,
+       "carattere": "normale",
+       "colore": "#191409",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 615,
+       "w": 680,
+       "h": 152,
+       "carattere": "normale",
+       "colore": "#191309",
+       "colore_evidenziato": "#A84A32",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "5. STOP CHASING P*SSY. She flakes? Gone. She plays games? Gone. She acts entitled? Gone. A pretty face doesn't buy unlimited access to your dignity.",
+     "testo": "5.\n\nSMETTILA DI CORRERE\nDIETRO ALLE GONNELLE.\n\nTi dà buca? Fuori.\nFa i giochetti? Fuori.\nPretende tutto? Fuori.\n\nUn bel faccino non è\nun lasciapassare per la tua dignità.",
+     "blocchi": [
+      {
+       "x": 80,
+       "y": 239,
+       "w": 25,
+       "h": 20,
+       "carattere": "normale",
+       "colore": "#944D33",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 303,
+       "w": 700,
+       "h": 132,
+       "carattere": "normale",
+       "colore": "#211D16",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 483,
+       "w": 570,
+       "h": 135,
+       "carattere": "normale",
+       "colore": "#1A1409",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 664,
+       "w": 860,
+       "h": 97,
+       "carattere": "normale",
+       "colore": "#19140A",
+       "colore_evidenziato": "#A84A32",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "6. LEARN TO WALK AWAY without flinching. From women. From friendships. From shitty deals. The man who's terrified of losing people will tolerate damn near anything.",
+     "testo": "6.\n\nIMPARA\nAD ANDARTENE\n\nsenza battere ciglio.\n\nDalle donne.\nDalle amicizie.\nDagli affari di mer*a.\n\nChi ha il terrore di perdere qualcuno\nfinisce per sopportare\nquasi tutto.",
+     "blocchi": [
+      {
+       "x": 80,
+       "y": 146,
+       "w": 25,
+       "h": 20,
+       "carattere": "normale",
+       "colore": "#974D33",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 210,
+       "w": 620,
+       "h": 166,
+       "carattere": "normale",
+       "colore": "#221D16",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 415,
+       "w": 400,
+       "h": 34,
+       "carattere": "normale",
+       "colore": "#191408",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 483,
+       "w": 430,
+       "h": 142,
+       "carattere": "normale",
+       "colore": "#191409",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 674,
+       "w": 630,
+       "h": 141,
+       "carattere": "normale",
+       "colore": "#19140A",
+       "colore_evidenziato": "#A84A32",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "7. BECOME DANGEROUSLY UNAVAILABLE. Stop answering every call. Stop entertaining every idiot. Stop being everybody's free fucking therapist. Your attention is a privilege, not a public service.",
+     "testo": "7.\n\nDIVENTA\nPERICOLOSAMENTE\nIRRAGGIUNGIBILE.\n\nNon rispondere a ogni chiamata.\nNon dare corda a ogni idiota.\nNon fare lo psicologo gratis\na tutti, caz*o.\n\nLa tua attenzione è un privilegio,\nnon un servizio pubblico.",
+     "blocchi": [
+      {
+       "x": 80,
+       "y": 146,
+       "w": 25,
+       "h": 20,
+       "carattere": "normale",
+       "colore": "#904E34",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 234,
+       "w": 740,
+       "h": 215,
+       "carattere": "normale",
+       "colore": "#211D15",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 493,
+       "w": 730,
+       "h": 186,
+       "carattere": "normale",
+       "colore": "#191409",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 727,
+       "w": 670,
+       "h": 93,
+       "carattere": "normale",
+       "colore": "#191309",
+       "colore_evidenziato": "#A84A32",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "8. NEVER EXPLAIN YOURSELF to people beneath your standards. Let them misunderstand. Let them gossip. Let them invent bullshit. A lion doesn't hold a press conference every time a dog barks.",
+     "testo": "8.\n\nNON GIUSTIFICARTI\nMAI\n\ncon chi non è al tuo livello.\n\nChe fraintendano.\nChe spettegolino.\nChe si inventino stron*a*e.\n\nIl leone non indice\nuna conferenza stampa ogni\nvolta che un cane abbaia.",
+     "blocchi": [
+      {
+       "x": 80,
+       "y": 146,
+       "w": 25,
+       "h": 20,
+       "carattere": "normale",
+       "colore": "#964C34",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 210,
+       "w": 780,
+       "h": 162,
+       "carattere": "normale",
+       "colore": "#211D15",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 415,
+       "w": 780,
+       "h": 38,
+       "carattere": "normale",
+       "colore": "#191409",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 493,
+       "w": 560,
+       "h": 132,
+       "carattere": "normale",
+       "colore": "#191409",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 673,
+       "w": 690,
+       "h": 143,
+       "carattere": "normale",
+       "colore": "#191409",
+       "colore_evidenziato": "#A84A32",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 10,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "9. BECOME OBSESSED WITH WINNING. Train when you're tired. Work when nobody's watching. Save while everybody's flexing. Your competition is busy getting drunk and chasing ass. Let them.",
+     "testo": "9.\n\nDIVENTA\nOSSESSIONATO\nDAL VINCERE.\n\nAllenati quando sei stanco.\nLavora quando nessuno ti guarda.\nRisparmia mentre gli altri si mettono in mostra.\n\nI tuoi rivali sono troppo occupati a ubriacarsi\ne a correre dietro alle donne. Lasciali fare.",
+     "blocchi": [
+      {
+       "x": 80,
+       "y": 146,
+       "w": 25,
+       "h": 20,
+       "carattere": "normale",
+       "colore": "#954D33",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 263,
+       "w": 790,
+       "h": 187,
+       "carattere": "normale",
+       "colore": "#211D15",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 516,
+       "w": 740,
+       "h": 138,
+       "carattere": "normale",
+       "colore": "#191409",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 703,
+       "w": 800,
+       "h": 93,
+       "carattere": "normale",
+       "colore": "#19140A",
+       "colore_evidenziato": "#A84A32",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 11,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "10. BE WILLING TO LOSE FUCKING EVERYBODY. The girl. The friends. The applause. The invitations. The moment you need someone more than you respect yourself, they've got you by the balls.",
+     "testo": "10.\n\nSII PRONTO\nA PERDERE TUTTI,\nCAZ*O.\n\nLa ragazza. Gli amici.\nGli applausi. Gli inviti.\n\nNel momento in cui ti serve qualcuno\npiù del rispetto per te stesso,\nti tiene per le palle.",
+     "blocchi": [
+      {
+       "x": 80,
+       "y": 195,
+       "w": 35,
+       "h": 20,
+       "carattere": "normale",
+       "colore": "#974D33",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 264,
+       "w": 740,
+       "h": 205,
+       "carattere": "normale",
+       "colore": "#211D16",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 512,
+       "w": 600,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#191409",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 644,
+       "w": 780,
+       "h": 152,
+       "carattere": "normale",
+       "colore": "#191409",
+       "colore_evidenziato": "#A84A32",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 12,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Call it toxic. Call it arrogant. Call it selfish. I'd rather be the asshole who owns his life than the nice guy everybody fucking uses.",
+     "testo": "Chiamatelo tossico.\nChiamatelo arrogante.\nChiamatelo egoista.\n\nMeglio lo stron*o\npadrone della propria vita che\nil bravo ragazzo che tutti\nusano, caz*o.",
+     "blocchi": [
+      {
+       "x": 80,
+       "y": 244,
+       "w": 385,
+       "h": 171,
+       "carattere": "normale",
+       "colore": "#19140A",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 80,
+       "y": 493,
+       "w": 750,
+       "h": 278,
+       "carattere": "normale",
+       "colore": "#19140A",
+       "colore_evidenziato": "#A84A32",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 13,
+     "via": "cta-stile-post-foto",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se ti sei riconosciuto\nanche in uno solo di questi 10 punti,\nil problema non è che sei troppo buono.\nÈ che il tuo sì è sempre garantito.\n\nSegui @poteresociale\nper imparare a mettere confini\nsenza diventare il cattivo.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Il carosello rovescia l'etichetta di \"tossico\": i comportamenti che la gente chiama così (essere egoisti con il proprio tempo, tagliare i ponti con chi ti manca di rispetto, fregarsene di piacere, dire no senza sensi di colpa, andarsene senza battere ciglio, non giustificarsi, essere ossessionati dal vincere, essere pronti a perdere tutti) sono in realtà quelli che danno a un uomo rispetto di sé e il controllo della propria vita. Chiude con: chiamatelo tossico, meglio lo stronzo padrone della sua vita che il bravo ragazzo usato da tutti. Registro: provocatorio, crudo, da orgoglio maschile.",
+   "descrizione": "Questa lista ha ragione a metà. La metà giusta ti restituisce anni di vita, quella sbagliata ti trasforma in un uomo che scambia la chiusura per forza.\n\nParti da una scena che conosci. Venerdì sera ti chiedono l'ennesimo favore. Dici sì prima ancora che finiscano di parlare, e intanto senti quel fastidio sordo. Il weekend salta, la gratitudine dura un messaggio, e la volta dopo la richiesta arriva con meno giri di parole. Nessuno ti sta sfruttando con un piano: hai insegnato agli altri cosa aspettarsi da te. E un ruolo, una volta assegnato, il gruppo non lo aggiorna da solo.\n\nMolti dei comportamenti che il post chiama tossici sono confini che hai paura di mettere. Un no senza tre giustificazioni. Una chiamata a cui rispondi più tardi. Una persona che esce dalla tua agenda perché ti ha mancato di rispetto per la quinta volta, non per la prima. Julian Givi e Colleen Kirk hanno osservato che tendiamo a sopravvalutare quanto l'altro se la prenda quando rifiutiamo un invito. Il senso di colpa ti fa pagare in anticipo un conto che spesso nessuno ti avrebbe presentato.\n\nPoi c'è la metà da scartare. Tagliare chiunque al primo errore, vivere in guerra con rivali immaginari, guardare le donne come una distrazione da evitare: chi chiude tutti per non rischiare niente dipende dagli altri quanto chi mendica approvazione, solo al contrario. Un confine serio guarda la ripetizione, non il singolo gesto, e resta calmo invece di fare scena.\n\nLa forza sta in una cosa meno spettacolare: essere disposto a perdere una persona senza volerla perdere per forza. Quando l'altro sente che il tuo sì non è garantito, smette di trattarlo come dovuto.\n\nQuale dei dieci punti ti ha dato fastidio leggere, e quale confine ti sta indicando quel fastidio?\n\nMettere un limite non ti rende antipatico, ti rende leggibile. Ogni settimana senza confini è un altro weekend regalato a chi non lo ricambierebbe. Segui @poteresociale: nei prossimi post smontiamo le dinamiche che ti fanno passare da affidabile a scontato, e come uscirne senza diventare ostile.\n\n#confini #direno #rispettodise #dinamichesociali #psicologiasociale",
+   "segnalazioni": []
+  }
+ ]
 }
