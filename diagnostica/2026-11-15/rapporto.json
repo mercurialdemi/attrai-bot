@@ -1,34 +1,293 @@
 {
  "giorno": "2026-11-15",
- "post_preparati": 4,
- "slide_totali": 37,
+ "post_preparati": 2,
+ "slide_totali": 24,
  "slide_fallite": 0,
  "lavorazione": {
-  "openai-testo": {
-   "totali": 9,
-   "fallite": 0
-  },
-  "cta-illustrata": {
-   "totali": 1,
-   "fallite": 0
-  },
   "testo-su-sfondo-uniforme": {
-   "totali": 22,
+   "totali": 15,
+   "fallite": 0
+  },
+  "blocchi-sfondo-pieno": {
+   "totali": 6,
    "fallite": 0
   },
   "cta-stile-post": {
-   "totali": 3,
+   "totali": 2,
    "fallite": 0
   },
-  "blocchi-ricostruzione-codice": {
-   "totali": 1,
-   "fallite": 0
-  },
-  "blocchi-pulizia-codice": {
+  "openai-testo": {
    "totali": 1,
    "fallite": 0
   }
  },
- "segnalazioni": [],
- "post_con_problemi": []
+ "segnalazioni": [
+  {
+   "job_id": 50,
+   "testo": "Anche questa e tutte le altre slide devono avere lo stesso font del post dei collaboratori. Non usare font basic",
+   "quando": "2026-11-15T15:56:18+00:00"
+  }
+ ],
+ "post_con_problemi": [
+  {
+   "job_id": 50,
+   "fonte": "https://www.instagram.com/p/DV1BvX-CgzU/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Erase him.\nYes. Completely.",
+     "testo": "Cancellalo.\n\nSì. Del tutto.",
+     "blocchi": [
+      {
+       "x": 101,
+       "y": 356,
+       "w": 550,
+       "h": 83,
+       "carattere": "normale",
+       "colore": "#7A0E0E",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 518,
+       "w": 348,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#7A0E0E",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Erase the chats you reread.\nErase the memories you romanticize.\nErase the future you built in your head.\nErase the version of him that never existed.",
+     "testo": "Cancella le chat che rileggi.\nCancella i ricordi che abbellisci.\nCancella il futuro che ti eri costruita in testa.\nCancella quel lui che non è mai esistito.",
+     "blocchi": [
+      {
+       "x": 101,
+       "y": 311,
+       "w": 788,
+       "h": 298,
+       "carattere": "normale",
+       "colore": "#640C0F",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "He didn't forget how to love you.\nHe just stopped trying.\n\nHe knew what hurt you.\nAnd still did it.",
+     "testo": "Non ha dimenticato come si fa ad amarti.\nHa solo smesso di provarci.\n\nSapeva cosa ti faceva male.\nE l'ha fatto lo stesso.",
+     "blocchi": [
+      {
+       "x": 101,
+       "y": 311,
+       "w": 678,
+       "h": 90,
+       "carattere": "normale",
+       "colore": "#650C0F",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 415,
+       "w": 507,
+       "h": 142,
+       "carattere": "normale",
+       "colore": "#650C0E",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "You stayed loyal.\nHe stayed comfortable.\n\nYou stayed real.\nHe stayed temporary.",
+     "testo": "Tu sei rimasta fedele.\nLui si è messo comodo.\n\nTu sei rimasta sincera.\nLui era solo di passaggio.",
+     "blocchi": [
+      {
+       "x": 101,
+       "y": 311,
+       "w": 495,
+       "h": 90,
+       "carattere": "normale",
+       "colore": "#670B0D",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 415,
+       "w": 440,
+       "h": 142,
+       "carattere": "normale",
+       "colore": "#640C10",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "He wasn't confused.\n\nHe was getting everything without giving anything.",
+     "testo": "Non era confuso.\n\nSi prendeva tutto\nsenza dare niente.",
+     "blocchi": [
+      {
+       "x": 101,
+       "y": 312,
+       "w": 442,
+       "h": 41,
+       "carattere": "normale",
+       "colore": "#640D0F",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 420,
+       "w": 574,
+       "h": 98,
+       "carattere": "normale",
+       "colore": "#650C0E",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Stop holding on\nto someone who already let go.\n\nStop replaying moments\nhe moved on from.",
+     "testo": "Smetti di aggrapparti\na chi ti ha già lasciata andare.\n\nSmetti di riavvolgere momenti\nche lui ha già archiviato.",
+     "blocchi": [
+      {
+       "x": 101,
+       "y": 312,
+       "w": 684,
+       "h": 93,
+       "carattere": "normale",
+       "colore": "#650C0F",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 420,
+       "w": 543,
+       "h": 151,
+       "carattere": "normale",
+       "colore": "#650C0F",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Erase him.\nNot because you hate him.\n\nBecause you deserve peace.",
+     "testo": "Cancellalo.\nNon perché lo odi.\n\nMa perché hai diritto alla pace.",
+     "blocchi": [
+      {
+       "x": 101,
+       "y": 312,
+       "w": 580,
+       "h": 93,
+       "carattere": "normale",
+       "colore": "#660B0E",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 477,
+       "w": 610,
+       "h": 41,
+       "carattere": "normale",
+       "colore": "#660B0D",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Not every love story ends in forever.\n\nSome end\nwhen you finally choose yourself.",
+     "testo": "Non tutte le storie d'amore\nfiniscono con un per sempre.\n\nAlcune finiscono\nquando, finalmente, scegli te.",
+     "blocchi": [
+      {
+       "x": 101,
+       "y": 312,
+       "w": 617,
+       "h": 93,
+       "carattere": "normale",
+       "colore": "#7A0E0E",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 101,
+       "y": 477,
+       "w": 757,
+       "h": 95,
+       "carattere": "normale",
+       "colore": "#7A0E0E",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se quel \"Cancellalo\" ti ha colpita,\nnon lasciarlo qui.\n\nQui parliamo dei giorni in cui vorresti tornare indietro.\nDella chat riaperta.\nDel vocale riascoltato.\n\nSeguici:\ni prossimi post sono per quei giorni.\n\n@AmoreInfedele",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Cancellalo, e del tutto: le chat che rileggi, i ricordi che abbellisci, il futuro che ti eri immaginata, la versione di lui che non è mai esistita. Lui non ha dimenticato come amarti, ha smesso di provarci. Sapeva cosa ti faceva male e l'ha fatto lo stesso. Tu eri fedele e sincera, lui comodo e di passaggio. Non era confuso: prendeva tutto senza dare niente. Smetti di aggrapparti a chi ti ha già lasciata andare. Cancellalo non per odio, ma perché meriti pace: certe storie finiscono quando finalmente scegli te stessa. Il tono è deciso ed emotivo, tra la rivalsa e l'incoraggiamento.",
+   "descrizione": "Io la sua chat l'ho tenuta per mesi. Non per scrivergli: per scorrere fino al vocale di una sera di marzo, quello in cui rideva, e controllare che fosse ancora lì.\n\nOgni volta che la riapri non stai guardando lui. Stai guardando la donna che si sentiva scelta, e vuoi vedere se esiste ancora. Per questo ti costa tanto: sonno, concentrazione, la stima che si consuma un po' a ogni rilettura, e il tempo che passi dentro una storia che ormai recita una persona sola.\n\nNel 2010 Helen Fisher e il suo gruppo hanno messo in risonanza magnetica 15 persone appena lasciate (10 donne e 5 uomini), ancora innamorate, e hanno mostrato loro la foto dell'ex. Si sono accese le aree della ricompensa e del desiderio, le stesse della voglia, non solo quelle della tristezza. Il tuo cervello non ricorda: chiede la dose. Per questo sai benissimo che è finita e senti comunque la mano andare al telefono.\n\nC'è un secondo pezzo. Nel 1987 Daniel Wegner ha chiesto a degli studenti di non pensare a un orso bianco: ci pensavano lo stesso, e quando il divieto cadeva ci pensavano ancora di più. Ordinarti di smettere di pensarlo non funziona. Cancellare, qui, vuol dire agire sugli oggetti, non sui pensieri: la chat, le foto, la canzone, il profilo che apri per sbaglio. Togli quello che accende la voglia e il resto passa a ondate, senza che tu debba combatterlo.\n\nPoi c'è il lui che non è mai esistito. Non devi decidere che fosse un mostro, può anche averti amata a modo suo. Cancelli la versione che hai completato tu con la speranza, perché è l'unica che continua a chiederti qualcosa. Se lui ha smesso di provarci, ogni rilettura è un lavoro che fai da sola per un rapporto che non ha più due parti.\n\nNon devi odiarlo per andartene. Devi smettere di essere l'unica a tenere la porta aperta.\n\nQui parliamo di quello che succede nella testa e nel cuore dopo che qualcuno ti ha ferita: la ricaduta, il controllo, la voglia di tornare indietro. Seguici, perché i prossimi post sono pensati per quei giorni.\n\nCosa speri di trovare, quando riapri quella chat per la quinta volta?\n\nSei d'accordo col post?\n\n#lasciarandare #dipendenzaaffettiva #superareunex #amoreinfedele #relazionitossiche",
+   "segnalazioni": [
+    "Anche questa e tutte le altre slide devono avere lo stesso font del post dei collaboratori. Non usare font basic"
+   ]
+  }
+ ]
 }
