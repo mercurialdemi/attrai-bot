@@ -744,7 +744,10 @@ HASHTAG_REGOLA = (
 
 def _caption_system(brand: dict, rules: list[dict], recent: dict) -> str:
     guida_p = guida_pagina(brand)
-    return _caption_system_base(brand, rules, recent) + HASHTAG_REGOLA + (
+    tag_pagina = (f"\nHashtag di nicchia di QUESTA pagina ({brand.get('nome', '')}), da cui prendere i 2-3 di nicchia "
+                  f"(gli altri sono sul tema del post, sempre coerenti con questa pagina, mai quelli di un'altra nostra "
+                  f"pagina): {brand['hashtag']}" if brand.get("hashtag") else "")
+    return _caption_system_base(brand, rules, recent) + HASHTAG_REGOLA + tag_pagina + (
         "\n\nGUIDA EDITORIALE DELLA PAGINA (scritta da Gabriele: ha la precedenza su tono, pubblico e CTA generici; "
         "le regole di formato della descrizione restano quelle sopra). IMPORTANTE: proponi SOLO i manuali dell'elenco MANUALI della pagina; quelli citati nella guida ma non in elenco non sono ancora in vendita, non nominarli. \n" + guida_p if guida_p else "")
 
