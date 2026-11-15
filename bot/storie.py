@@ -649,6 +649,10 @@ def _disegna_serie(serie: dict, brand: dict, slug: str, jdir: Path, nome: str) -
     global TOP_SAFE
     tutte = serie.get("slides") or []
     mid = _manuale_citato(serie, brand) if serie.get("tipo") == "vendita" else None
+    if mid and not serie.get("_mockup_sempre"):     # Gabriele 15/11: mockup in 1 storia di vendita ogni 3
+        fatte = sum(1 for x in _storico() if x.get("tipo") == "vendita")
+        if fatte % 3:
+            mid = None
     for i, s in enumerate(tutte, 1):
         pl: list = []
         base_i, top_prima = base, TOP_SAFE

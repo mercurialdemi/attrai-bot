@@ -12,7 +12,12 @@ from . import config
 COPERTINE = Path(__file__).resolve().parent.parent / "assets" / "manuali"
 # id del manuale -> copertine (il bundle mostra due libri)
 MAPPA = {"potere-sociale-solo": ["potere-sociale"], "bundle-attrazione-potere": ["attraiseduci", "potere-sociale"],
-         "potere-sociale": ["attraiseduci", "potere-sociale"]}
+         "potere-sociale": ["attraiseduci", "potere-sociale"],
+         # manuale + bonus (copertine di Gabriele, 15/11)
+         "arte-sedurre-chat": ["arte-sedurre-chat", "bonus-100-messaggi"],
+         "dipendenza-emotiva": ["dipendenza-emotiva", "bonus-30-giorni-dipendenza"],
+         "lasciare-andare": ["lasciare-andare", "bonus-strumenti-lasciare-andare"],
+         "magnetismo-femminile": ["magnetismo-femminile", "bonus-desiderata-scelta"]}
 
 
 def copertine(manuale_id: str) -> list[Path]:
