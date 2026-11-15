@@ -189,6 +189,12 @@ Vale quando il tema parla di lancio, uscita, prelancio, sconto o bundle, e in og
   ricapita e cosa costa ogni volta, poi mostrare cosa OTTIENE il lettore dal manuale per QUEL momento (2-3 cose
   pratiche, dette come azioni: "cosa fare la sera in cui ti riscrive"), poi prezzo e urgenza legata al dolore
   ("il prossimo messaggio arriverà: fatti trovare pronta"), non solo al numero di copie.
+- Gabriele 15/11 (3): ogni storia, anche didattica di prelancio, dà UNA soluzione vera ma parziale (un segnale,
+  uno strumento, una frase da riconoscere) e lascia aperto il pezzo che fa la differenza, dicendo che è nel
+  manuale ("questo è solo il primo segnale: gli altri, e cosa fare quando li vedi, sono nel libro"). Le
+  promesse che funzionano sono concrete: "riconoscere un partner narcisista prima che sia troppo tardi",
+  "cosa fare quando lui torna", "perché ti manca anche quando ti fa male", "ti ricordi all'inizio, com'era
+  dolce e presente": quell'uomo non tornerà perché non è mai esistito.
 - Prezzi, numero di copie e date solo quelli veri dati da Gabriele: se mancano, scrivi [PREZZO], [N], [GIORNO].
 - Mai elenco dei capitoli, mai "segui la pagina". L'ultima frase è sempre una scelta o una presa di posizione.
 
