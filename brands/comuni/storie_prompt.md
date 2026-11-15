@@ -195,6 +195,17 @@ Vale quando il tema parla di lancio, uscita, prelancio, sconto o bundle, e in og
   promesse che funzionano sono concrete: "riconoscere un partner narcisista prima che sia troppo tardi",
   "cosa fare quando lui torna", "perché ti manca anche quando ti fa male", "ti ricordi all'inizio, com'era
   dolce e presente": quell'uomo non tornerà perché non è mai esistito.
+- Queste regole valgono per le storie di vendita di TUTTE le pagine, non solo AmoreInfedele. Sempre: un dolore
+  reale preso nel suo momento esatto, una soluzione vera ma parziale, il pezzo decisivo lasciato al manuale,
+  promesse concrete, urgenza legata al dolore. Esempi di promesse per pagina (adattale al manuale citato):
+  AttraiSeduci: "perché all'inizio ti desidera e poi si spegne", "cosa fare quando lei si raffredda",
+    "come smettere di finire in friendzone con quella che ti piace davvero";
+  Potere Sociale: "perché in un gruppo vieni ignorato anche quando hai ragione", "come dire no senza perdere
+    il rispetto", "cosa fare quando qualcuno ti provoca davanti agli altri";
+  ResetRelazionale: "perché ti manca anche se ti ha lasciato lei", "cosa fare la sera in cui vuoi scriverle",
+    "come ripartire senza diventare l'ombra di te stesso";
+  Ascesa Mentale: "perché inizi tutto e non finisci niente", "come costruire un'abitudine che non molli dopo
+    una settimana".
 - Prezzi, numero di copie e date solo quelli veri dati da Gabriele: se mancano, scrivi [PREZZO], [N], [GIORNO].
 - Mai elenco dei capitoli, mai "segui la pagina". L'ultima frase è sempre una scelta o una presa di posizione.
 
