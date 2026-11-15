@@ -184,6 +184,11 @@ Vale quando il tema parla di lancio, uscita, prelancio, sconto o bundle, e in og
   poi la falsa credenza smontata ("non sei debole: è un legame costruito così"), poi il libro come risposta
   precisa a QUEI gesti e il costo di restare ("ogni mese in più lo paghi con un pezzo di te"). Mai concetti
   astratti tipo "il meccanismo", "la dinamica" senza il gesto concreto che li mostra.
+- Gabriele 15/11 (2): un elenco di dolori non basta. La storia deve puntare su UN dolore preciso con il suo
+  momento esatto (es. "lo hai bloccato, alle 23 arriva il messaggio: mi manchi, ho capito tutto"), dire perché
+  ricapita e cosa costa ogni volta, poi mostrare cosa OTTIENE il lettore dal manuale per QUEL momento (2-3 cose
+  pratiche, dette come azioni: "cosa fare la sera in cui ti riscrive"), poi prezzo e urgenza legata al dolore
+  ("il prossimo messaggio arriverà: fatti trovare pronta"), non solo al numero di copie.
 - Prezzi, numero di copie e date solo quelli veri dati da Gabriele: se mancano, scrivi [PREZZO], [N], [GIORNO].
 - Mai elenco dei capitoli, mai "segui la pagina". L'ultima frase è sempre una scelta o una presa di posizione.
 
