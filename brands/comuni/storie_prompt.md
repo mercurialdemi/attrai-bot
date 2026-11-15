@@ -178,6 +178,12 @@ Vale quando il tema parla di lancio, uscita, prelancio, sconto o bundle, e in og
   4. IL COLLEGAMENTO (bundle). "Capisci il collegamento: uno ti insegna a…, l'altro ti insegna a…", poi il
      bundle e lo sconto per le prime N copie. Il valore sta nella somma, non nell'elenco dei capitoli.
 - Frasi brevi, una idea per frase, ritmo da annuncio: qui le slide sono meno dense delle storie didattiche.
+- Gabriele 15/11: una storia di vendita senza dolori VERI non vende. Prima del libro, una raffica di 5-6 gesti
+  concreti che il lettore fa davvero e di cui un po' si vergogna (es. "rileggi le chat di notte per capire dove
+  hai sbagliato", "chiedi scusa per cose che non hai fatto", "te ne vai, lui torna perfetto, ci ricaschi"),
+  poi la falsa credenza smontata ("non sei debole: è un legame costruito così"), poi il libro come risposta
+  precisa a QUEI gesti e il costo di restare ("ogni mese in più lo paghi con un pezzo di te"). Mai concetti
+  astratti tipo "il meccanismo", "la dinamica" senza il gesto concreto che li mostra.
 - Prezzi, numero di copie e date solo quelli veri dati da Gabriele: se mancano, scrivi [PREZZO], [N], [GIORNO].
 - Mai elenco dei capitoli, mai "segui la pagina". L'ultima frase è sempre una scelta o una presa di posizione.
 
