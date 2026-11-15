@@ -177,7 +177,8 @@ Vale quando il tema parla di lancio, uscita, prelancio, sconto o bundle, e in og
      collegamento, poi "ora torna alla domanda". È il modo di vendere il manuale a chi ha un desiderio diverso.
   4. IL COLLEGAMENTO (bundle). "Capisci il collegamento: uno ti insegna a…, l'altro ti insegna a…", poi il
      bundle e lo sconto per le prime N copie. Il valore sta nella somma, non nell'elenco dei capitoli.
-- Frasi brevi, una idea per frase, ritmo da annuncio: qui le slide sono meno dense delle storie didattiche.
+- Discorso FLUIDO e completo (Gabriele 15/11): frasi collegate con connettivi naturali (poi, e da allora, perché,
+  finché, così), non una raffica di frasi secche separate da punti. Al massimo una frase breve a effetto per blocco.
 - Gabriele 15/11: una storia di vendita senza dolori VERI non vende. Prima del libro, una raffica di 5-6 gesti
   concreti che il lettore fa davvero e di cui un po' si vergogna (es. "rileggi le chat di notte per capire dove
   hai sbagliato", "chiedi scusa per cose che non hai fatto", "te ne vai, lui torna perfetto, ci ricaschi"),
