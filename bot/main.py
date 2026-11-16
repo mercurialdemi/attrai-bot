@@ -551,7 +551,7 @@ async def cmd_citazione(update: Update, context: ContextTypes.DEFAULT_TYPE):
     from bot import citazioni
     msg = update.effective_message
     n = int(context.args[0]) if context.args and context.args[0].isdigit() else 1
-    n = max(1, min(n, 4))
+    n = max(1, min(n, 5))
     brand = writer.load_brand()
 
     async def go():

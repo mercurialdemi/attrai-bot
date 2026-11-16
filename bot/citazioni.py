@@ -19,6 +19,24 @@ LOGO = config.ROOT / "assets" / "logo.png"
 
 # testo (con **parole rosse**), autore, opera, scena da illustrare (il personaggio prende il posto dell'autore)
 CITAZIONI = [
+    # le 5 scelte da Gabriele il 16/11
+    ("Amare ed essere **saggi** è concesso a stento a un **dio**.", "Publilio Siro", "Sentenze",
+     "un attore e poeta nel teatro dell'antica Roma, dietro le quinte a lume di torcia, che osserva sul palco una coppia di amanti che si dispera",
+     ""),
+    ("Forse **tremate più voi** nel pronunciare questa sentenza che io nell'ascoltarla.", "Giordano Bruno", "ai giudici, Roma 1600",
+     "un'aula del tribunale dell'Inquisizione nel 1600, giudici in tonaca seduti in alto e visibilmente tesi, l'imputato in piedi al centro, calmo e fiero",
+     "Giordano_Bruno"),
+    ("L'amore, come esiste nella società, non è che lo scambio di **due fantasie** e il contatto di **due epidermidi**.",
+     "Chamfort", "Massime e pensieri",
+     "un salotto parigino del Settecento, dame e gentiluomini che flirtano con ventagli e parrucche, un uomo che li osserva in disparte con un sorriso ironico",
+     "Nicolas_Chamfort"),
+    ("L'assenza diminuisce le passioni **mediocri** e accresce le **grandi**, come il vento spegne le candele e attizza il fuoco.",
+     "François de La Rochefoucauld", "Massime, 276",
+     "un uomo che sale su una carrozza di notte, una donna alla finestra di un palazzo seicentesco lo guarda partire, il vento spegne una candela sul davanzale",
+     "François_de_La_Rochefoucauld"),
+    ("Nelle prime passioni le donne amano **l'amante**; nelle altre amano **l'amore**.", "François de La Rochefoucauld", "Massime, 471",
+     "un ballo in un palazzo francese del Seicento, una dama che danza con lo sguardo perso, mentre un gentiluomo la osserva consapevole",
+     "François_de_La_Rochefoucauld"),
     ("Desideriamo sempre ciò che è **vietato**, e vogliamo ciò che ci viene **negato**.", "Ovidio", "Amori, III, 4",
      "un poeta nell'antica Roma che legge i suoi versi a una festa serale tra colonne e lucerne, donne eleganti che lo ascoltano rapite", "Publio_Ovidio_Nasone"),
     ("È molto più sicuro essere **temuto** che amato, quando si debba rinunciare a una delle due cose.", "Niccolò Machiavelli", "Il Principe, XVII",
@@ -136,7 +154,8 @@ def genera(brand: dict, n: int = 1, uscita: Path | None = None) -> list[Path]:
     logo = Image.open(LOGO)
     rosso = storie.colore_chiave(brand)
     out = []
-    for c in random.sample(CITAZIONI, min(n, len(CITAZIONI))):
+    scelte = CITAZIONI[:5] if n == 5 else random.sample(CITAZIONI, min(n, len(CITAZIONI)))   # /citazione 5 = le 5 scelte
+    for c in scelte:
         ritr = ritratto(c[4])
         if ritr is not None:                     # Gabriele 16/11: il ritratto vero dell'autore con il nostro volto
             img = _volto_nostro(ritr, logo)
