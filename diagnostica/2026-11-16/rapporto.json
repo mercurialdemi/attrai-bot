@@ -1,0 +1,313 @@
+{
+ "giorno": "2026-11-16",
+ "post_preparati": 11,
+ "slide_totali": 71,
+ "slide_fallite": 8,
+ "lavorazione": {
+  "testo-su-sfondo-uniforme": {
+   "totali": 20,
+   "fallite": 0
+  },
+  "cta-stile-post": {
+   "totali": 7,
+   "fallite": 0
+  },
+  "blocchi-ricostruzione-codice": {
+   "totali": 4,
+   "fallite": 0
+  },
+  "blocchi-sfondo-pieno": {
+   "totali": 28,
+   "fallite": 0
+  },
+  "cta-alone": {
+   "totali": 3,
+   "fallite": 0
+  },
+  "openai-pulizia+blocchi": {
+   "totali": 9,
+   "fallite": 8
+  }
+ },
+ "segnalazioni": [],
+ "post_con_problemi": [
+  {
+   "job_id": 136,
+   "fonte": "https://www.instagram.com/p/DfsRuz8E4_X/",
+   "fallite": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Tetto di spesa di oggi raggiunto (9.37 € su 9.00 €). Riparte domani, oppure alza il tetto con /tetto.)",
+     "testo_originale": "WHY DOES A MAN WHO USED TO BE KIND SUDDENLY START LOSING HIS PATIENCE?",
+     "testo": "PERCHÉ UN UOMO\nCHE ERA GENTILE\nA UN CERTO PUNTO\nPERDE LA PAZIENZA?",
+     "blocchi": [
+      {
+       "x": 312,
+       "y": 49,
+       "w": 470,
+       "h": 127,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Tetto di spesa di oggi raggiunto (9.37 € su 9.00 €). Riparte domani, oppure alza il tetto con /tetto.)",
+     "testo_originale": "YOU USED TO BE SO PATIENT WITH ME. / I WAS. THEN MY PATIENCE BECAME THE REASON NOTHING EVER HAD CONSEQUENCES.",
+     "testo": "PRIMA ERI COSÌ\nPAZIENTE CON ME.\n\nLO ERO.\nPOI, GRAZIE ALLA MIA PAZIENZA,\nNIENTE HA PIÙ AVUTO\nCONSEGUENZE.",
+     "blocchi": [
+      {
+       "x": 59,
+       "y": 37,
+       "w": 417,
+       "h": 80,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 475,
+       "y": 103,
+       "w": 495,
+       "h": 127,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Tetto di spesa di oggi raggiunto (9.37 € su 9.00 €). Riparte domani, oppure alza il tetto con /tetto.)",
+     "testo_originale": "SO NOW YOU'RE JUST ANGRY? / NO. I'M TIRED OF EXPLAINING THE SAME HURT TO SOMEONE WHO ONLY LISTENS WHEN I FINALLY LOSE MY CALM.",
+     "testo": "QUINDI ADESSO\nSEI SOLO ARRABBIATO?\n\nNO.\nSONO STANCO DI SPIEGARE\nLO STESSO DOLORE\nA CHI MI ASCOLTA\nSOLO QUANDO PERDO LA CALMA.",
+     "blocchi": [
+      {
+       "x": 39,
+       "y": 117,
+       "w": 339,
+       "h": 88,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 391,
+       "y": 44,
+       "w": 586,
+       "h": 215,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Tetto di spesa di oggi raggiunto (9.37 € su 9.00 €). Riparte domani, oppure alza il tetto con /tetto.)",
+     "testo_originale": "WHY DIDN'T YOU SAY SOMETHING? / I DID. CALMLY. REPEATEDLY. YOU CALLED IT OVERTHINKING BECAUSE MY PAIN ARRIVED WITHOUT A SCENE.",
+     "testo": "PERCHÉ NON\nHAI DETTO NIENTE?\n\nL'HO DETTO.\nCON CALMA.\nPIÙ VOLTE.\nPER TE MI FACEVO TROPPI FILM,\nPERCHÉ IL MIO DOLORE\nNON FACEVA SCENATE.",
+     "blocchi": [
+      {
+       "x": 65,
+       "y": 98,
+       "w": 332,
+       "h": 93,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 479,
+       "y": 34,
+       "w": 491,
+       "h": 171,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Tetto di spesa di oggi raggiunto (9.37 € su 9.00 €). Riparte domani, oppure alza il tetto con /tetto.)",
+     "testo_originale": "BUT YOU ALWAYS LET IT GO. / I DIDN'T LET IT GO. I SWALLOWED IT TO KEEP THE PEACE. EVENTUALLY, THERE WAS NO ROOM LEFT.",
+     "testo": "MA TU LASCIAVI\nSEMPRE CORRERE.\n\nNON LASCIAVO CORRERE.\nINGOIAVO\nPER NON LITIGARE.\nFINCHÉ NON C'È STATO\nPIÙ POSTO.",
+     "blocchi": [
+      {
+       "x": 55,
+       "y": 73,
+       "w": 375,
+       "h": 83,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 449,
+       "y": 44,
+       "w": 527,
+       "h": 239,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Tetto di spesa di oggi raggiunto (9.37 € su 9.00 €). Riparte domani, oppure alza il tetto con /tetto.)",
+     "testo_originale": "SO YOUR KINDNESS WAS FAKE? / NO. IT WAS REAL. BUT KINDNESS WITHOUT RESPECT EVENTUALLY BECOMES SELF-BETRAYAL.",
+     "testo": "QUINDI LA TUA\nGENTILEZZA ERA FINTA?\n\nNO.\nERA VERA.\nMA LA GENTILEZZA\nSENZA RISPETTO\nPRIMA O POI\nTI FA TRADIRE TE STESSO.",
+     "blocchi": [
+      {
+       "x": 52,
+       "y": 78,
+       "w": 417,
+       "h": 88,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 508,
+       "y": 29,
+       "w": 462,
+       "h": 210,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Tetto di spesa di oggi raggiunto (9.37 € su 9.00 €). Riparte domani, oppure alza il tetto con /tetto.)",
+     "testo_originale": "WHY DO SMALL THINGS SET YOU OFF NOW? / BECAUSE THEY'RE NOT SMALL ANYMORE. EACH ONE ARRIVES CARRYING EVERY TIME I WAS IGNORED.",
+     "testo": "PERCHÉ ADESSO ESPLODI\nPER OGNI PICCOLEZZA?\n\nPERCHÉ NON SONO\nPIÙ PICCOLEZZE.\nOGNUNA SI PORTA DIETRO\nTUTTE LE VOLTE\nCHE MI HAI IGNORATO.",
+     "blocchi": [
+      {
+       "x": 39,
+       "y": 73,
+       "w": 449,
+       "h": 78,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 501,
+       "y": 98,
+       "w": 475,
+       "h": 142,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "OpenAI non ha risposto (Tetto di spesa di oggi raggiunto (9.37 € su 9.00 €). Riparte domani, oppure alza il tetto con /tetto.)",
+     "testo_originale": "CAN HE BECOME PATIENT AGAIN? / YES. BUT NOT BY DEMANDING THE OLD VERSION OF HIM. RESPECT THE MAN WHOSE SILENCE KEPT WARNING YOU.",
+     "testo": "PUÒ TORNARE\nPAZIENTE?\n\nSÌ.\nMA NON SE RIVUOI\nL'UOMO DI PRIMA.\nRISPETTA L'UOMO\nCHE COL SILENZIO\nTI AVVERTIVA DA TEMPO.",
+     "blocchi": [
+      {
+       "x": 59,
+       "y": 88,
+       "w": 352,
+       "h": 78,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 475,
+       "y": 29,
+       "w": 488,
+       "h": 230,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "openai-pulizia+blocchi",
+     "tentativi": 2,
+     "fallita": false,
+     "problema": "OpenAI non ha risposto (Tetto di spesa di oggi raggiunto (9.37 € su 9.00 €). Riparte domani, oppure alza il tetto con /tetto.)",
+     "testo_originale": "IF YOU'RE A MAN WHO IS DONE CONFUSING ENDLESS TOLERANCE WITH LOVE... AND WANTS THE STRENGTH TO SET BOUNDARIES BEFORE RESENTMENT CHANGES HIM... THAT'S WHY I CREATED MY GUIDES. COMMENT 'MIND' AND I'LL SEND THEM TO YOU.",
+     "testo": "(slide CTA AttraiSeduci)",
+     "blocchi": [
+      {
+       "x": 98,
+       "y": 20,
+       "w": 827,
+       "h": 342,
+       "carattere": "fumetto",
+       "colore": "#000000",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    }
+   ],
+   "concetto": "Un uomo gentile non diventa impaziente all'improvviso: per anni ha spiegato con calma, ha lasciato correre e ha mandato giù tutto per non litigare, e nessuno lo ascoltava finché non perdeva la pazienza. Le piccolezze che oggi lo fanno esplodere si portano dietro tutte le volte in cui è stato ignorato. La sua gentilezza era vera, ma senza rispetto diventa un tradimento verso se stesso. Può tornare paziente, ma solo se lo si rispetta. Il registro è drammatico e di rivalsa, in forma di dialogo a fumetti.",
+   "descrizione": "Un uomo mi ha scritto: «Per due anni le ho detto le cose con calma. Mi ha preso sul serio solo la sera che ho alzato la voce. E adesso sono io quello cambiato.»\n\nGli dici una cosa che ti ferisce, e la dici bene, senza alzare i toni. Lei annuisce, cambia argomento, e la settimana dopo succede di nuovo. Allora ingoi, perché litigare ti sembra peggio. Paghi con la stima di te stesso, un sorso alla volta, finché una sera esplodi per un bicchiere lasciato sul tavolo e il problema diventi tu.\n\nQuella pazienza non ti ha protetto. Le ha insegnato che il tuo disagio non costa niente. Lei non lo fa per cattiveria: ognuno regola il proprio comportamento sulle conseguenze che vede, e un dolore detto sempre a bassa voce finisce in fondo alla lista. Negli anni '90 la psicologa Dana Crowley Jack ha studiato chi zittisce i propri bisogni per non incrinare la relazione: quel silenzio non porta pace, porta rabbia trattenuta e la sensazione di non contare. Il rancore è il conto di tutti i no che non hai detto.\n\nLei, poi, legge tutto al contrario. Vede uno scatto per una piccolezza e pensa che tu sia diventato instabile, perché non vede il registro che tieni da mesi. E quando esplodi perdi due volte: passi dalla parte del torto e ti giochi l'autorevolezza.\n\nLa strada non passa dal tornare quello che sopporta tutto, e nemmeno dal diventare quello che urla. Il limite va messo la prima volta, con calma e con una conseguenza vera: se una cosa si ripete, tu cambi qualcosa, non la ripeti a voce più alta. La calma vale solo se dietro c'è un uomo disposto ad agire.\n\nLa gentilezza senza confini non è bontà. È un debito, e di solito lo paghi tu.\n\nQual è la cosa che le hai detto con calma tre volte e che oggi non riesci più a dire senza alzare la voce?\n\nLei non ti ascolterà di più perché parli più forte, ma quando capirà che alle tue parole seguono dei fatti. Ogni mese passato a ingoiare ti toglie stima di te e rispetto ai suoi occhi, e chi non sa farsi rispettare in casa lo paga anche fuori. Nel bundle \"AttraiSeduci\" + \"Potere Sociale\" impari a mettere limiti senza esplodere e a tornare l'uomo che lei prende sul serio. Link in bio, oppure commenta BUNDLE.",
+   "segnalazioni": []
+  }
+ ]
+}
