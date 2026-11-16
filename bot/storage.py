@@ -131,6 +131,18 @@ def _row_to_job(row) -> dict | None:
     }
 
 
+def recent_cta(n: int = 12) -> list[str]:
+    """Tipi di CTA (manuale/segui) degli ultimi post di questa pagina, dal più recente."""
+    with _lock:
+        rows = _db().execute("SELECT post_json FROM jobs ORDER BY id DESC LIMIT ?", (n,)).fetchall()
+    out = []
+    for r in rows:
+        t = (json.loads(r["post_json"]).get("cta") or {}).get("tipo")
+        if t in ("manuale", "segui"):
+            out.append(t)
+    return out
+
+
 def recent_style(n: int = 6) -> dict:
     """Hook e autori usati negli ultimi post, per non ripetersi."""
     with _lock:

@@ -882,15 +882,31 @@ REGOLE FISSE DATE DA GABRIELE (hanno la precedenza su tutto il resto)
 
 
 def _cta_da_natura(slides_out: dict) -> str:
-    """Gabriele 15/11: la CTA segue la natura del post, decisa una volta sola alla traduzione."""
+    """Gabriele 16/11: circa metà CTA al manuale e metà "segui". Il manuale va dove il post dà valore vero o apre un
+    dolore preciso che il manuale risolve, didattico o virale che sia; altrimenti "segui"."""
     if not load_brand().get("manuali"):
         return ""
     singolo = slides_out.get("formato") == "singolo" or len(slides_out.get("slides") or []) <= 1
-    if singolo or slides_out.get("natura") != "didattico":
-        return ("\n\nCTA OBBLIGATORIA: questo post è " + ("un post singolo" if singolo else "VIRALE")
-                + " -> cta tipo='segui', manuale vuoto. Niente manuale.")
-    return ("\n\nCTA OBBLIGATORIA: questo post è DIDATTICO -> cta tipo='manuale' con il manuale più adatto al "
-            "dolore del post. Mai 'segui la pagina'.")
+    if singolo:
+        return "\n\nCTA OBBLIGATORIA: post singolo -> cta tipo='segui', manuale vuoto."
+    try:
+        from . import storage
+        ult = storage.recent_cta(12)
+    except Exception:
+        ult = []
+    n_man = ult.count("manuale")
+    quota = (f"Negli ultimi {len(ult)} post di questa pagina: {n_man} CTA al manuale e {len(ult) - n_man} 'segui'. "
+             "L'obiettivo è circa metà e metà. ") if ult else ""
+    soglia = ("Ultimamente ci sono troppe CTA al manuale: questa volta scegli il manuale SOLO se il dolore è forte e "
+              "preciso, altrimenti 'segui'. " if ult and n_man > len(ult) - n_man + 1 else
+              "Ultimamente ci sono poche CTA al manuale: se il post ha valore o tocca un dolore, scegli il manuale. "
+              if ult and len(ult) - n_man > n_man + 1 else "")
+    natura = slides_out.get("natura") or "?"
+    return ("\n\nSCELTA DELLA CTA (questo post è stato classificato " + natura.upper() + "): " + quota + soglia +
+            "Scegli tipo='manuale' quando il post dà valore vero o apre un dolore specifico che un nostro manuale "
+            "risolve (vale anche per un virale che crea un dolore forte). Scegli tipo='segui' quando il post è "
+            "intrattenimento, ego, polarizzazione o un valore generico senza un dolore preciso da risolvere. "
+            "Mai il manuale forzato su un post che non lo regge.")
 
 
 def _source_cta_note(slides_out: dict) -> str:
@@ -1095,9 +1111,9 @@ def create_post(caption: str, owner: str, images: list[bytes], brand: dict,
     if not brand.get("manuali") and isinstance(cap.get("cta"), dict):   # pagina senza manuali: sempre "segui"
         cap["cta"] = {**cap["cta"], "tipo": "segui", "manuale": ""}
     singolo = slides_out.get("formato") == "singolo" or len(slides_out.get("slides") or []) <= 1
-    if isinstance(cap.get("cta"), dict) and (singolo or slides_out.get("natura") == "virale"):
-        if cap["cta"].get("tipo") == "manuale":                        # virale o singolo: mai il manuale
-            log.info("CTA al manuale su post %s: corretta in segui", "singolo" if singolo else "virale")
+    if isinstance(cap.get("cta"), dict) and singolo:
+        if cap["cta"].get("tipo") == "manuale":                        # post singolo: mai il manuale
+            log.info("CTA al manuale su post singolo: corretta in segui")
             cap["cta"] = {**cap["cta"], "tipo": "segui", "manuale": ""}
     apply_cta_texts(slides_out, cap.pop("slide_cta", None) or [])
     slides_out["_formato_post"] = cap.pop("formato_post", "")
