@@ -1,24 +1,24 @@
 # CTA modello di Potere Sociale (15/11/2026, dal tono delle storie di lancio e della salespage di Gabriele).
 # Il bot parte SEMPRE da una di queste per la slide CTA finale: tiene la leva e la chiusura e riscrive l'aggancio
-# iniziale sul post. Niente parola da commentare: solo link in bio.
+# iniziale sul post. Manuale Potere Sociale: commenta POTERE e arriva in DM (Gabriele 16/11).
 
 potere-sociale-solo:
-  parola: ""
+  parola: "POTERE"
   modelli:
     - |
       Non ti manca talento. Ti manca struttura.
       Finché non capisci come gli altri ti leggono nei primi secondi, resterai quello capace ma sostituibile: utile, presente, mai ascoltato davvero.
       In "Potere Sociale" trovi le leve che spostano la tua posizione in una stanza, prima ancora che tu apra bocca.
-      Il link è in bio. Usarle, poi, sta a te.
+      Commenta POTERE e te lo mando in privato. Usarle, poi, sta a te.
     - |
       Ogni volta che ti giustifichi senza motivo, perdi posizione.
       Ogni volta che dici sì quando volevi dire no, perdi posizione.
       Non è il tuo carattere: è un linguaggio che nessuno ti ha mai insegnato a leggere.
-      In "Potere Sociale" lo smontiamo pezzo per pezzo. Lo trovi nel link in bio.
+      In "Potere Sociale" lo smontiamo pezzo per pezzo. Commenta POTERE e te lo mando in privato.
     - |
       Le persone non ti trattano per quanto vali. Ti trattano per quanto vali ai loro occhi.
       Puoi continuare ad aspettare che se ne accorgano da sole, oppure imparare a cambiare quello che vedono.
-      Il manuale "Potere Sociale" è nel link in bio.
+      Commenta POTERE e ti mando il manuale "Potere Sociale" in privato.
 
 bundle-attrazione-potere:
   parola: ""
