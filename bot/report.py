@@ -676,8 +676,11 @@ async def run_report(bot, chat_ids: list[int]) -> None:
                     cands = _tieni(cands, st)
                 # 12/11 (Gabriele: "7 post tutti virali, ho bisogno anche dei didattici"): ci si ferma solo se ci
                 # sono abbastanza post E almeno 2 didattici; altrimenti si guarda più indietro per trovarli
+                # 16/11 (Gabriele: "o tutti didattici o tutti virali"): ci si ferma solo quando ci sono
+                # sia i didattici sia i virali per fare metà e metà; altrimenti si guarda più indietro
                 n_did = sum(1 for p in cands if p.natura == "didattico")
-                if len(cands) >= st["link"] and n_did >= min(2, st["link"] // 2):
+                n_vir = len(cands) - n_did
+                if n_did >= st["link"] // 2 and n_vir >= st["link"] - st["link"] // 2:
                     break
             if not cands:
                 riepilogo = _page_summary(posts, handles, ore, st["min_score"], own, set())

@@ -106,7 +106,7 @@ SLIDES_TOOL = {
             "senso": {"type": "string", "description": "1-2 frasi: di cosa parla il post e perché funziona."},
             "formato": {"type": "string", "enum": ["carosello", "singolo"]},
             "natura": {"type": "string", "enum": ["didattico", "virale"],
-                       "description": "didattico = INSEGNA qualcosa di concreto: spiega un meccanismo, un trucco, cosa fare o non fare, segnali da riconoscere, errori con la soluzione. Chi lo legge ne esce sapendo fare o capire qualcosa in più -> CTA al manuale. virale = punta sull'EMOZIONE più che sull'insegnamento: provoca, polarizza, tocca l'ego o l'orgoglio, fa sentire rabbia, rivalsa, riconoscimento o nostalgia (frasi d'impatto, verità scomode, scene e dialoghi che fanno dire 'è proprio così', confronti uomo/donna, meme, citazioni). Anche se tocca un tema serio, se non spiega come fare è virale -> CTA segui la pagina. Nel dubbio: se non c'è un insegnamento pratico, è virale."},
+                       "description": "didattico = INSEGNA qualcosa di concreto: spiega un meccanismo, un trucco, cosa fare o non fare, segnali da riconoscere, errori con la soluzione. Chi lo legge ne esce sapendo fare o capire qualcosa in più -> CTA al manuale. virale = punta sull'EMOZIONE più che sull'insegnamento: provoca, polarizza, tocca l'ego o l'orgoglio, fa sentire rabbia, rivalsa, riconoscimento o nostalgia (frasi d'impatto, verità scomode, scene e dialoghi che fanno dire 'è proprio così', confronti uomo/donna, meme, citazioni). Anche se tocca un tema serio, se non spiega come fare è virale -> CTA segui la pagina. Un carosello a ELENCO di comportamenti, momenti, segnali o abitudini concrete (es. 6 momenti che avvicinano un uomo e una donna, 5 segnali che) è didattico anche se il tono è emotivo. Nel dubbio: se non c'è un insegnamento pratico né un elenco di cose concrete, è virale."},
             "slides": {"type": "array", "items": _SLIDE_ITEM_TRAD},
         },
         "required": ["concetto", "senso", "formato", "natura", "slides"],
@@ -881,6 +881,18 @@ REGOLE FISSE DATE DA GABRIELE (hanno la precedenza su tutto il resto)
 
 
 
+def _cta_da_natura(slides_out: dict) -> str:
+    """Gabriele 15/11: la CTA segue la natura del post, decisa una volta sola alla traduzione."""
+    if not load_brand().get("manuali"):
+        return ""
+    singolo = slides_out.get("formato") == "singolo" or len(slides_out.get("slides") or []) <= 1
+    if singolo or slides_out.get("natura") != "didattico":
+        return ("\n\nCTA OBBLIGATORIA: questo post è " + ("un post singolo" if singolo else "VIRALE")
+                + " -> cta tipo='segui', manuale vuoto. Niente manuale.")
+    return ("\n\nCTA OBBLIGATORIA: questo post è DIDATTICO -> cta tipo='manuale' con il manuale più adatto al "
+            "dolore del post. Mai 'segui la pagina'.")
+
+
 def _source_cta_note(slides_out: dict) -> str:
     """Se il post originale chiude vendendo un prodotto (guide, libri, corso), anche il nostro chiude con il manuale."""
     cta_txt = " | ".join((s.get("testo_originale") or "")[:300] for s in slides_out.get("slides", []) if s.get("e_cta"))
@@ -919,6 +931,7 @@ def write_caption(slides_out: dict, caption: str, brand: dict, rules: list[dict]
         "e sostituisci la CTA originale con la nostra."
         + _cta_slides_request(slides_out)
         + _source_cta_note(slides_out)
+        + _cta_da_natura(slides_out)
         + "\n\n" + _caption_variabile(recent)
     )}]
     system = _caption_system(brand, rules, recent)
@@ -1081,6 +1094,11 @@ def create_post(caption: str, owner: str, images: list[bytes], brand: dict,
     cap = write_caption(slides_out, caption, brand, rules, recent)
     if not brand.get("manuali") and isinstance(cap.get("cta"), dict):   # pagina senza manuali: sempre "segui"
         cap["cta"] = {**cap["cta"], "tipo": "segui", "manuale": ""}
+    singolo = slides_out.get("formato") == "singolo" or len(slides_out.get("slides") or []) <= 1
+    if isinstance(cap.get("cta"), dict) and (singolo or slides_out.get("natura") == "virale"):
+        if cap["cta"].get("tipo") == "manuale":                        # virale o singolo: mai il manuale
+            log.info("CTA al manuale su post %s: corretta in segui", "singolo" if singolo else "virale")
+            cap["cta"] = {**cap["cta"], "tipo": "segui", "manuale": ""}
     apply_cta_texts(slides_out, cap.pop("slide_cta", None) or [])
     slides_out["_formato_post"] = cap.pop("formato_post", "")
     slides_out["_testo_cta_finale"] = quote_titles(pick_cta_slide_text(clean_text(cap.pop("testo_slide_finale", "") or ""),

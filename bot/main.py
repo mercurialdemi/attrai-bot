@@ -32,6 +32,8 @@ COMMANDS = [
         ("manuali", "Manuali della pagina: in vendita e in arrivo",
          "/manuali mostra i manuali della pagina; /manuali attiva <id> quando un manuale esce (da lì descrizioni, CTA "
          "e storie lo propongono); /manuali disattiva <id>"),
+        ("citazione", "Storia-citazione con il nostro personaggio",
+         "/citazione o /citazione 3: scena illustrata con lo scheletro al posto dell'autore e la citazione"),
         ("temistorie", "I migliori temi per le storie",
          "/temistorie: 8 temi presi da quello che rende di più sulla pagina; poi /storie 3, o /storie 1 4 6 per più insieme"),
         ("riserva", "Foto di riserva per i post",
@@ -540,6 +542,36 @@ async def _manda_storie(bot, chat_id: int, paths: list, canva_path, testo: str) 
     if canva_path and Path(canva_path).exists():
         await bot.send_document(chat_id, Path(canva_path).read_bytes(), filename=Path(canva_path).name)
     await bot.send_message(chat_id, testo)
+
+
+async def cmd_citazione(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """/citazione [n]: storie-citazione illustrate con il nostro personaggio al posto dell'autore (16/11)."""
+    if not await _authorized(update):
+        return
+    from bot import citazioni
+    msg = update.effective_message
+    n = int(context.args[0]) if context.args and context.args[0].isdigit() else 1
+    n = max(1, min(n, 4))
+    brand = writer.load_brand()
+
+    async def go():
+        status = await msg.reply_text(f"Preparo {n} storia/e con citazione (circa un minuto ciascuna)…")
+        try:
+            files = await asyncio.to_thread(citazioni.genera, brand, n)
+        except costi.TettoSpesa:
+            await status.edit_text("Tetto di spesa di oggi raggiunto: riprova dopo l'1 di notte.")
+            return
+        except Exception as e:
+            log.exception("citazione")
+            await status.edit_text("Non sono riuscito a fare la citazione: " + _causa_errore(e))
+            return
+        await status.delete()
+        for f in files:
+            with open(f, "rb") as fh:
+                await msg.reply_document(fh, filename=f.name)
+        if not files:
+            await msg.reply_text("OpenAI non ha generato l'immagine: riprova.")
+    context.application.create_task(go())
 
 
 async def cmd_temi(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -1526,6 +1558,7 @@ def main():
     app.add_handler(CommandHandler(["sfondi", "sfondo"], cmd_sfondi))
     app.add_handler(CommandHandler("riserva", cmd_riserva))
     app.add_handler(CommandHandler(["temistorie", "temi_storie", "temi"], cmd_temi))
+    app.add_handler(CommandHandler(["citazione", "citazioni"], cmd_citazione))
     app.add_handler(CommandHandler("manuali", cmd_manuali))
     app.add_handler(MessageHandler(filters.PHOTO | filters.Document.IMAGE, on_media))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_text))
