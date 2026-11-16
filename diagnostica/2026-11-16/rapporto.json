@@ -69,6 +69,11 @@
    "job_id": 51,
    "testo": "tutte le altre hanno immagin di sfondo,  questa no",
    "quando": "2026-11-16T11:11:19+00:00"
+  },
+  {
+   "job_id": 50,
+   "testo": "questa slide ( e non solo) hanno font piu piccolo rispetto alle altre e va male",
+   "quando": "2026-11-16T11:13:39+00:00"
   }
  ],
  "post_con_problemi": [
@@ -1206,6 +1211,297 @@
    "concetto": "Il carosello rovescia l'etichetta di \"tossico\": i comportamenti che la gente chiama così (essere egoisti con il proprio tempo, tagliare i ponti con chi ti manca di rispetto, fregarsene di piacere, dire no senza sensi di colpa, andarsene senza battere ciglio, non giustificarsi, essere ossessionati dal vincere, essere pronti a perdere tutti) sono in realtà quelli che danno a un uomo rispetto di sé e il controllo della propria vita. Chiude con: chiamatelo tossico, meglio lo stronzo padrone della sua vita che il bravo ragazzo usato da tutti. Registro: provocatorio, crudo, da orgoglio maschile.",
    "descrizione": "Questa lista ha ragione a metà. La metà giusta ti restituisce anni di vita, quella sbagliata ti trasforma in un uomo che scambia la chiusura per forza.\n\nParti da una scena che conosci. Venerdì sera ti chiedono l'ennesimo favore. Dici sì prima ancora che finiscano di parlare, e intanto senti quel fastidio sordo. Il weekend salta, la gratitudine dura un messaggio, e la volta dopo la richiesta arriva con meno giri di parole. Nessuno ti sta sfruttando con un piano: hai insegnato agli altri cosa aspettarsi da te. E un ruolo, una volta assegnato, il gruppo non lo aggiorna da solo.\n\nMolti dei comportamenti che il post chiama tossici sono confini che hai paura di mettere. Un no senza tre giustificazioni. Una chiamata a cui rispondi più tardi. Una persona che esce dalla tua agenda perché ti ha mancato di rispetto per la quinta volta, non per la prima. Julian Givi e Colleen Kirk hanno osservato che tendiamo a sopravvalutare quanto l'altro se la prenda quando rifiutiamo un invito. Il senso di colpa ti fa pagare in anticipo un conto che spesso nessuno ti avrebbe presentato.\n\nPoi c'è la metà da scartare. Tagliare chiunque al primo errore, vivere in guerra con rivali immaginari, guardare le donne come una distrazione da evitare: chi chiude tutti per non rischiare niente dipende dagli altri quanto chi mendica approvazione, solo al contrario. Un confine serio guarda la ripetizione, non il singolo gesto, e resta calmo invece di fare scena.\n\nLa forza sta in una cosa meno spettacolare: essere disposto a perdere una persona senza volerla perdere per forza. Quando l'altro sente che il tuo sì non è garantito, smette di trattarlo come dovuto.\n\nQuale dei dieci punti ti ha dato fastidio leggere, e quale confine ti sta indicando quel fastidio?\n\nMettere un limite non ti rende antipatico, ti rende leggibile. Ogni settimana senza confini è un altro weekend regalato a chi non lo ricambierebbe. Segui @poteresociale: nei prossimi post smontiamo le dinamiche che ti fanno passare da affidabile a scontato, e come uscirne senza diventare ostile.\n\n#confini #direno #rispettodise #dinamichesociali #psicologiasociale",
    "segnalazioni": []
+  },
+  {
+   "job_id": 50,
+   "fonte": "https://www.instagram.com/p/DfR-yfckqVx/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "How to Speak like The Elite",
+     "testo": "Come parla\nl'élite",
+     "blocchi": [
+      {
+       "x": 180,
+       "y": 615,
+       "w": 650,
+       "h": 310,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Instead of: \"I don't care.\" Say: \"It's not a priority for me at the moment.\"",
+     "testo": "Invece di:\n\"Non mi interessa.\"\n\nDi':\n\"Al momento non è\ntra le mie priorità.\"",
+     "blocchi": [
+      {
+       "x": 304,
+       "y": 583,
+       "w": 390,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 176,
+       "y": 740,
+       "w": 652,
+       "h": 165,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Instead of: \"That's none of your business.\" Say: \"I'd prefer to keep this matter private for now.\"",
+     "testo": "Invece di:\n\"Non sono affari tuoi.\"\n\nDi':\n\"Per ora preferisco che\nla cosa resti riservata.\"",
+     "blocchi": [
+      {
+       "x": 200,
+       "y": 520,
+       "w": 605,
+       "h": 155,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 146,
+       "y": 740,
+       "w": 682,
+       "h": 165,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Instead of: \"I'm bored.\" Say: \"I need a change of scenery. Preferably one with a pool.\"",
+     "testo": "Invece di:\n\"Mi annoio.\"\n\nDi':\n\"Ho bisogno di cambiare aria.\nPossibilmente con piscina.\"",
+     "blocchi": [
+      {
+       "x": 340,
+       "y": 522,
+       "w": 355,
+       "h": 105,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 140,
+       "y": 740,
+       "w": 725,
+       "h": 215,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Instead of: \"I'm stressed.\" Say: \"My schedule requires some curation this week.\"",
+     "testo": "Invece di:\n\"Sono stressato.\"\n\nDi':\n\"Questa settimana la mia agenda\nha bisogno di qualche ritocco.\"",
+     "blocchi": [
+      {
+       "x": 328,
+       "y": 590,
+       "w": 340,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 146,
+       "y": 740,
+       "w": 706,
+       "h": 165,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Instead of: \"It's fine.\" Say: \"It's fine.\" (said while already mentally booking something better)",
+     "testo": "Invece di:\n\"Va bene.\"\n\nDi':\n\"Va bene.\"\n(mentre con la testa stai già\nprenotando qualcosa di meglio)",
+     "blocchi": [
+      {
+       "x": 365,
+       "y": 585,
+       "w": 275,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 128,
+       "y": 740,
+       "w": 748,
+       "h": 170,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Instead of: \"I don't know what to get them.\" Say: \"I'll have it monogrammed. Problem solved.\"",
+     "testo": "Invece di:\n\"Non so cosa regalargli.\"\n\nDi':\n\"Ci faccio incidere le iniziali.\nProblema risolto.\"",
+     "blocchi": [
+      {
+       "x": 188,
+       "y": 550,
+       "w": 658,
+       "h": 150,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 140,
+       "y": 740,
+       "w": 725,
+       "h": 165,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Instead of: \"It's too expensive.\" Say: \"It's not aligned with my current investment priorities.\"",
+     "testo": "Invece di:\n\"Costa troppo.\"\n\nDi':\n\"Al momento non rientra\nnei miei piani di investimento.\"",
+     "blocchi": [
+      {
+       "x": 262,
+       "y": 585,
+       "w": 480,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 122,
+       "y": 740,
+       "w": 755,
+       "h": 165,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Instead of: \"Whatever.\" Say: \"I'll leave that decision up to you.\"",
+     "testo": "Invece di:\n\"Come ti pare.\"\n\nDi':\n\"Lascio decidere\na te.\"",
+     "blocchi": [
+      {
+       "x": 347,
+       "y": 585,
+       "w": 310,
+       "h": 85,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 170,
+       "y": 740,
+       "w": 682,
+       "h": 170,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 10,
+     "via": "cta-alone",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se almeno una di queste 8 frasi\nl'hai detta questa settimana,\nsai già da dove ripartire.\n\nQui ti spieghiamo come le parole\nspostano la tua posizione\nprima ancora del contenuto.\n\nSegui @poteresociale",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Il carosello mostra come trasformare frasi banali o sgarbate di tutti i giorni in versioni eleganti e controllate, come parlerebbe qualcuno dell'alta società. Ogni slide mette a confronto la frase comune e quella raffinata, a volte con un tocco ironico (la piscina, le iniziali incise). Il messaggio è che il modo in cui dici le cose comunica il tuo status. Il tono è elegante, leggermente ironico e aspirazionale.",
+   "descrizione": "Dici \"costa troppo\" davanti agli altri e qualcosa si sposta di un millimetro. Nessuno lo commenta, ma in quel momento hai mostrato un limite che subisci, e chi ascolta tende a registrarlo.\n\nIl post scherza sul lusso, con la piscina e le iniziali incise. Sotto la battuta però c'è una regola seria. Le frasi banali descrivono qualcosa che ti capita: non posso, mi annoio, sono stressato, fai come vuoi. Le versioni riscritte descrivono una scelta. Il contenuto resta quasi lo stesso, ma cambia la posizione da cui parli.\n\nNel 2012 Vanessa Patrick e Henrik Hagtvedt hanno confrontato due modi di rifiutare: \"non posso\" e \"non lo faccio\". Chi usava la seconda formula teneva meglio il proprio limite, perché il rifiuto suonava come un criterio personale e non come un ostacolo da aggirare. Chi ascolta tende a leggerlo allo stesso modo. Un \"non posso\" invita l'altro a trovare la soluzione al posto tuo. Un \"non rientra nei miei piani\" chiude la trattativa senza alzare la voce.\n\nVale per tutte le altre frasi. \"Non sono affari tuoi\" è un muro che provoca. \"Preferisco che resti riservata\" mette un confine senza dare appigli allo scontro e senza spiegazioni dovute. \"Sono stressato\" ti mette nella posizione di chi chiede comprensione, mentre \"la mia agenda ha bisogno di un ritocco\" dice che il controllo è ancora tuo. \"Come ti pare\" è una resa col broncio. \"Lascio decidere a te\" è una delega fatta con calma.\n\nNon devi parlare come il catalogo di uno yacht. Per una settimana prova a togliere le frasi che raccontano un limite subito e a sostituirle con frasi che raccontano una scelta. Niente giustificazioni in coda: la frase deve reggersi da sola. Poi osserva come rispondono gli altri. Non succede con tutti né ogni volta, ma abbastanza spesso da accorgertene.\n\nGli altri ti misurano anche dalle parole che usi quando avresti la scusa per lamentarti.\n\nSei d'accordo con il post?\n\n#comunicazione #assertivita #frame #autorevolezza #poteresociale",
+   "segnalazioni": [
+    "questa slide ( e non solo) hanno font piu piccolo rispetto alle altre e va male"
+   ]
   },
   {
    "job_id": 51,
