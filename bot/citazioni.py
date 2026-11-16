@@ -152,7 +152,7 @@ def genera(brand: dict, n: int = 1, uscita: Path | None = None) -> list[Path]:
     uscita = uscita or Path(config.DATA_DIR) / "citazioni"
     uscita.mkdir(parents=True, exist_ok=True)
     logo = Image.open(LOGO)
-    rosso = storie.colore_chiave(brand)
+    rosso = (222, 0, 20)      # rosso acceso sul cartiglio chiaro (Gabriele 16/11)
     out = []
     scelte = CITAZIONI[:5] if n == 5 else random.sample(CITAZIONI, min(n, len(CITAZIONI)))   # /citazione 5 = le 5 scelte
     for c in scelte:
