@@ -563,7 +563,7 @@ async def cmd_analizzareel(update: Update, context: ContextTypes.DEFAULT_TYPE):
             return
         except Exception as e:
             log.exception("analizzareel")
-            await status.edit_text("Analisi non riuscita: " + _causa_errore(e))
+            await status.edit_text("Analisi non riuscita: " + _causa_errore(e, "l'analisi"))
             return
         await status.delete()
         await _manda_lungo(msg, testo)
@@ -589,7 +589,7 @@ async def cmd_citazione(update: Update, context: ContextTypes.DEFAULT_TYPE):
             return
         except Exception as e:
             log.exception("citazione")
-            await status.edit_text("Non sono riuscito a fare la citazione: " + _causa_errore(e))
+            await status.edit_text("Non sono riuscito a fare la citazione: " + _causa_errore(e, "la citazione"))
             return
         await status.delete()
         for f in files:

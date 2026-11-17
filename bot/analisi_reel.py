@@ -112,9 +112,10 @@ def analizza(handle: str, quanti: int = 40, top: int = 8) -> str:
         "7. FORMAT DA PROVARE su AttraiSeduci (personaggio: uno scheletro elegante con cappello di paglia), 3 idee "
         "concrete che usano gli stessi meccanismi su temi di attrazione e potere maschile, senza deridere le donne.\n"
         "Basati solo su ciò che vedi e leggi; se un dato non si vede (es. audio), dillo.")
-    out = writer._tool_call(richiesta, content, ANALISI_TOOL, model=config.CLAUDE_MODEL, max_tokens=6000)
+    _su_github(handle, salva, "(analisi in corso)", video, vis)     # prima i dati: restano anche se Claude fallisce
+    out = writer._tool_call(richiesta, content, ANALISI_TOOL, model=config.CLAUDE_MODEL, max_tokens=16000)
     testo = f"Analisi dei reel di @{handle} ({len(video)} letti, media {media:,.0f} visualizzazioni)\n\n" + out.get("analisi", "")
-    _su_github(handle, salva, testo, video, vis)
+    _su_github(handle, [], testo, video, vis)
     return testo
 
 
