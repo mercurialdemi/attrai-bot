@@ -25,7 +25,7 @@ from pathlib import Path
 import yaml
 from PIL import Image, ImageDraw
 
-from . import config, costi, textslide, writer
+from . import pagine, config, costi, textslide, writer
 
 log = logging.getLogger(__name__)
 
@@ -105,12 +105,22 @@ def proponi_temi(brand: dict) -> list[dict]:
         sv = writer.load_style().get("studio_virali") or {}
     except Exception:
         sv = {}
+    # 17/11 (Gabriele): su Potere Sociale servono storie miste seduzione + potere per il bundle; su AttraiSeduci ogni tanto
+    mix = ""
+    if any("potere" in (m.get("id") or "") for m in brand.get("manuali") or []):
+        slug = pagine.corrente()
+        mix = ("\nMIX SEDUZIONE + POTERE (per il bundle AttraiSeduci + Potere Sociale): "
+               + ("almeno 2 degli 8 temi" if slug == "poteresociale" else "1 degli 8 temi")
+               + " deve unire le due cose: come la posizione di un uomo nel gruppo, il rispetto che ottiene e il suo "
+               "frame cambiano l'attrazione di lei (es. ignorato al tavolo mentre lei guarda; dice sempre sì agli "
+               "amici e lei lo sente; un altro prende la parola e lei si gira verso di lui). Se è di vendita, il "
+               "manuale è il bundle.")
     dati = ("\nTEMI E DOLORI CHE RENDONO DI PIÙ SU QUESTA PAGINA (dai post virali, dal più forte):\n"
             + "\n".join(f"- {t}" for t in (sv.get("temi") or [])[:12])) if sv.get("temi") else ""
     richiesta = (f"Proponi 8 temi per serie di storie: {7 - vendita} didattica, {vendita} vendita, 1 domande "
                  "(box domande). Parti dai dolori che rendono di più (sotto, se ci sono): ogni tema è una situazione "
                  "precisa che il lettore riconosce come sua, con dentro un meccanismo che può sorprenderlo. Tutti "
-                 "diversi tra loro" + (" e diversi da quelli già fatti:\n" + "\n".join(fatti) if fatti else ".") + dati)
+                 "diversi tra loro" + (" e diversi da quelli già fatti:\n" + "\n".join(fatti) if fatti else ".") + mix + dati)
     out = writer._tool_call("Sei lo stratega delle storie Instagram di una pagina italiana.\n" + _profilo(brand),
                             [{"type": "text", "text": richiesta}], TEMI_TOOL, model=config.CLAUDE_MODEL, max_tokens=6000)
     temi = [t for t in out.get("temi") or [] if t.get("tipo") in TIPI and (t.get("tema") or "").strip()][:8]
