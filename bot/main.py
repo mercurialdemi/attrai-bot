@@ -551,11 +551,8 @@ async def cmd_analizzareel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not await _authorized(update):
         return
     msg = update.effective_message
-    if not context.args:
-        await msg.reply_text("Scrivi /analizzareel seguito dalla pagina, es. /analizzareel diventa_semidio")
-        return
     from bot import analisi_reel
-    handle = context.args[0]
+    handle = context.args[0] if context.args else "diventa_semidio"   # 17/11: serve per i reel di Diventa Semidio
 
     async def go():
         status = await msg.reply_text(f"Leggo i reel di @{handle.lstrip('@')} e guardo i più visti (2-4 minuti)…")
