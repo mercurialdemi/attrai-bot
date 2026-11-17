@@ -133,6 +133,8 @@ def _su_github(handle, salva, testo, video, vis) -> None:
                        "descrizione": (_v(v, "caption", default="") or "")[:500]} for v in video]
             dati = [{k: x[k] for k in x if k != "frames"} for x in salva]
             diagnostica._put(http, f"{base}/analisi.md", testo.encode(), f"Analisi reel {handle}")
+            if not salva:                                   # seconda chiamata: solo il testo dell'analisi
+                return
             diagnostica._put(http, f"{base}/dati.json", json.dumps({"tutti": elenco, "scelti": dati},
                              ensure_ascii=False, indent=1).encode(), f"Dati reel {handle}")
             for x in salva:
