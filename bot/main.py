@@ -552,12 +552,15 @@ async def cmd_analizzareel(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
     msg = update.effective_message
     from bot import analisi_reel
-    handle = context.args[0] if context.args else "diventa_semidio"   # 17/11: serve per i reel di Diventa Semidio
+    args = [a for a in context.args if not a.isdigit()]
+    n = next((int(a) for a in context.args if a.isdigit()), 5)       # /analizzareel 5 = solo i 5 più visti
+    n = max(1, min(n, 10))
+    handle = args[0] if args else "diventa_semidio"   # 17/11: serve per i reel di Diventa Semidio
 
     async def go():
         status = await msg.reply_text(f"Leggo i reel di @{handle.lstrip('@')} e guardo i più visti (2-4 minuti)…")
         try:
-            testo = await asyncio.to_thread(analisi_reel.analizza, handle)
+            testo = await asyncio.to_thread(analisi_reel.analizza, handle, 30, n)
         except costi.TettoSpesa:
             await status.edit_text("Tetto di spesa di oggi raggiunto: riprova dopo l'1 di notte.")
             return

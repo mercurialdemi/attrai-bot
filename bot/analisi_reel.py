@@ -72,7 +72,7 @@ def _fotogrammi(url: str, n: int = 6) -> tuple[list[str], float]:
     return out, durata
 
 
-def analizza(handle: str, quanti: int = 40, top: int = 8) -> str:
+def analizza(handle: str, quanti: int = 30, top: int = 5) -> str:
     handle = handle.strip().lstrip("@").strip("/")
     video = _leggi(handle, quanti)
     if not video:
@@ -83,7 +83,7 @@ def analizza(handle: str, quanti: int = 40, top: int = 8) -> str:
     scelti = video[:top] + video[-2:]
     salva = []                                              # per Claude in chat: dati e fotogrammi su GitHub                       # i migliori + i 2 peggiori, per il confronto
     content = [{"type": "text", "text": f"Pagina @{handle}: {len(video)} reel letti, media visualizzazioni "
-                                        f"{media:,.0f}. Seguono i {top} più visti e i 2 meno visti."}]
+                                        f"{media:,.0f}. Seguono i {top} più visti."}]
     for i, it in enumerate(scelti, 1):
         try:
             frames, durata = _fotogrammi(_v(it, "videoUrl", "video_url"))
@@ -108,7 +108,7 @@ def analizza(handle: str, quanti: int = 40, top: int = 8) -> str:
         "3. TEMI E LEVE: dolori, credenze attaccate, emozioni usate (ego, rabbia, ironia...).\n"
         "4. CHIUSURA E CTA: come finiscono, come portano a seguire, commentare o al prodotto.\n"
         "5. DESCRIZIONI: lunghezza, domanda finale, hashtag.\n"
-        "6. COSA HANNO I PIÙ VISTI CHE MANCA AI MENO VISTI.\n"
+        "6. COSA HANNO IN COMUNE QUESTI REEL PIÙ VISTI.\n"
         "7. FORMAT DA PROVARE su AttraiSeduci (personaggio: uno scheletro elegante con cappello di paglia), 3 idee "
         "concrete che usano gli stessi meccanismi su temi di attrazione e potere maschile, senza deridere le donne.\n"
         "Basati solo su ciò che vedi e leggi; se un dato non si vede (es. audio), dillo.")
