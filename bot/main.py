@@ -32,6 +32,8 @@ COMMANDS = [
         ("manuali", "Manuali della pagina: in vendita e in arrivo",
          "/manuali mostra i manuali della pagina; /manuali attiva <id> quando un manuale esce (da lì descrizioni, CTA "
          "e storie lo propongono); /manuali disattiva <id>"),
+        ("analizzareel", "Studia i reel più visti di una pagina",
+         "/analizzareel diventa_semidio: hook, struttura, ritmo, chiusure e format da provare"),
         ("citazione", "Storia-citazione con il nostro personaggio",
          "/citazione o /citazione 3: scena illustrata con lo scheletro al posto dell'autore e la citazione"),
         ("temistorie", "I migliori temi per le storie",
@@ -542,6 +544,33 @@ async def _manda_storie(bot, chat_id: int, paths: list, canva_path, testo: str) 
     if canva_path and Path(canva_path).exists():
         await bot.send_document(chat_id, Path(canva_path).read_bytes(), filename=Path(canva_path).name)
     await bot.send_message(chat_id, testo)
+
+
+async def cmd_analizzareel(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """/analizzareel pagina: pattern strutturali dei reel più visti di una pagina (17/11)."""
+    if not await _authorized(update):
+        return
+    msg = update.effective_message
+    if not context.args:
+        await msg.reply_text("Scrivi /analizzareel seguito dalla pagina, es. /analizzareel diventa_semidio")
+        return
+    from bot import analisi_reel
+    handle = context.args[0]
+
+    async def go():
+        status = await msg.reply_text(f"Leggo i reel di @{handle.lstrip('@')} e guardo i più visti (2-4 minuti)…")
+        try:
+            testo = await asyncio.to_thread(analisi_reel.analizza, handle)
+        except costi.TettoSpesa:
+            await status.edit_text("Tetto di spesa di oggi raggiunto: riprova dopo l'1 di notte.")
+            return
+        except Exception as e:
+            log.exception("analizzareel")
+            await status.edit_text("Analisi non riuscita: " + _causa_errore(e))
+            return
+        await status.delete()
+        await _manda_lungo(msg, testo)
+    context.application.create_task(go())
 
 
 async def cmd_citazione(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -1559,6 +1588,7 @@ def main():
     app.add_handler(CommandHandler("riserva", cmd_riserva))
     app.add_handler(CommandHandler(["temistorie", "temi_storie", "temi"], cmd_temi))
     app.add_handler(CommandHandler(["citazione", "citazioni"], cmd_citazione))
+    app.add_handler(CommandHandler(["analizzareel", "reel"], cmd_analizzareel))
     app.add_handler(CommandHandler("manuali", cmd_manuali))
     app.add_handler(MessageHandler(filters.PHOTO | filters.Document.IMAGE, on_media))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_text))
