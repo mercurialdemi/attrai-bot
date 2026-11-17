@@ -112,7 +112,7 @@ def proponi_temi(brand: dict) -> list[dict]:
                  "precisa che il lettore riconosce come sua, con dentro un meccanismo che può sorprenderlo. Tutti "
                  "diversi tra loro" + (" e diversi da quelli già fatti:\n" + "\n".join(fatti) if fatti else ".") + dati)
     out = writer._tool_call("Sei lo stratega delle storie Instagram di una pagina italiana.\n" + _profilo(brand),
-                            [{"type": "text", "text": richiesta}], TEMI_TOOL, model=config.CLAUDE_MODEL, max_tokens=2500)
+                            [{"type": "text", "text": richiesta}], TEMI_TOOL, model=config.CLAUDE_MODEL, max_tokens=6000)
     temi = [t for t in out.get("temi") or [] if t.get("tipo") in TIPI and (t.get("tema") or "").strip()][:8]
     config.DATA_DIR.mkdir(parents=True, exist_ok=True)
     _proposte_file().write_text(json.dumps(temi, ensure_ascii=False), encoding="utf-8")
