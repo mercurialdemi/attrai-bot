@@ -80,7 +80,7 @@ def analizza(handle: str, quanti: int = 30, top: int = 5) -> str:
     vis = lambda it: int(_v(it, "videoPlayCount", "videoViewCount", "play_count", "view_count", default=0) or 0)
     video.sort(key=vis, reverse=True)
     media = sum(vis(v) for v in video) / len(video)
-    scelti = video[:top] + video[-2:]
+    scelti = video[:top]                                    # 17/11: solo i più visti (Gabriele: 5 reel)
     salva = []                                              # per Claude in chat: dati e fotogrammi su GitHub                       # i migliori + i 2 peggiori, per il confronto
     content = [{"type": "text", "text": f"Pagina @{handle}: {len(video)} reel letti, media visualizzazioni "
                                         f"{media:,.0f}. Seguono i {top} più visti."}]
