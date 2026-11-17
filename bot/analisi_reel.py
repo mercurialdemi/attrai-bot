@@ -80,7 +80,8 @@ def analizza(handle: str, quanti: int = 40, top: int = 8) -> str:
     vis = lambda it: int(_v(it, "videoPlayCount", "videoViewCount", "play_count", "view_count", default=0) or 0)
     video.sort(key=vis, reverse=True)
     media = sum(vis(v) for v in video) / len(video)
-    scelti = video[:top] + video[-2:]                       # i migliori + i 2 peggiori, per il confronto
+    scelti = video[:top] + video[-2:]
+    salva = []                                              # per Claude in chat: dati e fotogrammi su GitHub                       # i migliori + i 2 peggiori, per il confronto
     content = [{"type": "text", "text": f"Pagina @{handle}: {len(video)} reel letti, media visualizzazioni "
                                         f"{media:,.0f}. Seguono i {top} più visti e i 2 meno visti."}]
     for i, it in enumerate(scelti, 1):
@@ -96,6 +97,9 @@ def analizza(handle: str, quanti: int = 40, top: int = 8) -> str:
             f"Descrizione: {(_v(it, 'caption', default='') or '')[:700]}\n"
             f"Fotogrammi a 0,3s / 1,5s / 3s / 35% / 65% / 95%:")})
         content += [{"type": "image", "source": {"type": "base64", "media_type": "image/jpeg", "data": f}} for f in frames]
+        salva.append({"n": i, "tipo": etichetta, "url": _v(it, "url", default=""), "visualizzazioni": vis(it),
+                      "like": _v(it, "likesCount", default=0), "commenti": _v(it, "commentsCount", default=0),
+                      "durata": round(durata), "descrizione": _v(it, "caption", default=""), "frames": frames})
     richiesta = (
         "Sei uno stratega di contenuti Instagram. Analizza la STRUTTURA di questi reel e scrivi in italiano, per un "
         "creator che vuole capire il metodo (non copiare personaggi o testi). Sezioni, con elenchi brevi:\n"
@@ -109,4 +113,30 @@ def analizza(handle: str, quanti: int = 40, top: int = 8) -> str:
         "concrete che usano gli stessi meccanismi su temi di attrazione e potere maschile, senza deridere le donne.\n"
         "Basati solo su ciò che vedi e leggi; se un dato non si vede (es. audio), dillo.")
     out = writer._tool_call(richiesta, content, ANALISI_TOOL, model=config.CLAUDE_MODEL, max_tokens=6000)
-    return f"Analisi dei reel di @{handle} ({len(video)} letti, media {media:,.0f} visualizzazioni)\n\n" + out.get("analisi", "")
+    testo = f"Analisi dei reel di @{handle} ({len(video)} letti, media {media:,.0f} visualizzazioni)\n\n" + out.get("analisi", "")
+    _su_github(handle, salva, testo, video, vis)
+    return testo
+
+
+def _su_github(handle, salva, testo, video, vis) -> None:
+    """Copia su GitHub (ramo diagnostica, cartella reel/<pagina>) così Claude in chat può rileggere tutto."""
+    from . import diagnostica
+    if not diagnostica.enabled():
+        return
+    import json
+    try:
+        with httpx.Client(timeout=60) as http:
+            diagnostica._ensure_branch(http)
+            base = f"reel/{handle}"
+            elenco = [{"url": _v(v, "url", default=""), "visualizzazioni": vis(v), "durata": _v(v, "videoDuration"),
+                       "descrizione": (_v(v, "caption", default="") or "")[:500]} for v in video]
+            dati = [{k: x[k] for k in x if k != "frames"} for x in salva]
+            diagnostica._put(http, f"{base}/analisi.md", testo.encode(), f"Analisi reel {handle}")
+            diagnostica._put(http, f"{base}/dati.json", json.dumps({"tutti": elenco, "scelti": dati},
+                             ensure_ascii=False, indent=1).encode(), f"Dati reel {handle}")
+            for x in salva:
+                for j, f in enumerate(x["frames"], 1):
+                    diagnostica._put(http, f"{base}/reel{x['n']:02d}_f{j}.jpg", base64.b64decode(f),
+                                     f"Fotogramma reel {handle}")
+    except Exception as e:
+        log.warning("Copia su GitHub dell'analisi reel non riuscita: %s", e)
