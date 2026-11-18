@@ -1,22 +1,256 @@
 {
  "giorno": "2026-11-18",
- "post_preparati": 1,
- "slide_totali": 7,
+ "post_preparati": 6,
+ "slide_totali": 67,
  "slide_fallite": 0,
  "lavorazione": {
-  "blocchi-ricostruzione-codice": {
+  "openai-testo": {
    "totali": 1,
    "fallite": 0
   },
   "testo-su-sfondo-uniforme": {
-   "totali": 5,
+   "totali": 39,
    "fallite": 0
   },
   "cta-stile-post": {
+   "totali": 5,
+   "fallite": 0
+  },
+  "blocchi-sfondo-pieno": {
+   "totali": 20,
+   "fallite": 0
+  },
+  "blocchi-pulizia-codice": {
+   "totali": 1,
+   "fallite": 0
+  },
+  "cta-illustrata": {
    "totali": 1,
    "fallite": 0
   }
  },
- "segnalazioni": [],
- "post_con_problemi": []
+ "segnalazioni": [
+  {
+   "job_id": 50,
+   "testo": "Anche questa e tutte le altre slide devono avere lo stesso font del post dei collaboratori. Non usare font basic",
+   "quando": "2026-11-15T15:56:18+00:00"
+  },
+  {
+   "job_id": 56,
+   "testo": "il testo non deve avere questo font ma dovrebbe essere quanto più possibile simile a quello del post dei collaboratori",
+   "quando": "2026-11-18T10:04:43+00:00"
+  }
+ ],
+ "post_con_problemi": [
+  {
+   "job_id": 56,
+   "fonte": "https://www.instagram.com/p/Df0pe3IEh0m/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "I don't want a relationship where I have to investigate you to believe you...",
+     "testo": "Non voglio una\nrelazione in cui,\nper crederti,\ndevo indagare su di te...",
+     "blocchi": [
+      {
+       "x": 90,
+       "y": 244,
+       "w": 860,
+       "h": 459,
+       "carattere": "normale",
+       "colore": "#E8141E",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "I don't want to check your phone. I don't want to decode your behavior. I don't want to see who you're texting. I want to trust you without needing evidence.",
+     "testo": "Non voglio controllarti\nil telefono.\nNon voglio decifrare\nogni tua mossa.\nNon voglio sapere\na chi scrivi.\nVoglio fidarmi di te\nsenza bisogno di prove.",
+     "blocchi": [
+      {
+       "x": 67,
+       "y": 146,
+       "w": 896,
+       "h": 664,
+       "carattere": "normale",
+       "colore": "#E8141E",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "I shouldn't have to become a detective just to feel like I'm the only person you're choosing. Your actions should make me feel safe.",
+     "testo": "Non dovrei fare\nla detective\nper sentire che scegli me,\ne nessun'altra.\nDevono essere i tuoi gesti\na farmi sentire\nal sicuro.",
+     "blocchi": [
+      {
+       "x": 73,
+       "y": 190,
+       "w": 872,
+       "h": 582,
+       "carattere": "normale",
+       "colore": "#E8141E",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Because when someone genuinely values you, they don't constantly put you in situations where you have to question their intentions.\n\nConsistency creates security.",
+     "testo": "Perché chi tiene\ndavvero a te\nnon ti lascia\nogni volta\na chiederti\ncosa ha in mente.\n\nÈ la costanza\na farti sentire al sicuro.",
+     "blocchi": [
+      {
+       "x": 85,
+       "y": 146,
+       "w": 860,
+       "h": 440,
+       "carattere": "normale",
+       "colore": "#E8141E",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 171,
+       "y": 640,
+       "w": 707,
+       "h": 141,
+       "carattere": "normale",
+       "colore": "#E8141E",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "And no, asking for reassurance isn't \"being insecure.\"\n\nSometimes you're not asking for too much. You're asking the wrong person to give you peace.",
+     "testo": "E no, chiedere\nrassicurazioni non vuol dire\n\"essere insicura\".\n\nA volte\nnon chiedi troppo.\nChiedi pace\nalla persona\nsbagliata.",
+     "blocchi": [
+      {
+       "x": 122,
+       "y": 137,
+       "w": 762,
+       "h": 224,
+       "carattere": "normale",
+       "colore": "#E8141E",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 85,
+       "y": 391,
+       "w": 842,
+       "h": 371,
+       "carattere": "normale",
+       "colore": "#E8141E",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "I want the kind of relationship where your words and actions match. Where I don't have to wonder if you mean what you say. Where trust is the default, not the reward.",
+     "testo": "Voglio una relazione\nin cui parole e gesti\ncoincidono.\nIn cui non devo chiedermi\nse quello che dici\nlo pensi davvero.\nIn cui la fiducia è\nil punto di partenza,\nnon un premio.",
+     "blocchi": [
+      {
+       "x": 85,
+       "y": 127,
+       "w": 848,
+       "h": 664,
+       "carattere": "normale",
+       "colore": "#E8141E",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "The right relationship shouldn't leave you constantly looking for proof that you're loved. You should feel it in the way they show up.",
+     "testo": "La relazione giusta\nnon ti lascia\na cercare sempre\nla prova\ndi essere amata.\nLo senti\nda come c'è\nper te.",
+     "blocchi": [
+      {
+       "x": 85,
+       "y": 156,
+       "w": 836,
+       "h": 654,
+       "carattere": "normale",
+       "colore": "#E8141E",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Love should give you peace, not a reason to investigate.",
+     "testo": "L'amore dovrebbe\ndarti pace,\nnon motivi\nper indagare.",
+     "blocchi": [
+      {
+       "x": 79,
+       "y": 234,
+       "w": 872,
+       "h": 498,
+       "carattere": "normale",
+       "colore": "#E8141E",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se questa frase ti ha colpita,\nquella sull'amore che dà pace\ne non motivi per indagare,\nnon lasciarla a metà.\n\nHai trovato questa pagina\nper un motivo.\n\nSeguici prima\ndi dimenticarti di noi.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Chi scrive non vuole una relazione in cui deve fare il detective per sentirsi al sicuro: controllare il telefono, decifrare i comportamenti, cercare prove. Chiedere rassicurazioni non vuol dire essere insicuri. A volte vuol dire che la persona accanto non ti dà pace. L'amore giusto si sente da come l'altro si comporta, con costanza, e la fiducia è il punto di partenza, non un premio. Il tono è intimo, deciso e un po' amaro: rivendica quello che si merita.",
+   "descrizione": "Ultimo accesso alle 23:48. Poi alle 23:51. Tu sei sul divano con un film che non stai guardando.\n\nNon l'hai deciso: il pollice ha riaperto la chat da solo. Intanto la testa fa la contabile. L'orario, il tono di quel \"tutto ok\", la risposta arrivata dopo quattro ore con una scusa che quadra e non quadra.\n\nNel 1985 gli psicologi Rempel, Holmes e Zanna hanno chiesto a coppie vere cosa significhi fidarsi. Ne è uscito che la fiducia non nasce da una promessa, ma da tre cose che si accumulano col tempo: la prevedibilità di come l'altro si comporta, l'affidabilità nei momenti piccoli e la certezza che ci sarà anche domani, quando tu non potrai controllare. Gottman lo chiama il lavoro dei momenti minimi: la sera in cui lui risponde, o non risponde, a una tua richiesta di niente.\n\nQuando questi tre pezzi mancano, la mente non resta ferma. Sostituisce la fiducia con l'indagine. Ogni verifica ti regala qualche minuto di sollievo, poi serve la prossima. Funziona come una sete che si spegne solo se l'acqua arriva da lui, e lui non la dà in modo regolare.\n\nChiedere rassicurazioni non è insicurezza finché le risposte coincidono con i fatti. Diventa un lavoro a tempo pieno quando le parole dicono una cosa e i gesti un'altra, e a quel punto le domande non sono il problema. Lo è ciò che le provoca.\n\nNon è colpa tua se hai cominciato a indagare: lo fa chiunque viva accanto a messaggi che non combaciano con la realtà. È responsabilità tua quanto a lungo accetti di fare un mestiere che non ti spetta.\n\nLa fiducia non si conquista a forza di prove. Si accumula con la costanza, oppure non arriva.\n\nCosa speri di trovare, quando riguardi per la quinta volta l'ultimo accesso?\n\nSei d'accordo con il post?\n\n#fiducia #tradimento #relazionitossiche #psicologiadellacoppia #guarigioneemotiva",
+   "segnalazioni": [
+    "il testo non deve avere questo font ma dovrebbe essere quanto più possibile simile a quello del post dei collaboratori"
+   ]
+  }
+ ]
 }
