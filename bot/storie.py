@@ -381,6 +381,7 @@ GRIGIO = (221, 221, 221)          # #DDDDDD
 FONT_BOLD = config.ROOT / "assets" / "carlito_bold.ttf"
 FONT_CORSIVO = config.ROOT / "assets" / "carlito_italic.ttf"
 FONT_GRASSETTO_CORSIVO = config.ROOT / "assets" / "carlito_bold_italic.ttf"
+FONT_SERIF = config.ROOT / "assets" / "serif_dm.ttf"          # stile libro "editoriale" (Il Pensatore)
 MARGINE_X = 54                   # rettangoli larghi il 90% della slide
 PAD_X, PAD_Y, GAP = 24, 12, 28
 
@@ -573,14 +574,20 @@ def disegna(blocchi: list[str], prima: bool, brand: dict, base: Image.Image,
     # nero, "§" riquadro nero con barra rossa a sinistra
     STILI = {"^": "rosso", "°": "bianco", "§": "barra", "!": "titolo"}   # "!" = titolo grande in maiuscolo
     stile = [STILI.get(b[:1]) for b in blocchi]
+    # ogni pagina può avere il SUO modo di far risaltare il libro (Gabriele 19/11: "per ogni pagina qualcosa di
+    # originale"). Scheda: storie_libro: editoriale -> pannello velato con filetti sottili e carattere serif.
+    modo_libro = str(brand.get("storie_libro") or "").strip().lower()
+    if modo_libro == "editoriale":
+        stile = [("ed_titolo" if st == "titolo" else "ed") if st else None for st in stile]
     risalto = [bool(x) for x in stile]
     blocchi = [b[1:].strip() if r else b for b, r in zip(blocchi, risalto)]
-    blocchi = [b.upper() if st == "titolo" else b for b, st in zip(blocchi, stile)]
+    blocchi = [b.upper() if st in ("titolo", "ed_titolo") else b for b, st in zip(blocchi, stile)]
     while True:
         tutte, misure = [], []
         for b, r, st in zip(blocchi, risalto, stile):
-            sz = int(size * 1.7) if st == "titolo" else (size + 8 if r else size)
-            fb = _font(FONT_BOLD, sz)
+            sz = int(size * 1.7) if st == "titolo" else (int(size * 1.15) if st == "ed_titolo" else
+                                                          (size + 10 if st == "ed" else (size + 8 if r else size)))
+            fb = _font(FONT_SERIF if st in ("ed", "ed_titolo") else FONT_BOLD, sz)
             tutte.append(_righe(draw, b, fb, max_w))
             misure.append((sz, fb, int(sz * 1.22)))
         alto = sum(len(r) * m[2] + 2 * PAD_Y for r, m in zip(tutte, misure)) + GAP * (len(tutte) - 1)
@@ -593,15 +600,27 @@ def disegna(blocchi: list[str], prima: bool, brand: dict, base: Image.Image,
     for righe, (bsize, f, lh), ris, st in zip(tutte, misure, risalto, stile):
         h_blocco = len(righe) * lh + 2 * PAD_Y
         fondo = {"rosso": colore_chiave(brand), "bianco": (255, 255, 255)}.get(st, (0, 0, 0))
-        testo_col = (0, 0, 0) if st == "bianco" else (255, 255, 255)
-        for d in (draw, ImageDraw.Draw(sfondo)):
-            d.rectangle((MARGINE_X, y, W - MARGINE_X, y + h_blocco), fill=fondo)
-            if st == "barra":
-                d.rectangle((MARGINE_X, y, MARGINE_X + 14, y + h_blocco), fill=colore_chiave(brand))
+        testo_col = (0, 0, 0) if st == "bianco" else (colore_chiave(brand) if st == "ed_titolo" else (255, 255, 255))
+        acc = colore_chiave(brand)
+        for im_ in (img, sfondo):
+            d = ImageDraw.Draw(im_)
+            if st == "ed":                    # pannello velato blu notte, filetti sottili sopra e sotto
+                box = (MARGINE_X, y, W - MARGINE_X, y + h_blocco)
+                im_.paste((8, 14, 28), box, Image.new("L", (box[2] - box[0], box[3] - box[1]), 200))
+                for yy in (y, y + h_blocco - 3):
+                    d.rectangle((MARGINE_X + 40, yy, W - MARGINE_X - 40, yy + 2), fill=acc)
+            elif st == "ed_titolo":           # nessun riquadro: titolo serif nel colore della pagina con filetto
+                cx = W // 2
+                d.rectangle((cx - 60, y + h_blocco - 4, cx + 60, y + h_blocco - 2), fill=acc)
+            else:
+                d.rectangle((MARGINE_X, y, W - MARGINE_X, y + h_blocco), fill=fondo)
+                if st == "barra":
+                    d.rectangle((MARGINE_X, y, MARGINE_X + 14, y + h_blocco), fill=acc)
+        draw = ImageDraw.Draw(img)
         ty = y + PAD_Y - int(bsize * 0.08)
         for r in righe:
             x = MARGINE_X + PAD_X
-            if CENTRATO:                      # righe centrate come nelle storie di lancio di Potere Sociale
+            if CENTRATO or st in ("ed", "ed_titolo"):   # righe centrate (lancio Potere Sociale; stile editoriale)
                 spazio = draw.textlength("a a", font=f) - draw.textlength("aa", font=f)
                 lw = sum(draw.textlength(t, font=f) for parola in r for t, _ in parola) + spazio * (len(r) - 1)
                 x = (W - lw) / 2
@@ -609,7 +628,8 @@ def disegna(blocchi: list[str], prima: bool, brand: dict, base: Image.Image,
             runs = []
             for k, parola in enumerate(r):
                 for j, (t, rosso) in enumerate(parola):
-                    col = ((0, 0, 0) if st == "rosso" else colore_chiave(brand)) if rosso else testo_col
+                    col = testo_col if st == "ed_titolo" else (
+                        ((0, 0, 0) if st == "rosso" else colore_chiave(brand)) if rosso else testo_col)
                     draw.text((x, ty), t, font=f, fill=col)
                     x += draw.textlength(t, font=f)
                     ultimo = j == len(parola) - 1
@@ -617,7 +637,8 @@ def disegna(blocchi: list[str], prima: bool, brand: dict, base: Image.Image,
                 if k < len(r) - 1:
                     x += draw.textlength("a a", font=f) - draw.textlength("aa", font=f)   # lo spazio da solo misura 0
             righe_out.append({"testo": " ".join(_testo(w) for w in r), "x": float(x0), "y": float(ty),
-                              "size": bsize, "weight": "bold_carlito", "color": testo_col, "runs": runs,
+                              "size": bsize, "weight": "elegante" if st in ("ed", "ed_titolo") else "bold_carlito",
+                              "color": testo_col, "runs": runs,
                               "spazi": True})
             ty += lh
         y += h_blocco + GAP

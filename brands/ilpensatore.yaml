@@ -131,3 +131,4 @@ testo_overlay:
   posizione: centro
 # colore delle parole chiave nelle storie (Gabriele, 9/11: blu)
 storie_colore: "#4DA3FF"
+storie_libro: editoriale        # come risalta il libro nelle storie: pannello velato, filetti, serif (19/11)
