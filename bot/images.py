@@ -286,8 +286,9 @@ def _motore() -> str:
     return "OpenAI" if (config.MOTORE_IMMAGINI == "openai" and config.OPENAI_API_KEY) else "Gemini"
 
 
-def _openai_edit(original: Image.Image, prompt: str) -> Image.Image | None:
-    """Stessa cosa di Gemini con il modello immagini di OpenAI: riceve la slide e il prompt, restituisce la slide nuova."""
+def _openai_edit(original: Image.Image, prompt: str, extra: list | None = None) -> Image.Image | None:
+    """Stessa cosa di Gemini con il modello immagini di OpenAI: riceve la slide e il prompt, restituisce la slide nuova.
+    `extra`: altre immagini di riferimento dopo la prima (es. il nostro personaggio, lo scheletro)."""
     global _oclient
     import base64
     from openai import OpenAI
@@ -298,7 +299,14 @@ def _openai_edit(original: Image.Image, prompt: str) -> Image.Image | None:
     h = min(max(h, w // 3 // 16 * 16 + 16), w * 3)
     buf = io.BytesIO()
     original.convert("RGB").save(buf, "PNG")
-    args = dict(model=config.OPENAI_IMAGE_MODEL, image=("slide.png", buf.getvalue(), "image/png"),
+    img_arg = ("slide.png", buf.getvalue(), "image/png")
+    if extra:
+        img_arg = [img_arg]
+        for k, im in enumerate(extra):
+            b = io.BytesIO()
+            im.convert("RGB").save(b, "PNG")
+            img_arg.append((f"riferimento{k + 2}.png", b.getvalue(), "image/png"))
+    args = dict(model=config.OPENAI_IMAGE_MODEL, image=img_arg,
                 prompt=prompt, quality=config.OPENAI_IMAGE_QUALITY)
     if config.OPENAI_IMAGE_MODEL.startswith("gpt-image-2"):
         args["size"] = f"{w}x{h}"

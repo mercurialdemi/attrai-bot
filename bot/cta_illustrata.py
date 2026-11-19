@@ -64,6 +64,48 @@ def _al_pubblico(prompt: str) -> str:
             .replace("same man, same woman if present", "same woman, same man if present"))
 
 
+SCHELETRO = (
+    "the character from the SECOND reference image (our mascot): an elegant skeleton with a straw hat, dark "
+    "pinstripe three-piece suit, white shirt, red tie and red flower on the lapel, confident and slightly mocking "
+    "attitude. Redraw him in the art style of the FIRST image, but keep him clearly recognizable (skull face, straw "
+    "hat, suit, red tie). The FIRST image gives only the style, colors and setting; the SECOND image gives only the "
+    "character. He has exactly two arms and two bony hands"
+)
+
+
+def _personaggio() -> Image.Image | None:
+    """Il personaggio della pagina (AttraiSeduci: lo scheletro), se la pagina ne ha uno (brand: personaggio)."""
+    from . import writer
+    rel = str(writer.load_brand().get("personaggio") or "").strip()
+    if not rel or not config.OPENAI_API_KEY:
+        return None
+    p = config.ROOT / rel
+    try:
+        return Image.open(p).convert("RGB") if p.exists() else None
+    except OSError:
+        return None
+
+
+def _con_personaggio(prompt: str) -> str:
+    """Gabriele 19/11: se nell'ultima slide c'è un'immagine, ci deve essere il nostro scheletro."""
+    return (prompt.replace("a confident, well-dressed man, the kind of character that appears in the reference style",
+                           SCHELETRO)
+            .replace("a confident, well-dressed man", SCHELETRO)
+            .replace("same kind of characters and setting (same man, same woman if present, same place and light)",
+                     "same setting and light of the first image (same woman if present); the only man in the scene is "
+                     + SCHELETRO)
+            .replace("reference image", "first reference image", 1))
+
+
+def _genera(ref: Image.Image, prompt: str) -> Image.Image | None:
+    """Scena della CTA: con il personaggio della pagina (OpenAI con 2 riferimenti) oppure come prima."""
+    from . import images
+    pers = _personaggio()
+    if pers is not None:
+        return images._openai_edit(ref, _con_personaggio(prompt), extra=[pers])
+    return images._gemini_edit(ref, prompt)
+
+
 def _green_quads(img: Image.Image, want: int) -> list[np.ndarray]:
     import cv2
     a = np.asarray(img.convert("RGB")).astype(np.int16)
@@ -328,7 +370,7 @@ def make(post: dict, originals: list[bytes], jdir: Path) -> tuple[Path, dict] | 
     prompt = _al_pubblico(PROMPT.format(n=n) if books else PROMPT_SEGUI)
     for attempt in range(2):
         try:
-            gen = images._gemini_edit(ref, prompt)
+            gen = _genera(ref, prompt)
         except Exception as e:
             log.warning("CTA illustrata: Gemini non ha risposto (%s)", e)
             gen = None
@@ -458,14 +500,14 @@ def make_alone(post: dict, jdir: Path) -> tuple[Path, dict] | None:
         return None
     bg = None
     op = jdir / "originali" / "01.jpg"
-    if _is_comic(post) or _post_background(post, jdir / "originali") is None:
+    if _is_comic(post) or _post_background(post, jdir / "originali") is None or (_personaggio() is not None and op.exists()):
         if not op.exists() or not (config.GEMINI_API_KEY or config.OPENAI_API_KEY):
             return None
         from . import images
         ref = Image.open(op).convert("RGB")
         for _ in range(2):
             try:
-                gen = images._gemini_edit(ref, _al_pubblico(PROMPT_SCENA))
+                gen = _genera(ref, _al_pubblico(PROMPT_SCENA))
             except Exception as e:
                 log.warning("CTA casella: scena non generata (%s)", e)
                 gen = None

@@ -4,6 +4,7 @@
 
 nome: AttraiSeduci
 handle: attraiseduci          # handle Instagram senza @
+personaggio: assets/logo.png  # il nostro scheletro: compare nell'immagine dell'ultima slide (CTA illustrata)
 hashtag: "#seduzione #attrazione #psicologiafemminile #crescitapersonaleuomo #uominidivalore #dinamichedicoppia #frame #friendzone #sicurezzainteriore #rapportiuomodonna"   # bacino di nicchia per i 5 hashtag finali (15/11)
 
 # ---------------------------------------------------------------
