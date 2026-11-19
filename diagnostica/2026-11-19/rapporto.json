@@ -34,9 +34,315 @@
    "job_id": 149,
    "testo": "la prima riga in alto termina precisa con lo sfondo nero dietro. Lascerei un pelino di spazio in più",
    "quando": "2026-11-19T01:32:22+00:00"
+  },
+  {
+   "job_id": 148,
+   "testo": "Qui mandano le emoj dal post originale, sistema e rimandami questo post",
+   "quando": "2026-11-19T01:33:01+00:00"
   }
  ],
  "post_con_problemi": [
+  {
+   "job_id": 148,
+   "fonte": "https://www.instagram.com/p/Df2as0wgu_H/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "blocchi-pulizia-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Stop Texting Her Like A Nice Guy.\n\nDo This Instead:",
+     "testo": "Smettila di scriverle da bravo ragazzo.\n\nScrivile così:",
+     "blocchi": [
+      {
+       "x": 85,
+       "y": 596,
+       "w": 794,
+       "h": 42,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 85,
+       "y": 713,
+       "w": 385,
+       "h": 42,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "❌ \"Good morning, beautiful.\"\n\n✅ \"Morning. Try not to be too distracting today.\"",
+     "testo": "\"Buongiorno, bellissima.\"\n\n\"Buongiorno. Oggi vedi di non\ndistrarmi troppo.\"",
+     "blocchi": [
+      {
+       "x": 128,
+       "y": 386,
+       "w": 600,
+       "h": 44,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 128,
+       "y": 557,
+       "w": 810,
+       "h": 99,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "❌ \"I had a great time with you.\"\n\n✅ \"That was dangerously fun. We're doing that again.\"",
+     "testo": "\"Sono stato benissimo con te.\"\n\n\"Ci siamo divertiti fin troppo.\nSi replica.\"",
+     "blocchi": [
+      {
+       "x": 149,
+       "y": 391,
+       "w": 640,
+       "h": 44,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 149,
+       "y": 562,
+       "w": 733,
+       "h": 102,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "❌ \"Do you want to hang out tonight?\"\n\n✅ \"I'm grabbing a drink tonight. Come keep me company if you're free.\"",
+     "testo": "\"Ti va di uscire stasera?\"\n\n\"Stasera vado a bere qualcosa. Se sei\nlibera, vieni a farmi compagnia.\"",
+     "blocchi": [
+      {
+       "x": 147,
+       "y": 376,
+       "w": 669,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 147,
+       "y": 576,
+       "w": 796,
+       "h": 93,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "❌ \"I really like you.\"\n\n✅ \"There's something about you I'm definitely enjoying.\"",
+     "testo": "\"Mi piaci davvero tanto.\"\n\n\"Hai qualcosa che mi sta\npiacendo parecchio.\"",
+     "blocchi": [
+      {
+       "x": 147,
+       "y": 381,
+       "w": 500,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 147,
+       "y": 535,
+       "w": 674,
+       "h": 90,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "❌ \"Why aren't you talking to me?\"\n\n✅ \"I'll let you come back when you're done being mysterious.\"",
+     "testo": "\"Perché non mi rispondi?\"\n\n\"Torna pure quando hai finito\ndi fare la misteriosa.\"",
+     "blocchi": [
+      {
+       "x": 128,
+       "y": 435,
+       "w": 560,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 128,
+       "y": 581,
+       "w": 773,
+       "h": 93,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "❌ \"Are you thinking about me?\"\n\n✅ \"Be honest... I've crossed your mind at least once today.\"",
+     "testo": "\"Mi stai pensando?\"\n\n\"Ammettilo... oggi almeno una\nvolta mi hai pensato.\"",
+     "blocchi": [
+      {
+       "x": 116,
+       "y": 435,
+       "w": 634,
+       "h": 44,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 116,
+       "y": 547,
+       "w": 791,
+       "h": 98,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "❌ \"When can I see you?\"\n\n✅ \"I think it's time we made plans. What day works for you?\"",
+     "testo": "\"Quando posso vederti?\"\n\n\"Direi che è ora di vederci.\nChe giorno sei libera?\"",
+     "blocchi": [
+      {
+       "x": 144,
+       "y": 366,
+       "w": 520,
+       "h": 44,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 144,
+       "y": 532,
+       "w": 690,
+       "h": 98,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "❌ \"You're really pretty.\"\n\n✅ \"You have no idea how distracting you are.\"",
+     "testo": "\"Sei proprio carina.\"\n\n\"Non hai idea di quanto\nmi distrai.\"",
+     "blocchi": [
+      {
+       "x": 147,
+       "y": 430,
+       "w": 460,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 147,
+       "y": 591,
+       "w": 728,
+       "h": 97,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 10,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se ti sei riconosciuto anche in uno solo di questi 8 messaggi da bravo ragazzo,\nse anche tu le scrivi \"Mi stai pensando?\"\ne poi resti a fissare lo schermo...\ndevi cambiare il modo in cui interpreti ogni interazione.\n\nNel mio manuale \"Diventa l'uomo a cui nessuna donna sa resistere\"\ntrovi le dinamiche psicologiche che spiegano perché alcune attenzioni aumentano l'attrazione\ne altre la distruggono, anche se sembrano giuste.\n\nDai un'occhiata al link in bio\no commenta con \"ATTRAZIONE\" e te lo invio ",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Se le scrivi come il classico bravo ragazzo, con messaggi zuccherosi, insicuri o che chiedono attenzione, perdi attrattiva. Il carosello mette a confronto frasi da evitare e alternative più sicure, giocose e dirette: complimenti meno scontati, inviti senza supplicare, interesse senza dipendenza. Il tono è pratico e un po' sfrontato, con un sorriso.",
+   "descrizione": "Un ragazzo mi ha mandato lo screenshot della sua chat. Tre messaggi suoi di fila: \"Buongiorno bellissima\", \"Com'è andata la giornata?\", \"Mi stai pensando?\". Sotto, quattro ore dopo, una sola riga di lei: \"Sì dai, tutto ok\".\n\nEra stato gentile in ogni parola, e infatti le parole non c'entrano. Sotto, ogni messaggio diceva la stessa cosa: ho bisogno di sapere che ci tieni. Lei sa già quanto ti piace e quanto stai aspettando, quindi non le resta più niente da scoprire. Ti costa proprio questo: la tensione.\n\nNel 2011 Whitchurch, Wilson e Gilbert, all'Università della Virginia, hanno mostrato a un gruppo di studentesse i profili di uomini che le avevano valutate. Le più attratte non erano quelle convinte di piacere molto. Erano quelle che non sapevano se piacevano oppure no, e per questo continuavano a pensarci. \"Mi piaci davvero tanto\" chiude la partita. \"Hai qualcosa che mi sta piacendo parecchio\" la lascia aperta.\n\nGuarda i messaggi giusti del post: l'interesse non lo nascondono, lo mostrano da un'altra posizione. Non le chiedi se ti pensa, lo dai per scontato con un sorriso. Non le chiedi il permesso di uscire, le dici dove sarai e le lasci la porta aperta. Copiarli però dura poco se dietro resta lo stesso uomo in attesa: dopo tre giorni la fame torna fuori, in un doppio messaggio o in un \"tutto ok?\".\n\nUna donna non si stanca di un uomo gentile. Si stanca di un uomo che le ha già detto tutto.\n\nQual è l'ultimo messaggio che le hai mandato solo per avere la certezza che ti rispondesse?\n\nLe frasi giuste da sole non bastano, perché lei sente da dove scrivi prima ancora di leggere cosa scrivi. E ogni conferma che le chiedi ti spinge un po' più in là, nel ruolo di quello sempre disponibile. Nel manuale \"Diventa l'uomo a cui nessuna donna sa resistere\" ti spiego perché alcune attenzioni accendono il desiderio e altre lo spengono anche quando sembrano giuste, e come scriverle senza perdere valore. Lo trovi nel link in bio, oppure commenta \"ATTRAZIONE\" e te lo mando in DM.\n\n#flirt #bravoragazzo #seduzione #attrazione #psicologiafemminile",
+   "segnalazioni": [
+    "Qui mandano le emoj dal post originale, sistema e rimandami questo post"
+   ]
+  },
   {
    "job_id": 149,
    "fonte": "https://www.instagram.com/p/Df2gBdEFDiy/",
