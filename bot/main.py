@@ -529,9 +529,9 @@ async def _crea_one(bot, chat_id: int, user_id: int, hint: str, label: str = "")
                   f"{'📚 didattico' if idea.get('natura') == 'didattico' else '🔥 virale'} · hook: {idea.get('tipo_hook', '')}"
                   f" · stile {(post.get('_look') or {}).get('stile', '')}, sfondo {(post.get('_look') or {}).get('palette', '').replace('_', ' ')}")
         await pipeline.send_post(bot, chat_id, job_id, post, paths, [], header=header)
-    except Exception:
+    except Exception as e:
         log.exception("Carosello da zero non creato")
-        await status.edit_text("Non sono riuscito a creare il carosello. Riprova tra poco.")
+        await status.edit_text(_causa_errore(e, "il carosello"))
     finally:
         storage.end_work(work)
 
@@ -651,9 +651,9 @@ async def cmd_storie(update: Update, context: ContextTypes.DEFAULT_TYPE):
             serie, paths, cv = await asyncio.to_thread(storie.crea, brand, slug, tema, tipo, storage.list_rules(), jdir)
             await status.delete()
             await _manda_storie(context.bot, chat_id, paths, cv, storie.istruzioni(serie))
-        except Exception:
+        except Exception as e:
             log.exception("Storie non create")
-            await msg.reply_text("Non sono riuscito a creare le storie. Riprova tra poco.")
+            await msg.reply_text(_causa_errore(e, "le storie"))
     context.application.create_task(go())
 
 
@@ -678,9 +678,9 @@ async def _rispondi_domanda(update: Update, context: ContextTypes.DEFAULT_TYPE, 
                                 + ("Ultima slide: metti lo sticker link MANUALE sotto il testo.\n"
                                    if out.get("chiusura") == "vendita" else "")
                                 + "Per forzare la chiusura scrivi \"risposta vendita\" o \"risposta didattica\".")
-        except Exception:
+        except Exception as e:
             log.exception("Risposta alla domanda non creata")
-            await status.edit_text("Non sono riuscito a preparare la risposta. Riprova tra poco.")
+            await status.edit_text(_causa_errore(e, "la risposta"))
     context.application.create_task(go())
 
 
@@ -1285,6 +1285,9 @@ async def on_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 def _causa_errore(e: Exception, cosa: str) -> str:
     """Messaggio chiaro con la causa vera, invece di "controlla i log su Render" (Gabriele 12/11)."""
+    from bot import costi
+    if isinstance(e, costi.TettoSpesa):
+        return f"{e} (oggi spesi {costi.speso_oggi():.2f} €)"
     t = f"{type(e).__name__}: {e}".lower()
     if "apify" in t and ("token" in t or "user was not found" in t):
         return ("Non riesco a scaricare il post: Apify rifiuta la chiave (APIFY_TOKEN non valido o account Apify "
