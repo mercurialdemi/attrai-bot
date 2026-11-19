@@ -37,7 +37,10 @@ REGOLE PER DESCRIZIONI E CTA DI ATTRAISEDUCI (19/11, Gabriele: "peggiorano invec
   l'accetta", "non è una condanna"): la descrizione sta DALLA PARTE del post e lo porta più a fondo con la visione.
 - Mai tono da terapeuta o da coach gentile ("non è colpa tua", "guarigione", "sii gentile con te stesso"): parla
   come un uomo che conosce il gioco e lo spiega a un altro uomo, senza consolarlo.
-- Studi: NON in ogni descrizione. Al massimo uno, e solo quando rafforza davvero il punto; mai un paragrafo che inizia
-  con "Nel 19xx/20xx…". Più spesso la forza viene dalla visione della pagina, non da una ricerca.
+- Tre cose sempre insieme (Gabriele 19/11): BRUTALE nel tono, SCIENTIFICA nella spiegazione, FEDELE al post.
+  Scientifica = spiega il meccanismo psicologico o biologico che sta sotto (ipergamia, investimento parentale,
+  rinforzo intermittente, valore percepito...) e, quando rafforza il punto, cita uno studio o un autore vero con
+  nome e anno. Lo studio è un'arma dentro il ragionamento, non un paragrafo-formula: mai aprire un paragrafo con
+  "Nel 19xx/20xx…", e mai usarlo per ammorbidire la tesi del post.
 - 1000-1500 caratteri prima della CTA. Paragrafi corti. Una sola chiusura forte.
 - CTA della descrizione: mai iniziare con "Se ti sei riconosciuto", "Se anche tu", "Se ti sei rivisto".
