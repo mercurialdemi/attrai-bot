@@ -34,6 +34,9 @@ COMMANDS = [
          "e storie lo propongono); /manuali disattiva <id>"),
         ("analizzareel", "Studia i reel più visti di una pagina",
          "/analizzareel diventa_semidio: hook, struttura, ritmo, chiusure e format da provare"),
+        ("copione", "Da un reel a un nostro copione di 60 secondi",
+         "/copione <link del reel> (oppure rispondi con /copione a un video mandato qui): stesso senso "
+         "dell'originale, tono AttraiSeduci con lo scheletro. Dopo il link puoi aggiungere una richiesta"),
         ("citazione", "Storia-citazione con il nostro personaggio",
          "/citazione o /citazione 3: scena illustrata con lo scheletro al posto dell'autore e la citazione"),
         ("temistorie", "I migliori temi per le storie",
@@ -567,6 +570,49 @@ async def cmd_analizzareel(update: Update, context: ContextTypes.DEFAULT_TYPE):
         except Exception as e:
             log.exception("analizzareel")
             await status.edit_text("Analisi non riuscita: " + _causa_errore(e, "l'analisi"))
+            return
+        await status.delete()
+        await _manda_lungo(msg, testo)
+    context.application.create_task(go())
+
+
+async def cmd_copione(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """/copione <link> o in risposta a un video: copione di ~60s nel nostro tono (19/11)."""
+    if not await _authorized(update):
+        return
+    from bot import copione
+    msg = update.effective_message
+    args = list(context.args or [])
+    link = next((a for a in args if "instagram.com" in a or a.startswith("http")), "")
+    note = " ".join(a for a in args if a != link)
+    rep = msg.reply_to_message
+    vid = None
+    if rep:
+        vid = rep.video or (rep.document if rep.document and (rep.document.mime_type or "").startswith("video") else None)
+        if not link and not vid:
+            link = next((w for w in (rep.text or rep.caption or "").split() if "instagram.com" in w), "")
+    if not link and msg.video:
+        vid = msg.video
+    if not link and not vid:
+        await msg.reply_text("Mandami /copione seguito dal link del reel, oppure rispondi con /copione a un video.")
+        return
+    brand = writer.load_brand()
+
+    async def go():
+        status = await msg.reply_text("Guardo e ascolto il video, poi lo riscrivo nel nostro tono (1-2 minuti)…")
+        try:
+            if vid:
+                f = await context.bot.get_file(vid.file_id)
+                video, descr = bytes(await f.download_as_bytearray()), (rep.caption if rep else "") or ""
+            else:
+                video, descr = await asyncio.to_thread(copione.video_da_link, link)
+            testo = await asyncio.to_thread(copione.crea, video, descr, note, brand)
+        except copione.CopioneError as e:
+            await status.edit_text(str(e))
+            return
+        except Exception as e:
+            log.exception("copione")
+            await status.edit_text(_causa_errore(e, "il copione"))
             return
         await status.delete()
         await _manda_lungo(msg, testo)
@@ -1592,6 +1638,7 @@ def main():
     app.add_handler(CommandHandler(["temistorie", "temi_storie", "temi"], cmd_temi))
     app.add_handler(CommandHandler(["citazione", "citazioni"], cmd_citazione))
     app.add_handler(CommandHandler(["analizzareel", "reel"], cmd_analizzareel))
+    app.add_handler(CommandHandler(["copione", "script"], cmd_copione))
     app.add_handler(CommandHandler("manuali", cmd_manuali))
     app.add_handler(MessageHandler(filters.PHOTO | filters.Document.IMAGE, on_media))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_text))
