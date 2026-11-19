@@ -10,6 +10,7 @@ sbaglia spesso le lettere. Qui invece:
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
 
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
@@ -69,6 +70,132 @@ def no_emoji(text: str) -> str:
     """Le emoji non esistono nei font delle slide (uscirebbe un quadratino): si tolgono."""
     t = _re.sub(r"[ \t]{2,}", " ", _EMOJI.sub("", text or ""))
     return "\n".join(line.strip() for line in t.split("\n")).strip()
+
+
+# ---------------------------------------------------------------- emoji del post originale (❌ ✅ a inizio riga...)
+# 19/11 (post 148): le emoji dell'originale sparivano. I font delle slide non le hanno: si disegnano come immagini
+# (assets/emoji/, o il font a colori del sistema se c'è). Quelle che non si sanno disegnare si tolgono come prima.
+_EMOJI_SEQ = _re.compile("(?:[\U0001F000-\U0001FAFF\u2600-\u27BF\u2B00-\u2BFF][\uFE0F]?)"
+                         "(?:\u200D[\U0001F000-\U0001FAFF\u2600-\u27BF\u2B00-\u2BFF][\uFE0F]?)*")
+_EMOJI_DIR = config.ROOT / "assets" / "emoji"
+_EMOJI_FONT = Path("/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf")
+_PH0 = 0xE000                     # segnaposto (zona privata Unicode) al posto di ogni emoji durante l'impaginazione
+_emoji_cache: dict = {}
+
+
+def _emoji_png(seq: str):
+    key = "-".join("%x" % ord(c) for c in seq if c != "\uFE0F")
+    if key in _emoji_cache:
+        return _emoji_cache[key]
+    im = None
+    p = _EMOJI_DIR / f"{key}.png"
+    try:
+        if p.exists():
+            im = Image.open(p).convert("RGBA")
+        elif _EMOJI_FONT.exists():
+            f = ImageFont.truetype(str(_EMOJI_FONT), 109)
+            tmp = Image.new("RGBA", (200, 160), (0, 0, 0, 0))
+            ImageDraw.Draw(tmp).text((10, 10), seq, font=f, embedded_color=True)
+            bb = tmp.getbbox()
+            im = tmp.crop(bb) if bb else None
+    except Exception:
+        im = None
+    _emoji_cache[key] = im
+    return im
+
+
+def rimetti_emoji(originale: str, italiano: str) -> str:
+    """Se un paragrafo dell'originale inizia (o finisce) con un'emoji e la traduzione l'ha persa, la rimette
+    nello stesso paragrafo italiano. Solo se i paragrafi si corrispondono uno a uno."""
+    po = [x.strip() for x in (originale or "").split("\n\n") if x.strip()]
+    pi = (italiano or "").split("\n\n")
+    if not po or len(po) != len([x for x in pi if x.strip()]) or _EMOJI_SEQ.search(italiano or ""):
+        return italiano
+    out, k = [], 0
+    for par in pi:
+        if not par.strip():
+            out.append(par)
+            continue
+        o = po[k]
+        k += 1
+        m1 = _re.match(r"((?:%s)\s*)+" % _EMOJI_SEQ.pattern, o)
+        m2 = _re.search(r"(\s*(?:%s))+$" % _EMOJI_SEQ.pattern, o)
+        if m1:
+            par = " ".join(_EMOJI_SEQ.findall(m1.group(0))) + " " + par.lstrip()
+        if m2 and not (m1 and m2.start() <= m1.end()):
+            par = par.rstrip() + " " + " ".join(_EMOJI_SEQ.findall(m2.group(0)))
+        out.append(par)
+    return "\n\n".join(out)
+
+
+def _segnaposto_emoji(text: str):
+    """Sostituisce le emoji disegnabili con un segnaposto; le altre si tolgono. Ritorna (testo, {segnaposto: seq})."""
+    mappa: dict = {}
+    def sub(m):
+        seq = m.group(0)
+        if _emoji_png(seq) is None:
+            return ""
+        ph = next((k for k, v in mappa.items() if v == seq), None)
+        if ph is None:
+            ph = chr(_PH0 + len(mappa))
+            mappa[ph] = seq
+        return ph
+    t = _EMOJI_SEQ.sub(sub, text or "")
+    t = no_emoji(t)              # resti (selettori di variante ecc.) e spazi doppi
+    return t, mappa
+
+
+class _DrawEmoji:
+    """Come ImageDraw ma misura ogni segnaposto come un'emoji larga circa una lettera e mezza."""
+    def __init__(self, draw, mappa):
+        self.d, self.m = draw, mappa
+
+    def textlength(self, s, font=None):
+        n = sum(s.count(ph) for ph in self.m)
+        for ph in self.m:
+            s = s.replace(ph, "")
+        return self.d.textlength(s, font=font) + n * _emoji_adv(font)
+
+
+def _emoji_adv(font) -> float:
+    return round(getattr(font, "size", 40) * 1.18)
+
+
+def _scrivi_riga(img: Image.Image, draw, xy, ln: str, font, col, mappa: dict) -> None:
+    """Scrive una riga; i segnaposto diventano le immagini delle emoji, alte quanto le maiuscole un po' abbondanti."""
+    if not mappa or not any(ph in ln for ph in mappa):
+        draw.text(xy, ln, font=font, fill=col)
+        return
+    x, y = xy
+    size = getattr(font, "size", 40)
+    try:
+        _, hy0, _, hy1 = font.getbbox("H")
+    except Exception:
+        hy0, hy1 = size * 0.2, size * 0.93
+    cy = y + (hy0 + hy1) / 2
+    lato = int(round(size * 1.05))
+    pezzo = ""
+    for ch in ln + "\0":
+        if ch in mappa or ch == "\0":
+            if pezzo:
+                draw.text((x, y), pezzo, font=font, fill=col)
+                x += draw.textlength(pezzo, font=font)
+                pezzo = ""
+            if ch in mappa:
+                em = _emoji_png(mappa[ch])
+                sc = lato / max(em.size)
+                e2 = em.resize((max(1, int(em.width * sc)), max(1, int(em.height * sc))), Image.LANCZOS)
+                adv = _emoji_adv(font)
+                img.paste(e2, (int(x + (adv - lato) / 2 + (lato - e2.width) / 2), int(cy - e2.height / 2)), e2)
+                x += adv
+        else:
+            pezzo += ch
+
+
+def testo_canva(ln: str, mappa: dict) -> str:
+    for ph, seq in (mappa or {}).items():
+        ln = ln.replace(ph, seq)
+    return ln
 
 
 def _font(weight: str, size: int) -> ImageFont.FreeTypeFont:
@@ -651,11 +778,12 @@ def background(img: Image.Image, lay: Layout) -> Image.Image:
 def render(img: Image.Image, lay: Layout, text: str, placements: list | None = None) -> Image.Image:
     """Scrive il testo. Se `placements` è una lista, ci aggiunge (riga, x, y, corpo, peso, colore) per il file Canva."""
     out = background(img, lay)
-    text = no_emoji(text)
+    text, mappa = _segnaposto_emoji(text)
     if not text:
         return out
     W, H = out.size
-    draw = ImageDraw.Draw(out)
+    draw_img = ImageDraw.Draw(out)
+    draw = _DrawEmoji(draw_img, mappa) if mappa else draw_img
     size = lay.size
     max_h = H * 0.84
     while True:
@@ -724,9 +852,9 @@ def render(img: Image.Image, lay: Layout, text: str, placements: list | None = N
             x = (W - draw.textlength(ln, font=f)) / 2
         else:
             x = left
-        draw.text((x, y), ln, font=f, fill=col)
+        _scrivi_riga(out, draw_img, (x, y), ln, f, col, mappa)
         if placements is not None:
-            placements.append({"testo": ln, "x": float(x), "y": float(y), "size": size,
+            placements.append({"testo": testo_canva(ln, mappa), "x": float(x), "y": float(y), "size": size,
                                "weight": wt, "color": col})
         y += line_h
     return out
@@ -1286,7 +1414,10 @@ def dark_fade(img: Image.Image, original: Image.Image, boxes: list) -> Image.Ima
     col = np.median(rgb[band < 90], axis=0)
     a = np.asarray(img.convert("RGB")).astype(np.float32)
     y = np.arange(H, dtype=np.float32)[:, None]
-    start, full = top - H * 0.26, top - H * 0.02      # sfumatura lunga: nessun bordo netto sulla foto
+    # la fascia piena parte un po' sopra la prima riga: la prima riga non deve toccare il bordo della fascia
+    # (19/11, post 149: "la prima riga termina precisa con lo sfondo nero dietro, lascia un pelino di spazio")
+    margine = H * 0.035
+    start, full = top - margine - H * 0.24, top - margine   # sfumatura lunga: nessun bordo netto sulla foto
     alpha = np.clip((y - start) / max(1.0, full - start), 0, 1)
     if bot < H * 0.8:                                # fascia in mezzo alla slide: sfuma anche sotto
         end0, end1 = bot + H * 0.02, bot + H * 0.14
@@ -1299,7 +1430,7 @@ def dark_fade(img: Image.Image, original: Image.Image, boxes: list) -> Image.Ima
     # "esclusi" dalla sfumatura e ricomparivano come un'ombra chiara (7/11, @themasculinecreed)
     lum = np.asarray(img.convert("L")).astype(np.float32)
     dark_w = np.clip((140 - lum) / 90, 0, 1)
-    above = np.arange(H)[:, None] < top - H * 0.01
+    above = np.arange(H)[:, None] < top - margine
     alpha = np.where(above, np.minimum(alpha, dark_w), alpha)
     a = a * (1 - alpha[..., None]) + col[None, None, :] * alpha[..., None]
     return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))

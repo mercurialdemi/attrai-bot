@@ -711,7 +711,9 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
                             W_o - max(lay.left, int(W_o * textslide.SAFE_X)) - int(W_o * textslide.SAFE_X))
         if lay:
             placements: list = []
-            img = textslide.render(original, lay, testo, placements)
+            # emoji dell'originale (❌ ✅ a inizio riga...) che la traduzione ha perso: si rimettono (19/11, post 148)
+            testo_e = textslide.rimetti_emoji(slide.get("testo_originale", ""), testo)
+            img = textslide.render(original, lay, testo_e, placements)
             slide["_canva"] = {"tipo": "testo", "righe": placements}
             slide["_via"] = "testo-su-sfondo-uniforme"
             slide["_sfondo"] = textslide.background(original, lay)

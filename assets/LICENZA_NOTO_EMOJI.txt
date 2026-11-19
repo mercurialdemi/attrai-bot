@@ -1,0 +1,3 @@
+assets/emoji/*.png: immagini delle emoji ricavate dal font Noto Color Emoji (Google), licenza SIL Open Font License 1.1
+(https://github.com/googlefonts/noto-emoji). Servono per rimettere sulle slide le emoji del post originale
+(es. croce rossa e spunta verde a inizio riga). Nome del file = codici delle lettere in esadecimale.

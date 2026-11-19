@@ -145,6 +145,13 @@ CASI = {
         dict(testo="Smetti di rispondere a ogni chiamata.\nSmetti di dare corda\na ogni idiota.", x=35, y=439, w=800, h=132, colore="#8A8A8A", allineamento="left", carattere=S),
         dict(testo="Smetti di fare il caz*o\ndi psicologo gratis di tutti.", x=35, y=581, w=720, h=83, colore="#FFFFFF", allineamento="left", carattere=S),
     ], "@thementalpower in basso", {"x": 372, "y": 921, "w": 255, "h": 38}),
+    # post 148 (19/11): segnalato "mancano le emoji del post originale" (croce rossa e spunta verde a inizio riga)
+    "emoji_croce_spunta.jpg": ("tinta_unita", '❌ "Good morning, beautiful."\n\n✅ "Morning. Try not to be too distracting today."', [
+        dict(testo='"Buongiorno, bellissima."', x=128, y=386, w=600, h=44, colore="#FFFFFF", allineamento="left", carattere=S, peso="regular"),
+        dict(testo='"Buongiorno. Oggi vedi di non\ndistrarmi troppo."', x=128, y=557, w=810, h=99, colore="#FFFFFF", allineamento="left", carattere=S, peso="regular")]),
+    # post 149 (19/11): segnalato "la prima riga in alto termina precisa con lo sfondo nero dietro: un pelino di spazio in più"
+    "cover_bloodline.jpg": ("foto", "FOR THE SAKE OF YOUR BLOODLINE, AVOID THESE 8 TYPES OF WOMEN AT ALL COSTS", [
+        dict(testo="PER IL [[BENE]] DELLA TUA\n[[DISCENDENZA,]] STAI LONTANO\nDA QUESTI [[8 TIPI]] DI\n[[DONNE.]] A [[OGNI COSTO.]]", x=35, y=580, w=930, h=400, colore="#FFFFFF", colore_evidenziato="#F5C518", allineamento="center", maiuscolo=True, carattere=S, peso="bold")]),
 }
 
 
