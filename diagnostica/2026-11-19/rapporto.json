@@ -1,30 +1,572 @@
 {
  "giorno": "2026-11-19",
- "post_preparati": 3,
- "slide_totali": 33,
+ "post_preparati": 10,
+ "slide_totali": 100,
  "slide_fallite": 0,
  "lavorazione": {
-  "foto-sfocata": {
-   "totali": 1,
+  "blocchi-ricostruzione-codice": {
+   "totali": 6,
    "fallite": 0
   },
   "testo-su-sfondo-uniforme": {
-   "totali": 27,
+   "totali": 80,
    "fallite": 0
   },
   "cta-stile-post": {
-   "totali": 3,
-   "fallite": 0
-  },
-  "blocchi-ricostruzione-codice": {
-   "totali": 1,
+   "totali": 10,
    "fallite": 0
   },
   "blocchi-pulizia-codice": {
+   "totali": 2,
+   "fallite": 0
+  },
+  "openai-testo": {
+   "totali": 1,
+   "fallite": 0
+  },
+  "foto-sfocata": {
    "totali": 1,
    "fallite": 0
   }
  },
- "segnalazioni": [],
- "post_con_problemi": []
+ "segnalazioni": [
+  {
+   "job_id": 149,
+   "testo": "la prima riga in alto termina precisa con lo sfondo nero dietro. Lascerei un pelino di spazio in più",
+   "quando": "2026-11-19T01:32:22+00:00"
+  }
+ ],
+ "post_con_problemi": [
+  {
+   "job_id": 149,
+   "fonte": "https://www.instagram.com/p/Df2gBdEFDiy/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "FOR THE SAKE OF YOUR BLOODLINE, AVOID THESE 8 TYPES OF WOMEN AT ALL COSTS",
+     "testo": "PER IL BENE DELLA TUA\nDISCENDENZA, STAI LONTANO\nDA QUESTI 8 TIPI DI\nDONNE. A OGNI COSTO.",
+     "blocchi": [
+      {
+       "x": 35,
+       "y": 580,
+       "w": 930,
+       "h": 400,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#F5C518",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "1. The Daughter of a Single Mother\n\nRaised by bitterness. Fed on male-hate.\n\nShe's been trained to survive without a man not build with one.\n\nShe doesn't know how to honor masculinity cause she's never seen it.\n\nShe will turn your household into a feminist battleground.\n\nShe doesn't need you-until the bills pile up.",
+     "testo": "1. La figlia di una madre single\n\nCresciuta nel rancore. Svezzata a pane e odio per gli uomini.\n\nLe hanno insegnato a cavarsela senza un uomo,\nnon a costruire con uno.\n\nNon sa onorare la mascolinità:\nnon l'ha mai vista.\n\nFarà di casa tua un campo\ndi battaglia femminista.\n\nDi te non ha bisogno. Finché non si accumulano le bollette.",
+     "blocchi": [
+      {
+       "x": 100,
+       "y": 248,
+       "w": 680,
+       "h": 30,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 335,
+       "w": 820,
+       "h": 30,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 440,
+       "w": 820,
+       "h": 60,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 585,
+       "w": 820,
+       "h": 75,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 730,
+       "w": 820,
+       "h": 75,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 862,
+       "w": 820,
+       "h": 32,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "2. The Stewardess (Air Hostess)\n\nShe's in a different city every night, surrounded by wealthy men and no accountability.\n\nWhat happens in Dubai stays in Dubai.\n\nYou think you're her only man?\n\nYou're her emotional layover-she lands, refuels, and takes off again.",
+     "testo": "2. L'hostess\n\nOgni notte una città diversa,\nin mezzo a uomini ricchi e senza\nrendere conto a nessuno.\n\nQuello che succede a Dubai resta a Dubai.\n\nCredi di essere l'unico?\n\nSei solo il suo scalo emotivo: atterra,\nfa rifornimento e riparte.",
+     "blocchi": [
+      {
+       "x": 100,
+       "y": 335,
+       "w": 680,
+       "h": 30,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 438,
+       "w": 820,
+       "h": 140,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 645,
+       "w": 820,
+       "h": 30,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 708,
+       "w": 820,
+       "h": 32,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 753,
+       "w": 820,
+       "h": 72,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "3. The Single Mother\n\nHer loyalty was already given-and it wasn't to you.\n\nYou're Plan B. Her safety net.\n\nYou'll raise another man's child while he pays nothing and she blames you for everything.\n\nDon't raise his legacy while yours dies in silence.",
+     "testo": "3. La madre single\n\nLa sua fedeltà l'ha già data.\nE non a te.\n\nSei il piano B. La sua rete di sicurezza.\n\nCrescerai il figlio di un altro: lui non\ntira fuori un euro e lei dà la colpa\na te di tutto.\n\nNon tirare su l'eredità di un altro\nmentre la tua muore in silenzio.",
+     "blocchi": [
+      {
+       "x": 100,
+       "y": 277,
+       "w": 680,
+       "h": 30,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 365,
+       "w": 820,
+       "h": 60,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 474,
+       "w": 820,
+       "h": 32,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 610,
+       "w": 820,
+       "h": 120,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 802,
+       "w": 820,
+       "h": 72,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "4. The Girl with Daddy Issues\n\nShe doesn't know how to love a man-only how to fight one.\n\nShe'll turn every disagreement into a test.\n\nYou'll spend years trying to fix what her father broke.\n\nYou're not her healing journey, you're her next trauma story.",
+     "testo": "4. La ragazza con problemi irrisolti col padre\n\nNon sa amare un uomo.\nSa solo fargli la guerra.\n\nOgni discussione diventerà un esame.\n\nPasserai anni a riparare\nquello che ha rotto suo padre.\n\nNon sei la sua guarigione:\nsei il suo prossimo trauma.",
+     "blocchi": [
+      {
+       "x": 100,
+       "y": 335,
+       "w": 680,
+       "h": 30,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 440,
+       "w": 820,
+       "h": 55,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 555,
+       "w": 820,
+       "h": 30,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 663,
+       "w": 820,
+       "h": 55,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 746,
+       "w": 820,
+       "h": 56,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "5. The Girl from a Broken Home\n\nShe's emotionally unstable, conflict is her comfort zone.\n\nShe doesn't want peace-she craves drama because it feels normal.\n\nAnd no matter how perfect you are, she'll still sabotage everything.",
+     "testo": "5. La ragazza cresciuta in una famiglia distrutta\n\nÈ instabile: nel conflitto\nsi sente a casa.\n\nNon cerca la pace. Cerca il dramma,\nperché per lei è la normalità.\n\nE puoi essere perfetto quanto vuoi:\nprima o poi manderà tutto all'aria.",
+     "blocchi": [
+      {
+       "x": 100,
+       "y": 383,
+       "w": 680,
+       "h": 30,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 450,
+       "w": 820,
+       "h": 70,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 595,
+       "w": 820,
+       "h": 70,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 745,
+       "w": 820,
+       "h": 70,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "6. The Waitress\n\nShe flirts for survival. Her smile is rehearsed.\n\nShe's been tipped, touched, and emotionally trained to charm desperate men.\n\nYou'll never be sure if she's yours or just playing her usual role.\n\nShe knows how to perform. But can she submit? Doubt it.",
+     "testo": "6. La cameriera\n\nFlirta per campare.\nIl sorriso è studiato.\n\nMance, mani addosso e anni di allenamento\na incantare uomini disperati.\n\nNon saprai mai se è tua davvero\no se sta recitando la solita parte.\n\nRecitare lo sa fare. Ma lasciarsi guidare?\nNe dubito.",
+     "blocchi": [
+      {
+       "x": 100,
+       "y": 312,
+       "w": 680,
+       "h": 30,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 400,
+       "w": 820,
+       "h": 65,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 500,
+       "w": 820,
+       "h": 65,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 598,
+       "w": 820,
+       "h": 65,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 698,
+       "w": 820,
+       "h": 65,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "7. The Female Attorney\n\nShe argues for a living. Her ego is her identity.\n\nShe doesn't want a husband-she wants a courtroom opponent.\n\nYou won't get love-you'll get litigation in bed.\n\nAnd if divorce hits? She'll bury you legally and smile doing it.",
+     "testo": "7. L'avvocata\n\nDiscute per mestiere.\nLei è il suo ego.\n\nNon cerca un marito:\ncerca un avversario in aula.\n\nNon avrai amore:\navrai una causa. Anche a letto.\n\nE se arriva il divorzio? Ti seppellisce\na colpi di codice. Col sorriso.",
+     "blocchi": [
+      {
+       "x": 100,
+       "y": 312,
+       "w": 680,
+       "h": 30,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 400,
+       "w": 820,
+       "h": 65,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 500,
+       "w": 820,
+       "h": 65,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 598,
+       "w": 820,
+       "h": 65,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 698,
+       "w": 820,
+       "h": 65,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "8. The Political Woman\n\nShe's already married-to ideology.\n\nHer loyalty is to hashtags and movements- not her man.\n\nYou'll lose every argument because her \"truth\" is whatever TikTok said this week.\n\nGood luck building a home with a woman who thinks femininity is oppression.",
+     "testo": "8. La donna politicizzata\n\nÈ già sposata. Con l'ideologia.\n\nÈ fedele agli hashtag e alle cause,\nnon al suo uomo.\n\nPerderai ogni discussione: la sua\n\"verità\" è quello che ha detto TikTok\nquesta settimana.\n\nAuguri a costruire una famiglia con\nuna che vede nella femminilità\nun'oppressione.",
+     "blocchi": [
+      {
+       "x": 100,
+       "y": 335,
+       "w": 680,
+       "h": 30,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 408,
+       "w": 820,
+       "h": 32,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 483,
+       "w": 820,
+       "h": 60,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 585,
+       "w": 820,
+       "h": 62,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 688,
+       "w": 820,
+       "h": 62,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 10,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se anche uno solo di questi 8 profili\nti ha fatto pensare a una donna precisa,\nse ti sei già trovato a riparare\nquello che altri avevano rotto,\n\nsegui @attraiseduci.\n\nOgni giorno parliamo di relazioni,\nseduzione e psicologia femminile.\n\nPer smettere di scegliere con gli occhi\ne pagare con gli anni.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Il carosello elenca 8 tipi di donne da evitare se vuoi costruire una famiglia e lasciare una discendenza: la figlia di una madre single, l'hostess, la madre single, la ragazza con problemi col padre, quella cresciuta in una famiglia distrutta, la cameriera, l'avvocata e la donna politicizzata. Per ognuna spiega in poche frasi secche perché, secondo l'autore, sarebbe un rischio per la relazione. Il registro è provocatorio e polarizzante, con frasi brevi e taglienti.",
+   "descrizione": "La donna con cui fai un figlio non la scegli solo per te. Scegli la madre che i tuoi figli avranno davanti ogni giorno, e il padre che tu riuscirai a essere accanto a lei.\n\nEppure all'inizio guardi tutt'altro: il sorriso, la chimica, come ti fa sentire il sabato sera. Poi passano due anni. Ogni discussione diventa un processo, torni a casa già sulla difensiva e non capisci in quale momento hai smesso di essere l'uomo di casa e sei diventato quello che si giustifica.\n\nIl post è volutamente brutale e le etichette tagliano con l'accetta: un mestiere non dice chi è una donna. Sotto le etichette però c'è una cosa vera. Nel 2001 Paul Amato e Danelle DeBoer hanno mostrato che chi cresce con genitori separati ha un rischio più alto di divorziare a sua volta. Non è una condanna: in casa ha imparato un modo di stare in coppia, e quel modo se lo porta dietro finché non lo vede. John Gottman, osservando per anni centinaia di coppie nel suo laboratorio di Seattle, ha scoperto che a prevedere meglio una rottura non è quanto si litiga, ma il disprezzo: gli occhi al cielo, il sarcasmo, il tono di chi ti tratta da avversario.\n\nQuindi la domanda da farti non riguarda il lavoro che fa o la famiglia da cui viene. Riguarda come litiga, come parla degli uomini che ha avuto intorno, se con te cerca un alleato o un nemico. Sono cose che si vedono presto, se smetti di guardarla con gli occhi di chi si è già innamorato.\n\nE non fare il salvatore. Un uomo con un centro non si carica le ferite di una donna sperando di essere ripagato con la pace in casa. Quella pace non arriva mai come ricompensa.\n\nUna famiglia stabile non nasce da quanto la desideri all'inizio. Nasce da quanto hai avuto il coraggio di guardarla davvero prima di sceglierla.\n\nSei d'accordo con il post?\n\n#matrimonio #famiglia #psicologiafemminile #rapportiuomodonna #dinamichedicoppia",
+   "segnalazioni": [
+    "la prima riga in alto termina precisa con lo sfondo nero dietro. Lascerei un pelino di spazio in più"
+   ]
+  }
+ ]
 }
