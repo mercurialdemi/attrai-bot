@@ -73,9 +73,13 @@ SCHELETRO = (
 )
 
 
-def _personaggio() -> Image.Image | None:
-    """Il personaggio della pagina (AttraiSeduci: lo scheletro), se la pagina ne ha uno (brand: personaggio)."""
+def _personaggio(post: dict) -> Image.Image | None:
+    """Il personaggio della pagina (AttraiSeduci: lo scheletro), se la pagina ne ha uno (brand: personaggio)
+    e SOLO se nell'ultima slide del post originale c'è una persona o un personaggio (Gabriele 19/11)."""
     from . import writer
+    slides = post.get("slides") or []
+    if not slides or not slides[-1].get("personaggio"):
+        return None
     rel = str(writer.load_brand().get("personaggio") or "").strip()
     if not rel or not config.OPENAI_API_KEY:
         return None
@@ -97,10 +101,10 @@ def _con_personaggio(prompt: str) -> str:
             .replace("reference image", "first reference image", 1))
 
 
-def _genera(ref: Image.Image, prompt: str) -> Image.Image | None:
+def _genera(post: dict, ref: Image.Image, prompt: str) -> Image.Image | None:
     """Scena della CTA: con il personaggio della pagina (OpenAI con 2 riferimenti) oppure come prima."""
     from . import images
-    pers = _personaggio()
+    pers = _personaggio(post)
     if pers is not None:
         return images._openai_edit(ref, _con_personaggio(prompt), extra=[pers])
     return images._gemini_edit(ref, prompt)
@@ -370,7 +374,7 @@ def make(post: dict, originals: list[bytes], jdir: Path) -> tuple[Path, dict] | 
     prompt = _al_pubblico(PROMPT.format(n=n) if books else PROMPT_SEGUI)
     for attempt in range(2):
         try:
-            gen = _genera(ref, prompt)
+            gen = _genera(post, ref, prompt)
         except Exception as e:
             log.warning("CTA illustrata: Gemini non ha risposto (%s)", e)
             gen = None
@@ -500,14 +504,14 @@ def make_alone(post: dict, jdir: Path) -> tuple[Path, dict] | None:
         return None
     bg = None
     op = jdir / "originali" / "01.jpg"
-    if _is_comic(post) or _post_background(post, jdir / "originali") is None or (_personaggio() is not None and op.exists()):
+    if _is_comic(post) or _post_background(post, jdir / "originali") is None or (_personaggio(post) is not None and op.exists()):
         if not op.exists() or not (config.GEMINI_API_KEY or config.OPENAI_API_KEY):
             return None
         from . import images
         ref = Image.open(op).convert("RGB")
         for _ in range(2):
             try:
-                gen = _genera(ref, _al_pubblico(PROMPT_SCENA))
+                gen = _genera(post, ref, _al_pubblico(PROMPT_SCENA))
             except Exception as e:
                 log.warning("CTA casella: scena non generata (%s)", e)
                 gen = None
