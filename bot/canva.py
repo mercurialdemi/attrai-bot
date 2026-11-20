@@ -25,6 +25,20 @@ FONT_NAMES = {"bold_carlito": "Carlito", "italic_carlito": "Carlito", "regular":
               "regular_architects": "Architects Daughter", "semibold_architects": "Architects Daughter", "bold_architects": "Architects Daughter"}
 
 
+def _immagine(path) -> str:
+    """PowerPoint non accetta WEBP (es. slide rimasta uguale all'originale di Instagram): la converte in JPEG."""
+    from PIL import Image
+    try:
+        with Image.open(path) as im:
+            if (im.format or "").upper() in ("JPEG", "PNG", "BMP", "GIF", "TIFF"):
+                return str(path)
+            out = Path(str(path) + ".canva.jpg")
+            im.convert("RGB").save(out, "JPEG", quality=95)
+            return str(out)
+    except Exception:
+        return str(path)
+
+
 def build(post: dict, paths: list[Path], out_path: Path, failed: list[int] | None = None) -> Path:
     from PIL import Image
 
@@ -42,11 +56,11 @@ def build(post: dict, paths: list[Path], out_path: Path, failed: list[int] | Non
         canva = slide_info.get("_canva") or {}
         s = prs.slides.add_slide(blank)
         if canva.get("tipo") == "testo" and canva.get("sfondo") and Path(canva["sfondo"]).exists():
-            s.shapes.add_picture(canva["sfondo"], 0, 0, Emu(W * PX), Emu(H * PX))
+            s.shapes.add_picture(_immagine(canva["sfondo"]), 0, 0, Emu(W * PX), Emu(H * PX))
             for g in _blocchi(canva.get("righe", []), W):
                 _casella(s, g, W)
         else:
-            s.shapes.add_picture(str(p), 0, 0, Emu(W * PX), Emu(H * PX))
+            s.shapes.add_picture(_immagine(p), 0, 0, Emu(W * PX), Emu(H * PX))
     out_path.parent.mkdir(parents=True, exist_ok=True)
     prs.save(out_path)
     return out_path
