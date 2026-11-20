@@ -136,11 +136,9 @@ CAPTION_TOOL = {
                                "poi con lo stesso stile grafico delle altre slide. Base: per un manuale, il MODELLO CTA SCRITTO DA "
                                "GABRIELE per quel manuale più coerente con questo post (se mancano, i TESTI DELLE NOSTRE SLIDE "
                                "CTA di quel manuale); per 'segui la pagina', i nostri testi 'segui'. Tieni la sua leva, la sua chiusura e la "
-                               "parola da commentare IDENTICHE. RISCRIVI invece l'aggancio iniziale perché continui QUESTO "
-                               "post nel suo formato e nel suo contenuto, nominando la cosa concreta di cui parla: "
-                               "elenco -> 'Se ti sei riconosciuto anche in uno solo di questi 5 segnali…' (mai 'scena'); "
-                               "scena -> 'Se ti sei rivisto in questa scena…'; riflessione -> 'Se questa frase ti ha "
-                               "colpito…'; storia -> 'Se questa storia ti suona familiare…'. Chi legge deve sentire che la "
+                               "parola da commentare IDENTICHE. RISCRIVI invece l'aggancio iniziale con lo STILE DI AGGANCIO "
+                               "indicato nel messaggio (cambia da un post all'altro: Gabriele 20/11), legato a QUESTO post "
+                               "e alla cosa concreta di cui parla (mai 'scena' se non c'è una scena). Chi legge deve sentire che la "
                                "CTA è la naturale conclusione del post, non un testo incollato. Mai partire dalle CTA delle "
                                "descrizioni. Righe corte con a capo. Niente emoji. Titolo del manuale sempre tra virgolette \"...\".",
             },
@@ -513,6 +511,42 @@ Regole fisse date da Gabriele (valgono anche qui se riguardano le slide):
 """
 
 
+AGGANCI_CTA = {   # Gabriele 20/11: "non possiamo usare sempre gli stessi stili di call to action"
+    "riconoscimento": "riconoscimento: si aggancia a ciò che il lettore ha appena letto ('Se anche uno solo di questi "
+                      "segnali ti riguarda…', 'Se questa frase ti ha colpito…'), nel formato del post",
+    "domanda": "domanda provocatoria: 'Adesso lascia che ti faccia una domanda.' e poi UNA domanda scomoda e precisa sul "
+               "post, che lo mette davanti a sé stesso; poi il collegamento",
+    "verita": "verità scomoda: apre con la cosa che nessuno gli ha mai detto in faccia su questo tema, secca, poi il "
+              "collegamento",
+    "costo": "costo dell'attesa: cosa succede se resta com'è (la prossima volta che…, tra sei mesi…), concreto e "
+             "brutale, poi il collegamento",
+    "ribaltamento": "ribaltamento: 'Il problema non è lei. È…' / 'Non ti manca X, ti manca Y': rovescia la convinzione "
+                    "del lettore sul post, poi il collegamento",
+    "sfida": "sfida diretta: lo provoca su un comportamento preciso che ha quasi sicuramente ('Scommetto che anche "
+             "stasera…', 'Dimmi la verità:…'), poi il collegamento",
+    "meccanismo": "il perché: 'C'è un motivo preciso per cui…' e in una riga il meccanismo psicologico dietro il post, "
+                  "poi il collegamento",
+}
+
+
+def scegli_aggancio_cta() -> tuple[str, str]:
+    """Ruota gli stili di aggancio della CTA: mai uno usato negli ultimi 4 post della pagina."""
+    import random
+    f = config.DATA_DIR / "agganci_cta.json"
+    try:
+        storia = json.loads(f.read_text(encoding="utf-8"))
+    except Exception:
+        storia = []
+    liberi = [k for k in AGGANCI_CTA if k not in storia[-4:]] or list(AGGANCI_CTA)
+    k = random.choice(liberi)
+    try:
+        config.DATA_DIR.mkdir(parents=True, exist_ok=True)
+        f.write_text(json.dumps((storia + [k])[-20:]), encoding="utf-8")
+    except Exception:
+        pass
+    return k, AGGANCI_CTA[k]
+
+
 def translate_slides(caption: str, owner: str, images: list[bytes], brand: dict, rules: list[dict]) -> dict:
     content: list = []
     for i, data in enumerate(images, 1):
@@ -520,7 +554,8 @@ def translate_slides(caption: str, owner: str, images: list[bytes], brand: dict,
         content.append(_image_block(data, 1024))
     content.append({"type": "text", "text": (
         f"Pagina di origine: @{owner}. Numero di slide: {len(images)}.\n"
-        f"Descrizione originale, solo per capire il contesto:\n<<<\n{(caption or '(vuota)')[:2000]}\n>>>"
+        f"Descrizione originale, solo per capire il contesto:\n<<<\n{(caption or '(vuota)')[:2000]}\n>>>\n\n"
+        f"STILE DI AGGANCIO della slide CTA finale per QUESTO post: {scegli_aggancio_cta()[1]}."
     )})
     out = _tool_call(_slides_system(brand, rules), content, SLIDES_TOOL, model=config.SLIDES_MODEL, max_tokens=16000)
     try:
@@ -950,6 +985,8 @@ def write_caption(slides_out: dict, caption: str, brand: dict, rules: list[dict]
         + _source_cta_note(slides_out)
         + _cta_da_natura(slides_out)
         + "\n\n" + _caption_variabile(recent)
+        + f"\n\nSTILE DI AGGANCIO della CTA nella descrizione (diverso dalla formula 'Se ti sei…'): "
+          f"{scegli_aggancio_cta()[1]}."
     )}]
     system = _caption_system(brand, rules, recent)
     # Descrizione: Opus sulle pagine che vendono manuali (la CTA deve vendere), Sonnet (metà prezzo) su quelle che
