@@ -1704,6 +1704,15 @@ def main():
                 except Exception as e:
                     log.warning("Rete: connessione a %s FALLITA dopo %.1fs (%s)", host, time.time() - t1,
                                 type(e).__name__)
+            import httpx
+            for nome, url in (("pagina Telegram", "https://api.telegram.org/"),
+                              ("getMe del bot", f"https://api.telegram.org/bot{config.TELEGRAM_BOT_TOKEN}/getMe")):
+                t1 = time.time()
+                try:
+                    r = httpx.get(url, timeout=20)
+                    log.info("Rete: %s -> HTTP %s in %.1fs", nome, r.status_code, time.time() - t1)
+                except Exception as e:
+                    log.warning("Rete: %s FALLITA dopo %.1fs (%s)", nome, time.time() - t1, type(e).__name__)
         except Exception as e:
             log.warning("Avvio: api.telegram.org non raggiungibile (%s)", e)
 
