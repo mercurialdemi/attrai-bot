@@ -1703,11 +1703,15 @@ def main():
         if not _partito.wait(180):
             log.error("Avvio bloccato da 3 minuti nel collegamento a Telegram: riavvio")
             os._exit(1)
+    import faulthandler
+    import sys
+    faulthandler.dump_traceback_later(75, repeat=False, file=sys.stderr)   # diagnosi: dove resta fermo l'avvio
     threading.Thread(target=_rete, daemon=True).start()
     threading.Thread(target=_guardia, daemon=True).start()
 
     async def _battito(context):      # diagnosi 20/11: il bot sta davvero leggendo i messaggi da Telegram?
         _partito.set()
+        faulthandler.cancel_dump_traceback_later()
         up = context.application.updater
         try:
             me = await context.bot.get_me()
