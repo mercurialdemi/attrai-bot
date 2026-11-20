@@ -110,11 +110,14 @@ def proponi_temi(brand: dict) -> list[dict]:
     if any("potere" in (m.get("id") or "") for m in brand.get("manuali") or []):
         slug = pagine.corrente()
         mix = ("\nMIX SEDUZIONE + POTERE (per il bundle AttraiSeduci + Potere Sociale): "
-               + ("almeno 2 degli 8 temi" if slug == "poteresociale" else "1 degli 8 temi")
+               + ("almeno 2 degli 8 temi" if slug == "poteresociale" else
+                  "almeno 2 degli 8 temi, e ALMENO 1 DEI TEMI DI VENDITA è per il bundle (Gabriele 20/11: le storie di "
+                  "vendita erano quasi sempre per il solo manuale di seduzione)")
                + " deve unire le due cose: come la posizione di un uomo nel gruppo, il rispetto che ottiene e il suo "
                "frame cambiano l'attrazione di lei (es. ignorato al tavolo mentre lei guarda; dice sempre sì agli "
                "amici e lei lo sente; un altro prende la parola e lei si gira verso di lui). Se è di vendita, il "
-               "manuale è il bundle.")
+               "manuale è il bundle. Nei temi di VENDITA scrivi all'inizio del tema il manuale tra parentesi quadre, "
+               "es. [bundle], [seduzione], [friendzone].")
     dati = ("\nTEMI E DOLORI CHE RENDONO DI PIÙ SU QUESTA PAGINA (dai post virali, dal più forte):\n"
             + "\n".join(f"- {t}" for t in (sv.get("temi") or [])[:12])) if sv.get("temi") else ""
     richiesta = (f"Proponi 8 temi per serie di storie: {7 - vendita} didattica, {vendita} vendita, 1 domande "
@@ -293,7 +296,8 @@ def scrivi(brand: dict, tema: str, tipo: str | None, rules: list[dict]) -> dict:
     cta = modo_cta() if tipo == "vendita" else ""
     richiesta = {
         "didattica": "Serie DIDATTICA: chiusura senza vendere.\n" + _testo_struttura(struttura),
-        "vendita": ("Serie di VENDITA, col manuale più adatto al tema.\n" + _testo_struttura(struttura) + "\n"
+        "vendita": ("Serie di VENDITA, col manuale più adatto al tema (se il tema indica il manuale tra parentesi "
+                    "quadre, es. [bundle], usa QUEL manuale; il bundle è AttraiSeduci + Potere Sociale).\n" + _testo_struttura(struttura) + "\n"
                     + CTA_TESTO.get(cta, "")),
         "domande": ("BOX DOMANDE: 1 slide sola. Un blocco di 3-4 righe che apre il tema con un gancio e invita a fare "
                     "la domanda che non farebbero a nessuno (la metà alta resta libera per lo sticker DOMANDA). "
