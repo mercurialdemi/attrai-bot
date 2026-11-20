@@ -500,7 +500,8 @@ def add_brand_mark(img: Image.Image, brand: dict, avoid: list | None = None,
     d = max(36, int(W * float(wm.get("larghezza_logo", 0.075))))
     if at and alto and wm.get("stessa_grandezza", True):
         # stessa grandezza del watermark che sostituiamo (entro limiti leggibili)
-        d = int(min(max(W * alto, W * 0.032, 28), W * 0.11))
+        # minimo alzato (Gabriele 20/11, post 155: "logo troppo piccolo" al posto di un handle sottile)
+        d = int(min(max(W * alto, W * 0.062, 40), W * 0.11))
     margin = int(W * 0.04)
     text = wm.get("testo", brand.get("nome", ""))
     font = _font(int(d * 0.42))
