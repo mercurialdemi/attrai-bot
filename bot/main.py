@@ -1696,6 +1696,14 @@ def main():
         try:
             ip = socket.getaddrinfo("api.telegram.org", 443)[0][4][0]
             log.info("Avvio: api.telegram.org -> %s in %.1fs", ip, time.time() - t0)
+            for host in ("api.telegram.org", "api.anthropic.com", "github.com"):
+                t1 = time.time()
+                try:
+                    socket.create_connection((host, 443), timeout=10).close()
+                    log.info("Rete: connessione a %s riuscita in %.1fs", host, time.time() - t1)
+                except Exception as e:
+                    log.warning("Rete: connessione a %s FALLITA dopo %.1fs (%s)", host, time.time() - t1,
+                                type(e).__name__)
         except Exception as e:
             log.warning("Avvio: api.telegram.org non raggiungibile (%s)", e)
 
