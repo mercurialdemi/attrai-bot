@@ -134,6 +134,7 @@ async def _authorized(update: Update) -> bool:
 async def _set_page(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Prima di tutto: la pagina su cui si lavora è quella del gruppo (o AttraiSeduci in chat privata)."""
     chat = update.effective_chat
+    log.info("Messaggio ricevuto da chat %s", chat.id if chat else None)
     pagine.imposta(pagine.di_chat(chat.id if chat else None))
 
 
@@ -1681,6 +1682,16 @@ def main():
     pagine.imposta(pagine.PRINCIPALE)
     _schedule_diagnostics(app)
     log.info("Bot avviato.")
+
+    async def _battito(context):      # diagnosi 20/11: il bot sta davvero leggendo i messaggi da Telegram?
+        up = context.application.updater
+        try:
+            me = await context.bot.get_me()
+            log.info("Battito: collegato a Telegram come @%s, lettura messaggi attiva=%s", me.username,
+                     bool(up and up.running))
+        except Exception as e:
+            log.warning("Battito: Telegram non risponde (%s)", type(e).__name__)
+    app.job_queue.run_repeating(_battito, interval=120, first=20)
     app.run_polling(allowed_updates=Update.ALL_TYPES)
 
 
