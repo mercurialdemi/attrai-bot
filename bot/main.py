@@ -1593,6 +1593,7 @@ def main():
     async def _menu(application: Application):
         """Menu dei comandi che Telegram mostra scrivendo "/" o col pulsante Menu."""
         from telegram import BotCommand
+        log.info("Avvio: collegato a Telegram, imposto il menu")
         from bot import costi
         loop = asyncio.get_running_loop()
         destinatari = sorted(config.REPORT_CHAT_IDS or config.ALLOWED_USER_IDS)
@@ -1608,6 +1609,8 @@ def main():
             log.exception("Menu comandi non impostato")
 
     app = (Application.builder().token(config.TELEGRAM_BOT_TOKEN).concurrent_updates(True)
+           .connect_timeout(15).read_timeout(30).write_timeout(60).pool_timeout(15)
+           .get_updates_connect_timeout(15).get_updates_read_timeout(40).get_updates_pool_timeout(15)
            .post_init(_menu).build())
     app.add_handler(TypeHandler(Update, _set_page), group=-1)     # la pagina del gruppo, prima di ogni altra cosa
     app.add_handler(CommandHandler(["start", "aiuto", "help", "comandi"], cmd_start))
@@ -1683,7 +1686,28 @@ def main():
     _schedule_diagnostics(app)
     log.info("Bot avviato.")
 
+    import os
+    import socket
+    import threading
+    _partito = threading.Event()
+
+    def _rete():                      # diagnosi 20/11: il nome di Telegram si risolve? (blocchi DNS)
+        t0 = time.time()
+        try:
+            ip = socket.getaddrinfo("api.telegram.org", 443)[0][4][0]
+            log.info("Avvio: api.telegram.org -> %s in %.1fs", ip, time.time() - t0)
+        except Exception as e:
+            log.warning("Avvio: api.telegram.org non raggiungibile (%s)", e)
+
+    def _guardia():                   # se dopo 3 minuti non legge ancora i messaggi, esce e Render lo riavvia
+        if not _partito.wait(180):
+            log.error("Avvio bloccato da 3 minuti nel collegamento a Telegram: riavvio")
+            os._exit(1)
+    threading.Thread(target=_rete, daemon=True).start()
+    threading.Thread(target=_guardia, daemon=True).start()
+
     async def _battito(context):      # diagnosi 20/11: il bot sta davvero leggendo i messaggi da Telegram?
+        _partito.set()
         up = context.application.updater
         try:
             me = await context.bot.get_me()
