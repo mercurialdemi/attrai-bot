@@ -1,0 +1,96 @@
+{
+ "giorno": "2026-11-21",
+ "post_preparati": 8,
+ "slide_totali": 41,
+ "slide_fallite": 0,
+ "lavorazione": {
+  "testo-su-sfondo-uniforme": {
+   "totali": 10,
+   "fallite": 0
+  },
+  "cta-stile-post": {
+   "totali": 5,
+   "fallite": 0
+  },
+  "blocchi-pulizia-codice": {
+   "totali": 1,
+   "fallite": 0
+  },
+  "blocchi-ricostruzione-codice": {
+   "totali": 2,
+   "fallite": 0
+  },
+  "originale": {
+   "totali": 1,
+   "fallite": 0
+  },
+  "cta-alone": {
+   "totali": 2,
+   "fallite": 0
+  },
+  "blocchi-sfondo-pieno": {
+   "totali": 18,
+   "fallite": 0
+  },
+  "cta-illustrata": {
+   "totali": 1,
+   "fallite": 0
+  },
+  "openai-testo": {
+   "totali": 1,
+   "fallite": 0
+  }
+ },
+ "segnalazioni": [
+  {
+   "job_id": 155,
+   "testo": "il logo troppo in piccolo",
+   "quando": "2026-11-20T06:04:29+00:00"
+  }
+ ],
+ "post_con_problemi": [
+  {
+   "job_id": 155,
+   "fonte": "https://www.instagram.com/p/DfMt18DJD6D/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "'Not taking women seriously\" is the most powerful game technique every man should learn.",
+     "testo": "La tecnica di seduzione più potente\nche un uomo possa imparare?\n\"Non prendere le donne troppo sul serio.\"",
+     "blocchi": [
+      {
+       "x": 26,
+       "y": 451,
+       "w": 938,
+       "h": 102,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Se questa frase ti ha colpito,\nse anche tu rileggi tre volte\nogni suo messaggio\nper capire cosa voleva dire,\n\nsegui @attraiseduci.\n\nOgni giorno parliamo di relazioni,\nseduzione e psicologia femminile.\n\nPer smettere di essere\nquello che la mette sul piedistallo.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Un uomo deve smettere di mettere le donne su un piedistallo e di dare un peso enorme a ogni loro parola o atteggiamento. Quando non le prendi troppo sul serio, le vedi come persone e non come un premio da conquistare. Così resti rilassato e non perdi i tuoi standard. Il tono è provocatorio, una frase d'impatto.",
+   "descrizione": "Rileggi la sua risposta tre volte. Pesi il punto alla fine, l'emoji che manca, i quaranta minuti di ritardo. Intanto lei, dall'altra parte, ha già dimenticato cosa ti ha scritto.\n\nOgni sua parola diventa un verdetto su di te. Un suo malumore ti rovina la serata, un suo silenzio ti tiene sveglio. Ti costa la calma e il tempo, ma soprattutto il posto che occupi nella sua testa: un uomo che pende dalle labbra di una donna le sta dicendo, senza volerlo, che lei vale più di lui.\n\nLei comunica con le emozioni, e le emozioni cambiano. Quello che dice alle undici di sera non è quello che pensa alle nove del mattino. Se prendi ogni frase alla lettera, tratti ogni onda come un terremoto e passi la vita a rincorrere crisi che per lei erano già finite. Spesso ti mette alla prova proprio così, per vedere se ti sposta. E non cerca un giudice che soppesa ogni frase: cerca un uomo che ci ride sopra e va avanti.\n\nAll'Università della Virginia, Erin Whitchurch, Timothy Wilson e Daniel Gilbert (2011) hanno mostrato a delle studentesse i profili di uomini che le avevano valutate. Le attiravano di più quelli che lasciavano il dubbio, non quelli che le avevano messe al primo posto. Chi la piazza in cima a tutto le toglie ogni motivo di pensarci.\n\nNon prenderla troppo sul serio non vuol dire disprezzarla. Vuol dire che i suoi umori non cambiano la tua direzione. Davanti a una provocazione rispondi con l'ironia, non con una spiegazione. La tua vita resta piena e lei ci entra, non ne diventa il centro.\n\nIl piedistallo non la avvicina a te. La mette abbastanza in alto da guardarti dall'alto in basso.\n\nSei d'accordo con il post?\n\n#psicologiafemminile #seduzione #frame #piedistallo #sicurezzainteriore",
+   "segnalazioni": [
+    "il logo troppo in piccolo"
+   ]
+  }
+ ]
+}
