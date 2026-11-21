@@ -872,6 +872,31 @@ async def cmd_diagnosi(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # ---------------------------------------------------------------- link manuale
 
+async def _da_reel(bot, chat_id: int, user_id: int, url: str, brand: dict, status) -> None:
+    """Reel (21/11): parlato -> carosello nostro con gli stessi concetti; frase a schermo -> post singolo."""
+    from bot import reel_post, copione as copione_mod
+    await status.edit_text("È un reel: lo guardo e ascolto la voce (1-2 minuti)…")
+    try:
+        info = await asyncio.to_thread(reel_post.leggi, url, brand)
+    except copione_mod.CopioneError as e:
+        await status.edit_text(str(e))
+        return
+    if info.get("tipo") == "frase" and (info.get("frase_italiana") or "").strip():
+        await status.edit_text("Reel con una frase: ne faccio un post singolo…")
+        post, paths = await asyncio.to_thread(reel_post.make_singolo, brand, storage.list_rules(),
+                                              storage.recent_style(), info["frase_italiana"])
+        header = f"POST SINGOLO DA REEL · frase originale: «{(info.get('frase_originale') or '').strip()[:200]}»"
+    else:
+        await status.edit_text("Reel parlato: ne faccio un carosello con gli stessi concetti…")
+        post, paths = await asyncio.to_thread(crea.make, brand, storage.list_rules(), storage.recent_style(),
+                                              reel_post.hint_carosello(info))
+        header = f"CAROSELLO DA REEL · {(post.get('_idea') or {}).get('tema', '')}"
+    job_id = storage.save_job(chat_id, user_id, url, brand.get("handle", ""), post, paths)
+    pipeline.after_save(job_id, url, post, paths, [])
+    await status.delete()
+    await pipeline.send_post(bot, chat_id, job_id, post, paths, [], header=header)
+
+
 async def process_link(update: Update, context: ContextTypes.DEFAULT_TYPE, url: str):
     msg = update.effective_message
     chat_id = update.effective_chat.id
@@ -885,7 +910,7 @@ async def process_link(update: Update, context: ContextTypes.DEFAULT_TYPE, url: 
         brand = writer.load_brand()
         src = await asyncio.to_thread(instagram.fetch_post, url)
         if src.is_video:
-            await status.edit_text("Per ora gestisco post con immagini e caroselli, i reel arriveranno più avanti.")
+            await _da_reel(context.bot, chat_id, update.effective_user.id, url, brand, status)
             return
         await context.bot.send_chat_action(chat_id, ChatAction.TYPING)
         post, paths, failed = await pipeline.build_post(src, brand, str(msg.message_id), on_status=status.edit_text)
