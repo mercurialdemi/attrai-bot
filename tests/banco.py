@@ -152,6 +152,11 @@ CASI = {
     # post 149 (19/11): segnalato "la prima riga in alto termina precisa con lo sfondo nero dietro: un pelino di spazio in più"
     "cover_bloodline.jpg": ("foto", "FOR THE SAKE OF YOUR BLOODLINE, AVOID THESE 8 TYPES OF WOMEN AT ALL COSTS", [
         dict(testo="PER IL [[BENE]] DELLA TUA\n[[DISCENDENZA,]] STAI LONTANO\nDA QUESTI [[8 TIPI]] DI\n[[DONNE.]] A [[OGNI COSTO.]]", x=35, y=580, w=930, h=400, colore="#FFFFFF", colore_evidenziato="#F5C518", allineamento="center", maiuscolo=True, carattere=S, peso="bold")]),
+    # post 70 (20/11, Potere Sociale): segnalato "mettere il nostro watermark". Claude non aveva segnalato la firma
+    # '-@astoicsmind-' in basso: restava e il nostro logo mancava. Ora la trova il codice (images.trova_firme)
+    "stoico_firma_basso.jpg": ("foto", '"An enemy will agree, but a friend will argue." — Russian Proverb', [
+        dict(testo='"Il nemico ti dà ragione,\nl\'amico ti contraddice."', x=91, y=98, w=818, h=132, colore="#111111", allineamento="center", carattere=S),
+        dict(testo="Proverbio russo", x=299, y=259, w=402, h=34, colore="#111111", allineamento="center", carattere=S)]),
 }
 
 
@@ -167,6 +172,8 @@ def main(out_dir: str, salva: bool = False):
         sl = {"numero": 2, "testo": "\n\n".join(x["testo"] for x in blocks), "testo_originale": orig_txt,
               "sfondo": sfondo, "watermark_originale": (marchio or [""])[0], "da_modificare": True, "altri_marchi": [],
               "watermark_riquadro": (marchio[1:] or [NONE])[0], "blocchi": [dict(x) for x in blocks]}
+        if not marchio and images.trova_firme([sl], [b.getvalue()]):
+            sl["_metti_logo"] = True      # firma di un'altra pagina trovata dal codice: va il nostro logo
         try:
             img, ok, pr = images.render_slide(b.getvalue(), sl, brand, "codice")
         except Exception as e:

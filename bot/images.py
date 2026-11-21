@@ -588,6 +588,15 @@ def _remove_watermark(clean: Image.Image, orig_fit: Image.Image, slide: dict):
     if done:
         return clean
     wb = textslide.wm_box(slide, W, H)
+    if wb:
+        # fascia non uniforme (es. una foto che scende fin quasi in fondo) ma attorno alla firma lo sfondo è
+        # pulito: si cancella con precisione solo lì (20/11, post 70: l'inpaint lasciava un'ombra)
+        bg = textslide.local_background(clean, wb)
+        if bg is not None:
+            clean, _, _ = textslide.erase_local(clean, wb, bg)
+            if not textslide.other_marks(slide, W, H):
+                return clean
+            wb = None                                  # già cancellata: restano solo gli altri marchi
     marks = ([wb] if wb else []) + textslide.other_marks(slide, W, H)
     if marks:
         try:
@@ -601,6 +610,85 @@ def _remove_watermark(clean: Image.Image, orig_fit: Image.Image, slide: dict):
     except Exception as e:
         log.warning("Rimozione watermark con Gemini fallita: %s", e)
     return clean
+
+
+def _firma_in_basso(img: Image.Image, blocchi: list) -> tuple | None:
+    """Riquadro di una firma piccola isolata in basso (es. '-@astoicsmind-') su sfondo uniforme, fuori dai blocchi
+    di testo. None se non c'è o se la zona non è abbastanza pulita per esserne sicuri."""
+    import numpy as np
+    g = np.asarray(img.convert("L")).astype(np.int16)
+    H, W = g.shape
+    y0, y1, x0, x1 = int(H * 0.86), int(H * 0.985), int(W * 0.02), W - int(W * 0.02)
+    band = g[y0:y1, x0:x1]
+    bg = float(np.median(band[-max(3, band.shape[0] // 4):]))     # colore di fondo: le righe più in basso
+    ink = np.abs(band - bg) > 40
+    rows = textslide._runs(ink.sum(axis=1) >= 2, min_gap=max(2, int(H * 0.006)))
+    if not rows:
+        return None
+    if len(rows) > 1:
+        # sopra c'è altro (il fondo di una foto): si guarda solo sotto, se c'è uno stacco pulito
+        top = rows[-2][1] + 1
+        if rows[-1][0] - top < H * 0.015:
+            return None
+        y0, band, ink = y0 + top, band[top:], ink[top:]
+        rows = [(rows[-1][0] - top, rows[-1][1] - top)]
+    if ink.mean() > 0.08 or float(band[~ink].std()) > 12:
+        return None                                    # zona non uniforme (foto, disegno): meglio non toccare
+    ry0, ry1 = rows[0]
+    if ry0 < H * 0.01 or not (H * 0.006 <= ry1 - ry0 + 1 <= H * 0.04):
+        return None                                    # tocca la zona sopra (continua un'immagine) o troppo grande
+    cols = np.where(ink[ry0:ry1 + 1].any(axis=0))[0]
+    cx0, cx1 = int(cols.min()), int(cols.max())
+    if not (W * 0.03 <= cx1 - cx0 + 1 <= W * 0.5):
+        return None
+    box = (x0 + cx0, y0 + ry0, x0 + cx1 + 1, y0 + ry1 + 1)
+    for b in blocchi or []:
+        try:
+            bb = textslide.block_box(b, W, H)
+        except (KeyError, TypeError):
+            continue
+        if not (box[2] < bb[0] or box[0] > bb[2] or box[3] < bb[1] or box[1] > bb[3]):
+            return None                                # è testo del post, non una firma
+    return box
+
+
+def trova_firme(slides: list[dict], originals: list[bytes]) -> int:
+    """Rete di sicurezza (Gabriele 20/11, post 70: '-@astoicsmind-' in basso non era stato segnalato da Claude,
+    quindi restava e il nostro logo non veniva messo). Se nessuna slide ha un watermark segnalato e il post non è
+    nostro, cerca col codice una firma piccola nella stessa posizione in basso su più slide. Restituisce quante."""
+    if any((s.get("watermark_originale") or "").strip() for s in slides) or any(s.get("_nostra") for s in slides):
+        return 0
+    cand = [i for i, s in enumerate(slides[:len(originals)])
+            if not s.get("e_cta") and not s.get("_cta_riscritta") and "(slide CTA " not in (s.get("testo") or "")]
+    trovate = {}
+    for i in cand:
+        try:
+            im = Image.open(io.BytesIO(originals[i])).convert("RGB")
+            box = _firma_in_basso(im, slides[i].get("blocchi"))
+        except Exception as e:
+            log.debug("Ricerca firma slide %s non riuscita: %s", i + 1, e)
+            continue
+        if box:
+            W, H = im.size
+            trovate[i] = ((box[0] + box[2]) / 2 / W, (box[1] + box[3]) / 2 / H, box, W, H)
+    if not trovate or (len(cand) >= 2 and len(trovate) < 2):
+        return 0
+    if len(trovate) >= 2:
+        mx = sorted(v[0] for v in trovate.values())[len(trovate) // 2]
+        my = sorted(v[1] for v in trovate.values())[len(trovate) // 2]
+        trovate = {i: v for i, v in trovate.items() if abs(v[0] - mx) <= 0.04 and abs(v[1] - my) <= 0.03}
+        if len(trovate) < 2:
+            return 0                                   # non è la stessa firma ripetuta: non si tocca niente
+    for i, (cx, _cy, box, W, H) in trovate.items():
+        lato = "a sinistra" if cx < 0.35 else "a destra" if cx > 0.65 else "al centro"
+        px, py = W * 0.006, H * 0.006
+        slides[i]["watermark_originale"] = f"firma della pagina di origine in basso {lato}"
+        slides[i]["watermark_riquadro"] = {
+            "x": int(max(0, box[0] - px) / W * 1000), "y": int(max(0, box[1] - py) / H * 1000),
+            "w": int(min(W - box[0], box[2] - box[0] + 2 * px) / W * 1000) + 1,
+            "h": int(min(H - box[1], box[3] - box[1] + 2 * py) / H * 1000) + 1}
+    log.info("Firma della pagina di origine trovata col codice sulle slide %s", [i + 1 for i in trovate])
+    return len(trovate)
 
 
 def needs_logo(slide: dict, brand: dict) -> bool:
@@ -1023,6 +1111,11 @@ async def render_all(post: dict, originals: list[bytes], brand: dict, job_dir: P
         post["_peso_testo"] = peso
         for sl in slides:
             sl["_peso_post"] = peso
+    # firma dell'altra pagina sfuggita a Claude: la si cerca col codice (gratis)
+    try:
+        await asyncio.to_thread(trova_firme, slides, originals)
+    except Exception as e:
+        log.warning("Ricerca della firma non riuscita: %s", e)
     # il nostro logo: solo sulla prima slide, e solo se il post è di un'altra pagina (aveva il suo watermark)
     wm_post = any((sl.get("watermark_originale") or "").strip() for sl in slides
                   if not sl.get("_cta_riscritta") and "(slide CTA " not in (sl.get("testo") or ""))

@@ -503,7 +503,8 @@ Ricevi le slide di un post di una pagina collaboratrice che ci ha autorizzato a 
   parole sono in grassetto in mezzo a testo normale mettile tra {{ }}. Nella traduzione evidenzia le parole
   italiane che hanno lo stesso ruolo. Non perdere mai un'evidenziazione dell'originale.
   colore_evidenziato vuoto solo se non ci sono parole di un altro colore.
-- Segnala in watermark_originale handle, nome o logo di un'altra pagina e dove si trova. Se è il nostro (@{brand['handle']}, {brand['nome']}) o non c'è, lascialo vuoto.
+- Segnala in watermark_originale handle, nome o logo di un'altra pagina e dove si trova (anche una firma piccola
+  in basso tra trattini, come '-@pagina-', è il watermark: va segnalata con il suo riquadro). Se è il nostro (@{brand['handle']}, {brand['nome']}) o non c'è, lascialo vuoto.
 - da_modificare = false per le slide già in italiano e senza riferimenti ad altre pagine (comprese le slide con la nostra CTA o il nostro profilo): restano identiche all'originale e i blocchi riportano il testo originale.
 
 Regole fisse date da Gabriele (valgono anche qui se riguardano le slide):
@@ -572,6 +573,7 @@ def translate_slides(caption: str, owner: str, images: list[bytes], brand: dict,
         wm = (s.get("watermark_originale") or "").lower().replace(" ", "").replace("@", "")
         if own_post or any(o in wm for o in ours):
             s["watermark_originale"] = ""      # il nostro marchio non va mai sostituito
+            s["_nostra"] = True                # niente ricerca automatica della firma (images.trova_firme)
         if own_post:
             s["da_modificare"] = False         # post della nostra pagina: le slide restano com'erano
         s.setdefault("da_modificare", True)
