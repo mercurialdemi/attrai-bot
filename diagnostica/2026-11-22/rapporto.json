@@ -1,22 +1,425 @@
 {
  "giorno": "2026-11-22",
- "post_preparati": 2,
- "slide_totali": 12,
+ "post_preparati": 8,
+ "slide_totali": 58,
  "slide_fallite": 0,
  "lavorazione": {
+  "openai-testo": {
+   "totali": 36,
+   "fallite": 0
+  },
+  "cta-alone": {
+   "totali": 7,
+   "fallite": 0
+  },
   "blocchi-ricostruzione-codice": {
-   "totali": 1,
+   "totali": 5,
+   "fallite": 0
+  },
+  "blocchi-pulizia-codice": {
+   "totali": 3,
+   "fallite": 0
+  },
+  "blocchi-sfondo-pieno": {
+   "totali": 5,
    "fallite": 0
   },
   "testo-su-sfondo-uniforme": {
-   "totali": 9,
+   "totali": 1,
    "fallite": 0
   },
   "cta-stile-post": {
-   "totali": 2,
+   "totali": 1,
    "fallite": 0
   }
  },
- "segnalazioni": [],
- "post_con_problemi": []
+ "segnalazioni": [
+  {
+   "job_id": 70,
+   "testo": "mettere il nostro watermark",
+   "quando": "2026-11-20T20:49:57+00:00"
+  },
+  {
+   "job_id": 73,
+   "testo": "questa slide ha solo la scritta (con font sbagliato) e non c'è niente di raffigurazioni del post originale",
+   "quando": "2026-11-22T10:48:11+00:00"
+  }
+ ],
+ "post_con_problemi": [
+  {
+   "job_id": 70,
+   "fonte": "https://www.instagram.com/p/DfPXUwjDAs-/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "blocchi-pulizia-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "\"An enemy will agree, but a friend will argue.\" — Russian Proverb",
+     "testo": "\"Il nemico ti dà ragione,\nl'amico ti contraddice.\"\n\nProverbio russo",
+     "blocchi": [
+      {
+       "x": 91,
+       "y": 98,
+       "w": 818,
+       "h": 132,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 299,
+       "y": 259,
+       "w": 402,
+       "h": 34,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "blocchi-pulizia-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "\"A man's true character is revealed by how he treats those who can do nothing for him.\" — Unknown",
+     "testo": "\"Il carattere di un uomo\nsi vede da come tratta\nchi non può dargli\nnulla.\"\n\nAnonimo",
+     "blocchi": [
+      {
+       "x": 76,
+       "y": 44,
+       "w": 848,
+       "h": 239,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 366,
+       "y": 342,
+       "w": 268,
+       "h": 34,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "\"I sat with my anger long enough until she told me her real name was grief.\" — C.S. Lewis",
+     "testo": "\"Sono rimasto accanto alla mia rabbia\nfinché non mi ha rivelato\nil suo vero nome: dolore.\"\n\nC.S. Lewis",
+     "blocchi": [
+      {
+       "x": 85,
+       "y": 103,
+       "w": 827,
+       "h": 161,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 366,
+       "y": 303,
+       "w": 280,
+       "h": 34,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "blocchi-pulizia-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "\"A man who fears suffering is already suffering from what he fears.\" — Montaigne",
+     "testo": "\"Chi ha paura di soffrire\nsoffre già\ndi ciò che teme.\"\n\nMontaigne",
+     "blocchi": [
+      {
+       "x": 67,
+       "y": 63,
+       "w": 866,
+       "h": 225,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 354,
+       "y": 322,
+       "w": 290,
+       "h": 34,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "cta-alone",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Non ti manca carattere.\nTi manca una posizione\nda cui reggere un disaccordo.\n\nFinché non capisci come gli altri\nti leggono nei primi secondi,\nresterai quello capace ma sostituibile:\nutile, presente, mai ascoltato davvero.\n\nIn \"Potere Sociale\" trovi le leve\nche spostano la tua posizione in una stanza,\nprima ancora che tu apra bocca.\n\nCommenta POTERE e te lo mando in privato.\nUsarle, poi, sta a te.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Una raccolta di citazioni sul carattere e sulla mente: il vero amico ha il coraggio di contraddirti, il carattere di un uomo si vede da come tratta chi non può dargli niente, dietro la rabbia spesso si nasconde il dolore, e la paura di soffrire fa già soffrire. Il tono è riflessivo e solenne, da massima stoica.",
+   "descrizione": "Al tavolo dici una cosa discutibile e tutti annuiscono. Uno solo ti guarda e dice: \"Secondo me ti sbagli.\" Per un secondo lo detesti. Dieci minuti dopo è l'unico di cui ti fidi davvero.\n\nQuattro frasi, quattro scene che conosci. Chi ti dà sempre ragione spesso non ti stima: ti trova comodo, oppure non gli importa abbastanza da rischiare un attrito. E chi è gentile solo con chi gli serve ti sta mostrando il prezzo della sua gentilezza, anche quella che riserva a te. Guarda come parla al cameriere, al nuovo arrivato, a chi in quel momento non conta niente.\n\nNegli anni Cinquanta Solomon Asch mise alcune persone in una stanza con dei complici che davano risposte palesemente sbagliate su quale linea fosse più lunga. Molti partecipanti si allinearono almeno una volta, pur vedendo l'errore con i propri occhi. Il disaccordo costa, e la maggior parte delle persone preferisce non pagarlo. Per questo chi ti contraddice con calma ti sta dando qualcosa di raro: il segnale che il rapporto regge anche la tensione.\n\nLe ultime due slide guardano dentro di te. La rabbia che esplode per una battuta raramente riguarda la battuta: sotto c'è una ferita, spesso la sensazione di non contare. La paura di soffrire, invece, ti fa pagare in anticipo un conto che magari non arriverà mai. Eviti la discussione, rinunci al no, sorridi mentre dentro bruci.\n\nIl carattere si misura qui, nella capacità di reggere un disaccordo senza mendicare approvazione e senza esplodere. Chi regge la tensione viene letto come uno che ha una posizione. Chi la evita viene letto come uno da gestire.\n\nGuarda le persone che hai intorno: qualcuno ti contraddice ancora, o hai costruito una stanza dove tutti ti danno ragione?\n\nNon ti manca carattere. Ti manca l'abitudine a reggere l'attrito senza perdere posizione. Ogni discussione evitata insegna agli altri che con te basta insistere, e quel ruolo col tempo si fissa. In \"Potere Sociale\" impari a restare fermo nel disaccordo, calmo davanti alla provocazione, chiaro quando serve un no. Commenta POTERE e te lo mando in privato.\n\n#carattere #intelligenzaemotiva #poteresociale #frame #psicologiasociale",
+   "segnalazioni": [
+    "mettere il nostro watermark"
+   ]
+  },
+  {
+   "job_id": 73,
+   "fonte": "https://www.instagram.com/p/DfxAVZwDil5/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Six Laws Of Maturity",
+     "testo": "Le sei leggi\ndella maturità",
+     "blocchi": [
+      {
+       "x": 226,
+       "y": 142,
+       "w": 552,
+       "h": 170,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Control Yourself, Not Others\nMaster Your Emotions, Not Their Opinions. You Power Lies Within, Not Outside.",
+     "testo": "Controlla te stesso, non gli altri\n\nGoverna le tue emozioni, non le opinioni\naltrui. La tua forza sta dentro,\nnon fuori.",
+     "blocchi": [
+      {
+       "x": 132,
+       "y": 210,
+       "w": 725,
+       "h": 40,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 132,
+       "y": 278,
+       "w": 686,
+       "h": 112,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Learn To React Less\nSilence Is Strength. Not Everything Deserves Your Energy. When You Control Your Reaction, Nobody Can Manipulate You.",
+     "testo": "Impara a reagire di meno\n\nIl silenzio è forza. Non tutto merita\nla tua energia. Se controlli\nle reazioni, nessuno riesce\na manovrarti.",
+     "blocchi": [
+      {
+       "x": 120,
+       "y": 256,
+       "w": 505,
+       "h": 35,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 120,
+       "y": 322,
+       "w": 686,
+       "h": 156,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Choose Your Friends Wisely\nSurround Yourself With Builders, Not Destroyers. Your Circle Shapes Your Future.",
+     "testo": "Scegli bene chi frequenti\n\nStai vicino a chi costruisce, non a chi\ndistrugge. Chi hai intorno\ndecide chi diventerai.",
+     "blocchi": [
+      {
+       "x": 79,
+       "y": 210,
+       "w": 776,
+       "h": 46,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 79,
+       "y": 278,
+       "w": 737,
+       "h": 127,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Expect Nothing, Appreciate Everything\nGratitude Keeps You Grounded. Entitlement Keeps You Bitter.",
+     "testo": "Non pretendere niente,\napprezza tutto\n\nLa gratitudine ti tiene coi piedi per terra.\nLa pretesa ti incattivisce.",
+     "blocchi": [
+      {
+       "x": 100,
+       "y": 168,
+       "w": 578,
+       "h": 94,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 100,
+       "y": 293,
+       "w": 625,
+       "h": 103,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Stop Telling People Everything\nMove In Silence. Build Quietly. Let Results Make The Noise.",
+     "testo": "Smetti di raccontare tutto a tutti\n\nMuoviti in silenzio. Costruisci senza clamore.\nIl rumore lascialo fare ai risultati.",
+     "blocchi": [
+      {
+       "x": 92,
+       "y": 205,
+       "w": 818,
+       "h": 44,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 92,
+       "y": 278,
+       "w": 700,
+       "h": 93,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Trust The Process\nGrowth Isn't Instant. Stay Disciplined, Stay Patient, And Let Time Work For You.",
+     "testo": "Fidati del tempo\n\nNon si cresce in un giorno.\nResta disciplinato, resta paziente\ne lascia che il tempo lavori per te.",
+     "blocchi": [
+      {
+       "x": 79,
+       "y": 168,
+       "w": 492,
+       "h": 39,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 79,
+       "y": 234,
+       "w": 700,
+       "h": 139,
+       "carattere": "normale",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Sei leggi.\nUna sola le tiene insieme:\nchi reagisce a tutto\nlascia agli altri il proprio ritmo.\n\nQui smontiamo ogni giorno\nle dinamiche che decidono\ncome ti leggono gli altri.\n\nSegui @poteresociale.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Sei regole per diventare adulti davvero: controlla te stesso invece degli altri, reagisci di meno, scegli bene chi frequenti, non pretendere ma apprezza, non raccontare tutto a tutti e fidati del tempo. È un elenco pratico di comportamenti che separano chi è maturo da chi non lo è. Il registro è motivazionale e asciutto, da stoico.",
+   "descrizione": "Ti provocano in chat alle undici di sera e alle undici e due hai già risposto. Tre messaggi, il tono che sale, la serata rovinata. Il giorno dopo chi ha scritto non ci pensa più. Tu sì.\n\nDelle sei leggi, quella che pesa di più è la seconda, perché regge tutte le altre. Ogni reazione immediata consegna a qualcun altro il tuo ritmo. Decide lui quando ti arrabbi, quanto ci metti a calmarti e di cosa parli per il resto della giornata. In un gruppo questo si nota presto: chi risponde a ogni stimolo diventa prevedibile, e una persona prevedibile si sposta con poco.\n\nIl silenzio di cui parla il post non vuol dire stare muti. È lo spazio tra quello che ti succede e quello che fai. Lì dentro scegli se una provocazione merita una risposta, una frase secca o niente. Le persone tendono a dare autorevolezza a chi ha questo margine, perché lo leggono come stabilità.\n\nLa quinta legge sembra un consiglio di riservatezza, ma riguarda la motivazione. Nel 2009 Peter Gollwitzer, alla New York University, ha osservato che chi annunciava agli altri un obiettivo legato a chi voleva diventare tendeva poi a impegnarsi meno: il riconoscimento ricevuto per l'annuncio bastava a dare la sensazione di esserci già arrivati. Raccontare tutto a tutti ti costa due volte: perdi la spinta e dai agli altri materiale per giudicare un progetto ancora a metà.\n\nLe altre seguono la stessa logica. Chi frequenti decide quali comportamenti ti sembrano normali. La pretesa ti lega a ciò che gli altri ti danno, la gratitudine ti lascia libero. E il tempo lavora solo per chi resta coerente abbastanza a lungo da costringere gli altri ad aggiornare l'immagine che hanno di lui.\n\nNessuna di queste leggi si dimostra in un giorno. Si vede quando chi ti conosce smette di aspettarsi la tua reazione e comincia ad aspettarsi la tua decisione.\n\nSei d'accordo con il post?\n\n#maturita #autocontrollo #stoicismo #poteresociale #autorevolezza",
+   "segnalazioni": [
+    "questa slide ha solo la scritta (con font sbagliato) e non c'è niente di raffigurazioni del post originale"
+   ]
+  }
+ ]
 }
