@@ -69,7 +69,8 @@ SCHELETRO = (
     "pinstripe three-piece suit, white shirt, red tie and red flower on the lapel, confident and slightly mocking "
     "attitude. Redraw him in the art style of the FIRST image, but keep him clearly recognizable (skull face, straw "
     "hat, suit, red tie). The FIRST image gives only the style, colors and setting; the SECOND image gives only the "
-    "character. He has exactly two arms and two bony hands"
+    "character (ignore any chess pieces or furniture in it). He has exactly two arms and two bony hands. "
+    "Everyone in the scene is elegantly and fully dressed; nothing suggestive"
 )
 
 
@@ -77,8 +78,10 @@ def _personaggio(post: dict) -> Image.Image | None:
     """Il personaggio della pagina (AttraiSeduci: lo scheletro), se la pagina ne ha uno (brand: personaggio)
     e SOLO se nell'ultima slide del post originale c'è una persona o un personaggio (Gabriele 19/11)."""
     from . import writer
-    slides = post.get("slides") or []
-    if not slides or not slides[-1].get("personaggio"):
+    # 24/11: prima guardava solo l'ultima slide, che nei caroselli è quasi sempre la CTA scritta dell'altra pagina,
+    # così lo scheletro non usciva quasi mai. Ora basta che una slide del post (non la loro CTA) mostri una persona.
+    slides = [sl for sl in (post.get("slides") or []) if not sl.get("e_cta")]
+    if not any(sl.get("personaggio") for sl in slides):
         return None
     rel = str(writer.load_brand().get("personaggio") or "").strip()
     if not rel or not config.OPENAI_API_KEY:
@@ -106,6 +109,7 @@ def _genera(post: dict, ref: Image.Image, prompt: str) -> Image.Image | None:
     from . import images
     pers = _personaggio(post)
     if pers is not None:
+        log.info("CTA illustrata: scena con il nostro scheletro")
         return images._openai_edit(ref, _con_personaggio(prompt), extra=[pers])
     return images._gemini_edit(ref, prompt)
 
@@ -518,6 +522,9 @@ def make_alone(post: dict, jdir: Path) -> tuple[Path, dict] | None:
             if gen is not None:
                 bg = images._fit(gen, images.output_size(ref))
                 break
+        if bg is None and _personaggio(post) is not None:
+            log.info("CTA casella: scena con lo scheletro non riuscita, uso lo sfondo del post")
+            bg = _post_background(post, jdir / "originali")
     else:
         bg = _post_background(post, jdir / "originali")
     if bg is None:
