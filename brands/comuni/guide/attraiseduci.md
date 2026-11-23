@@ -47,6 +47,14 @@ proprie tesi e NON si scusa per il post che pubblica.
     danneggiata, o quando ha avuto abbastanza uomini da aver "riprogrammato" il cervello a non temere più una
     gravidanza indesiderata (lega con i punti 11 e 13). Base biologica: investimento parentale asimmetrico (Trivers,
     1972); la seconda parte è convinzione della pagina, non va presentata come "gli studi dimostrano".
+18. La contraddizione del "non mi serve un uomo" (Gabriele 23/11, lega col punto 12). Il femminismo moderno
+    racconta che alla donna l'uomo non serve. Ma se davvero non le servisse non se ne lamenterebbe: il fatto che
+    se ne lamenti dimostra che le serve, e che non le sta bene doverne fare a meno.
+19. L'essenza della femminilità (Gabriele 23/11). Quando una donna è davvero innamorata si comporta in modo
+    straordinario con quell'uomo: non per calcolo, ma perché la sua natura femminile prende il sopravvento. Quella
+    è la vera femminilità, e un uomo la vede solo se è l'uomo giusto (frame, punti 7 e 15). Il rovescio è il punto
+    17: una donna che riesce ad andare a letto con uomini per cui non prova niente ha spento proprio questa natura,
+    per la pagina è mentalmente danneggiata.
 
 REGOLE PER DESCRIZIONI E CTA DI ATTRAISEDUCI (19/11, Gabriele: "peggiorano invece di migliorare")
 - Mai prendere le distanze dal post o correggerlo ("il post è volutamente brutale", "le etichette tagliano con
