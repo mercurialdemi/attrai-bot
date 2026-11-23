@@ -508,14 +508,14 @@ def make_alone(post: dict, jdir: Path) -> tuple[Path, dict] | None:
         return None
     bg = None
     op = jdir / "originali" / "01.jpg"
-    if _is_comic(post) or _post_background(post, jdir / "originali") is None or (_personaggio(post) is not None and op.exists()):
+    if _is_comic(post) or _post_background(post, jdir / "originali") is None:
         if not op.exists() or not (config.GEMINI_API_KEY or config.OPENAI_API_KEY):
             return None
         from . import images
         ref = Image.open(op).convert("RGB")
         for _ in range(2):
             try:
-                gen = _genera(post, ref, _al_pubblico(PROMPT_SCENA))
+                gen = _genera({**post, "slides": []}, ref, _al_pubblico(PROMPT_SCENA))
             except Exception as e:
                 log.warning("CTA casella: scena non generata (%s)", e)
                 gen = None

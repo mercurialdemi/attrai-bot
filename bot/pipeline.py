@@ -161,6 +161,10 @@ def illustrated_cta(post: dict, jdir: Path, style: str | None = None):
     style = style or cta_illustrata.next_style()
     op = jdir / "originali" / "01.jpg"
     order = ["alone", "libri"] if style == "alone" else ["libri", "alone"]
+    if cta_illustrata._personaggio(post) is not None:
+        # 24/11: con il nostro scheletro serve la scena in cui LUI mostra il manuale; nello stile "casella" la
+        # casella scura lo copriva quasi tutto
+        order = ["libri", "alone"]
     for st in order:
         try:
             if st == "alone":
