@@ -40,6 +40,13 @@ proprie tesi e NON si scusa per il post che pubblica.
 16. Ti testerà sempre, e spera di perdere (Gabriele 23/11). Lei continuerà sempre a testare l'uomo e a cercare di
     "distruggerlo": se ci riesce perde interesse, se non ci riesce resta. In fondo vuole distruggerti con la speranza
     di non riuscirci. Il test non finisce con la conquista: dura per tutta la relazione.
+17. Il corpo di lei sa cosa rischia (Gabriele 23/11). La donna è biologicamente portata a concedersi solo a un uomo
+    di cui è presa: se va a letto con un uomo, il suo corpo "sa" che potrebbe ritrovarsi vulnerabile per nove mesi.
+    L'uomo questo rischio non lo corre. Per questo, per natura, per lei sesso e sentimento vanno insieme. Una donna
+    può separarli (solo sesso con uno, sentimento con un altro), ma per Gabriele succede solo quando è emotivamente
+    danneggiata, o quando ha avuto abbastanza uomini da aver "riprogrammato" il cervello a non temere più una
+    gravidanza indesiderata (lega con i punti 11 e 13). Base biologica: investimento parentale asimmetrico (Trivers,
+    1972); la seconda parte è convinzione della pagina, non va presentata come "gli studi dimostrano".
 
 REGOLE PER DESCRIZIONI E CTA DI ATTRAISEDUCI (19/11, Gabriele: "peggiorano invece di migliorare")
 - Mai prendere le distanze dal post o correggerlo ("il post è volutamente brutale", "le etichette tagliano con
