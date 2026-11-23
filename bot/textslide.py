@@ -442,7 +442,9 @@ def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False,
     # quella slide la lascia a Gemini per non cancellarla
     header_rows = []
     for (y0, y1, x0, x1), h in zip(lines, heights):
-        if h > 2.6 * med_h and y0 > H * 0.22 and y1 < H * 0.86:
+        # (anche un disegno grande che arriva fino al bordo in basso: post 73 del 22/11, ragazzo col corvo
+        # su carta grigia, cancellato e restava solo la scritta)
+        if h > 2.6 * med_h and y0 > H * 0.22 and (y1 < H * 0.86 or (y0 < H * 0.86 and h > H * 0.2)):
             # con un marchio di un'altra pagina, un elemento piccolo è il suo avatar (stile tweet): si cancella
             if has_mark and h < H * 0.14:
                 header_rows.append((y0, y1))

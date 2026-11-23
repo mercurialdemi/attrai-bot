@@ -154,6 +154,13 @@ CASI = {
         dict(testo="PER IL [[BENE]] DELLA TUA\n[[DISCENDENZA,]] STAI LONTANO\nDA QUESTI [[8 TIPI]] DI\n[[DONNE.]] A [[OGNI COSTO.]]", x=35, y=580, w=930, h=400, colore="#FFFFFF", colore_evidenziato="#F5C518", allineamento="center", maiuscolo=True, carattere=S, peso="bold")]),
     # post 70 (20/11, Potere Sociale): segnalato "mettere il nostro watermark". Claude non aveva segnalato la firma
     # '-@astoicsmind-' in basso: restava e il nostro logo mancava. Ora la trova il codice (images.trova_firme)
+    # post 73 (22/11): segnalato "questa slide ha solo la scritta (con font sbagliato) e non c'è niente delle
+    # raffigurazioni del post originale": il disegno (ragazzo col corvo) toccava il bordo in basso e il codice
+    # lo prendeva per sfondo uniforme da cancellare
+    "carta_corvo.jpg": ("disegno", "Control Yourself, Not Others\nMaster Your Emotions, Not Their\nOpinions. You Power Lies Within, Not\nOutside.", [
+        dict(testo="Controlla te stesso, non gli altri", x=132, y=210, w=725, h=40, colore="#111111", allineamento="left", carattere=S),
+        dict(testo="Governa le tue emozioni, non le opinioni\naltrui. La tua forza sta dentro,\nnon fuori.", x=132, y=278, w=686, h=112, colore="#111111", allineamento="left", carattere=S)],
+        "in alto a destra: @philosophyflirt", {"x": 760, "y": 20, "w": 215, "h": 35}),
     "stoico_firma_basso.jpg": ("foto", '"An enemy will agree, but a friend will argue." — Russian Proverb', [
         dict(testo='"Il nemico ti dà ragione,\nl\'amico ti contraddice."', x=91, y=98, w=818, h=132, colore="#111111", allineamento="center", carattere=S),
         dict(testo="Proverbio russo", x=299, y=259, w=402, h=34, colore="#111111", allineamento="center", carattere=S)]),
