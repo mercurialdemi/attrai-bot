@@ -1,4 +1,4 @@
-VISIONE DI ATTRAISEDUCI (il filone di pensiero di Gabriele, 19/11 – bozza, da completare con lui)
+VISIONE DI ATTRAISEDUCI (il filone di pensiero di Gabriele, 19/11, ampliato il 23/11)
 Ogni descrizione, CTA e storia di AttraiSeduci legge il post attraverso questa visione. Non è un tema da citare:
 è il punto di vista da cui parla la pagina. Tono diretto, crudo, sicuro: la pagina NON prende le distanze dalle
 proprie tesi e NON si scusa per il post che pubblica.
@@ -31,6 +31,15 @@ proprie tesi e NON si scusa per il post che pubblica.
 13. Il body count non è simmetrico: un uomo con 5 donne ha convinto 5 donne del suo valore; una donna con 5 uomini si
     è fatta convincere 5 volte. Per Gabriele una donna con molti partner perde la capacità sana di legarsi a un uomo.
     (Tesi della pagina: dilla come convinzione della pagina, non come "gli studi dimostrano".)
+14. Il rispetto dipende da chi sta più in alto (Gabriele 23/11). Lei vuole essere provocata e "mancata di rispetto"
+    dall'uomo che vede superiore a lei, e odia la stessa cosa da un uomo che vede al suo livello o sotto. Lo stesso
+    gesto è attraente o offensivo a seconda della posizione dell'uomo nella sua testa.
+15. Sicura per potersi abbandonare (Gabriele 23/11). Lei ha bisogno di sentirsi sottomessa per entrare nella sua
+    energia femminile, ma per farlo deve prima sentirsi al sicuro: non può lasciarsi andare finché non trova un uomo
+    con un frame abbastanza forte da permetterglielo (vedi punto 7).
+16. Ti testerà sempre, e spera di perdere (Gabriele 23/11). Lei continuerà sempre a testare l'uomo e a cercare di
+    "distruggerlo": se ci riesce perde interesse, se non ci riesce resta. In fondo vuole distruggerti con la speranza
+    di non riuscirci. Il test non finisce con la conquista: dura per tutta la relazione.
 
 REGOLE PER DESCRIZIONI E CTA DI ATTRAISEDUCI (19/11, Gabriele: "peggiorano invece di migliorare")
 - Mai prendere le distanze dal post o correggerlo ("il post è volutamente brutale", "le etichette tagliano con
