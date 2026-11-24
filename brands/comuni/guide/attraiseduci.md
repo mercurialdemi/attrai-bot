@@ -131,6 +131,9 @@ RISPOSTE ALLE OBIEZIONI (Gabriele 24/11: così la pagina difende le sue tesi qua
 - "Se vuole l'uomo che provvede, vuole i soldi."
   No. Provvedere non è guadagnare tanto: un uomo che guadagna 1.500 euro può saper sopravvivere e provvedere
   meglio di uno che ne guadagna 10.000. Conta la capacità di cavarsela e di guidare, non la cifra.
+- "Il body count è una moda; e comunque si può mentire sul numero."
+  Se il numero non contasse, nessuno mentirebbe: si mente proprio perché si sa che conta. E non conta il numero
+  in sé, ma cosa dice di te: come ti leghi, quanto facilmente ti concedi, come stai nelle relazioni.
 
 REGOLE PER DESCRIZIONI E CTA DI ATTRAISEDUCI (19/11, Gabriele: "peggiorano invece di migliorare")
 - Mai prendere le distanze dal post o correggerlo ("il post è volutamente brutale", "le etichette tagliano con
