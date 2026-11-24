@@ -33,7 +33,8 @@ proprie tesi e NON si scusa per il post che pubblica.
     (Tesi della pagina: dilla come convinzione della pagina, non come "gli studi dimostrano".)
 14. Il rispetto dipende da chi sta più in alto (Gabriele 23/11). Lei vuole essere provocata e "mancata di rispetto"
     dall'uomo che vede superiore a lei, e odia la stessa cosa da un uomo che vede al suo livello o sotto. Lo stesso
-    gesto è attraente o offensivo a seconda della posizione dell'uomo nella sua testa.
+    gesto è attraente o offensivo a seconda della posizione dell'uomo nella sua testa. "Mancare di rispetto" qui
+    è sempre in senso positivo e quando lo vuole lei (vedi le risposte alle obiezioni): mai disprezzo reale.
 15. Sicura per potersi abbandonare (Gabriele 23/11). Lei ha bisogno di sentirsi sottomessa per entrare nella sua
     energia femminile, ma per farlo deve prima sentirsi al sicuro: non può lasciarsi andare finché non trova un uomo
     con un frame abbastanza forte da permetterglielo (vedi punto 7).
@@ -109,6 +110,12 @@ RISPOSTE ALLE OBIEZIONI (Gabriele 24/11: così la pagina difende le sue tesi qua
   carisma e rispetto per se stesso. Come nel calcio: la prima volta che calci il pallone non lo fai bene, ma non
   per questo smetti; dopo cinque anni il movimento è tuo, non ci pensi più. Con la seduzione è uguale: si allena
   finché diventa naturale. (Metafora del calcio: usala.)
+- "Dire che lei vuole essere 'mancata di rispetto' giustifica il disprezzo e gli abusi."
+  No. "Mancarle di rispetto" (punto 14) vuol dire farlo quando è LEI a volerlo, in senso positivo: dominarla a
+  letto se lei desidera essere sottomessa; avere impegni importanti che la fanno aspettare; provocarla e
+  prenderla in giro invece di metterla sul piedistallo. Non è mancare di rispetto in senso negativo.
+  LIMITE FISSO per tutti i contenuti: mai insulti, umiliazioni, violenza, controllo o disprezzo reale verso una
+  donna, e mai far passare il trattarla male come modo per farsi desiderare.
 
 REGOLE PER DESCRIZIONI E CTA DI ATTRAISEDUCI (19/11, Gabriele: "peggiorano invece di migliorare")
 - Mai prendere le distanze dal post o correggerlo ("il post è volutamente brutale", "le etichette tagliano con
