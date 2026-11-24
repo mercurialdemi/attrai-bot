@@ -1,42 +1,667 @@
 {
  "giorno": "2026-11-24",
- "post_preparati": 11,
- "slide_totali": 95,
- "slide_fallite": 0,
+ "post_preparati": 9,
+ "slide_totali": 106,
+ "slide_fallite": 1,
  "lavorazione": {
-  "openai-testo": {
-   "totali": 20,
-   "fallite": 0
-  },
-  "testo-su-sfondo-uniforme": {
-   "totali": 26,
+  "blocchi-ricostruzione-codice": {
+   "totali": 3,
    "fallite": 0
   },
   "blocchi-sfondo-pieno": {
-   "totali": 34,
+   "totali": 11,
+   "fallite": 0
+  },
+  "testo-su-sfondo-uniforme": {
+   "totali": 33,
    "fallite": 0
   },
   "cta-stile-post": {
-   "totali": 7,
+   "totali": 3,
    "fallite": 0
   },
   "blocchi-pulizia-codice": {
    "totali": 1,
    "fallite": 0
   },
-  "cta-illustrata": {
-   "totali": 2,
-   "fallite": 0
+  "openai-testo": {
+   "totali": 49,
+   "fallite": 1
   },
-  "blocchi-ricostruzione-codice": {
+  "cta-alone": {
    "totali": 3,
    "fallite": 0
   },
-  "cta-alone": {
-   "totali": 2,
+  "cta-illustrata": {
+   "totali": 3,
    "fallite": 0
   }
  },
- "segnalazioni": [],
- "post_con_problemi": []
+ "segnalazioni": [
+  {
+   "job_id": 54,
+   "testo": "le dita devono \"prendere\" il libro. Nella foto che hai mandato tu inveve il libro è semplicemente messo sopra",
+   "quando": "2026-11-24T17:33:31+00:00"
+  }
+ ],
+ "post_con_problemi": [
+  {
+   "job_id": 51,
+   "fonte": "https://www.instagram.com/p/DgCVoIQD7du/",
+   "fallite": [
+    2
+   ],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "I want to break up with you.",
+     "testo": "Voglio lasciarti.",
+     "blocchi": [
+      {
+       "x": 580,
+       "y": 410,
+       "w": 354,
+       "h": 70,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "openai-testo",
+     "tentativi": 2,
+     "fallita": true,
+     "problema": "Manca il punto dopo \"Ah\": la slide dice \"Ah, Okay...\" invece di \"Ah. Okay...\". Il vecchio logo AP in basso è stato tolto correttamente.",
+     "testo_originale": "Oh, okay...",
+     "testo": "Ah. Okay...",
+     "blocchi": [
+      {
+       "x": 345,
+       "y": 418,
+       "w": 190,
+       "h": 34,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "What do you mean \"okay\"? Aren't you going to cry, ask me why, beg me to stay?",
+     "testo": "Come sarebbe \"okay\"?\nNon piangi,\nnon mi chiedi perché,\nnon mi preghi di restare?",
+     "blocchi": [
+      {
+       "x": 576,
+       "y": 317,
+       "w": 368,
+       "h": 181,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "No. Thanks for not wasting any more of my time.",
+     "testo": "No. Grazie per non\nfarmi perdere\naltro tempo.",
+     "blocchi": [
+      {
+       "x": 230,
+       "y": 344,
+       "w": 356,
+       "h": 106,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "You're letting me go way too easily...",
+     "testo": "Mi lasci andare\nfin troppo\nfacilmente...",
+     "blocchi": [
+      {
+       "x": 667,
+       "y": 366,
+       "w": 246,
+       "h": 108,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "I'm taking you seriously. You said what you want. Who am I to try to convince you otherwise?",
+     "testo": "Ti prendo sul serio.\nHai detto cosa vuoi.\nChi sono io per\nfarti cambiare idea?",
+     "blocchi": [
+      {
+       "x": 193,
+       "y": 262,
+       "w": 466,
+       "h": 183,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Every man asks for at least an explanation.",
+     "testo": "Qualunque uomo\nchiederebbe almeno\nuna spiegazione.",
+     "blocchi": [
+      {
+       "x": 623,
+       "y": 389,
+       "w": 293,
+       "h": 109,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "An explanation is for someone who wants to negotiate. I don't negotiate my presence. Either someone wants to be here, or they don't.",
+     "testo": "Le spiegazioni servono\na chi vuole trattare.\nLa mia presenza\nnon è in trattativa.\nO mi vuoi accanto,\no no.",
+     "blocchi": [
+      {
+       "x": 259,
+       "y": 225,
+       "w": 410,
+       "h": 221,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "You're pretending it doesn't hurt.",
+     "testo": "Fai finta\nche non ti faccia\nmale.",
+     "blocchi": [
+      {
+       "x": 595,
+       "y": 396,
+       "w": 323,
+       "h": 107,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 10,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "It hurts because I like you, but I won't lower my worth or beg for your affection.",
+     "testo": "Fa male, perché mi piaci.\nMa non mi svendo\ne non elemosino\naffetto.",
+     "blocchi": [
+      {
+       "x": 226,
+       "y": 347,
+       "w": 382,
+       "h": 102,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 11,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "If you were the woman I want in my life, we'd solve our problems, not use little things as an excuse to leave.",
+     "testo": "Se fossi la donna\nche voglio accanto,\ni problemi li risolveremmo.\nNon useresti una sciocchezza\ncome scusa per andartene.",
+     "blocchi": [
+      {
+       "x": 201,
+       "y": 311,
+       "w": 440,
+       "h": 166,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 12,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "......",
+     "testo": "......",
+     "blocchi": [
+      {
+       "x": 730,
+       "y": 468,
+       "w": 113,
+       "h": 12,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 13,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "What happened? Did you go quiet?",
+     "testo": "Che c'è?\nSei rimasta\nsenza parole?",
+     "blocchi": [
+      {
+       "x": 275,
+       "y": 395,
+       "w": 317,
+       "h": 55,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 14,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Nothing... I think I am starting to like you again.",
+     "testo": "Niente...\nCredo che tu\nmi stia piacendo\ndi nuovo.",
+     "blocchi": [
+      {
+       "x": 549,
+       "y": 332,
+       "w": 251,
+       "h": 122,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 15,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "I know. But I am not available anymore.",
+     "testo": "Lo so.\nMa io non sono\npiù disponibile.",
+     "blocchi": [
+      {
+       "x": 281,
+       "y": 386,
+       "w": 344,
+       "h": 88,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 16,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "Sh!t",
+     "testo": "Caz*o.",
+     "blocchi": [
+      {
+       "x": 708,
+       "y": 420,
+       "w": 67,
+       "h": 27,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 17,
+     "via": "cta-alone",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Adesso lascia che ti faccia una domanda.\nQuando lei ti ha detto basta,\nhai detto \"okay\"\no hai cominciato a trattare?\n\nNon sei arrivato qui per caso.\n\nSe questi contenuti ti parlano,\nseguici prima di dimenticarti di noi.",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Lei lo lascia aspettandosi che lui pianga, chieda spiegazioni e la preghi di restare. Lui invece risponde con un calmo \"okay\": la prende sul serio, non tratta la sua presenza e non elemosina affetto, anche se gli fa male. Davanti a tanta sicurezza lei ci ripensa e si accorge che le piace di nuovo, ma ormai è tardi: lui non è più disponibile e se ne va. Il tono è da scena cinematografica, provocatorio e di rivalsa.",
+   "descrizione": "\"Okay.\" Due sillabe che quasi nessun uomo riesce a dire quando lei pronuncia \"voglio lasciarti\".\n\nDi solito va al contrario. Ti siedi sul bordo del letto e cominci a trattare: chiedi cosa hai sbagliato, prometti che cambierai, alle due di notte le scrivi un messaggio lunghissimo che lei leggerà a colazione. A te ogni parola sembra una prova d'amore. A lei conferma che sta facendo la scelta giusta.\n\nAll'inizio degli anni '90 Roy Baumeister ha raccolto racconti di amori non ricambiati, ascoltando sia chi veniva respinto sia chi respingeva. Davanti all'insistenza dell'altro, chi chiudeva provava soprattutto senso di colpa, fastidio e la sensazione di non sapere come uscirne. Tradotto: la supplica non riapre la porta. Carica di peso chi la sta chiudendo, e prima o poi quel peso torna addosso a te.\n\nC'è anche un prezzo che paghi tu, persino se lei restasse. Una relazione salvata a forza di pregare riparte con una gerarchia già scritta: tu sei quello che ha bisogno, lei quella che concede. Da quel giorno ogni litigio riparte da lì.\n\nPerò occhio al finale del fumetto. Lei che ci ripensa, tu che rispondi \"non sono più disponibile\": è una bella fantasia, e quasi mai va così. Se dici \"okay\" per vederla pentita, stai ancora supplicando, solo con un'altra voce. La dignità funziona soltanto quando non è una mossa per farla tornare.\n\nFa male, e puoi ammetterlo. Ma quel dolore lo porti tu: a un amico, in palestra, nel lavoro, nelle sere che torni a riempire. Non in una trattativa con chi ha già deciso.\n\nNon è colpa tua se lei ha smesso di volerti. È una tua responsabilità non svenderti mentre se ne va.\n\nLa tua presenza vale qualcosa solo se smetti di metterla all'asta.\n\nSei d'accordo con il post?\n\n#dignita #amorproprio #rottura #finediunamore #ricominciare",
+   "segnalazioni": []
+  },
+  {
+   "job_id": 54,
+   "fonte": "https://www.instagram.com/p/Dfd8ukbm5h3/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "YOU'LL NEVER FIND ANOTHER ME.\nTHAT'S THE PLAN.",
+     "testo": "NON TROVERAI MAI\nUN'ALTRA\nCOME ME.\n\nCI CONTO.",
+     "blocchi": [
+      {
+       "x": 423,
+       "y": 10,
+       "w": 443,
+       "h": 156,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 384,
+       "y": 503,
+       "w": 593,
+       "h": 54,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "YOU REALLY THINK YOU'RE BETTER OFF WITHOUT ME?\nI'M BETTER OFF WITHOUT THE VERSION OF MYSELF I BECAME TRYING TO KEEP YOU.",
+     "testo": "PENSI DAVVERO\nDI STARE MEGLIO\nSENZA DI ME?\n\nSTO MEGLIO SENZA\nL'UOMO CHE ERO\nDIVENTATO\nPER TENERTI.",
+     "blocchi": [
+      {
+       "x": 33,
+       "y": 93,
+       "w": 410,
+       "h": 142,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 475,
+       "y": 44,
+       "w": 508,
+       "h": 190,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "YOU SAY THAT LIKE I WAS THE PROBLEM.\nI SAY IT LIKE I FINALLY LEARNED THE PATTERN. APOLOGIES WITHOUT CHANGE. AFFECTION AFTER DISRESPECT. PROMISES ONLY WHEN I WAS READY TO LEAVE.",
+     "testo": "LO DICI COME SE\nIL PROBLEMA FOSSI IO.\n\nLO DICO PERCHÉ FINALMENTE\nHO CAPITO IL MECCANISMO.\nSCUSE, E POI TUTTO COME PRIMA.\nCAREZZE DOPO LE MANCANZE DI RISPETTO.\nPROMESSE SOLO QUANDO\nSTAVO PER ANDARMENE.",
+     "blocchi": [
+      {
+       "x": 39,
+       "y": 29,
+       "w": 410,
+       "h": 78,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 300,
+       "y": 78,
+       "w": 657,
+       "h": 284,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "NOBODY WILL EVER LOVE YOU LIKE I DID.\nTHEN I HOPE NOT. LOVE SHOULDN'T REQUIRE A MAN TO ABANDON HIS SELF-RESPECT JUST TO KEEP IT.",
+     "testo": "NESSUNO TI AMERÀ MAI\nCOME TI HO AMATO IO.\n\nME LO AUGURO.\nPER TENERSI UN AMORE\nUN UOMO NON DOVREBBE MAI\nRINUNCIARE ALLA DIGNITÀ.",
+     "blocchi": [
+      {
+       "x": 33,
+       "y": 15,
+       "w": 580,
+       "h": 100,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 319,
+       "y": 117,
+       "w": 664,
+       "h": 200,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "SO YOU'RE REPLACING ME?\nI'M REPLACING CHAOS WITH PEACE. CONFUSION WITH CLARITY. ACCESS WITH DISTANCE.",
+     "testo": "QUINDI\nMI STAI\nSOSTITUENDO?\n\nSÌ. IL CAOS\nCON LA PACE.\nLA CONFUSIONE CON LA LUCIDITÀ.\nLA PORTA APERTA CON LA DISTANZA.",
+     "blocchi": [
+      {
+       "x": 26,
+       "y": 88,
+       "w": 417,
+       "h": 112,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 443,
+       "y": 39,
+       "w": 540,
+       "h": 166,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "YOU THINK YOU CAN DO BETTER?\nBETTER ISN'T ALWAYS ANOTHER WOMAN. SOMETIMES BETTER IS SLEEPING WELL, THINKING CLEARLY, AND RESPECTING THE MAN IN THE MIRROR AGAIN.",
+     "testo": "PENSI DI TROVARE\nDI MEGLIO?\n\nIL MEGLIO NON È\nPER FORZA UN'ALTRA DONNA.\nA VOLTE IL MEGLIO\nÈ DORMIRE BENE,\nAVERE LA TESTA LUCIDA\nE TORNARE A GUARDARSI\nALLO SPECCHIO CON RISPETTO.",
+     "blocchi": [
+      {
+       "x": 39,
+       "y": 78,
+       "w": 410,
+       "h": 90,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 358,
+       "y": 5,
+       "w": 632,
+       "h": 333,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "WHAT IF I CHANGE?\nCHANGE IS SOMETHING YOU LIVE. NOT SOMETHING YOU ANNOUNCE WHEN CONSEQUENCES FINALLY ARRIVE.",
+     "testo": "E SE\nCAMBIASSI?\n\nIL CAMBIAMENTO\nSI VEDE NEI FATTI.\nNON SI ANNUNCIA\nQUANDO ARRIVA\nIL CONTO.",
+     "blocchi": [
+      {
+       "x": 20,
+       "y": 73,
+       "w": 372,
+       "h": 122,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 404,
+       "y": 10,
+       "w": 580,
+       "h": 283,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "HE ISN'T LOOKING FOR ANOTHER HER. HE IS LOOKING FOR A LIFE THAT DOESN'T REQUIRE RECOVERING FROM HER. SOMETIMES THE UPGRADE ISN'T WHO COMES NEXT. IT'S WHO HE BECOMES AFTER HE LEAVES.",
+     "testo": "NON CERCA\nUN'ALTRA COME LEI.\nCERCA UNA VITA\nCHE NON LO COSTRINGA\nA RIPRENDERSI DA LEI.\nA VOLTE IL VERO SALTO DI QUALITÀ\nNON È CHI ARRIVA DOPO.\nÈ L'UOMO CHE DIVENTA\nQUANDO SE NE VA.",
+     "blocchi": [
+      {
+       "x": 72,
+       "y": 29,
+       "w": 860,
+       "h": 386,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "cta-illustrata",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "La prossima volta che stai per andartene,\nla promessa arriverà puntuale.\nE se non capisci perché finora è bastata,\nresterai ancora:\ndisponibile sempre, scelto mai.\n\nPer questo ho scritto \"Come uscire dalla friendzone\":\ngli errori che ti portano in quella posizione,\ni meccanismi psicologici che consolidano il ruolo\ndi chi c'è sempre\ne come cambiare il modo in cui ti relazioni con le donne.\n\nPuoi continuare ad aspettare che qualcosa cambi\noppure iniziare a cambiare tu.\nIl manuale è nel link in bio",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Un fumetto a dialoghi: lei prova a trattenerlo con le frasi classiche (\"non troverai mai un'altra come me\", \"nessuno ti amerà come me\", \"e se cambiassi?\") e lui risponde con calma, ribaltandole tutte. Il messaggio: un uomo che se ne va non cerca per forza un'altra donna, cerca pace, lucidità e rispetto per sé stesso. Il vero miglioramento è l'uomo che diventa dopo essersene andato. Il registro è provocatorio e di rivalsa, con battute secche e sicure.",
+   "descrizione": "\"Non troverai mai un'altra come me\" arriva sempre quando lei sente che stai per uscire dalla porta. Mai prima.\n\nLo senti mentre lo dice: il tono si abbassa, gli occhi si fanno lucidi e per un attimo torna la donna delle prime settimane. Tu hai già la giacca addosso. E proprio adesso arrivano le scuse, la carezza, la promessa che stavolta sarà diverso.\n\nQuello che ti ha tenuto lì per mesi, a volte per anni, è un meccanismo semplice. Negli anni '50 Ferster e Skinner hanno dimostrato che una ricompensa imprevedibile lega molto più di una costante: il comportamento resiste anche quando i premi diventano rarissimi. Nella tua vita significa che dieci giorni di freddezza e una sera di tenerezza pesano più di un mese di calma. Resti per quello che speri di ricevere la prossima volta, più che per quello che ricevi.\n\nLo paghi in una moneta che non vedi subito. Ogni volta che accetti la promessa dell'ultimo minuto ti convinci che il tuo limite si può trattare. E un uomo che tratta sui propri limiti piano piano smette di riconoscersi: dormi male, studi il tono dei suoi messaggi prima di aprirli, a cena pesi ogni parola. \"L'uomo che eri diventato per tenerla\" è questo.\n\nPer questo la risposta più forte del post è anche la più corta: \"Ci conto.\" Non c'è rabbia, non c'è vendetta. C'è un uomo che ha smesso di scambiare la pace per noia e l'allarme per passione.\n\nNon è colpa tua se ti sei abituato al caos: nessuno nasce sapendo distinguere l'intensità dall'amore. Ma è tua la responsabilità di non chiamare più amore una promessa che arriva solo quando presenti il conto.\n\nQuante volte hai chiamato speranza quella che era solo paura di ricominciare da solo?\n\nLa prossima volta che stai per andartene, la promessa arriverà puntuale. Se non capisci perché finora è bastata, resterai ancora, e tra sei mesi sarai lo stesso uomo: sempre disponibile e mai davvero scelto. In \"Come uscire dalla friendzone\" ti spiego cosa ti tiene inchiodato nel ruolo di chi c'è sempre e aspetta di essere scelto, e come smettere di alimentarlo. Trovi il manuale nel link in bio, oppure commenta \"FRIENDZONE\".\n\n#resetrelazionale #dipendenzaaffettiva #relazionetossica #superareunarottura #ricominciare",
+   "segnalazioni": [
+    "le dita devono \"prendere\" il libro. Nella foto che hai mandato tu inveve il libro è semplicemente messo sopra"
+   ]
+  }
+ ]
 }
