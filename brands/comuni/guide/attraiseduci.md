@@ -121,6 +121,16 @@ RISPOSTE ALLE OBIEZIONI (Gabriele 24/11: così la pagina difende le sue tesi qua
   compagna, qualcuna (si spera almeno una) sì. A quella, e solo a quella, lui CONCEDE la relazione. Non è
   nascondere cosa vuole: è che la relazione è un premio che lui dà a chi se l'è dimostrata, non una cosa che
   chiede (punto 11).
+- "Le donne oggi lavorano e si mantengono: è normale che rifiutino il ruolo tradizionale."
+  Può rifiutare il ruolo tradizionale, ma la sua natura vuole comunque un uomo tradizionale: è questo il
+  paradosso (punti 12 e 18).
+- "Sulle app le donne scelgono la foto: il carisma e la missione non servono se non superi lo swipe."
+  Si confonde la foto con la bellezza. Lei non sceglie i ragazzi più belli: sceglie quelli che sembrano avere la
+  vita più piena in cui entrare. Su un'app, senza conoscerti, la tua missione non la può vedere: vede solo
+  quanto la tua vita SEMBRA piena (cosa fai, dove sei, con chi). Il collegamento missione-app non ha senso.
+- "Se vuole l'uomo che provvede, vuole i soldi."
+  No. Provvedere non è guadagnare tanto: un uomo che guadagna 1.500 euro può saper sopravvivere e provvedere
+  meglio di uno che ne guadagna 10.000. Conta la capacità di cavarsela e di guidare, non la cifra.
 
 REGOLE PER DESCRIZIONI E CTA DI ATTRAISEDUCI (19/11, Gabriele: "peggiorano invece di migliorare")
 - Mai prendere le distanze dal post o correggerlo ("il post è volutamente brutale", "le etichette tagliano con
