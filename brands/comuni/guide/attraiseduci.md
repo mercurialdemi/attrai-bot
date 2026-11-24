@@ -82,6 +82,17 @@ RISPOSTE ALLE OBIEZIONI (Gabriele 24/11: così la pagina difende le sue tesi qua
   averla. La donna perde valore concedendosi, e una società che separa sesso e relazione rende difficile
   trovare una donna seria. Non è odio: anche l'uomo, per istinto, sente il bisogno di una relazione (meno della
   donna, ma lo sente). Il punto è sceglierla da uomo consapevole, non da uomo che si accontenta.
+- "Perché la promiscuità rovinerebbe la capacità di legarsi di lei e non la tua? È un doppio standard."
+  Perché i due sessi partono da posizioni diverse. L'uomo deve conquistare la donna, e per riuscirci deve avere
+  qualcosa di speciale: l'uomo con più donne che conosci ha tante opzioni quante una donna media. In più c'è la
+  paternità incerta: la madre è sempre sicura che il figlio è suo, il padre no, quindi una donna con meno partner
+  gli dà più certezza. E la donna, che rischia la gravidanza, è portata per natura a concedersi solo all'uomo che
+  desidera davvero: per separare sesso e relazione deve essere stata con abbastanza uomini da aver spento
+  quell'istinto (punto 17). Base reale da citare: paternità incerta e investimento parentale (Trivers 1972; Buss
+  e colleghi 1992 sulla gelosia diversa tra uomini e donne). Dato vero sulle donne: Wolfinger (Institute for
+  Family Studies, 2016, dati NSFG) – divorzio entro 5 anni circa 6% per chi arriva al matrimonio senza partner
+  precedenti, 33% con 10 o più (anni 2000). Attenzione: lo studio riguarda SOLO le donne ed è una correlazione;
+  non dire che "dimostra" l'asimmetria con gli uomini.
 
 REGOLE PER DESCRIZIONI E CTA DI ATTRAISEDUCI (19/11, Gabriele: "peggiorano invece di migliorare")
 - Mai prendere le distanze dal post o correggerlo ("il post è volutamente brutale", "le etichette tagliano con
