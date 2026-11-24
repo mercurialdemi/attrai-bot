@@ -62,6 +62,10 @@ RISPOSTE ALLE OBIEZIONI (Gabriele 24/11: così la pagina difende le sue tesi qua
   bisogno sono lo stesso uomo, tutti e due hanno bisogno di lei (punto 9). Il distacco vero non è una tattica per
   lei: serve a ritrovare se stesso e a rimettersi al centro della propria vita. L'attrazione che torna è la
   conseguenza di questo, non lo scopo della recita.
+- "Ma se ti ritrovi per riprendertela, l'obiettivo resta lei."
+  No: il distacco dà spazio a due cose. A lui per ritrovare se stesso, a lei per mostrare chi è davvero senza
+  di lui. Il risultato non è deciso in partenza: molto spesso, dopo una relazione, l'uomo che si è ritrovato non
+  vuole più quella donna, ed è giusto così. Se fosse una tattica per riaverla, finirebbe sempre con lei.
 
 REGOLE PER DESCRIZIONI E CTA DI ATTRAISEDUCI (19/11, Gabriele: "peggiorano invece di migliorare")
 - Mai prendere le distanze dal post o correggerlo ("il post è volutamente brutale", "le etichette tagliano con
