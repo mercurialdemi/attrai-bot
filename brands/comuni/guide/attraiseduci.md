@@ -75,6 +75,13 @@ RISPOSTE ALLE OBIEZIONI (Gabriele 24/11: così la pagina difende le sue tesi qua
   (Tesi della pagina. "L'1% degli uomini" è un'immagine, non una statistica: non presentarla come dato. Se
   serve un dato vero: l'analisi di OkCupid (2009) in cui le donne giudicavano "sotto la media" circa l'80% degli
   uomini.)
+- "Se l'uomo medio è il ripiego, perché dovrebbe sposarsi? Spingete gli uomini a odiare le donne."
+  Lei si diverte con i migliori e poi sposa l'uomo medio per la stabilità: sì. Chi si sposa così è il grosso
+  degli uomini che non capisce come funzionano le relazioni: non vive relazioni felici ed è disposto a scendere
+  a compromessi, per esempio sceglie una donna con un passato promiscuo perché una migliore non riesce ad
+  averla. La donna perde valore concedendosi, e una società che separa sesso e relazione rende difficile
+  trovare una donna seria. Non è odio: anche l'uomo, per istinto, sente il bisogno di una relazione (meno della
+  donna, ma lo sente). Il punto è sceglierla da uomo consapevole, non da uomo che si accontenta.
 
 REGOLE PER DESCRIZIONI E CTA DI ATTRAISEDUCI (19/11, Gabriele: "peggiorano invece di migliorare")
 - Mai prendere le distanze dal post o correggerlo ("il post è volutamente brutale", "le etichette tagliano con
