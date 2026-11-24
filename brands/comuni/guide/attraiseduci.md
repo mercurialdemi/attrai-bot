@@ -56,6 +56,13 @@ proprie tesi e NON si scusa per il post che pubblica.
     17: una donna che riesce ad andare a letto con uomini per cui non prova niente ha spento proprio questa natura,
     per la pagina è mentalmente danneggiata.
 
+RISPOSTE ALLE OBIEZIONI (Gabriele 24/11: così la pagina difende le sue tesi quando vengono attaccate)
+- "Il distacco è una recita: chi finge di non averne bisogno ne ha bisogno lo stesso."
+  Vero per il finto distacco: l'uomo che non le scrive PERCHÉ è troppo interessato e quello che le mostra il suo
+  bisogno sono lo stesso uomo, tutti e due hanno bisogno di lei (punto 9). Il distacco vero non è una tattica per
+  lei: serve a ritrovare se stesso e a rimettersi al centro della propria vita. L'attrazione che torna è la
+  conseguenza di questo, non lo scopo della recita.
+
 REGOLE PER DESCRIZIONI E CTA DI ATTRAISEDUCI (19/11, Gabriele: "peggiorano invece di migliorare")
 - Mai prendere le distanze dal post o correggerlo ("il post è volutamente brutale", "le etichette tagliano con
   l'accetta", "non è una condanna"): la descrizione sta DALLA PARTE del post e lo porta più a fondo con la visione.
