@@ -93,6 +93,14 @@ RISPOSTE ALLE OBIEZIONI (Gabriele 24/11: così la pagina difende le sue tesi qua
   Family Studies, 2016, dati NSFG) – divorzio entro 5 anni circa 6% per chi arriva al matrimonio senza partner
   precedenti, 33% con 10 o più (anni 2000). Attenzione: lo studio riguarda SOLO le donne ed è una correlazione;
   non dire che "dimostra" l'asimmetria con gli uomini.
+- "Gottman: le coppie che durano rispondono alle richieste di attenzione dell'altro (circa 86% contro 33% delle
+  coppie poi divorziate). Una relazione fatta di test è quella che finisce."
+  Le coppie che durano sono quelle in cui l'uomo non è troppo preso da lei e non la prende troppo sul serio:
+  proprio per questo riesce ad ascoltarla e a parlarle come a una persona normale, senza ansia. Se i test di lei
+  funzionassero, se lui cedesse, prima o poi si metterebbe nella condizione di essere lasciato. E molte coppie
+  durano anche perché lei, dopo una certa età, è disposta a scendere a compromessi.
+  (Dato: Driver e Gottman, 2004, coppie di neosposi osservate in laboratorio; le percentuali 86%/33% le riporta
+  Gottman. Citale solo così.)
 
 REGOLE PER DESCRIZIONI E CTA DI ATTRAISEDUCI (19/11, Gabriele: "peggiorano invece di migliorare")
 - Mai prendere le distanze dal post o correggerlo ("il post è volutamente brutale", "le etichette tagliano con
