@@ -116,6 +116,11 @@ RISPOSTE ALLE OBIEZIONI (Gabriele 24/11: così la pagina difende le sue tesi qua
   prenderla in giro invece di metterla sul piedistallo. Non è mancare di rispetto in senso negativo.
   LIMITE FISSO per tutti i contenuti: mai insulti, umiliazioni, violenza, controllo o disprezzo reale verso una
   donna, e mai far passare il trattarla male come modo per farsi desiderare.
+- "Se lui non deve mai volere la relazione prima di lei, nessuno dice cosa vuole: è strategia, non sincerità."
+  Sì, è un gioco, ed è giusto così: l'uomo frequenta più donne, la maggior parte si dimostra non essere una buona
+  compagna, qualcuna (si spera almeno una) sì. A quella, e solo a quella, lui CONCEDE la relazione. Non è
+  nascondere cosa vuole: è che la relazione è un premio che lui dà a chi se l'è dimostrata, non una cosa che
+  chiede (punto 11).
 
 REGOLE PER DESCRIZIONI E CTA DI ATTRAISEDUCI (19/11, Gabriele: "peggiorano invece di migliorare")
 - Mai prendere le distanze dal post o correggerlo ("il post è volutamente brutale", "le etichette tagliano con
