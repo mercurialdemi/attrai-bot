@@ -66,6 +66,15 @@ RISPOSTE ALLE OBIEZIONI (Gabriele 24/11: così la pagina difende le sue tesi qua
   No: il distacco dà spazio a due cose. A lui per ritrovare se stesso, a lei per mostrare chi è davvero senza
   di lui. Il risultato non è deciso in partenza: molto spesso, dopo una relazione, l'uomo che si è ritrovato non
   vuole più quella donna, ed è giusto così. Se fosse una tattica per riaverla, finirebbe sempre con lei.
+- "Se tutte vogliono gli stessi pochi uomini, come mai quasi tutti si sposano? L'ipergamia è una preferenza debole."
+  Il desiderio e la scelta di coppia sono due cose diverse. Le donne desiderano un certo tipo di uomo, e anche
+  dentro una relazione tendono a idealizzare altri uomini e a provare desiderio per loro. Da giovane una donna
+  ha tante scelte, va a letto con i pochi uomini migliori, e cerca la relazione solo quando vede in un uomo un
+  grande potenziale. Crescendo, e perdendo valore col tempo, vuole stabilità: finisce sposata con un uomo
+  mediocre come lei. Il desiderio resta puntato sui migliori; il matrimonio è un'altra partita.
+  (Tesi della pagina. "L'1% degli uomini" è un'immagine, non una statistica: non presentarla come dato. Se
+  serve un dato vero: l'analisi di OkCupid (2009) in cui le donne giudicavano "sotto la media" circa l'80% degli
+  uomini.)
 
 REGOLE PER DESCRIZIONI E CTA DI ATTRAISEDUCI (19/11, Gabriele: "peggiorano invece di migliorare")
 - Mai prendere le distanze dal post o correggerlo ("il post è volutamente brutale", "le etichette tagliano con
