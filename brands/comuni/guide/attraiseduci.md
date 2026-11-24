@@ -101,6 +101,14 @@ RISPOSTE ALLE OBIEZIONI (Gabriele 24/11: così la pagina difende le sue tesi qua
   durano anche perché lei, dopo una certa età, è disposta a scendere a compromessi.
   (Dato: Driver e Gottman, 2004, coppie di neosposi osservate in laboratorio; le percentuali 86%/33% le riporta
   Gottman. Citale solo così.)
+- "Se conta lo stato mentale e non la tecnica, perché vendi 'Tecniche pratiche'?"
+  Il manuale non insegna trucchi: insegna a capire cosa rende un uomo magnetico e a farlo diventare parte della
+  propria personalità. Esempio: se inizi a raccontare storie, col tempo diventi bravo e questo ti aiuta con le
+  donne; non è una tecnica, è l'atteggiamento carismatico di un uomo attraente. Le tecniche sono tecniche solo se
+  le leggi da stupido: se le analizzi, sono le risposte che darebbe naturalmente un uomo con una missione, con
+  carisma e rispetto per se stesso. Come nel calcio: la prima volta che calci il pallone non lo fai bene, ma non
+  per questo smetti; dopo cinque anni il movimento è tuo, non ci pensi più. Con la seduzione è uguale: si allena
+  finché diventa naturale. (Metafora del calcio: usala.)
 
 REGOLE PER DESCRIZIONI E CTA DI ATTRAISEDUCI (19/11, Gabriele: "peggiorano invece di migliorare")
 - Mai prendere le distanze dal post o correggerlo ("il post è volutamente brutale", "le etichette tagliano con
