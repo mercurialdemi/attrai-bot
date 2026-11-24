@@ -1,0 +1,42 @@
+{
+ "giorno": "2026-11-24",
+ "post_preparati": 11,
+ "slide_totali": 95,
+ "slide_fallite": 0,
+ "lavorazione": {
+  "openai-testo": {
+   "totali": 20,
+   "fallite": 0
+  },
+  "testo-su-sfondo-uniforme": {
+   "totali": 26,
+   "fallite": 0
+  },
+  "blocchi-sfondo-pieno": {
+   "totali": 34,
+   "fallite": 0
+  },
+  "cta-stile-post": {
+   "totali": 7,
+   "fallite": 0
+  },
+  "blocchi-pulizia-codice": {
+   "totali": 1,
+   "fallite": 0
+  },
+  "cta-illustrata": {
+   "totali": 2,
+   "fallite": 0
+  },
+  "blocchi-ricostruzione-codice": {
+   "totali": 3,
+   "fallite": 0
+  },
+  "cta-alone": {
+   "totali": 2,
+   "fallite": 0
+  }
+ },
+ "segnalazioni": [],
+ "post_con_problemi": []
+}
