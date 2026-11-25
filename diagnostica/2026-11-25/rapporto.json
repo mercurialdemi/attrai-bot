@@ -46,9 +46,264 @@
    "job_id": 181,
    "testo": "le scritte in alto sono troppo piccole. Non si leggono",
    "quando": "2026-11-25T13:26:56+00:00"
+  },
+  {
+   "job_id": 179,
+   "testo": "perché hai messo le parentesi?",
+   "quando": "2026-11-25T13:27:44+00:00"
   }
  ],
  "post_con_problemi": [
+  {
+   "job_id": 179,
+   "fonte": "https://www.instagram.com/p/Df5sLX6o5H4/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "foto-sfocata",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "SENTENCES THAT WILL BREAK HER EGO",
+     "testo": "FRASI CHE LE SMONTANO\nL'EGO",
+     "blocchi": [
+      {
+       "x": 50,
+       "y": 685,
+       "w": 900,
+       "h": 290,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#F5C518",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "1. \"I'm not hard to love. I'm just done accepting the bare minimum.\"",
+     "testo": "{1.} \"Non sono difficile da amare. Ho solo smesso di accontentarmi del minimo.\"",
+     "blocchi": [
+      {
+       "x": 162,
+       "y": 562,
+       "w": 720,
+       "h": 105,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "2. \"You didn't lose me because I stopped caring. You lost me because I stopped settling.\"",
+     "testo": "{2.} \"Non mi hai perso perché ho smesso di tenerci. Mi hai perso perché ho smesso di accettare le briciole.\"",
+     "blocchi": [
+      {
+       "x": 162,
+       "y": 530,
+       "w": 720,
+       "h": 155,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "3. \"I won't beg for attention that should come naturally.\"",
+     "testo": "{3.} \"Le attenzioni che dovrebbero arrivare da sole non le elemosino.\"",
+     "blocchi": [
+      {
+       "x": 162,
+       "y": 532,
+       "w": 720,
+       "h": 100,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "4. \"I'm not trying to prove I'm worth choosing. The right person won't need convincing.\"",
+     "testo": "{4.} \"Non ti devo dimostrare che merito di essere scelto. La donna giusta non andrà convinta.\"",
+     "blocchi": [
+      {
+       "x": 162,
+       "y": 530,
+       "w": 720,
+       "h": 155,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "5. \"I gave you chances because I cared. I stopped because I started caring about myself.\"",
+     "testo": "{5.} \"Ti ho dato altre occasioni perché ci tenevo. Ho smesso quando ho cominciato a tenere a me stesso.\"",
+     "blocchi": [
+      {
+       "x": 162,
+       "y": 530,
+       "w": 720,
+       "h": 155,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "testo-su-sfondo-uniforme",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "6. \"No hard feelings. I just learned that peace is more valuable than forced connections.\"",
+     "testo": "{6.} \"Nessun rancore. Ho solo capito che la mia pace vale più di un legame forzato.\"",
+     "blocchi": [
+      {
+       "x": 162,
+       "y": 530,
+       "w": 720,
+       "h": 155,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "FREE EBOOK. 7 Attraction Signals 90% of Men Miss. FREE - INSTANT - 1 EBOOK. → COMMENT THE WORD GUIDE and it lands in your DMs",
+     "testo": "DIMMI\n\nLA VERITÀ\n\nQuante volte hai elemosinato attenzioni che dovevano arrivare da sole?\n\nBASTA ACCONTENTARSI DEL MINIMO\n\nCOMMENTA\n\nATTRAZIONE\n\ne te lo invio in DM",
+     "blocchi": [
+      {
+       "x": 230,
+       "y": 28,
+       "w": 540,
+       "h": 100,
+       "carattere": "normale",
+       "colore": "#D4A93C",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 180,
+       "y": 140,
+       "w": 640,
+       "h": 100,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 50,
+       "y": 352,
+       "w": 900,
+       "h": 42,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#D4A93C",
+       "allineamento": "center"
+      },
+      {
+       "x": 230,
+       "y": 395,
+       "w": 540,
+       "h": 24,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 300,
+       "y": 727,
+       "w": 470,
+       "h": 26,
+       "carattere": "normale",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 220,
+       "y": 810,
+       "w": 380,
+       "h": 70,
+       "carattere": "normale",
+       "colore": "#D4A93C",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 250,
+       "y": 938,
+       "w": 320,
+       "h": 28,
+       "carattere": "normale",
+       "colore": "#8A8A8A",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "cta-stile-post",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Il problema non sono le briciole che ti dà.\nÈ che finora ti sono bastate.\n\nSe vuoi davvero smettere di inseguire\ne capire cosa porta una donna a sceglierti\ninvece di usarti finché le fai comodo…\ndevi cambiare il modo in cui\ninterpreti ogni interazione.\n\nNel mio manuale \"Diventa l'uomo\na cui nessuna donna sa resistere\"\ntrovi le dinamiche psicologiche che\nspiegano perché alcune attenzioni\naumentano l'attrazione e altre la\ndistruggono, anche se sembrano giuste.\n\nDai un'occhiata al link in bio o\ncom",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Sono frasi da dire a lei con calma, senza rabbia, per farle capire che non stai più al suo gioco. Non sei difficile da amare: hai solo smesso di accettare il minimo, di elemosinare attenzioni e di dimostrare quanto vali. Ti sei scelto da solo, e tra la tua pace e un legame forzato scegli la pace. Il registro è provocatorio e orgoglioso, da uomo che ha alzato i suoi standard.",
+   "descrizione": "Frasi come queste non si dicono a freddo. Ci arrivi dopo mesi passati a raccogliere briciole.\n\nLei risponde dopo sei ore con un vocale di dieci secondi. Annulla il venerdì e il sabato ti scrive come se niente fosse. E tu ringrazi, ti dici che è un periodo, che è fatta così, che con un po' di pazienza tornerà quella dei primi giorni. Intanto ogni volta che accetti il minimo le insegni quanto vali. E lo insegni anche a te.\n\nNegli anni '80 la psicologa Caryl Rusbult ha studiato perché le persone restano in relazioni che non le soddisfano. Non conta solo quanto stai bene: conta quanto hai già messo dentro. Più tempo, attenzioni e speranze hai investito, più ti senti obbligato a restare, anche quando quello che torni a casa è sempre meno. Rimani per non buttare via quello che hai dato, e così ne dai ancora.\n\nLei intanto non sta facendo i conti che fai tu. L'attrazione non funziona come uno scambio: più attenzioni le offri senza che tornino indietro, più lei ti colloca in basso. Non legge i tuoi messaggi, legge il bisogno che c'è dietro. E un uomo che accetta tutto le comunica una sola cosa: non ha nient'altro di meglio da fare.\n\nPer questo queste frasi funzionano solo se sono vere. Se le dici per farla tornare sono un'altra richiesta travestita da orgoglio, e lei lo sente subito. Funzionano quando hai davvero rimesso al centro la tua vita, il tuo lavoro, la tua direzione, e lei torna a essere una parte di quella vita, non il motivo per cui ti svegli.\n\nUna donna non rispetta quello che le dai. Rispetta quello a cui sai rinunciare.\n\nQual è l'ultima briciola che hai chiamato attenzione, e quanto ci hai messo ad accorgertene?\n\nIl problema non è lei che ti dà poco. Ti manca la soglia, e finora quel poco ti è bastato. Ogni settimana in cui ti basta, il minimo diventa la regola tra voi. Ho scritto un manuale che ti spiega perché le attenzioni date senza misura spengono il desiderio e come tenerti il tuo valore senza recitare. Si chiama \"Diventa l'uomo a cui nessuna donna sa resistere\": lo trovi nel link in bio, oppure commenta ATTRAZIONE e te lo mando in DM.\n\n#autostimamaschile #valorepersonale #attrazione #psicologiafemminile #uominidivalore",
+   "segnalazioni": [
+    "perché hai messo le parentesi?"
+   ]
+  },
   {
    "job_id": 181,
    "fonte": "https://www.instagram.com/p/DgHaHxEjcoz/",
