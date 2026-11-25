@@ -1638,6 +1638,11 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
         size, best = max(14, int(bh)), None
         if pitch:                                   # mai più grande dell'originale
             size = min(size, int(pitch / ratio * 1.02))
+        if pitch and line_h and pitch < line_h * 1.02:
+            # 25/11 (post 181, "le scritte in alto non si leggono"): un'interlinea più piccola dell'altezza delle
+            # lettere è impossibile, è una misura sbagliata (es. riga corta "1." sopra il titolo). Prima il
+            # testo veniva rimpicciolito fino a 22 px; ora si usa un'interlinea normale per quelle lettere.
+            pitch = line_h * 1.15
         if pitch and line_h:
             # stessa altezza delle lettere e stessa interlinea dell'originale (titoli grandi e serrati)
             sample = "HÀ" if text.replace("[[", "").replace("]]", "").isupper() else "Hg"
