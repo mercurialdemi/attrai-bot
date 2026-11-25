@@ -1,30 +1,426 @@
 {
  "giorno": "2026-11-25",
- "post_preparati": 3,
- "slide_totali": 21,
+ "post_preparati": 17,
+ "slide_totali": 144,
  "slide_fallite": 0,
  "lavorazione": {
-  "blocchi-ricostruzione-codice": {
-   "totali": 1,
+  "openai-testo": {
+   "totali": 27,
    "fallite": 0
   },
   "testo-su-sfondo-uniforme": {
-   "totali": 11,
+   "totali": 48,
+   "fallite": 0
+  },
+  "blocchi-sfondo-pieno": {
+   "totali": 42,
    "fallite": 0
   },
   "cta-stile-post": {
+   "totali": 11,
+   "fallite": 0
+  },
+  "blocchi-pulizia-codice": {
    "totali": 2,
    "fallite": 0
   },
-  "openai-testo": {
-   "totali": 6,
+  "cta-illustrata": {
+   "totali": 4,
    "fallite": 0
   },
-  "cta-illustrata": {
+  "blocchi-ricostruzione-codice": {
+   "totali": 7,
+   "fallite": 0
+  },
+  "cta-alone": {
+   "totali": 2,
+   "fallite": 0
+  },
+  "foto-sfocata": {
    "totali": 1,
    "fallite": 0
   }
  },
- "segnalazioni": [],
- "post_con_problemi": []
+ "segnalazioni": [
+  {
+   "job_id": 181,
+   "testo": "le scritte in alto sono troppo piccole. Non si leggono",
+   "quando": "2026-11-25T13:26:56+00:00"
+  }
+ ],
+ "post_con_problemi": [
+  {
+   "job_id": 181,
+   "fonte": "https://www.instagram.com/p/DgHaHxEjcoz/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "blocchi-pulizia-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "SHE GHOSTED YOU FOR SO LONG. NOW SHE TEXTS \"HEY\"... HERE'S WHAT A REAL MAN TEXTS BACK...",
+     "testo": "È SPARITA PER SETTIMANE. ORA TI SCRIVE \"EHI\"... ECCO COSA LE RISPONDE UN UOMO VERO.",
+     "blocchi": [
+      {
+       "x": 72,
+       "y": 684,
+       "w": 860,
+       "h": 273,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#F0524F",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "1.\nWHEN SHE DISAPPEARS\n\nBOY:\n\"WHY ARE YOU IGNORING ME? YOU USED ME AND DISAPPEARED.\"",
+     "testo": "1.\nQUANDO SPARISCE\n\nRAGAZZINO:\n\"PERCHÉ MI IGNORI?\nMI HAI USATO E SEI SPARITA.\"",
+     "blocchi": [
+      {
+       "x": 102,
+       "y": 262,
+       "w": 608,
+       "h": 105,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 102,
+       "y": 444,
+       "w": 745,
+       "h": 195,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "MAN:\n\n\"I DON'T CHASE PEOPLE WHO CHOOSE TO BE ABSENT.\nTAKE CARE.\"",
+     "testo": "UOMO:\n\n\"NON RINCORRO CHI SCEGLIE DI NON ESSERCI.\nSTAMMI BENE.\"",
+     "blocchi": [
+      {
+       "x": 102,
+       "y": 303,
+       "w": 143,
+       "h": 37,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 102,
+       "y": 425,
+       "w": 747,
+       "h": 135,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "2.\nWHEN SHE SHOWS NO INITIATIVE\n\nBOY:\n\"I MISS YOU... DON'T YOU EVER THINK ABOUT ME?\"",
+     "testo": "2.\nQUANDO NON PRENDE MAI L'INIZIATIVA\n\nRAGAZZINO:\n\"MI MANCHI... MA TU NON MI PENSI MAI?\"",
+     "blocchi": [
+      {
+       "x": 102,
+       "y": 262,
+       "w": 563,
+       "h": 184,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 102,
+       "y": 498,
+       "w": 690,
+       "h": 176,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "MAN:\n\n\"EFFORT MATTERS TO ME.\nI CHOOSE WOMEN WHO SHOW IT NATURALLY.\"\n\nWHICH ONE ARE YOU?\nREAD MORE: \"LINK IN BIO\"",
+     "testo": "UOMO:\n\n\"PER ME CONTA CHI SI IMPEGNA.\nSCELGO DONNE CHE LO FANNO SENZA CHE GLIELO CHIEDA.\"\n\nE TU, QUALE DEI DUE SEI?\nIL RESTO LO TROVI AL LINK IN BIO",
+     "blocchi": [
+      {
+       "x": 102,
+       "y": 303,
+       "w": 143,
+       "h": 37,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 102,
+       "y": 425,
+       "w": 768,
+       "h": 135,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 102,
+       "y": 645,
+       "w": 830,
+       "h": 90,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#F0524F",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "blocchi-ricostruzione-codice",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "3.\nWHEN SHE NEVER INITIATES PLANS\n\nBOY:\n\"WHY DON'T YOU EVER MAKE PLANS?\"",
+     "testo": "3.\nQUANDO NON PROPONE MAI DI VEDERVI\n\nRAGAZZINO:\n\"PERCHÉ NON PROPONI MAI NIENTE TU?\"",
+     "blocchi": [
+      {
+       "x": 102,
+       "y": 262,
+       "w": 706,
+       "h": 184,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 102,
+       "y": 498,
+       "w": 751,
+       "h": 176,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "MAN:\n\n\"IF YOU WANT TO SEE ME, SAY IT CLEARLY.\nI DON'T READ HINTS.\"",
+     "testo": "UOMO:\n\n\"SE VUOI VEDERMI, DIMMELO CHIARO.\nNON STO A DECIFRARE MESSAGGI IN CODICE.\"",
+     "blocchi": [
+      {
+       "x": 102,
+       "y": 303,
+       "w": 143,
+       "h": 37,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 102,
+       "y": 425,
+       "w": 786,
+       "h": 135,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "4.\nWHEN SHE ONLY TEXTS AT NIGHT\n\nBOY:\n\"I'M SO HAPPY YOU TEXTED! WHY ARE YOU STILL UP?\"",
+     "testo": "4.\nQUANDO TI SCRIVE SOLO DI NOTTE\n\nRAGAZZINO:\n\"CHE BELLO, MI HAI SCRITTO!\nCOME MAI ANCORA SVEGLIA?\"",
+     "blocchi": [
+      {
+       "x": 102,
+       "y": 262,
+       "w": 673,
+       "h": 184,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 102,
+       "y": 498,
+       "w": 732,
+       "h": 176,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "MAN:\n\n\"I DON'T DO LATE-NIGHT CONVENIENCE.\nRESPECT MY TIME.\"\n\nWANT THE FULL TEXTING PLAYBOOK? → LINK IN BIO",
+     "testo": "UOMO:\n\n\"NON SONO IL PASSATEMPO DI MEZZANOTTE.\nIL MIO TEMPO SI RISPETTA.\"\n\nVUOI TUTTE LE RISPOSTE GIUSTE IN CHAT? LINK IN BIO",
+     "blocchi": [
+      {
+       "x": 102,
+       "y": 303,
+       "w": 143,
+       "h": 37,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 102,
+       "y": 425,
+       "w": 615,
+       "h": 135,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 102,
+       "y": 645,
+       "w": 695,
+       "h": 80,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "#F0524F",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 10,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "5.\nWHEN SHE ONLY SENDS \"HI\"\n\nBOY:\n\"HII, HOW ARE YOU?\"",
+     "testo": "5.\nQUANDO TI SCRIVE SOLO \"CIAO\"\n\nRAGAZZINO:\n\"CIAOOO, COME STAI?\"",
+     "blocchi": [
+      {
+       "x": 102,
+       "y": 262,
+       "w": 732,
+       "h": 110,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 102,
+       "y": 444,
+       "w": 560,
+       "h": 142,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 11,
+     "via": "blocchi-sfondo-pieno",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "MAN:\n\n\"HI. BE INTENTIONAL.\nA CONVERSATION NEEDS DIRECTION.\"",
+     "testo": "UOMO:\n\n\"CIAO. DIMMI COSA VUOI.\nUNA CONVERSAZIONE DEVE ANDARE DA QUALCHE PARTE.\"",
+     "blocchi": [
+      {
+       "x": 102,
+       "y": 303,
+       "w": 143,
+       "h": 37,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      },
+      {
+       "x": 102,
+       "y": 425,
+       "w": 621,
+       "h": 160,
+       "carattere": "titolo",
+       "colore": "#FFFFFF",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 12,
+     "via": "cta-illustrata",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "C'è un motivo preciso per cui\nla stessa frase funziona scritta da un uomo\ne suona ridicola scritta da un altro:\nlei non legge il messaggio,\nlegge il bisogno che c'è dietro.\n\nSe vuoi davvero smettere di inseguire\ne capire cosa porta una donna a sceglierti\ninvece di usarti finché le fai comodo…\ndevi cambiare il modo in cui\ninterpreti ogni interazione.\n\nNel mio manuale \"Diventa l'uomo\na cui nessuna donna sa resistere\"\ntrovi le dinamiche psicologiche che\nspiegano perché alcune attenzioni\naumentano l",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Quando una donna sparisce, non prende mai l'iniziativa, ti scrive solo di notte o ti manda un semplice \"ciao\", c'è una risposta da ragazzino e una da uomo. Il ragazzino si lamenta, implora attenzioni e si accontenta delle briciole. L'uomo risponde con calma, mette un limite chiaro e protegge il suo tempo. Il messaggio di fondo: non sono le parole a fare la differenza ma gli standard di chi le scrive. Registro diretto, provocatorio, da confronto ragazzino/uomo.",
+   "descrizione": "Tre settimane di silenzio, poi tre lettere: «Ehi». E il pollice è già sulla tastiera prima che tu abbia deciso cosa provi.\n\nQuella mezz'ora passata a scrivere, cancellare e riscrivere ti costa più di quanto credi. Che tu risponda come se niente fosse o col rimprovero del «perché mi ignori?», le confermi la stessa cosa: può sparire e ritrovarti esattamente dove ti ha lasciato. Lei impara la regola in fretta. Tu ci sei sempre, quindi non serve esserci per te.\n\nIl messaggio del ragazzino e quello dell'uomo spesso sono lunghi uguali. Cambia da dove partono. Il primo chiede una rassicurazione, il secondo mette uno standard. Lei non legge le parole, legge il bisogno che c'è sotto, e una lamentela in chat è una richiesta d'aiuto travestita da orgoglio.\n\nStephen Worchel lo ha mostrato con un barattolo di biscotti, nel 1975: gli stessi biscotti venivano giudicati più buoni quando nel barattolo ne restavano due invece di dieci. Il valore stava in quanto era facile averli. In chat succede lo stesso: l'uomo disponibile a qualunque ora, che risponde a mezzanotte con entusiasmo, diventa il barattolo pieno.\n\nCopiare le frasi del post però non basta. Se scrivi «stammi bene» e poi controlli ogni ora se ha visualizzato, hai solo cambiato vestito al bisogno. Lei lo sente dal secondo messaggio, dal tono, da quanto in fretta torni a cercarla. Lo standard regge solo se dietro c'è una vita che va avanti comunque: il lavoro, gli allenamenti, gli amici, un obiettivo che non dipende da lei.\n\nIl ragazzino le chiede perché è sparita. L'uomo era troppo occupato per accorgersene.\n\nQual è l'ultimo messaggio che le hai mandato per avere una risposta, e non perché avevi davvero qualcosa da dire?\n\nC'è un motivo preciso per cui la stessa frase funziona scritta da un uomo e suona ridicola scritta da un altro: lei misura il bisogno, non la grammatica. Finché il tuo umore dipende da quando ti risponde, il prossimo «ehi» dopo settimane ti troverà pronto in trenta secondi. Ho scritto un manuale che ti spiega cosa accende il desiderio femminile e quali attenzioni lo spengono anche quando sembrano giuste, così smetti di rincorrerla anche in chat.",
+   "segnalazioni": [
+    "le scritte in alto sono troppo piccole. Non si leggono"
+   ]
+  }
+ ]
 }
