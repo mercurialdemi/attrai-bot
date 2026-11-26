@@ -111,12 +111,13 @@ def _con_personaggio(prompt: str) -> str:
     (AttraiSeduci lo scheletro; dal 26/11 anche Reset, Amore Infedele e Il Pensatore hanno il loro)."""
     desc, scheletro = _descrizione_personaggio()
     chi = "the only man in the scene is " if scheletro else "the main character in the scene is "
+    prompt = prompt.replace("reference image", "first reference image", 1)   # prima, o finiva nella descrizione
     return (prompt.replace("a confident, well-dressed man, the kind of character that appears in the reference style",
                            desc)
             .replace("a confident, well-dressed man", desc)
+            .replace("a confident, elegant woman", desc)
             .replace("same kind of characters and setting (same man, same woman if present, same place and light)",
-                     "same setting and light of the first image (same woman if present); " + chi + desc)
-            .replace("reference image", "first reference image", 1))
+                     "same setting and light of the first image (same woman if present); " + chi + desc))
 
 
 def _genera(post: dict, ref: Image.Image, prompt: str) -> Image.Image | None:
@@ -357,6 +358,59 @@ def _texts(img: Image.Image, text: str, font_path: Path = COMIC) -> Image.Image:
     return img.convert("RGB")
 
 
+SOTTO = (" COMPOSITION (very important): place the character and everything he/she holds entirely in the LOWER 58% "
+         "of the image, fully visible and not cut by the frame. The UPPER 42% must be empty, calm background only "
+         "(sky, wall, darkness, clouds), with no head, wings, hands, hat or objects reaching into it, because the "
+         "text will be placed there and must not cover the character.")
+
+
+def _texts_sopra(img: Image.Image, text: str, font_path: Path = COMIC) -> Image.Image:
+    """Gabriele 26/11: se nell'ultima slide c'è il personaggio, la scritta non lo deve coprire. Tutto il testo
+    (titolo, frase, chiusura) va in un solo riquadro nella parte alta, che il personaggio lascia libera."""
+    W, H = img.size
+    paras = [" ".join(p.split()) for p in text.split("\n\n") if p.strip()]
+    if not paras:
+        return img
+    head = paras[0].upper()
+    if "[[" not in head:
+        words = head.split()
+        if len(words) > 2:
+            head = " ".join(words[:-2] + ["[[" + " ".join(words[-2:]) + "]]"])
+    body = " ".join(paras[1:-1]) if len(paras) > 2 else ""
+    close = paras[-1].upper() if len(paras) > 1 else ""
+    red = (205, 30, 30)
+    margin = int(W * 0.05)
+    inner = W - 2 * margin - int(W * 0.06)
+    d = ImageDraw.Draw(img)
+    max_h = int(H * 0.40)
+    sh, sb, sc = int(W * 0.062), int(W * 0.036), int(W * 0.046)
+    while True:
+        fh = ImageFont.truetype(str(font_path), sh)
+        fb = ImageFont.truetype(str(font_path), sb)
+        fc = ImageFont.truetype(str(font_path), sc)
+        lh_, lb_, lc_ = _wrap(d, head, fh, inner), (_wrap(d, body, fb, inner) if body else []), \
+            (_wrap(d, close, fc, inner) if close else [])
+        tot = (int(sh * 1.12) * len(lh_) + int(sb * 1.25) * len(lb_) + int(sc * 1.15) * len(lc_)
+               + int(W * 0.03) * (bool(lb_) + bool(lc_)) + int(W * 0.05))
+        if tot <= max_h or sb <= int(W * 0.026):
+            break
+        sh, sb, sc = max(int(W * 0.04), sh - 2), sb - 1, max(int(W * 0.03), sc - 2)
+    box = (margin, int(H * 0.03), W - margin, int(H * 0.03) + tot)
+    img = _panel(img, box, 34)
+    d = ImageDraw.Draw(img)
+    y = box[1] + int(W * 0.025)
+    for lines, f, col, hl, step in ((lh_, fh, (15, 15, 15), red, 1.12), (lb_, fb, (25, 25, 25), red, 1.25),
+                                    (lc_, fc, red, red, 1.15)):
+        if not lines:
+            continue
+        for ln in lines:
+            w = d.textlength(ln.replace("[[", "").replace("]]", ""), font=f)
+            _draw_rich(d, (W - w) / 2, y, ln, f, col, hl)
+            y += int(f.size * step)
+        y += int(W * 0.03)
+    return img.convert("RGB")
+
+
 def _post_font(post: dict) -> Path:
     from . import textslide
     blocks = [b for sl in post.get("slides", []) for b in (sl.get("blocchi") or [])]
@@ -391,6 +445,12 @@ def make(post: dict, originals: list[bytes], jdir: Path) -> tuple[Path, dict] | 
     ref = Image.open(io.BytesIO(originals[0])).convert("RGB")
     n = "one book" if len(books) == 1 else f"{len(books)} books, one in each hand"
     prompt = _al_pubblico(PROMPT.format(n=n) if books else PROMPT_SEGUI)
+    con_pers = _personaggio(post) is not None
+    if con_pers:
+        prompt = (prompt.replace("Keep the top 30% of the image and the bottom 16% of the image calm and simple (sky, "
+                                 "wall or floor), because text will be added there later.", "")
+                  .replace("Keep the top 30% and the bottom 20% of the image calm and simple, because text will be "
+                           "added there later.", "") + SOTTO)
     for attempt in range(2):
         try:
             gen = _genera(post, ref, prompt)
@@ -410,7 +470,7 @@ def make(post: dict, originals: list[bytes], jdir: Path) -> tuple[Path, dict] | 
         else:
             img = gen
         bg = img.copy()
-        img = _texts(img, text, _post_font(post))
+        img = (_texts_sopra if con_pers else _texts)(img, text, _post_font(post))
         out = jdir / "cta_illustrata.jpg"
         img.save(out, "JPEG", quality=95, subsampling=0)
         bgp = jdir / "sfondo_cta_illustrata.jpg"
