@@ -31,8 +31,9 @@ log = logging.getLogger(__name__)
 
 W, H = 1080, 1920
 TOP_SAFE, BOTTOM_SAFE = 270, 420          # zone coperte dall'interfaccia di Instagram (nome in alto, risposte in basso)
-TIPI = ["didattica", "vendita", "domande"]
-SINONIMI = {"didattico": "didattica", "didattiche": "didattica", "marketing": "vendita", "lancio": "vendita", "prelancio": "vendita", "manuale": "vendita",
+TIPI = ["didattica", "vendita", "domande", "lancio"]
+TIPI_TEMI = ["didattica", "vendita", "domande"]   # il lancio si chiede apposta (/storie lancio ...), non si propone
+SINONIMI = {"didattico": "didattica", "didattiche": "didattica", "marketing": "vendita", "lancio": "lancio", "prelancio": "lancio", "hype": "lancio", "countdown": "lancio", "uscita": "lancio", "manuale": "vendita",
             "vendite": "vendita", "domanda": "domande", "box": "domande", "qa": "domande", "risposte": "domande"}
 
 # colori per pagina (sfondo a tinta unita, accento per i titoli)
@@ -90,7 +91,7 @@ TEMI_TOOL = {
     "name": "temi_storie",
     "description": "Propone temi per serie di storie Instagram.",
     "input_schema": {"type": "object", "properties": {"temi": {"type": "array", "items": {"type": "object", "properties": {
-        "tipo": {"type": "string", "enum": TIPI},
+        "tipo": {"type": "string", "enum": TIPI_TEMI},
         "tema": {"type": "string", "description": "Il tema in una frase concreta (il dolore o la situazione precisa)."},
         "perche": {"type": "string", "description": "Perché funziona per questo pubblico, in poche parole."},
     }, "required": ["tipo", "tema", "perche"]}}}, "required": ["temi"]},
@@ -126,7 +127,7 @@ def proponi_temi(brand: dict) -> list[dict]:
                  "diversi tra loro" + (" e diversi da quelli già fatti:\n" + "\n".join(fatti) if fatti else ".") + mix + dati)
     out = writer._tool_call("Sei lo stratega delle storie Instagram di una pagina italiana.\n" + _profilo(brand),
                             [{"type": "text", "text": richiesta}], TEMI_TOOL, model=config.CLAUDE_MODEL, max_tokens=6000)
-    temi = [t for t in out.get("temi") or [] if t.get("tipo") in TIPI and (t.get("tema") or "").strip()][:8]
+    temi = [t for t in out.get("temi") or [] if t.get("tipo") in TIPI_TEMI and (t.get("tema") or "").strip()][:8]
     config.DATA_DIR.mkdir(parents=True, exist_ok=True)
     _proposte_file().write_text(json.dumps(temi, ensure_ascii=False), encoding="utf-8")
     return temi
@@ -234,6 +235,31 @@ def riepilogo_strutture(chiave: str = "") -> str:
     return "\n".join(righe)
 
 
+# Gabriele 27/11: "per le storie deve seguire bene il mio pensiero e saper creare bene hype"
+LANCIO_TESTO = (
+    "Serie di LANCIO (hype) per un manuale in uscita. Dal tema capisci QUALE manuale e la FASE; se la fase non c'è, "
+    "deducila, e se non si capisce fai l'annuncio. Fasi:\n"
+    "- annuncio: sta arrivando qualcosa su questo dolore. Non dire tutto: niente prezzo, il titolo puoi tenerlo per dopo.\n"
+    "- lavori: dietro le quinte (lo stiamo completando): un assaggio vero del contenuto, una domanda a cui il manuale risponde.\n"
+    "- data: esce il giorno X alle Y (solo date e orari scritti nel tema).\n"
+    "- vigilia: domani alle Y.\n"
+    "- uscita: è uscito; prezzo di lancio e copie scontate SOLO come scritti nel tema o nei dati del manuale; chiusura "
+    "col manuale citato per titolo e 'Ti lascio il link qua.'\n"
+    "- ultime copie / riapertura: solo se il tema lo dice, con i numeri del tema.\n"
+    "COME SI CREA HYPE:\n"
+    "- Si parte sempre dal DOLORE del lettore, letto con la visione della pagina, non dalle caratteristiche del libro: "
+    "prima deve pensare 'questo parla di me', poi scopre che sta arrivando la risposta.\n"
+    "- Rivela a pezzi: ogni serie dà un assaggio vero (un'idea forte del manuale, un meccanismo, il nome di un "
+    "capitolo) e lascia aperta una domanda che solo il manuale chiude. Mai riassumere tutto il libro.\n"
+    "- Il lettore è dentro: lo sa prima degli altri, vede il dietro le quinte.\n"
+    "- Date e orari concreti battono 'presto' e 'a breve'.\n"
+    "- Prima dell'uscita chiudi coinvolgendo: 'Rispondi a questa storia con [PAROLA] e ti avviso per primo' "
+    "(una parola breve legata al tema, in maiuscolo). All'uscita chiudi col link.\n"
+    "- Scarsità e urgenza SOLO vere (prezzo di lancio, copie, data). MAI inventare numeri di richieste, vendite, "
+    "messaggi ricevuti o testimonianze: se il tema li riporta, usali uguali, altrimenti non parlarne.\n"
+    "- Niente toni da televendita ('imperdibile', 'occasione unica', esclamativi a raffica): l'hype nasce dalla "
+    "tensione e dal dolore, non dagli aggettivi.")
+
 CTA_TESTO = {
     "citato": "Chiusura di vendita col MANUALE CITATO (titolo + 'trovi esattamente: 3 cose concrete' + 'Ti lascio il link qua.').",
     "non_citato": "Chiusura di vendita col MANUALE NON CITATO: niente titolo né contenuti, solo dolore, costo del non "
@@ -288,9 +314,9 @@ def scrivi(brand: dict, tema: str, tipo: str | None, rules: list[dict]) -> dict:
     chiesta, tema = struttura_chiesta(tema)
     if tipo is None:
         tipo = "didattica"
-    if tipo == "vendita" and not brand.get("manuali"):
+    if tipo in ("vendita", "lancio") and not brand.get("manuali"):
         tipo = "didattica"
-    struttura = scegli_struttura(tipo, chiesta) if tipo != "domande" else None
+    struttura = scegli_struttura(tipo, chiesta) if tipo not in ("domande", "lancio") else None
     if struttura and tipo not in (strutture()[struttura].get("tipi") or [tipo]):
         tipo = (strutture()[struttura].get("tipi") or [tipo])[0]        # es. SCQA chiesta per la vendita: è didattica
     cta = modo_cta() if tipo == "vendita" else ""
@@ -299,6 +325,7 @@ def scrivi(brand: dict, tema: str, tipo: str | None, rules: list[dict]) -> dict:
         "vendita": ("Serie di VENDITA, col manuale più adatto al tema (se il tema indica il manuale tra parentesi "
                     "quadre, es. [bundle], usa QUEL manuale; il bundle è AttraiSeduci + Potere Sociale).\n" + _testo_struttura(struttura) + "\n"
                     + CTA_TESTO.get(cta, "")),
+        "lancio": LANCIO_TESTO,
         "domande": ("BOX DOMANDE: 1 slide sola. Un blocco di 3-4 righe che apre il tema con un gancio e invita a fare "
                     "la domanda che non farebbero a nessuno (la metà alta resta libera per lo sticker DOMANDA). "
                     "Scrivi anche sticker_testo, breve (es. 'Chiedimi tutto su [tema]')."),
@@ -697,8 +724,8 @@ def _disegna_serie(serie: dict, brand: dict, slug: str, jdir: Path, nome: str) -
     paths, slides = [], []
     global TOP_SAFE
     tutte = serie.get("slides") or []
-    mid = _manuale_citato(serie, brand) if serie.get("tipo") == "vendita" else None
-    if mid and not serie.get("_mockup_sempre"):     # Gabriele 15/11: mockup in 1 storia di vendita ogni 3
+    mid = _manuale_citato(serie, brand) if serie.get("tipo") in ("vendita", "lancio") else None
+    if mid and serie.get("tipo") == "vendita" and not serie.get("_mockup_sempre"):     # Gabriele 15/11: mockup in 1 storia di vendita ogni 3
         fatte = sum(1 for x in _storico() if x.get("tipo") == "vendita")
         if fatte % 3:
             mid = None
@@ -756,6 +783,9 @@ def istruzioni(serie: dict) -> str:
     else:
         if tipo == "vendita":
             righe.append("Ultima slide: metti lo sticker link MANUALE sotto il testo.")
+        if tipo == "lancio":
+            righe.append("Se è la storia d'uscita: sticker link sull'ultima slide. Se chiude con 'rispondi con [PAROLA]': "
+                         "chi risponde va avvisato in DM all'uscita.")
     righe.append("Il file Canva ha i testi modificabili.")
     return "\n".join(righe)
 

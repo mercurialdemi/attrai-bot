@@ -30,7 +30,7 @@ COMMANDS = [
          "crea caroselli nuovi nello stile AttraiSeduci: /crea, /crea 3, /crea segnali di disinteresse"),
         ("storie", "Storie: temi proposti o su un tema (es. /storie vendita gelosia)",
          "/storie propone 6 temi; /storie 3 crea il tema 3; /storie <tema> o /storie didattica|vendita|domande <tema>; "
-         "struttura a scelta: /storie vendita pas|bab|epifania|mito <tema>, /storie scqa|ciclo <tema> (altrimenti a rotazione)"),
+         "struttura a scelta: /storie vendita pas|bab|epifania|mito <tema>, /storie scqa|ciclo <tema> (altrimenti a rotazione); lancio di un manuale: /storie lancio <manuale> <fase> (annuncio, lavori, data, vigilia, uscita), es. /storie lancio narcisista vigilia domani alle 15"),
         ("manuali", "Manuali della pagina: in vendita e in arrivo",
          "/manuali mostra i manuali della pagina; /manuali attiva <id> quando un manuale esce (da lì descrizioni, CTA "
          "e storie lo propongono); /manuali disattiva <id>"),
@@ -692,7 +692,7 @@ async def cmd_storie(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 if not tema:
                     await msg.reply_text("Scrivi anche il tema, es. /storie vendita gelosia dopo la rottura")
                     return
-            if tipo == "vendita" and not brand.get("manuali"):
+            if tipo in ("vendita", "lancio") and not brand.get("manuali"):
                 await msg.reply_text(f"{brand['nome']} non ha manuali da vendere: faccio una serie didattica.")
                 tipo = "didattica"
             status = await msg.reply_text(f"Creo le storie: {tema}…")
