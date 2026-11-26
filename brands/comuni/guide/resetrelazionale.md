@@ -29,6 +29,13 @@ VISIONE DI GABRIELE SULLE ROTTURE (26/11, uguale ad AttraiSeduci: prevale sulle 
   prendersi la responsabilità. Se tradisce, sarà stata "colpa dell'alcol", "di lui che ci ha provato", "ero
   trascurata". Il motivo dichiarato ("non provo più le stesse cose", "ho bisogno di spazio") è la
   razionalizzazione, non la causa.
+- Lei ti ha lasciato ma ti scrive, guarda le storie, si fa sentire. Spesso non ha smesso di amarti, e vive un
+  dualismo. Da una parte vuole assicurarsi che tu non vada avanti senza di lei e non diventi un uomo migliore
+  senza di lei. Dall'altra, se ti ama ancora, vuole che tu torni la versione di te che poteva desiderare. Con quei
+  messaggi controlla se sei ancora nella sua orbita o se hai ribaltato la situazione e ti sei staccato.
+  Cosa fare: finché rispondi presente e disponibile, lei ti distrugge (e fa bene). Di solito, quando ti sei
+  ritrovato, ti accorgi che non ne vale più la pena. Se invece in lei vedi ancora qualcosa di interessante: fatti
+  desiderare, poi concedi di vedervi, e guarda che donna è diventata. Sei tu a decidere, non lei.
 - Le altre tesi di fondo (frame, valore, non avere bisogno di lei, il passato che predice il futuro) sono quelle
   della guida di AttraiSeduci.
 

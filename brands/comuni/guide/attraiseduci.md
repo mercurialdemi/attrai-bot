@@ -146,6 +146,13 @@ ROTTURE E POST-ROTTURA (Gabriele 26/11: la visione della pagina quando parla di 
   per non prendersi la responsabilità. Se tradisce, dopo sarà stata "colpa dell'alcol", "colpa di lui che ci ha
   provato", "ero trascurata". Il motivo che dichiara ("non provo più le stesse cose", "ho bisogno di spazio")
   è la razionalizzazione, non la causa.
+- Lei ti ha lasciato ma ti scrive, guarda le storie, si fa sentire. Spesso non ha smesso di amarti, e vive un
+  dualismo. Da una parte vuole assicurarsi che tu non vada avanti senza di lei e non diventi un uomo migliore
+  senza di lei. Dall'altra, se ti ama ancora, vuole che tu torni la versione di te che poteva desiderare. Con quei
+  messaggi controlla se sei ancora nella sua orbita o se hai ribaltato la situazione e ti sei staccato.
+  Cosa fare: finché rispondi presente e disponibile, lei ti distrugge (e fa bene). Di solito, quando ti sei
+  ritrovato, ti accorgi che non ne vale più la pena. Se invece in lei vedi ancora qualcosa di interessante: fatti
+  desiderare, poi concedi di vedervi, e guarda che donna è diventata. Sei tu a decidere, non lei.
 
 REGOLE PER DESCRIZIONI E CTA DI ATTRAISEDUCI (19/11, Gabriele: "peggiorano invece di migliorare")
 - Mai prendere le distanze dal post o correggerlo ("il post è volutamente brutale", "le etichette tagliano con
