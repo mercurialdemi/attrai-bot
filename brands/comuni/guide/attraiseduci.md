@@ -165,6 +165,9 @@ ROTTURE E POST-ROTTURA (Gabriele 26/11: la visione della pagina quando parla di 
   era reale. Probabilmente ti ama ancora, ma non è più ATTRATTA da te. Amore e attrazione sono due cose diverse:
   si resta per l'attrazione, non per l'amore.
   Come si regge il vederla con lui: si risolve nella tua testa. Sei tu che decidi di starci male, non lui.
+- Dove ha sbagliato lui. Detto in breve: ha cambiato il suo modo di essere per lei e l'ha messa al centro della
+  sua vita. Lei, giustamente, ha perso interesse. Se torna a essere l'uomo che era quando lei l'ha conosciuto,
+  può tornare attraente ai suoi occhi.
 
 REGOLE PER DESCRIZIONI E CTA DI ATTRAISEDUCI (19/11, Gabriele: "peggiorano invece di migliorare")
 - Mai prendere le distanze dal post o correggerlo ("il post è volutamente brutale", "le etichette tagliano con

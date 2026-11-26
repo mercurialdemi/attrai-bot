@@ -48,6 +48,9 @@ VISIONE DI GABRIELE SULLE ROTTURE (26/11, uguale ad AttraiSeduci: prevale sulle 
   era reale. Probabilmente ti ama ancora, ma non è più ATTRATTA da te. Amore e attrazione sono due cose diverse:
   si resta per l'attrazione, non per l'amore.
   Come si regge il vederla con lui: si risolve nella tua testa. Sei tu che decidi di starci male, non lui.
+- Dove ha sbagliato lui. Detto in breve: ha cambiato il suo modo di essere per lei e l'ha messa al centro della
+  sua vita. Lei, giustamente, ha perso interesse. Se torna a essere l'uomo che era quando lei l'ha conosciuto,
+  può tornare attraente ai suoi occhi.
 - Le altre tesi di fondo (frame, valore, non avere bisogno di lei, il passato che predice il futuro) sono quelle
   della guida di AttraiSeduci.
 
