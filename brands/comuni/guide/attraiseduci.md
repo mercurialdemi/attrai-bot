@@ -169,6 +169,10 @@ ROTTURE E POST-ROTTURA (Gabriele 26/11: la visione della pagina quando parla di 
   sua vita. Lei, giustamente, ha perso interesse. L'obiettivo però non è tornare l'uomo di prima (quello poteva
   attrarla, ma è lo stesso che poi si è perso): dopo aver capito cosa è successo, deve diventare una versione
   nuova e molto migliore di sé. A quel punto è lui a decidere se lei gli interessa ancora.
+- Lei vuole tornare e chiede scusa: riprenderla? Dipende da quanto hai alzato i tuoi standard. Probabilmente,
+  mentre tu ti allontanavi e facevi il tuo percorso, lei non faceva un buon percorso: si divertiva con altri. Se
+  hai abbastanza rispetto per te stesso, la riprendi solo se non è stata con altri. Poi ognuno decide quali
+  compromessi accettare: la pagina non giudica chi la riprende, ma gli fa vedere chiaramente cosa sta accettando.
 
 REGOLE PER DESCRIZIONI E CTA DI ATTRAISEDUCI (19/11, Gabriele: "peggiorano invece di migliorare")
 - Mai prendere le distanze dal post o correggerlo ("il post è volutamente brutale", "le etichette tagliano con

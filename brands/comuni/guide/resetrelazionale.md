@@ -52,6 +52,10 @@ VISIONE DI GABRIELE SULLE ROTTURE (26/11, uguale ad AttraiSeduci: prevale sulle 
   sua vita. Lei, giustamente, ha perso interesse. L'obiettivo però non è tornare l'uomo di prima (quello poteva
   attrarla, ma è lo stesso che poi si è perso): dopo aver capito cosa è successo, deve diventare una versione
   nuova e molto migliore di sé. A quel punto è lui a decidere se lei gli interessa ancora.
+- Lei vuole tornare e chiede scusa: riprenderla? Dipende da quanto hai alzato i tuoi standard. Probabilmente,
+  mentre tu ti allontanavi e facevi il tuo percorso, lei non faceva un buon percorso: si divertiva con altri. Se
+  hai abbastanza rispetto per te stesso, la riprendi solo se non è stata con altri. Poi ognuno decide quali
+  compromessi accettare: la pagina non giudica chi la riprende, ma gli fa vedere chiaramente cosa sta accettando.
 - Le altre tesi di fondo (frame, valore, non avere bisogno di lei, il passato che predice il futuro) sono quelle
   della guida di AttraiSeduci.
 
