@@ -666,6 +666,7 @@ async def cmd_storie(update: Update, context: ContextTypes.DEFAULT_TYPE):
     brand, slug = writer.load_brand(), pagine.corrente()
 
     async def go():
+        nonlocal brand
         try:
             if not arg:
                 status = await msg.reply_text("Cerco i temi migliori per le storie…")
@@ -692,6 +693,8 @@ async def cmd_storie(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 if not tema:
                     await msg.reply_text("Scrivi anche il tema, es. /storie vendita gelosia dopo la rottura")
                     return
+            if tipo == "lancio":
+                brand = storie._con_in_arrivo(brand)
             if tipo in ("vendita", "lancio") and not brand.get("manuali"):
                 await msg.reply_text(f"{brand['nome']} non ha manuali da vendere: faccio una serie didattica.")
                 tipo = "didattica"

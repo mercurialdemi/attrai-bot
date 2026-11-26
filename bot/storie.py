@@ -760,7 +760,19 @@ def _disegna_serie(serie: dict, brand: dict, slug: str, jdir: Path, nome: str) -
     return paths, canva_path
 
 
+def _con_in_arrivo(brand: dict) -> dict:
+    """Per il lancio contano anche i manuali IN ARRIVO della pagina (il lancio si fa proprio prima che siano in
+    vendita); restano solo quelli di questa pagina."""
+    presenti = {m.get("id") for m in brand.get("manuali") or []}
+    extra = [{"id": mid, "nome": m.get("nome", mid), "titoli": m.get("titoli") or [m.get("nome", mid)],
+              "dolori": m.get("dolori", ""), "vendita": m.get("vendita", "")}
+             for mid, m in writer.catalogo_manuali().items() if mid not in presenti]
+    return {**brand, "manuali": list(brand.get("manuali") or []) + extra} if extra else brand
+
+
 def crea(brand: dict, slug: str, tema: str, tipo: str | None, rules: list[dict], jdir: Path) -> tuple[dict, list[Path], Path | None]:
+    if tipo == "lancio":
+        brand = _con_in_arrivo(brand)
     serie = scrivi(brand, tema, tipo, rules)
     paths, canva_path = _disegna_serie(serie, brand, slug, jdir, "storia")
     serie["tema"] = struttura_chiesta(tema)[1]
