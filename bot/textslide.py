@@ -1572,7 +1572,70 @@ def _metrics_from_diff(original: Image.Image, cleaned: Image.Image, box) -> tupl
 def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict],
                   placements: list | None = None, boxes: list | None = None) -> Image.Image:
     """Scrive i blocchi di testo italiano sull'immagine ripulita, nei riquadri del testo originale.
-    `boxes` = riquadri già precisi (pulizia col codice); altrimenti si affinano confrontando con l'originale."""
+    `boxes` = riquadri già precisi (pulizia col codice); altrimenti si affinano confrontando con l'originale.
+
+    26/11 (Gabriele: "in un elenco di 10 cose non c'è un punto enorme e uno microscopico"): i blocchi che
+    nell'originale avevano la stessa grandezza (stesso carattere, grandezza di partenza entro il 20%) escono con
+    la stessa grandezza. Prima si cerca la grandezza tipica del gruppo; un blocco che non ci sta può allungarsi
+    in basso nello spazio libero invece di rimpicciolirsi; poi tutto il gruppo prende la grandezza più piccola
+    rimasta, così nessuno esce dalla sua casella."""
+    if boxes is None:
+        # i riquadri si affinano una volta sola, poi si riusano nei passaggi successivi
+        boxes = []
+        for bl in blocks:
+            box, _c = refine_box(original, cleaned, block_box(bl, *cleaned.size))
+            pitch, line_h = _metrics_from_diff(original, cleaned, box)
+            boxes.append((box, pitch, line_h, _c))
+        misurati = True
+    else:
+        misurati = False
+    if len(blocks) < 2:
+        return _render_blocks_once(cleaned, original, blocks, placements, boxes, misurati=misurati)
+    info: dict = {}
+    _render_blocks_once(cleaned, original, blocks, None, boxes, info=info, misurati=misurati)
+    gruppi: list[list[int]] = []
+    colori = {i: (blocks[i].get("colore") or "").upper() for i in info}
+    for i, (car, st, sz) in info.items():
+        for g in gruppi:
+            c0, s0, _ = info[g[0]]
+            # stesso ruolo = stesso carattere, stesso colore (un titoletto rosso non è un punto dell'elenco)
+            # e grandezza di partenza simile
+            if c0 == car and colori[g[0]] == colori[i] and abs(st - s0) <= 0.2 * max(st, s0):
+                g.append(i)
+                break
+        else:
+            gruppi.append([i])
+    cap, grow = {}, set()
+    for g in gruppi:
+        if len(g) < 2:
+            continue
+        sizes = sorted(info[i][2] for i in g)
+        tipica = sizes[len(sizes) // 2]
+        for i in g:
+            cap[i] = tipica
+            # le battute dei fumetti stanno nella loro nuvoletta: non si allungano
+            if info[i][2] < tipica and info[i][0] != "fumetto":
+                grow.add(i)
+    if not cap:
+        return _render_blocks_once(cleaned, original, blocks, placements, boxes, misurati=misurati)
+    info2: dict = {}
+    _render_blocks_once(cleaned, original, blocks, None, boxes, info=info2, cap=cap, grow=grow, misurati=misurati)
+    for g in gruppi:
+        if len(g) < 2:
+            continue
+        sz2 = [info2[i][2] for i in g if i in info2]
+        u = min(sz2)
+        # tutti uguali solo se il più piccolo non è molto sotto gli altri: non si rimpiccioliscono i blocchi
+        # buoni per colpa di uno che non ci sta (quello resta il più grande possibile)
+        if u >= 0.85 * max(sz2):
+            for i in g:
+                cap[i] = u
+    return _render_blocks_once(cleaned, original, blocks, placements, boxes, cap=cap, grow=grow, misurati=misurati)
+
+
+def _render_blocks_once(cleaned: Image.Image, original: Image.Image, blocks: list[dict],
+                        placements: list | None = None, boxes: list | None = None, info: dict | None = None,
+                        cap: dict | None = None, grow: set | None = None, misurati: bool = False) -> Image.Image:
     out = cleaned.copy()
     W, H = out.size
     draw = ImageDraw.Draw(out)
@@ -1588,11 +1651,13 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
             entry, color = boxes[idx], None
             box, pitch = entry[0], entry[1]
             line_h = entry[2] if len(entry) > 2 else None
+            if misurati:
+                color = entry[3] if len(entry) > 3 else None
         else:
             box, color = refine_box(original, cleaned, block_box(bl, W, H))
             pitch, line_h = _metrics_from_diff(original, cleaned, box)
         # con parole di due colori (es. nere e rosse) il colore misurato sarebbe una via di mezzo: vale quello di Claude
-        color = _hex(bl.get("colore")) if (boxes or not color or bl.get("colore_evidenziato")) else color
+        color = _hex(bl.get("colore")) if ((boxes and not misurati) or not color or bl.get("colore_evidenziato")) else color
         hl_color = _hex(bl.get("colore_evidenziato")) if bl.get("colore_evidenziato") else color
         bw, bh = max(40, box[2] - box[0]), max(20, box[3] - box[1])
         # spazio in larghezza: l'italiano è più lungo dell'inglese. Invece di rimpicciolire o andare a capo
@@ -1628,6 +1693,16 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
                 continue
             if ob[1] < box[3] + int(H * 0.005):
                 box = (box[0], box[1], box[2], max(box[1] + 20, ob[1] - int(H * 0.008)))
+                bh = box[3] - box[1]
+        if grow and idx in grow:
+            # stessa grandezza del gruppo: la casella si allunga in basso nello spazio libero, fino al blocco
+            # successivo o al margine sicuro, invece di rimpicciolire il testo
+            fondo = H - int(H * max(0.05, SAFE_Y))
+            for j, ob in enumerate(all_bb):
+                if j != idx and ob[1] > all_bb[idx][1] and not (ob[2] < box[0] or ob[0] > box[2]):
+                    fondo = min(fondo, ob[1] - int(H * 0.012))
+            if fondo > box[3]:
+                box = (box[0], box[1], box[2], fondo)
                 bh = box[3] - box[1]
         # CASELLA DI TESTO: il testo italiano sta nello stesso riquadro occupato dall'originale.
         # Le righe si ridistribuiscono liberamente, ma non si esce mai dalla casella.
@@ -1673,6 +1748,9 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
             ratio = float(np.clip(pitch / max(size, 1), 1.02, 1.6))
             size = min(size, int(pitch / 1.02))      # mai più grande di quanto permette l'interlinea originale
         start = size
+        partenza = size
+        if cap and idx in cap:
+            start = min(start, cap[idx]) if not (grow and idx in grow) else cap[idx]
         flat = [[[w for r in rows for w in r]] for rows in paras]
 
         def fit(p_):
@@ -1707,6 +1785,8 @@ def render_blocks(cleaned: Image.Image, original: Image.Image, blocks: list[dict
             lines = _layout(draw, paras, font, bw, bfont)
             best = (font, bfont, lines, int(14 * ratio), len(lines) * int(14 * ratio))
         font, bfont, lines, lh, total = best
+        if info is not None:
+            info[idx] = (car, partenza, font.size)
         # dove cadono davvero le lettere rispetto al punto di scrittura (cambia da un font all'altro)
         first = next((ln for ln in lines if ln), None)
         last = next((ln for ln in reversed(lines) if ln), None)
