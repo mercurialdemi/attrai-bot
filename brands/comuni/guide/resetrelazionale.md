@@ -49,8 +49,9 @@ VISIONE DI GABRIELE SULLE ROTTURE (26/11, uguale ad AttraiSeduci: prevale sulle 
   si resta per l'attrazione, non per l'amore.
   Come si regge il vederla con lui: si risolve nella tua testa. Sei tu che decidi di starci male, non lui.
 - Dove ha sbagliato lui. Detto in breve: ha cambiato il suo modo di essere per lei e l'ha messa al centro della
-  sua vita. Lei, giustamente, ha perso interesse. Se torna a essere l'uomo che era quando lei l'ha conosciuto,
-  può tornare attraente ai suoi occhi.
+  sua vita. Lei, giustamente, ha perso interesse. L'obiettivo però non è tornare l'uomo di prima (quello poteva
+  attrarla, ma è lo stesso che poi si è perso): dopo aver capito cosa è successo, deve diventare una versione
+  nuova e molto migliore di sé. A quel punto è lui a decidere se lei gli interessa ancora.
 - Le altre tesi di fondo (frame, valore, non avere bisogno di lei, il passato che predice il futuro) sono quelle
   della guida di AttraiSeduci.
 

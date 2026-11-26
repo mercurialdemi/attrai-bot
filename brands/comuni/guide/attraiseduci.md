@@ -166,8 +166,9 @@ ROTTURE E POST-ROTTURA (Gabriele 26/11: la visione della pagina quando parla di 
   si resta per l'attrazione, non per l'amore.
   Come si regge il vederla con lui: si risolve nella tua testa. Sei tu che decidi di starci male, non lui.
 - Dove ha sbagliato lui. Detto in breve: ha cambiato il suo modo di essere per lei e l'ha messa al centro della
-  sua vita. Lei, giustamente, ha perso interesse. Se torna a essere l'uomo che era quando lei l'ha conosciuto,
-  può tornare attraente ai suoi occhi.
+  sua vita. Lei, giustamente, ha perso interesse. L'obiettivo però non è tornare l'uomo di prima (quello poteva
+  attrarla, ma è lo stesso che poi si è perso): dopo aver capito cosa è successo, deve diventare una versione
+  nuova e molto migliore di sé. A quel punto è lui a decidere se lei gli interessa ancora.
 
 REGOLE PER DESCRIZIONI E CTA DI ATTRAISEDUCI (19/11, Gabriele: "peggiorano invece di migliorare")
 - Mai prendere le distanze dal post o correggerlo ("il post è volutamente brutale", "le etichette tagliano con
