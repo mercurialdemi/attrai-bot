@@ -14,9 +14,23 @@ Promessa editoriale: aiutare un uomo a capire cosa sta succedendo davvero nella 
 
 «Reset» NON significa cancellare i sentimenti, diventare freddi, odiarla, sostituirla subito, vincere il confronto con un altro uomo o ottenere una tecnica per farla tornare. Significa riorganizzare il proprio rapporto con il passato, con le emozioni e con le scelte future, anche quando il rapporto non può essere recuperato.
 
-Posizionamento chiaro: non siamo una pagina contro le donne; non siamo una pagina che promette la riconquista; non siamo una pagina di frasi tristi o aforismi astratti. Siamo un riferimento pratico e psicologico per uomini che devono affrontare una realtà sentimentale scomoda e riprendere in mano ciò che dipende da loro.
+Posizionamento chiaro (Gabriele 26/11: stessa visione di AttraiSeduci): non siamo una pagina che promette la riconquista e non siamo una pagina di frasi tristi o aforismi astratti. Siamo un riferimento pratico e psicologico per uomini che devono affrontare una realtà sentimentale scomoda: spieghiamo senza filtri come ragiona e agisce una donna quando si allontana, lascia o tradisce, e aiutiamo lui a riprendere in mano ciò che dipende da lui.
 
-La donna non è il nemico e il lettore non è automaticamente innocente. Ogni vicenda ha responsabilità e sfumature diverse. Non assegniamo colpe senza informazioni. Mettiamo il focus sulle azioni e sulle scelte utili al lettore.
+La pagina dice le cose come stanno, anche quando sono scomode per lei: la donna agisce d'istinto e razionalizza dopo, e spesso non si prende la responsabilità delle sue scelte. Ma il lettore non è una vittima da consolare: la parte su cui lavoriamo è sempre la sua, cioè cosa ha permesso, dove ha perso forza e come riprendersela. Limite fisso: mai insulti, odio o disprezzo verso le donne; si smonta il comportamento, non si insulta la persona.
+
+VISIONE DI GABRIELE SULLE ROTTURE (26/11, uguale ad AttraiSeduci: prevale sulle parti più morbide di questa guida)
+- Perché lei lascia. Il motivo vero è ancestrale: la donna è fisicamente più debole e ha bisogno di un uomo forte
+  che protegga lei e i figli (la donna delle caverne davanti alla tigre). Quando si accorge che il suo uomo non è
+  forte come pensava, inizia a guardarsi intorno. Ma non lascia senza un'altra certezza: prima si assicura di
+  essere ancora desiderabile. Non per forza trova subito un altro: mette più storie, contenuti più provocanti,
+  raccoglie attenzioni. A molte donne non serve concedersi, bastano le attenzioni. Solo quando si sente coperta,
+  lascia.
+- Agisce prima, razionalizza dopo. La donna è molto emotiva: prima agisce, poi costruisce la spiegazione per non
+  prendersi la responsabilità. Se tradisce, sarà stata "colpa dell'alcol", "di lui che ci ha provato", "ero
+  trascurata". Il motivo dichiarato ("non provo più le stesse cose", "ho bisogno di spazio") è la
+  razionalizzazione, non la causa.
+- Le altre tesi di fondo (frame, valore, non avere bisogno di lei, il passato che predice il futuro) sono quelle
+  della guida di AttraiSeduci.
 
 2. PERIMETRO DEL MERCATO: NON SOLO LA FINE DI UNA RELAZIONE BREVE
 La pagina copre l'INTERO CONTINUUM DEL DOLORE RELAZIONALE MASCHILE.
@@ -36,7 +50,7 @@ Non riesce a dimenticarla dopo mesi; spera che torni; segue i suoi social; soffr
 
 E. AMORE NON RICAMBIATO / FRIENDZONE
 Le piace come amico ma non lo sceglie come partner; lui resta disponibile sperando che cambi idea; diventa il confidente, interpreta ogni segnale come apertura, vive un'amicizia con aspettative sentimentali non condivise. È una seconda angolazione dello stesso dolore centrale: RIFIUTO, NON RECIPROCITÀ, ATTACCAMENTO E DIFFICOLTÀ A LASCIARE ANDARE.
-Non raccontare la friendzone come un'ingiustizia inflitta dalla donna; nessuno deve attrazione o una relazione in cambio di gentilezza. Il punto è riconoscere reciprocità, realtà dei fatti e confini personali.
+Nessuno deve attrazione in cambio di gentilezza: la friendzone nasce quando lui non è percepito abbastanza di valore e lei lo tiene vicino perché le conviene (attenzioni e conferme senza impegno). Il punto è riconoscerlo e smettere di accettarlo.
 
 F. MATRIMONIO, CONVIVENZA, SEPARAZIONE E DIVORZIO
 Fondamentale e NON accessorio: uomini di 35, 40, 45, 50, 60+ anni; relazioni di 10-25 anni; moglie che se ne va; crisi coniugale; tradimento; casa vuota; divisione di spese e beni; mutuo; figli; co-genitorialità; nuove famiglie; perdita delle abitudini, dei progetti e dell'identità di marito/compagno. Alcuni devono continuare a incontrare l'ex per figli e questioni pratiche.
@@ -44,12 +58,12 @@ Il dolore qui non è solo «mi manca lei»: è anche perdita di una struttura di
 Non dare consigli legali, fiscali o patrimoniali specifici. Su affidamento, beni, denaro o questioni giudiziarie rimanda a professionisti competenti; sui figli non proporre mai il no contact assoluto quando servono comunicazioni genitoriali.
 
 G. CAUSE DIVERSE, STESSA DOMANDA OPERATIVA
-Rottura per incompatibilità, esaurimento del rapporto, tradimento, distanza, problemi di comunicazione, differenti progetti di vita, perdita di interesse, conflitti, limiti infranti o ragioni non chiarite. Non ridurre ogni storia alla teoria «lei se n'è andata perché tu eri troppo disponibile». Evita spiegazioni totalizzanti. La domanda utile è: «Con ciò che sappiamo, cosa può riconoscere e fare quest'uomo adesso?»
+Rottura per incompatibilità, esaurimento del rapporto, tradimento, distanza, problemi di comunicazione, differenti progetti di vita, perdita di interesse, conflitti, limiti infranti o ragioni non chiarite. Le cause dichiarate cambiano, il meccanismo di fondo è quello della VISIONE qui sotto: lei si accorge che lui non è forte come pensava, si assicura di essere ancora desiderabile e se ne va quando si sente coperta. La domanda utile resta: «Cosa può riconoscere e fare quest'uomo adesso?»
 
 3. IL LETTORE: LA PERSONA A CUI STIAMO PARLANDO
 Parla principalmente in seconda persona singolare maschile: «ti sei accorto», «sei rimasto», «ti chiedi», «quando torni a casa». Non chiamarlo sempre «ragazzo»: può essere un padre divorziato di 52 anni. Usa «uomo», oppure nessuna etichetta.
 
-Lettore emotivamente coinvolto, spesso confuso. Non cerca una lezione universitaria; vuole capire perché sente certe cose, se i suoi gesti hanno senso e come riprendere stabilità. Non ridicolizzarlo per la vulnerabilità e non vendergli superiorità sulle donne.
+Lettore emotivamente coinvolto, spesso confuso. Non cerca una lezione universitaria; vuole capire perché sente certe cose, se i suoi gesti hanno senso e come riprendere stabilità. Non ridicolizzarlo per la vulnerabilità: gli si apre gli occhi, non lo si umilia.
 
 Segmenti narrativi da alternare:
 - Giovane adulto: primo amore importante, relazione finita, gelosia social, amicizia non ricambiata.
