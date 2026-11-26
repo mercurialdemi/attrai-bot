@@ -672,7 +672,7 @@ def polish_slides(out: dict) -> dict:
         f"Concetto del carosello: {out.get('concetto', '')}\n\n"
         f"Slide (JSON):\n{json.dumps(items, ensure_ascii=False, indent=1)}\n\n"
         "Restituisci tutte le slide ricevute con lo strumento slide_rilette.")}]
-    res = _tool_call(system, content, POLISH_TOOL, model=config.CAPTION_MODEL, max_tokens=12000)
+    res = _tool_call(system, content, POLISH_TOOL, model=config.CAPTION_MODEL, max_tokens=12000, cache_ora=True)
     by_num = {s["numero"]: s.get("blocchi") or [] for s in res.get("slides", []) if isinstance(s.get("numero"), int)}
     for sl in out.get("slides", []):
         new = by_num.get(sl.get("numero"))

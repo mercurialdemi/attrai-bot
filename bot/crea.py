@@ -196,7 +196,7 @@ def write_carousel(brand: dict, rules: list[dict], recent: dict, hint: str = "")
     content = [{"type": "text", "text": (
         req + ("\nGià creati di recente (NON ripetere tema, hook e struttura):\n" + gia + "\n" if gia else "")
         + "\nScrivi il carosello con lo strumento carosello_nuovo.")}]
-    idea = writer._tool_call(_system(brand, rules), content, IDEA_TOOL, model=config.CAPTION_MODEL, max_tokens=6000)
+    idea = writer._tool_call(_system(brand, rules), content, IDEA_TOOL, model=config.CAPTION_MODEL, max_tokens=6000, cache_ora=True)
     slides = []
     for i, s_ in enumerate(idea.get("slides") or [], 1):
         tit = writer.clean_text(s_.get("titolo") or "").upper()
