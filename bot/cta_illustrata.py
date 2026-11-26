@@ -93,14 +93,29 @@ def _personaggio(post: dict) -> Image.Image | None:
         return None
 
 
+def _descrizione_personaggio() -> tuple[str, bool]:
+    """Descrizione del personaggio della pagina (brand: personaggio_descrizione); di default lo scheletro.
+    Restituisce (descrizione, è_lo_scheletro)."""
+    from . import writer
+    d = str(writer.load_brand().get("personaggio_descrizione") or "").strip()
+    if not d:
+        return SCHELETRO, True
+    return (f"the character from the SECOND reference image (our page mascot): {d}. Redraw this character in the "
+            "art style of the FIRST image, but keep it clearly recognizable. The FIRST image gives only the style, "
+            "colors and setting; the SECOND image gives only the character. Exactly two arms and two hands. "
+            "Everyone in the scene is fully dressed; nothing suggestive"), False
+
+
 def _con_personaggio(prompt: str) -> str:
-    """Gabriele 19/11: se nell'ultima slide c'è un'immagine, ci deve essere il nostro scheletro."""
+    """Gabriele 19/11: se nel post c'è una persona, nella scena finale c'è il personaggio della pagina
+    (AttraiSeduci lo scheletro; dal 26/11 anche Reset, Amore Infedele e Il Pensatore hanno il loro)."""
+    desc, scheletro = _descrizione_personaggio()
+    chi = "the only man in the scene is " if scheletro else "the main character in the scene is "
     return (prompt.replace("a confident, well-dressed man, the kind of character that appears in the reference style",
-                           SCHELETRO)
-            .replace("a confident, well-dressed man", SCHELETRO)
+                           desc)
+            .replace("a confident, well-dressed man", desc)
             .replace("same kind of characters and setting (same man, same woman if present, same place and light)",
-                     "same setting and light of the first image (same woman if present); the only man in the scene is "
-                     + SCHELETRO)
+                     "same setting and light of the first image (same woman if present); " + chi + desc)
             .replace("reference image", "first reference image", 1))
 
 
@@ -109,7 +124,7 @@ def _genera(post: dict, ref: Image.Image, prompt: str) -> Image.Image | None:
     from . import images
     pers = _personaggio(post)
     if pers is not None:
-        log.info("CTA illustrata: scena con il nostro scheletro")
+        log.info("CTA illustrata: scena con il personaggio della pagina")
         return images._openai_edit(ref, _con_personaggio(prompt), extra=[pers])
     return images._gemini_edit(ref, prompt)
 
