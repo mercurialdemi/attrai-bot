@@ -56,6 +56,8 @@ VISIONE DI GABRIELE SULLE ROTTURE (26/11, uguale ad AttraiSeduci: prevale sulle 
   mentre tu ti allontanavi e facevi il tuo percorso, lei non faceva un buon percorso: si divertiva con altri. Se
   hai abbastanza rispetto per te stesso, la riprendi solo se non è stata con altri. Poi ognuno decide quali
   compromessi accettare: la pagina non giudica chi la riprende, ma gli fa vedere chiaramente cosa sta accettando.
+  E non basta che non sia andata con altri: se nella relazione non stai bene, non sei tranquillo, o lei flirta
+  con altri (anche senza andarci), va scartata lo stesso. La serenità e il rispetto contano quanto la fedeltà.
 - Le altre tesi di fondo (frame, valore, non avere bisogno di lei, il passato che predice il futuro) sono quelle
   della guida di AttraiSeduci.
 

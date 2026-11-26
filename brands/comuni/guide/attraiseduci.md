@@ -173,6 +173,8 @@ ROTTURE E POST-ROTTURA (Gabriele 26/11: la visione della pagina quando parla di 
   mentre tu ti allontanavi e facevi il tuo percorso, lei non faceva un buon percorso: si divertiva con altri. Se
   hai abbastanza rispetto per te stesso, la riprendi solo se non è stata con altri. Poi ognuno decide quali
   compromessi accettare: la pagina non giudica chi la riprende, ma gli fa vedere chiaramente cosa sta accettando.
+  E non basta che non sia andata con altri: se nella relazione non stai bene, non sei tranquillo, o lei flirta
+  con altri (anche senza andarci), va scartata lo stesso. La serenità e il rispetto contano quanto la fedeltà.
 
 REGOLE PER DESCRIZIONI E CTA DI ATTRAISEDUCI (19/11, Gabriele: "peggiorano invece di migliorare")
 - Mai prendere le distanze dal post o correggerlo ("il post è volutamente brutale", "le etichette tagliano con
