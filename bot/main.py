@@ -2,7 +2,9 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import logging
+import os
 import re
 import time
 from datetime import datetime
@@ -897,10 +899,68 @@ async def _da_reel(bot, chat_id: int, user_id: int, url: str, brand: dict, statu
     await pipeline.send_post(bot, chat_id, job_id, post, paths, [], header=header)
 
 
+# 26/11 (Gabriele: "il bot non deve consumare troppo"): niente link doppi e niente post fatti a tetto finito
+DOPPIONE_MINUTI = 15
+MARGINE_POST = float(os.getenv("MARGINE_POST_EURO", "0.9"))   # quanto costa più o meno un post intero
+_link_recenti: dict[str, float] = {}
+
+
+def _chiave_link(url: str) -> str:
+    m = re.search(r"/(?:p|reel|reels|tv)/([A-Za-z0-9_-]+)", url or "")
+    return m.group(1) if m else (url or "").split("?")[0].rstrip("/")
+
+
+def _coda_file() -> Path:
+    return config.DATA_DIR / "link_in_attesa.json"
+
+
+def _coda_leggi() -> list:
+    try:
+        return json.loads(_coda_file().read_text(encoding="utf-8"))
+    except Exception:
+        return []
+
+
+def _coda_aggiungi(chat_id: int, user_id: int, msg_id: int, url: str) -> int:
+    coda = [c for c in _coda_leggi() if _chiave_link(c["url"]) != _chiave_link(url)]
+    coda.append({"chat_id": chat_id, "user_id": user_id, "msg_id": msg_id, "url": url})
+    _coda_file().parent.mkdir(parents=True, exist_ok=True)
+    _coda_file().write_text(json.dumps(coda, ensure_ascii=False), encoding="utf-8")
+    return len(coda)
+
+
+def _tetto_quasi_finito() -> bool:
+    t = costi.tetto()
+    return t > 0 and costi.speso_oggi() + MARGINE_POST >= t
+
+
 async def process_link(update: Update, context: ContextTypes.DEFAULT_TYPE, url: str):
     msg = update.effective_message
     chat_id = update.effective_chat.id
-    status = await msg.reply_text("Leggo il post…")
+    k = _chiave_link(url)
+    quando = _link_recenti.get(k)
+    if quando and time.time() - quando < DOPPIONE_MINUTI * 60:
+        await msg.reply_text(f"Questo link me l'hai già mandato {max(1, int((time.time() - quando) / 60))} minuti fa: "
+                             "lo sto già facendo (o l'ho appena fatto), non lo rifaccio per non pagarlo due volte. "
+                             f"Se vuoi davvero rifarlo, rimandalo tra {DOPPIONE_MINUTI} minuti.")
+        return
+    if _tetto_quasi_finito():
+        n = _coda_aggiungi(chat_id, update.effective_user.id, msg.message_id, url)
+        await msg.reply_text(
+            f"⏸ Oggi il bot ha speso {costi.speso_oggi():.2f} € su {costi.tetto():.2f} €: un post intero non ci sta più "
+            f"e verrebbe fatto male (senza controlli e senza immagini). L'ho messo in coda ({n} in attesa): "
+            "lo faccio stanotte appena il tetto si azzera. Se lo vuoi adesso, alza il tetto con /tetto e rimandalo.")
+        return
+    _link_recenti[k] = time.time()
+    await _elabora_link(context.bot, chat_id, update.effective_user.id, msg.message_id, url)
+
+
+async def _elabora_link(bot, chat_id: int, user_id: int, msg_id: int, url: str):
+    try:
+        status = await bot.send_message(chat_id, "Leggo il post…", reply_to_message_id=msg_id,
+                                        allow_sending_without_reply=True)
+    except Exception:
+        status = await bot.send_message(chat_id, "Leggo il post…")
     try:
         await asyncio.to_thread(_libera_disco)
     except Exception:
@@ -910,23 +970,47 @@ async def process_link(update: Update, context: ContextTypes.DEFAULT_TYPE, url: 
         brand = writer.load_brand()
         src = await asyncio.to_thread(instagram.fetch_post, url)
         if src.is_video:
-            await _da_reel(context.bot, chat_id, update.effective_user.id, url, brand, status)
+            await _da_reel(bot, chat_id, user_id, url, brand, status)
             return
-        await context.bot.send_chat_action(chat_id, ChatAction.TYPING)
-        post, paths, failed = await pipeline.build_post(src, brand, str(msg.message_id), on_status=status.edit_text)
-        job_id = storage.save_job(chat_id, update.effective_user.id, url, src.owner, post, paths)
+        await bot.send_chat_action(chat_id, ChatAction.TYPING)
+        post, paths, failed = await pipeline.build_post(src, brand, str(msg_id), on_status=status.edit_text)
+        job_id = storage.save_job(chat_id, user_id, url, src.owner, post, paths)
         pipeline.after_save(job_id, src.url, post, paths, failed)
         await status.delete()
-        await pipeline.send_post(context.bot, chat_id, job_id, post, paths, failed)
+        await pipeline.send_post(bot, chat_id, job_id, post, paths, failed)
     except instagram.InstagramError as e:
         await status.edit_text(str(e))
     except costi.TettoSpesa as e:
-        await status.edit_text(str(e))
+        n = _coda_aggiungi(chat_id, user_id, msg_id, url)
+        await status.edit_text(f"{e}\nL'ho messo in coda ({n} in attesa): lo rifaccio stanotte, appena il tetto si azzera.")
     except Exception as e:
         log.exception("Errore elaborando %s", url)
         await status.edit_text(_causa_errore(e, "il post"))
     finally:
         storage.end_work(work)
+
+
+async def _svuota_coda(context: ContextTypes.DEFAULT_TYPE):
+    """Ogni notte, appena il tetto si azzera: i link messi in coda perché il tetto era finito."""
+    coda = _coda_leggi()
+    if not coda:
+        return
+    _coda_file().write_text("[]", encoding="utf-8")
+    log.info("Coda notturna: %d link in attesa", len(coda))
+    rimasti = []
+    for i, c in enumerate(coda):
+        if _tetto_quasi_finito():
+            rimasti = coda[i:]
+            break
+        pagine.imposta(pagine.di_chat(c["chat_id"]))
+        try:
+            await _elabora_link(context.bot, c["chat_id"], c["user_id"], c["msg_id"], c["url"])
+        except Exception:
+            log.exception("Coda notturna: link non fatto %s", c["url"])
+    if rimasti:
+        for c in rimasti:
+            _coda_aggiungi(c["chat_id"], c["user_id"], c["msg_id"], c["url"])
+        log.info("Coda notturna: %d link restano per domani (tetto)", len(rimasti))
 
 
 # ---------------------------------------------------------------- modifiche
@@ -1544,6 +1628,10 @@ def _schedule_diagnostics(app: Application):
             log.exception("Rapporto notturno non caricato")
 
     app.job_queue.run_daily(job, time=at, name="rapporto_notturno")
+    # 26/11: i link messi in coda perché il tetto di spesa era finito si fanno appena il tetto si azzera
+    # (il conteggio della spesa riparte a mezzanotte UTC, cioè all'1 di notte in Italia)
+    from datetime import time as _t
+    app.job_queue.run_daily(_svuota_coda, time=_t(1, 10, tzinfo=ZoneInfo("Europe/Rome")), name="coda_tetto")
     log.info("Studio della pagina programmato ogni settimana alle %s", at)
 
 

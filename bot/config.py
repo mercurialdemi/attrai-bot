@@ -38,7 +38,9 @@ CLAUDE_MODEL = _env("CLAUDE_MODEL", "claude-sonnet-5-5")
 # La descrizione è il testo che vende: la scrive il modello più forte nella scrittura (una chiamata per post)
 CAPTION_MODEL = _env("CAPTION_MODEL", "claude-opus-5-5")
 # lettura e prima traduzione delle slide (posizioni, colori, blocchi): il testo poi lo riscrive la rilettura
-SLIDES_MODEL = _env("SLIDES_MODEL", "") or CAPTION_MODEL
+# 26/11: Sonnet (metà prezzo di Opus): questo passaggio legge la slide e fa una prima traduzione, ma il testo
+# italiano finale lo riscrive la rilettura con CAPTION_MODEL, quindi la qualità del testo resta la stessa
+SLIDES_MODEL = _env("SLIDES_MODEL", "claude-sonnet-5-5")
 # correzioni: di base il modello più economico; "livello medio" / "livello alto" nel messaggio le fanno salire
 REVISE_MODEL = _env("REVISE_MODEL", "claude-haiku-5-5")
 GEMINI_IMAGE_MODEL = _env("GEMINI_IMAGE_MODEL", "gemini-2.5-flash-image")
