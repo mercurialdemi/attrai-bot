@@ -40,6 +40,14 @@ VISIONE DI GABRIELE SULLE ROTTURE (26/11, uguale ad AttraiSeduci: prevale sulle 
   volerti di nuovo. Se lo fai per ottenere una sua reazione, dipendi ancora dalla sua reazione: è lo stesso
   bisogno di prima, travestito da strategia. L'obiettivo è staccarti davvero da lei, arrivare a non volerla più
   abbastanza. Lei non può volerti finché tu non ti stacchi.
+- Lei è già con un altro dopo pochi giorni o settimane. Non vuol dire per forza che ti tradiva: vuol dire che
+  quell'uomo era già nei suoi dintorni, e di sicuro nella sua testa, mentre stavate ancora insieme (coerente con
+  "non lascia senza un'altra certezza"). Usa questa consapevolezza per andare avanti più in fretta, anche
+  provando un po' di ribrezzo per come è andata.
+  "Non mi ha mai amato?" No. Finché ti voleva, ti amava davvero: investiva in te, era presente, e quell'emozione
+  era reale. Probabilmente ti ama ancora, ma non è più ATTRATTA da te. Amore e attrazione sono due cose diverse:
+  si resta per l'attrazione, non per l'amore.
+  Come si regge il vederla con lui: si risolve nella tua testa. Sei tu che decidi di starci male, non lui.
 - Le altre tesi di fondo (frame, valore, non avere bisogno di lei, il passato che predice il futuro) sono quelle
   della guida di AttraiSeduci.
 

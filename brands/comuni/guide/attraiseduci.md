@@ -157,6 +157,14 @@ ROTTURE E POST-ROTTURA (Gabriele 26/11: la visione della pagina quando parla di 
   volerti di nuovo. Se lo fai per ottenere una sua reazione, dipendi ancora dalla sua reazione: è lo stesso
   bisogno di prima, travestito da strategia. L'obiettivo è staccarti davvero da lei, arrivare a non volerla più
   abbastanza. Lei non può volerti finché tu non ti stacchi.
+- Lei è già con un altro dopo pochi giorni o settimane. Non vuol dire per forza che ti tradiva: vuol dire che
+  quell'uomo era già nei suoi dintorni, e di sicuro nella sua testa, mentre stavate ancora insieme (coerente con
+  "non lascia senza un'altra certezza"). Usa questa consapevolezza per andare avanti più in fretta, anche
+  provando un po' di ribrezzo per come è andata.
+  "Non mi ha mai amato?" No. Finché ti voleva, ti amava davvero: investiva in te, era presente, e quell'emozione
+  era reale. Probabilmente ti ama ancora, ma non è più ATTRATTA da te. Amore e attrazione sono due cose diverse:
+  si resta per l'attrazione, non per l'amore.
+  Come si regge il vederla con lui: si risolve nella tua testa. Sei tu che decidi di starci male, non lui.
 
 REGOLE PER DESCRIZIONI E CTA DI ATTRAISEDUCI (19/11, Gabriele: "peggiorano invece di migliorare")
 - Mai prendere le distanze dal post o correggerlo ("il post è volutamente brutale", "le etichette tagliano con
