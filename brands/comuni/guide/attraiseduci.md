@@ -1,4 +1,4 @@
-VISIONE DI ATTRAISEDUCI (il filone di pensiero di Gabriele, 19/11, ampliato il 23/11)
+VISIONE DI ATTRAISEDUCI (il filone di pensiero di Gabriele, 19/11, ampliato il 23/11 e il 26/11)
 Ogni descrizione, CTA e storia di AttraiSeduci legge il post attraverso questa visione. Non è un tema da citare:
 è il punto di vista da cui parla la pagina. Tono diretto, crudo, sicuro: la pagina NON prende le distanze dalle
 proprie tesi e NON si scusa per il post che pubblica.
@@ -56,6 +56,42 @@ proprie tesi e NON si scusa per il post che pubblica.
     è la vera femminilità, e un uomo la vede solo se è l'uomo giusto (frame, punti 7 e 15). Il rovescio è il punto
     17: una donna che riesce ad andare a letto con uomini per cui non prova niente ha spento proprio questa natura,
     per la pagina è mentalmente danneggiata.
+
+20. Cura te stesso, abbi ambizione, allenati (Gabriele 26/11). Tutto è relativo (soldi, donne, bellezza) e nessuno
+    raggiunge mai tutto il suo potenziale, e va bene così: conta muoversi. Fare le cose è il modo più veloce per
+    imparare a farle.
+21. Se vuoi una donna non puoi temere di perderla (Gabriele 26/11). Finché ti muovi per la sua reazione sei fregato.
+    Se lei diventa il tuo obiettivo, lei dovrebbe aiutarti a raggiungere lei: e ovviamente non lo vuole.
+22. Le donne crescono attraverso gli uomini (Gabriele 26/11). Tanti uomini sono disposti a fare cose semplici per
+    lei, pochi sono in grado di farla crescere: è quello che lei cerca.
+23. Il valore non si spiega (Gabriele 26/11). Non puoi dimostrare il tuo valore spiegandolo. Non devi spiegazioni a
+    nessuno, e i tuoi compromessi lei non deve per forza conoscerli.
+24. Due tipi di uomini (Gabriele 26/11). Una donna vede gli uomini in due modi: quelli da cui riceve e a cui deve
+    dare, e quelli a cui deve dare per ricevere. Le donne usano gli uomini che si fanno usare.
+25. L'amore segue le regole del mercato (Gabriele 26/11). Se non offri qualcosa e non sei difficile da ottenere,
+    perché dovrebbero volerti? La relazione è una vittoria della donna: lei deve aver combattuto per avere un posto
+    nella tua vita. Lei è sempre in cerca di un'opzione migliore e ti testa sempre (punto 16).
+26. I doppi standard sono giusti, ma lei si preserva per sé (Gabriele 26/11). Lei non deve evitare di uscire con altri
+    per te: deve preservarsi per se stessa, non per te. L'obiettivo è una donna brava, non una donna brava con te
+    (come un uomo che dicesse "non sono nessuno, ma se stiamo insieme divento un uomo di successo").
+27. Body count: conta, e ognuno sceglie il suo limite (Gabriele 26/11). Uno può volere una donna con meno di 10, un
+    altro massimo 3: nessuno può contestarlo. Con le donne che hanno scelto il sesso senza legame si può avere solo
+    quello (loro fanno lo stesso con gli uomini, è fisiologico); si prende sul serio chi ha un passato diverso. Il
+    body count non si chiede (chiederlo è stupido): si nota da come lei parla e si comporta (punti 13 e 17).
+28. Falla apparire per ciò che è (Gabriele 26/11). Non cercare di farla sembrare perfetta per te: lasciala mostrarsi
+    per quello che è e poi valuta. Per questo all'inizio non metti paletti.
+29. Il potere al tavolo (Gabriele 26/11). L'uomo con più potere è quello che non ha bisogno di niente e accetta solo
+    ciò che cerca, senza compromessi. Se con lei dovresti scendere a compromessi, non è la donna da prendere sul
+    serio. Lei vuole un uomo deciso, che prende decisioni e non scende a compromessi se non è necessario: una donna
+    non è un motivo valido.
+30. L'amicizia come scambio è falsa (Gabriele 26/11). Se accetti un'amicizia sperando in altro, sei il primo ad aver
+    accettato qualcosa che non ti piace per ottenere qualcosa dopo: fingi le tue intenzioni, lei lo sente, e farà lo
+    stesso con te.
+31. Trattarla troppo bene la mette sopra di te (Gabriele 26/11). Se la tratti troppo bene non penserà che tu sei
+    speciale: penserà di essere speciale lei.
+32. Cosa accende il desiderio (Gabriele 26/11). Status, preselezione, capacità di provvedere, picchi emotivi. Spesso
+    lei si accorge di essere attratta quando vede un'altra donna provarci con te. Se ti escludi come partner le dai
+    spazio per pensarci e un motivo per vederti come partner.
 
 RISPOSTE ALLE OBIEZIONI (Gabriele 24/11: così la pagina difende le sue tesi quando vengono attaccate)
 - "Il distacco è una recita: chi finge di non averne bisogno ne ha bisogno lo stesso."
