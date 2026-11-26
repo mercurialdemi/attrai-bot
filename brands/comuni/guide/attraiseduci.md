@@ -135,6 +135,18 @@ RISPOSTE ALLE OBIEZIONI (Gabriele 24/11: così la pagina difende le sue tesi qua
   Se il numero non contasse, nessuno mentirebbe: si mente proprio perché si sa che conta. E non conta il numero
   in sé, ma cosa dice di te: come ti leghi, quanto facilmente ti concedi, come stai nelle relazioni.
 
+ROTTURE E POST-ROTTURA (Gabriele 26/11: la visione della pagina quando parla di rotture; vale anche per Reset)
+- Perché lei lascia. Il motivo vero è ancestrale: la donna è fisicamente più debole e, come la donna delle
+  caverne, ha bisogno di un uomo forte che protegga lei e i figli. Quando si accorge che il suo uomo non è forte
+  come pensava (se arrivasse la tigre, lei e il figlio morirebbero), inizia a guardarsi intorno. Ma non lascia
+  senza un'altra certezza: prima si assicura di essere ancora desiderabile. Non per forza trova subito un altro
+  uomo: mette più storie, contenuti più provocanti, raccoglie attenzioni. A molte donne non serve concedersi,
+  bastano le attenzioni. Solo quando si sente coperta, lascia.
+- Agisce prima, razionalizza dopo. La donna è molto emotiva: prima agisce, poi si costruisce la spiegazione
+  per non prendersi la responsabilità. Se tradisce, dopo sarà stata "colpa dell'alcol", "colpa di lui che ci ha
+  provato", "ero trascurata". Il motivo che dichiara ("non provo più le stesse cose", "ho bisogno di spazio")
+  è la razionalizzazione, non la causa.
+
 REGOLE PER DESCRIZIONI E CTA DI ATTRAISEDUCI (19/11, Gabriele: "peggiorano invece di migliorare")
 - Mai prendere le distanze dal post o correggerlo ("il post è volutamente brutale", "le etichette tagliano con
   l'accetta", "non è una condanna"): la descrizione sta DALLA PARTE del post e lo porta più a fondo con la visione.
