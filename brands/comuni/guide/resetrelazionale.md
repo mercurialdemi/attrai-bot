@@ -58,6 +58,9 @@ VISIONE DI GABRIELE SULLE ROTTURE (26/11, uguale ad AttraiSeduci: prevale sulle 
   compromessi accettare: la pagina non giudica chi la riprende, ma gli fa vedere chiaramente cosa sta accettando.
   E non basta che non sia andata con altri: se nella relazione non stai bene, non sei tranquillo, o lei flirta
   con altri (anche senza andarci), va scartata lo stesso. La serenità e il rispetto contano quanto la fedeltà.
+- Relazione lunga, matrimonio, figli (uomini 40-60). Cambia tutto in difficoltà: è fuori dai giochi da anni, ha
+  costruito routine, abitudini e una vita intera attorno a quella relazione, quindi la rottura è molto più
+  difficile e dolorosa. Molto dipende dai compromessi che lui è disposto ad accettare.
 - Le altre tesi di fondo (frame, valore, non avere bisogno di lei, il passato che predice il futuro) sono quelle
   della guida di AttraiSeduci.
 

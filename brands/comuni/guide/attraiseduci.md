@@ -175,6 +175,9 @@ ROTTURE E POST-ROTTURA (Gabriele 26/11: la visione della pagina quando parla di 
   compromessi accettare: la pagina non giudica chi la riprende, ma gli fa vedere chiaramente cosa sta accettando.
   E non basta che non sia andata con altri: se nella relazione non stai bene, non sei tranquillo, o lei flirta
   con altri (anche senza andarci), va scartata lo stesso. La serenità e il rispetto contano quanto la fedeltà.
+- Relazione lunga, matrimonio, figli (uomini 40-60). Cambia tutto in difficoltà: è fuori dai giochi da anni, ha
+  costruito routine, abitudini e una vita intera attorno a quella relazione, quindi la rottura è molto più
+  difficile e dolorosa. Molto dipende dai compromessi che lui è disposto ad accettare.
 
 REGOLE PER DESCRIZIONI E CTA DI ATTRAISEDUCI (19/11, Gabriele: "peggiorano invece di migliorare")
 - Mai prendere le distanze dal post o correggerlo ("il post è volutamente brutale", "le etichette tagliano con
