@@ -36,6 +36,10 @@ VISIONE DI GABRIELE SULLE ROTTURE (26/11, uguale ad AttraiSeduci: prevale sulle 
   Cosa fare: finché rispondi presente e disponibile, lei ti distrugge (e fa bene). Di solito, quando ti sei
   ritrovato, ti accorgi che non ne vale più la pena. Se invece in lei vedi ancora qualcosa di interessante: fatti
   desiderare, poi concedi di vedervi, e guarda che donna è diventata. Sei tu a decidere, non lei.
+- Il no contact. Serve a te, per ritrovare te stesso; e solo quando ti sei ritrovato lasci a lei lo spazio per
+  volerti di nuovo. Se lo fai per ottenere una sua reazione, dipendi ancora dalla sua reazione: è lo stesso
+  bisogno di prima, travestito da strategia. L'obiettivo è staccarti davvero da lei, arrivare a non volerla più
+  abbastanza. Lei non può volerti finché tu non ti stacchi.
 - Le altre tesi di fondo (frame, valore, non avere bisogno di lei, il passato che predice il futuro) sono quelle
   della guida di AttraiSeduci.
 

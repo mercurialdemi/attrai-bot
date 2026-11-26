@@ -153,6 +153,10 @@ ROTTURE E POST-ROTTURA (Gabriele 26/11: la visione della pagina quando parla di 
   Cosa fare: finché rispondi presente e disponibile, lei ti distrugge (e fa bene). Di solito, quando ti sei
   ritrovato, ti accorgi che non ne vale più la pena. Se invece in lei vedi ancora qualcosa di interessante: fatti
   desiderare, poi concedi di vedervi, e guarda che donna è diventata. Sei tu a decidere, non lei.
+- Il no contact. Serve a te, per ritrovare te stesso; e solo quando ti sei ritrovato lasci a lei lo spazio per
+  volerti di nuovo. Se lo fai per ottenere una sua reazione, dipendi ancora dalla sua reazione: è lo stesso
+  bisogno di prima, travestito da strategia. L'obiettivo è staccarti davvero da lei, arrivare a non volerla più
+  abbastanza. Lei non può volerti finché tu non ti stacchi.
 
 REGOLE PER DESCRIZIONI E CTA DI ATTRAISEDUCI (19/11, Gabriele: "peggiorano invece di migliorare")
 - Mai prendere le distanze dal post o correggerlo ("il post è volutamente brutale", "le etichette tagliano con
