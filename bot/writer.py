@@ -662,6 +662,12 @@ def polish_slides(out: dict) -> dict:
               "- Se una frase suona già scritta da un italiano, lasciala com'è; se ha anche solo un'ombra di "
               "traduzione, riscrivila."
               + (f"\nVOCE DELLA PAGINA (dai post migliori):\n{guida[:2500]}" if guida else ""))
+    visione = visione_pagina(_b)
+    if visione:   # Gabriele 27/11: anche le slide seguono il suo pensiero, non solo descrizione e CTA
+        system = (system.replace("- Stesse idee, stesso ordine, nessuna idea aggiunta o tolta.",
+                                 "- Stesse idee, stesso ordine, nessuna idea aggiunta o tolta, TRANNE quando un'idea va "
+                                 "contro la visione qui sotto: allora la ribalti nella sua direzione.")
+                  + VISIONE_REGOLA + visione)
     content = [{"type": "text", "text": (
         f"Concetto del carosello: {out.get('concetto', '')}\n\n"
         f"Slide (JSON):\n{json.dumps(items, ensure_ascii=False, indent=1)}\n\n"
@@ -771,6 +777,48 @@ def guida_pagina(brand: dict | None = None) -> str:
         return p.read_text(encoding="utf-8").strip()
     except Exception:
         return ""
+
+
+def _sezione(testo: str, inizio: str, fine: str | None) -> str:
+    i = testo.find(inizio)
+    if i < 0:
+        return ""
+    j = testo.find(fine, i + len(inizio)) if fine else -1
+    return testo[i:j if j > 0 else None].strip()
+
+
+def visione_pagina(brand: dict | None = None) -> str:
+    """Il pensiero di Gabriele (Gabriele 27/11: "il bot, nel fare i post, deve seguire il mio pensiero"): tesi,
+    risposte alle obiezioni e visione sulle rotture, senza le regole di descrizioni e CTA. Vale per AttraiSeduci e
+    per Reset Relazionale (stessa visione); le altre pagine seguono il loro posizionamento."""
+    from . import pagine
+    cartella = config.ROOT / "brands" / "comuni" / "guide"
+    try:
+        attrai = (cartella / "attraiseduci.md").read_text(encoding="utf-8")
+    except Exception:
+        return ""
+    pagina = pagine.corrente()
+    if pagina == "attraiseduci":
+        return _sezione(attrai, "VISIONE DI ATTRAISEDUCI", "REGOLE PER DESCRIZIONI E CTA")
+    if pagina == "resetrelazionale":
+        try:
+            reset = (cartella / "resetrelazionale.md").read_text(encoding="utf-8")
+        except Exception:
+            reset = ""
+        return "\n\n".join(x for x in (
+            _sezione(reset, "VISIONE DI GABRIELE SULLE ROTTURE", "\n2. PERIMETRO"),
+            _sezione(attrai, "VISIONE DI ATTRAISEDUCI", "RISPOSTE ALLE OBIEZIONI")) if x)
+    return ""
+
+
+VISIONE_REGOLA = (
+    "\n\nIL PENSIERO DI GABRIELE (prevale su tutto il resto per il CONTENUTO delle slide): il post deve leggere la "
+    "realtà attraverso questa visione. Non è una lista di frasi da citare: è il punto di vista da cui parla la pagina. "
+    "Un post non deve per forza dimostrare una tesi, ma non deve MAI dire il contrario di queste tesi. Se il post di "
+    "partenza dice qualcosa che va contro (es. 'trattala come una regina e ti amerà', 'dalle tutto il tuo amore', "
+    "'resta suo amico e prima o poi capirà'), non tradurlo così: tieni l'argomento e la scena e ribalta la frase nella "
+    "direzione della visione, con lo stesso numero di slide e la stessa forza. Tono crudo e sicuro, mai insulti diretti "
+    "a persone.\n")
 
 
 HASHTAG_REGOLA = (

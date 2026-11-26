@@ -145,6 +145,7 @@ TONO
 {studio}
 {memoria.prompt_block()}
 {('COME SCRIVIAMO NOI (dai nostri post migliori)' + chr(10) + guida[:2500] + chr(10)) if guida else ''}
+{(writer.VISIONE_REGOLA.strip() + chr(10) + "Per un post originale le tesi sono la fonte principale degli angoli e delle verità scomode: ogni carosello sviluppa una di queste idee (o la applica a una scena), non una psicologia generica." + chr(10) + writer.visione_pagina(brand) + chr(10)) if writer.visione_pagina(brand) else ''}
 I NOSTRI MANUALI E I DOLORI CHE RISOLVONO (un post didattico parte da uno di questi dolori, MAI dal prodotto)
 {manuali}
 
