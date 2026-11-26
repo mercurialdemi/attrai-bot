@@ -164,6 +164,14 @@ CASI = {
     "stoico_firma_basso.jpg": ("foto", '"An enemy will agree, but a friend will argue." — Russian Proverb', [
         dict(testo='"Il nemico ti dà ragione,\nl\'amico ti contraddice."', x=91, y=98, w=818, h=132, colore="#111111", allineamento="center", carattere=S),
         dict(testo="Proverbio russo", x=299, y=259, w=402, h=34, colore="#111111", allineamento="center", carattere=S)]),
+    # post 179 (25/11): segnalato "perché hai messo le parentesi?" (Claude ha scritto {1.} con una graffa sola
+    # invece di {{1.}}: uscivano le graffe e il numero non era in grassetto) e "colore troppo chiaro"
+    "lista_numero_graffe.jpg": ("tinta_unita", '1. "I\'m not hard to love. I\'m just done accepting the bare minimum."', [
+        dict(testo='{1.} "Non sono difficile da amare. Ho solo smesso di accontentarmi del minimo."', x=162, y=562, w=720, h=105, colore="#FFFFFF", allineamento="left", carattere=S)]),
+    # post 179 (25/11): foto con avatar e filetti al centro; OpenAI l'ha rifiutata, segnalato "la foto è sfocata"
+    "cover_ego_marchio.jpg": ("foto", "SENTENCES THAT WILL BREAK HER EGO", [
+        dict(testo="[[FRASI]] CHE LE\nSMONTANO\n[[L'EGO]]", x=50, y=685, w=900, h=290, colore="#FFFFFF", colore_evidenziato="#F5C518", allineamento="center", maiuscolo=True, carattere=S)],
+        "al centro: avatar rotondo con due filetti", {"x": 230, "y": 575, "w": 540, "h": 75}),
 }
 
 

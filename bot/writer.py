@@ -358,7 +358,8 @@ def _image_block(data: bytes, max_side: int = 1280) -> dict:
 
 def plain(t: str) -> str:
     """Testo senza i segni di colore [[ ]] e grassetto {{ }}."""
-    return t.replace("[[", "").replace("]]", "").replace("{{", "").replace("}}", "")
+    from .textslide import graffe_doppie
+    return graffe_doppie(t).replace("[[", "").replace("]]", "").replace("{{", "").replace("}}", "")
 
 
 _CENSURA_DEFAULT = ["sesso", "cazzo", "cazzi", "cazzate", "cazzata", "incazzato", "incazzata", "fottuto", "fottuta",

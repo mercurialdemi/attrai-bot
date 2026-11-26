@@ -480,6 +480,14 @@ def analyze(img: Image.Image, original_text: str = "", has_mark: bool = False,
     for l in text_lines:                    # il colore si misura solo sulle righe di testo (non su avatar e loghi)
         strong[l[0]:l[1] + 1, l[2]:l[3] + 1] = dist[l[0]:l[1] + 1, l[2]:l[3] + 1] > 120
     color = tuple(int(c) for c in np.median(a[strong], axis=0)) if strong.any() else (255, 255, 255)
+    if strong.sum() >= 50:
+        # solo il "cuore" delle lettere: i bordi sfumati verso lo sfondo, nei caratteri sottili, sono la
+        # maggioranza e la mediana usciva più spenta dell'originale (26/11, post 179: "colore troppo chiaro",
+        # testo bianco reso grigio-azzurro)
+        d_s = dist[strong]
+        core = d_s >= np.percentile(d_s, 60)
+        if core.sum() >= 20:
+            color = tuple(int(c) for c in np.median(a[strong][core], axis=0))
     # peso: spessore medio dei tratti verticali (lunghezza delle corse orizzontali di inchiostro) rispetto al corpo
     runs = []
     for l in text_lines:
@@ -780,6 +788,7 @@ def background(img: Image.Image, lay: Layout) -> Image.Image:
 def render(img: Image.Image, lay: Layout, text: str, placements: list | None = None) -> Image.Image:
     """Scrive il testo. Se `placements` è una lista, ci aggiunge (riga, x, y, corpo, peso, colore) per il file Canva."""
     out = background(img, lay)
+    text = graffe_doppie(text).replace("{{", "").replace("}}", "")     # niente graffe stampate sulla slide
     text, mappa = _segnaposto_emoji(text)
     if not text:
         return out
@@ -909,10 +918,20 @@ def refine_box(original: Image.Image, cleaned: Image.Image, box: tuple[int, int,
     return new, color
 
 
+def graffe_doppie(text: str) -> str:
+    """Il grassetto si segna con {{ }}; a volte Claude scrive una graffa sola ('{1.}') e le graffe uscivano
+    stampate sulla slide (26/11, post 179: "perché hai messo le parentesi?"). Graffe singole -> doppie;
+    graffe singole rimaste spaiate si tolgono (nel testo delle slide non servono mai)."""
+    import re
+    text = re.sub(r"(?<!\{)\{(?!\{)([^{}\n]+?)(?<!\})\}(?!\})", r"{{\1}}", text or "")
+    return re.sub(r"(?<!\{)\{(?!\{)|(?<!\})\}(?!\})", "", text)
+
+
 def _tokens(text: str) -> list[list[list[tuple[str, int]]]]:
     """Testo -> paragrafi -> righe -> parole (parola, stile). Stile: 1 = colore evidenziato ([[ ]]),
     2 = grassetto ({{ }}), 3 = entrambi."""
     paras = []
+    text = graffe_doppie(text)
     hl, bd = False, False                  # un'evidenziazione può continuare sulla riga dopo
     for para in text.split("\n\n"):
         rows = []

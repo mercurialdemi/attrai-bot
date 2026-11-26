@@ -785,7 +785,9 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
         if needs_logo(slide, brand):
             return add_brand_mark(original, brand, _avoid_boxes(slide, *original.size), textslide.wm_box(slide, *original.size), slide.get('_wm_alto')), True, ""
         return original, True, ""
-    testo = (slide.get("testo") or "").strip()
+    # '{1.}' (graffa singola di Claude): niente graffe stampate. Non si passa al percorso a blocchi (testo più
+    # piccolo): il testo resta come le altre slide del post (26/11, post 179)
+    testo = textslide.graffe_doppie(slide.get("testo") or "").replace("{{", "").replace("}}", "").strip()
     # serve il percorso a blocchi solo per titoli con font stretti o parole evidenziate davvero ([[ ]])
     special = any(b.get("carattere") in ("titolo", "stretto", "fumetto") or "[[" in (b.get("testo") or "") or "{{" in (b.get("testo") or "")
                   for b in (slide.get("blocchi") or []))
@@ -821,6 +823,7 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
     original_jpeg = _jpeg(original)
     orig_fit = _fit(original, size)
     blocks0 = [b for b in (slide.get("blocchi") or []) if (b.get("testo") or "").strip()]
+    pulita_codice = None       # foto ripulita dal codice: riserva nitida se poi OpenAI rifiuta la slide
     fam = (slide.get("_peso_post") or "").partition("_")[2]
     if fam:
         # il post usa un font riconosciuto (compatto, Montserrat, Poppins): stesso font per copertina e titoli
@@ -921,6 +924,7 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
                 pt, lh_ = textslide._metrics_from_diff(orig_fit, clean, bx)
                 pre.append((bx, pt, lh_))
             clean = textslide.dark_fade(clean, orig_fit, [p_[0] for p_ in pre])
+            pulita_codice = clean
             placements = []
             img = textslide.render_blocks(clean, orig_fit, blocks0, placements, boxes=pre)
             ok, problems = (True, "")
@@ -992,7 +996,7 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
     if rifiutata and blocks0:
         # 11/11 (Gabriele): foto rifiutata -> una foto di riserva della pagina; il testo italiano lo scrive il codice negli stessi riquadri dell'originale
         try:
-            sost = _immagine_sostitutiva(slide, orig_fit, blocks0, original_jpeg)
+            sost = _immagine_sostitutiva(slide, orig_fit, blocks0, original_jpeg, pulita_codice)
         except Exception as e:
             log.warning("Immagine sostitutiva non riuscita: %s", e)
             sost = None
@@ -1032,13 +1036,18 @@ def cartella_riserva() -> Path:
     return config.DATA_DIR / "riserva"
 
 
-def _immagine_sostitutiva(slide: dict, orig_fit: Image.Image, blocks0: list, original_jpeg: bytes):
+def _immagine_sostitutiva(slide: dict, orig_fit: Image.Image, blocks0: list, original_jpeg: bytes,
+                          pulita: Image.Image | None = None):
     """Quando OpenAI rifiuta la foto: una foto a caso tra quelle di riserva della pagina (/riserva).
     Niente immagine nuova da OpenAI: costerebbe quanto un'altra slide (Gabriele 11/11: abbassare i costi)."""
     import random
     foto = [p for p in cartella_riserva().glob("*") if p.suffix.lower() in (".jpg", ".jpeg", ".png", ".webp")]
     if foto:
         return _cover(Image.open(random.choice(foto)), orig_fit.size), "foto-di-riserva"
+    if pulita is not None and pulita.size == orig_fit.size:
+        # la stessa foto, nitida, ripulita dal codice (testo e marchi cancellati): Gabriele 25/11, post 179,
+        # "la foto è sfocata". La sfocatura resta solo se il codice non è riuscito a ripulirla
+        return pulita.copy(), "foto-ripulita-codice"
     # nessuna foto di riserva: la stessa foto sfocata e scurita, così il post esce comunque completo (costo zero)
     sf = orig_fit.convert("RGB").filter(ImageFilter.GaussianBlur(radius=max(12, orig_fit.width // 40)))
     return Image.blend(sf, Image.new("RGB", sf.size, (0, 0, 0)), 0.35), "foto-sfocata"
