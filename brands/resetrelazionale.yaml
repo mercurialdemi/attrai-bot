@@ -145,6 +145,6 @@ testo_overlay:
 storie_colore: "#FF8A3D"
 storie_libro: cornice           # come risalta il libro nelle storie: cornice arancio, carattere stretto (19/11)
 
-# personaggio della pagina (Gabriele 26/11): compare nella scena della CTA illustrata quando il post ha persone
+# personaggio della pagina (Gabriele 26/11, riferimento ufficiale 27/11): compare nella scena della CTA illustrata quando il post ha persone
 personaggio: assets/personaggio_resetrelazionale.jpg
-personaggio_descrizione: "a young fallen angel with dark curly hair, large black feathered wings, pale skin with small wounds and scratches, a white drape at the waist, an intense, wounded and proud gaze, 19th-century academic painting look (Cabanel); he is the man who fell and is rising again"
+personaggio_descrizione: "a young fallen angel with copper-red curly hair, skin like warm cracked marble, large brown-grey feathered wings, a cream drape with a deep red cloth, an intense wounded and proud gaze (often half-covered by his arm); dark orange smoky clouds; academic painting look; he is the man who fell and is rising again"

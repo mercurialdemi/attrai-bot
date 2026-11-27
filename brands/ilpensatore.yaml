@@ -133,6 +133,6 @@ testo_overlay:
 storie_colore: "#4DA3FF"
 storie_libro: editoriale        # come risalta il libro nelle storie: pannello velato, filetti, serif (19/11)
 
-# personaggio della pagina (Gabriele 26/11): compare nella scena della CTA illustrata quando il post ha persone
+# personaggio della pagina (Gabriele 26/11, riferimento ufficiale 27/11): compare nella scena della CTA illustrata quando il post ha persone
 personaggio: assets/personaggio_ilpensatore.jpg
-personaggio_descrizione: "a muscular man with olive-amber skin (at most mixed-race), short curly hair, bare-chested with a white drape at the waist, in the pose of The Thinker (hand under the chin); his face is NEVER fully visible: always from behind, in shadow or covered by the hand; thick post-impressionist brushstrokes, night blue and gold"
+personaggio_descrizione: "a muscular man with olive-amber skin (at most mixed-race), short dark curly hair, bare-chested with a white drape at the waist, among glowing night-blue and gold clouds, often in the pose of The Thinker (hand under the chin); his face is NEVER visible: always seen from behind, in shadow or covered by the hand; thick painterly brushstrokes, night blue and gold"

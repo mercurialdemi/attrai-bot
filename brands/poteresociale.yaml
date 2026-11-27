@@ -173,3 +173,7 @@ storie_voce: "Lucido e fermo, analitico, leggermente provocatorio. Porta il lett
 
 # colore delle parole chiave nelle storie: DA CONFERMARE con Gabriele (il brand è in bianco e nero)
 storie_colore: "#D4AF37"
+
+# personaggio della pagina (Gabriele 27/11, riferimento ufficiale): compare nella scena della CTA illustrata quando il post ha persone
+personaggio: assets/personaggio_poteresociale.jpg
+personaggio_descrizione: "a tall faceless man whose head is a smooth white mannequin head with a black serif monogram \"PS\" in place of the face, wearing a black three-piece suit, white shirt with open collar, white pocket square and a watch, often holding or throwing white playing cards marked \"PS\"; dark charcoal background with soft rim light; calm, in control"
