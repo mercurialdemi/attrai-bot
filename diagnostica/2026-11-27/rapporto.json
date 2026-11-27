@@ -1,0 +1,445 @@
+{
+ "giorno": "2026-11-27",
+ "post_preparati": 7,
+ "slide_totali": 58,
+ "slide_fallite": 0,
+ "lavorazione": {
+  "openai-testo": {
+   "totali": 8,
+   "fallite": 0
+  },
+  "cta-illustrata": {
+   "totali": 1,
+   "fallite": 0
+  },
+  "blocchi-ricostruzione-codice": {
+   "totali": 3,
+   "fallite": 0
+  },
+  "blocchi-sfondo-pieno": {
+   "totali": 8,
+   "fallite": 0
+  },
+  "testo-su-sfondo-uniforme": {
+   "totali": 31,
+   "fallite": 0
+  },
+  "cta-stile-post": {
+   "totali": 6,
+   "fallite": 0
+  },
+  "blocchi-pulizia-codice": {
+   "totali": 1,
+   "fallite": 0
+  }
+ },
+ "segnalazioni": [
+  {
+   "job_id": 190,
+   "testo": "quando vai a mettere il nostro teschio (brand) nella cta ricorda che il manuale non deve essere \"incollato\" sopra ma il teschio lo tiene con le mani quindi migliora il fatto che fa parte dell'immagine il manuale",
+   "quando": "2026-11-26T10:56:30+00:00"
+  }
+ ],
+ "post_con_problemi": [
+  {
+   "job_id": 190,
+   "fonte": "https://www.instagram.com/p/DgLhPjNkhT2/",
+   "fallite": [],
+   "slides": [
+    {
+     "numero": 1,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "WHY DON'T YOU POST ME ON SOCIAL MEDIA?",
+     "testo": "PERCHÉ NON MI PUBBLICHI\nSUI SOCIAL?",
+     "blocchi": [
+      {
+       "x": 60,
+       "y": 50,
+       "w": 895,
+       "h": 160,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 2,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "BECAUSE I BARELY POST MYSELF. AND I DON'T NEED TO TURN OUR MARRIAGE INTO CONTENT FOR STRANGERS.",
+     "testo": "PERCHÉ GIÀ DI ME\nNON POSTO QUASI NIENTE.\n\nE IL NOSTRO MATRIMONIO\nNON DEVE DIVENTARE\nCONTENUTO PER SCONOSCIUTI.",
+     "blocchi": [
+      {
+       "x": 185,
+       "y": 15,
+       "w": 630,
+       "h": 108,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 175,
+       "y": 146,
+       "w": 770,
+       "h": 303,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "#E3191B",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 3,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "SO YOU'RE HIDING ME? / HIDING YOU? EVERYONE WHO MATTERS KNOWS YOU'RE MY WIFE. PRIVACY MEANS STRANGERS DON'T GET ACCESS. SECRECY MEANS MY REAL LIFE DOESN'T KNOW YOU. THAT ISN'T US.",
+     "testo": "QUINDI\nMI NASCONDI?\n\nNASCONDERTI?\n\nCHI CONTA DAVVERO\nSA CHE SEI MIA MOGLIE.\n\nPRIVACY VUOL DIRE CHE GLI\nSCONOSCIUTI RESTANO FUORI.\n\nSEGRETO VUOL DIRE CHE\nNELLA MIA VITA VERA\nNESSUNO SA CHI SEI.\n\nE NON È IL NOSTRO CASO.",
+     "blocchi": [
+      {
+       "x": 45,
+       "y": 62,
+       "w": 335,
+       "h": 140,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 488,
+       "y": 15,
+       "w": 325,
+       "h": 43,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 423,
+       "y": 66,
+       "w": 540,
+       "h": 66,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 410,
+       "y": 161,
+       "w": 560,
+       "h": 69,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 443,
+       "y": 249,
+       "w": 470,
+       "h": 112,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 423,
+       "y": 376,
+       "w": 515,
+       "h": 44,
+       "carattere": "fumetto",
+       "colore": "#E3191B",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 4,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "IS IT BECAUSE YOU DON'T TRUST ME? / I TRUST YOU. I DON'T TRUST THE INTERNET WITH EVERYTHING I VALUE.",
+     "testo": "NON TI FIDI\nDI ME?\n\nDI TE MI FIDO.\n\nÈ A INTERNET\nCHE NON AFFIDO\nCIÒ A CUI TENGO.",
+     "blocchi": [
+      {
+       "x": 45,
+       "y": 73,
+       "w": 400,
+       "h": 117,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 520,
+       "y": 24,
+       "w": 380,
+       "h": 44,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 462,
+       "y": 98,
+       "w": 520,
+       "h": 190,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "#E3191B",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 5,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "WHAT DOES THAT EVEN MEAN? / PEOPLE SCREENSHOT. COMPARE. GOSSIP. ENVY. JUDGE. THEY TURN REAL LIVES INTO ENTERTAINMENT. WHY INVITE THAT INTO OUR MARRIAGE?",
+     "testo": "CHE VUOL\nDIRE?\n\nLA GENTE FA SCREENSHOT.\nCONFRONTA. SPETTEGOLA.\nINVIDIA. GIUDICA.\n\nFA DELLE VITE VERE\nUNO SPETTACOLO.\n\nPERCHÉ FARLO ENTRARE\nNEL NOSTRO MATRIMONIO?",
+     "blocchi": [
+      {
+       "x": 39,
+       "y": 93,
+       "w": 300,
+       "h": 117,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 404,
+       "y": 20,
+       "w": 495,
+       "h": 102,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 391,
+       "y": 132,
+       "w": 585,
+       "h": 68,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 430,
+       "y": 215,
+       "w": 500,
+       "h": 88,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "#E3191B",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 6,
+     "via": "openai-testo",
+     "tentativi": 2,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "BUT POSTING ME WOULD SHOW YOU'RE PROUD OF ME. / I INTRODUCE YOU AS MY WIFE. I SPEAK WELL OF YOU WHEN YOU'RE NOT THERE. I DON'T NEED A CAPTION TO REMEMBER YOUR VALUE.",
+     "testo": "MA POSTARMI\nVORREBBE DIRE\nCHE SEI FIERO DI ME.\n\nTI PRESENTO\nCOME MIA MOGLIE.\n\nPARLO BENE DI TE\nQUANDO NON CI SEI.\n\nNON MI SERVE\nUNA DIDASCALIA PER\nRICORDARMI QUANTO VALI.",
+     "blocchi": [
+      {
+       "x": 26,
+       "y": 73,
+       "w": 400,
+       "h": 196,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "#E3191B",
+       "allineamento": "center"
+      },
+      {
+       "x": 488,
+       "y": 20,
+       "w": 410,
+       "h": 73,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 462,
+       "y": 107,
+       "w": 520,
+       "h": 69,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 488,
+       "y": 190,
+       "w": 490,
+       "h": 108,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 7,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "I JUST LIKE PEOPLE SEEING US HAPPY. / I UNDERSTAND. BUT I VALUE THE PART OF US THAT BELONGS ONLY TO US. NOT EVERY DINNER, GIFT, JOKE, OR PRIVATE MOMENT NEEDS AN AUDIENCE.",
+     "testo": "VOGLIO SOLO\nCHE LA GENTE\nCI VEDA\nFELICI.\n\nTI CAPISCO.\n\nMA IO TENGO\nA QUELLA PARTE DI NOI\nCHE È SOLO\nNOSTRA.\n\nUNA CENA, UN REGALO,\nUNA BATTUTA, UN MOMENTO INTIMO:\nNON TUTTO VA MOSTRATO\nA UN PUBBLICO.",
+     "blocchi": [
+      {
+       "x": 39,
+       "y": 127,
+       "w": 350,
+       "h": 200,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 495,
+       "y": 15,
+       "w": 420,
+       "h": 43,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 521,
+       "y": 73,
+       "w": 390,
+       "h": 132,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 430,
+       "y": 215,
+       "w": 555,
+       "h": 161,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "#E3191B",
+       "allineamento": "center"
+      }
+     ]
+    },
+    {
+     "numero": 8,
+     "via": "openai-testo",
+     "tentativi": 1,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "THEN HOW DO I KNOW YOUR LOVE IS REAL? / WATCH ME WHEN NO ONE IS WATCHING. DO I KEEP MY WORD? PROTECT YOUR DIGNITY? STAY LOYAL? REMAIN THE SAME MAN? THAT IS MY PROOF. / Quaderno: MY PROMISE TO YOU - TAKE CARE OF YOU - STAY LOYAL - ALWAYS KEEP MY WORD",
+     "testo": "E ALLORA COME FACCIO\nA SAPERE\nCHE MI AMI\nDAVVERO?\n\nGUARDAMI QUANDO\nNESSUNO MI GUARDA.\n\nMANTENGO LA PAROLA?\nPROTEGGO LA TUA DIGNITÀ?\nRESTO FEDELE?\nSONO SEMPRE LO STESSO UOMO?\n\nLA MIA PROVA È QUESTA.\n\nLA MIA PROMESSA:\nPRENDERMI CURA DI TE\nRESTARTI FEDELE\nMANTENERE SEMPRE LA PAROLA",
+     "blocchi": [
+      {
+       "x": 39,
+       "y": 73,
+       "w": 345,
+       "h": 210,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 430,
+       "y": 20,
+       "w": 555,
+       "h": 78,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 417,
+       "y": 112,
+       "w": 555,
+       "h": 147,
+       "carattere": "fumetto",
+       "colore": "#111111",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 404,
+       "y": 273,
+       "w": 575,
+       "h": 54,
+       "carattere": "fumetto",
+       "colore": "#E3191B",
+       "colore_evidenziato": "",
+       "allineamento": "center"
+      },
+      {
+       "x": 705,
+       "y": 800,
+       "w": 135,
+       "h": 135,
+       "carattere": "fumetto",
+       "colore": "#222222",
+       "colore_evidenziato": "",
+       "allineamento": "left"
+      }
+     ]
+    },
+    {
+     "numero": 9,
+     "via": "cta-illustrata",
+     "tentativi": null,
+     "fallita": false,
+     "problema": "",
+     "testo_originale": "",
+     "testo": "Una foto non le ha mai dimostrato niente.\nLei non misura il tuo amore in like:\nmisura quanto resti fermo\nquando ti chiede di cambiare.\n\nSe vuoi davvero smettere di giustificarti\ne capire cosa porta una donna a sceglierti\ninvece di metterti alla prova all'infinito…\ndevi cambiare il modo in cui\ninterpreti ogni interazione.\n\nNel mio manuale \"Diventa l'uomo\na cui nessuna donna sa resistere\"\ntrovi le dinamiche psicologiche che\nspiegano perché alcune attenzioni\naumentano l'attrazione e altre la\ndistru",
+     "blocchi": []
+    }
+   ],
+   "concetto": "Una moglie chiede al marito perché non la pubblica mai sui social e pensa che la stia nascondendo, che non si fidi di lei o che non sia fiero di lei. Lui le risponde con calma che privacy e segreto sono due cose diverse: chi conta sa benissimo che è sua moglie, ma il loro matrimonio non è contenuto per sconosciuti che fanno screenshot, confrontano, spettegolano e giudicano. Le dimostra il suo amore con i fatti, cioè la parola mantenuta, la fedeltà e la coerenza quando nessuno guarda, non con una didascalia. Il registro è maschile, pacato e sicuro, con una scena di coppia che fa dire 'è proprio così'.",
+   "descrizione": "Quante volte ti sei sentito chiedere «perché non mi pubblichi?» con quel tono che non è una domanda ma un'accusa? E tu lì a giustificarti, come se tenere la tua vita lontana dagli sconosciuti fosse una colpa da confessare.\n\nQuella frase ti costa più di una foto. Se cedi, posti per dimostrare qualcosa, e da quel giorno il tuo amore si misura in like e didascalie. Se resisti senza sapere perché, diventi il sospettato di casa, quello che nasconde qualcosa. In tutti e due i casi hai lasciato a lei, e a internet, il compito di decidere che uomo sei.\n\nSotto quella richiesta c'è quasi sempre una prova, anche se lei non lo sa. Non vuole davvero la foto: vuole vedere se il tuo modo di vivere regge alla pressione o se basta un broncio per spostarlo. Un uomo che cambia le sue regole per calmarla le ha appena insegnato che le sue regole si trattano. E una donna non si lascia andare accanto a un uomo che si piega al primo sbuffo.\n\nIl luogo comune poi crolla anche sui dati. Nel 2014 Lydia Emery, Amy Muise e colleghi hanno pubblicato una ricerca su Facebook: nei giorni in cui le persone si sentivano più insicure dei sentimenti del partner, rendevano la relazione più visibile online. La vetrina spesso serve a rassicurare chi la allestisce, non a dimostrare amore.\n\nPer questo l'uomo del post non si difende. Spiega una volta, con calma, e chiude. Privacy non è segreto: chi conta sa chi è lei, perché lui la presenta come sua moglie. Il resto lo dimostra dove internet non arriva: la parola mantenuta, la dignità di lei protetta quando non c'è, lo stesso uomo davanti agli amici e a cena da soli.\n\nUna coppia che ha bisogno di pubblico per sentirsi vera è già in difficoltà. Un uomo che non ne ha bisogno è la sua garanzia.\n\nL'ultima volta che ti ha chiesto una prova d'amore, gliel'hai data con i fatti o con una giustificazione?\n\nLei non ti rispetta per quanto la mostri: ti rispetta per quanto resti fermo quando ti chiede di cambiare. Ogni giustificazione abbassa un po' la sua stima, e la prova successiva arriva più dura. Ho scritto un manuale che ti spiega come tenerti il tuo valore dentro la coppia quando lei mette alla prova chi sei, senza diventare freddo e senza piegarti.",
+   "segnalazioni": [
+    "quando vai a mettere il nostro teschio (brand) nella cta ricorda che il manuale non deve essere \"incollato\" sopra ma il teschio lo tiene con le mani quindi migliora il fatto che fa parte dell'immagine il manuale"
+   ]
+  }
+ ]
+}
