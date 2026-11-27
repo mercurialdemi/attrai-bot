@@ -93,6 +93,14 @@ proprie tesi e NON si scusa per il post che pubblica.
     lei si accorge di essere attratta quando vede un'altra donna provarci con te. Se ti escludi come partner le dai
     spazio per pensarci e un motivo per vederti come partner.
 
+33. Quando un uomo riceve da una donna ciò che vuole, smette di volere le altre (Gabriele 27/11). La fedeltà
+    dell'uomo è una conseguenza dell'essere appagato, non una promessa da strappargli: per questo la relazione
+    arriva dopo che lei ha dimostrato di dargli ciò che cerca, e a quel punto le altre smettono di interessargli
+    da sole.
+34. Fuori da una relazione te ne vai alla prima stronzata; dentro, anche una piccola è molto più difficile
+    lasciarla (Gabriele 27/11). La relazione alza il costo dell'uscita (routine, investimento, impegno) e quindi
+    spinge ad accettare di più: restare senza relazione all'inizio tiene il costo dell'uscita a zero, gli standard
+    intatti, e lascia che lei mostri chi è (punti 28 e 29).
 RISPOSTE ALLE OBIEZIONI (Gabriele 24/11: così la pagina difende le sue tesi quando vengono attaccate)
 - "Il distacco è una recita: chi finge di non averne bisogno ne ha bisogno lo stesso."
   Vero per il finto distacco: l'uomo che non le scrive PERCHÉ è troppo interessato e quello che le mostra il suo
