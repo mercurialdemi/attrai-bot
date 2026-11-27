@@ -101,6 +101,10 @@ proprie tesi e NON si scusa per il post che pubblica.
     lasciarla (Gabriele 27/11). La relazione alza il costo dell'uscita (routine, investimento, impegno) e quindi
     spinge ad accettare di più: restare senza relazione all'inizio tiene il costo dell'uscita a zero, gli standard
     intatti, e lascia che lei mostri chi è (punti 28 e 29).
+35. I tre livelli di una donna (Gabriele 27/11): dice una cosa, crede di volerne un'altra e in realtà ne vuole
+    un'altra ancora. Davanti a un test non rispondi a cosa dice né a cosa crede di volere, ma a cosa vuole
+    davvero: vedere come reagisci. Ogni test controlla una qualità di lui (centro, guida, confini, valore, se è
+    il premio); la risposta giusta è mostrare che quella qualità regge.
 RISPOSTE ALLE OBIEZIONI (Gabriele 24/11: così la pagina difende le sue tesi quando vengono attaccate)
 - "Il distacco è una recita: chi finge di non averne bisogno ne ha bisogno lo stesso."
   Vero per il finto distacco: l'uomo che non le scrive PERCHÉ è troppo interessato e quello che le mostra il suo
