@@ -34,10 +34,11 @@ PROMPT = (
     "Create a NEW vertical 4:5 illustration in EXACTLY the same art style, colors and rendering as the reference "
     "image (same kind of drawing, same lighting, same mood). Scene: a confident, well-dressed man, the kind of "
     "character that appears in the reference style, standing or sitting and proudly holding up {n} towards the "
-    "viewer. The books are seen from the front, slightly tilted, held firmly with fingers on the sides or behind "
-    "them, with some empty space around each book (the 3D thickness will be added later, do not draw it). "
+    "viewer. The books are seen from the front, slightly tilted, really GRIPPED by the hands like a real book: "
+    "fingers wrapped around the side edges and the thumbs resting ON the front cover near its outer edges, "
+    "covering only a small part of the edge, never the middle (the 3D thickness will be added later, do not draw it). "
     "Each book's FRONT COVER must be a perfectly flat, solid, pure bright green (#00FF00) rectangle, "
-    "fully visible, not covered by fingers or hands, with no texture and no drawing on it. "
+    "with no texture and no drawing on it; only the thumbs may overlap it. "
     "The background is a stylish city/office setting in the same style. "
     "IMPORTANT: absolutely NO text, letters, numbers, logos or speech bubbles anywhere in the image. "
     "Keep the top 30% of the image and the bottom 16% of the image calm and simple (sky, wall or floor), "
@@ -205,7 +206,31 @@ def _draw_thickness(out: np.ndarray, q: np.ndarray) -> None:
 def _paste_covers(img: Image.Image, quads: list[np.ndarray], covers: list[Path], mask: np.ndarray) -> Image.Image:
     import cv2
     out = cv2.cvtColor(np.asarray(img.convert("RGB")), cv2.COLOR_RGB2BGR)
+    orig = out.copy()
     H, W = out.shape[:2]
+    # Gabriele 26/11 (post 190): il manuale non deve sembrare incollato sopra la mano. Le dita che nella scena
+    # stanno DAVANTI al rettangolo verde (dentro la copertina ma non verdi) si rimettono sopra la copertina,
+    # e attorno a loro si toglie lo spessore del libro, così la mano lo tiene davvero.
+    oa = orig.astype(np.int16)
+    verde = (oa[..., 1] > 120) & (oa[..., 1] - oa[..., 2] > 40) & (oa[..., 1] - oa[..., 0] > 40)
+    davanti = np.zeros((H, W), np.uint8)
+    intorno = np.zeros((H, W), np.uint8)
+    for q in quads:
+        qm = np.zeros((H, W), np.uint8)
+        cv2.fillConvexPoly(qm, q.astype(np.int32), 255)
+        dentro = cv2.erode(qm, np.ones((7, 7), np.uint8))
+        occ = ((dentro > 0) & ~verde).astype(np.uint8) * 255
+        occ = cv2.morphologyEx(occ, cv2.MORPH_OPEN, np.ones((5, 5), np.uint8))
+        if cv2.countNonZero(occ) > 0.6 * cv2.countNonZero(dentro):
+            continue                                   # non è una mano: meglio non toccare niente
+        davanti |= occ
+        lato = int(max(np.linalg.norm(q[1] - q[0]), np.linalg.norm(q[3] - q[0])) * 0.15) + 3
+        vicino = cv2.dilate(occ, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (lato, lato)))
+        # fuori dalla copertina si rimette solo la continuazione delle dita (stesso colore), non lo sfondo
+        if cv2.countNonZero(occ):
+            col = orig[occ > 0].reshape(-1, 3).astype(np.int16)
+            simile = (np.abs(oa - np.median(col, axis=0)).sum(axis=2) < 75)
+            intorno |= ((vicino > 0) & (qm == 0) & simile).astype(np.uint8) * 255
     for q, cp in zip(quads, covers):
         _draw_thickness(out, q)
         cov = cv2.cvtColor(np.asarray(_book_face(Image.open(cp))), cv2.COLOR_RGB2BGR)
@@ -216,6 +241,8 @@ def _paste_covers(img: Image.Image, quads: list[np.ndarray], covers: list[Path],
         m = np.zeros((H, W), np.uint8)
         cv2.fillConvexPoly(m, q.astype(np.int32), 255)
         out[m > 0] = warped[m > 0]
+    rimetti = (davanti > 0) | (intorno > 0)
+    out[rimetti] = orig[rimetti]
     # bordini verdi rimasti attorno alle copertine: si ricostruiscono
     a = out.astype(np.int16)
     left = ((a[..., 1] > 140) & (a[..., 1] - a[..., 2] > 60) & (a[..., 1] - a[..., 0] > 60)).astype(np.uint8) * 255
