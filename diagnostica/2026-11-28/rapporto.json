@@ -1,0 +1,28 @@
+{
+ "giorno": "2026-11-28",
+ "post_preparati": 1,
+ "slide_totali": 9,
+ "slide_fallite": 0,
+ "lavorazione": {
+  "blocchi-ricostruzione-codice": {
+   "totali": 1,
+   "fallite": 0
+  },
+  "testo-su-sfondo-uniforme": {
+   "totali": 7,
+   "fallite": 0
+  },
+  "cta-stile-post": {
+   "totali": 1,
+   "fallite": 0
+  }
+ },
+ "segnalazioni": [
+  {
+   "job_id": 189,
+   "testo": "il logo è sovrapposto",
+   "quando": "2026-11-27T19:29:15+00:00"
+  }
+ ],
+ "post_con_problemi": []
+}
