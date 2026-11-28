@@ -491,10 +491,25 @@ def misura_watermark(original: Image.Image, slide: dict) -> None:
     slide["_wm_alto"] = round(alto / W, 4)
 
 
+def _scritte_nuove(img: Image.Image, orig: Image.Image):
+    """Maschera dei pixel con scritte NUOVE rispetto all'originale (testo italiano che OpenAI ha messo dove
+    prima non c'era niente): il pixel è molto più chiaro o più scuro di tutto ciò che c'era lì attorno."""
+    import numpy as np
+    a = img.convert("L")
+    o = orig.convert("L").resize(a.size)
+    k = max(3, (a.width // 90) | 1)
+    hi = np.asarray(o.filter(ImageFilter.MaxFilter(k))).astype(np.int16)
+    lo = np.asarray(o.filter(ImageFilter.MinFilter(k))).astype(np.int16)
+    g = np.asarray(a).astype(np.int16)
+    return (g > hi + 70) | (g < lo - 70)
+
+
 def add_brand_mark(img: Image.Image, brand: dict, avoid: list | None = None,
-                   at: tuple | None = None, alto: float | None = None) -> Image.Image:
+                   at: tuple | None = None, alto: float | None = None,
+                   originale: Image.Image | None = None) -> Image.Image:
     """Logo circolare + nome della pagina: al posto del watermark della pagina di origine (`at`, il suo riquadro)
-    se lì non copre scritte, altrimenti nell'angolo più libero."""
+    se lì non copre scritte, altrimenti nell'angolo più libero. Con `originale` (slide riscritta da OpenAI,
+    che può spostare il testo) si controllano anche le scritte vere dell'immagine, non solo le caselle stimate."""
     wm = brand.get("watermark", {})
     W, H = img.size
     d = max(36, int(W * float(wm.get("larghezza_logo", 0.075))))
@@ -518,9 +533,23 @@ def add_brand_mark(img: Image.Image, brand: dict, avoid: list | None = None,
         cx, cy = (at[0] + at[2]) / 2, (at[1] + at[3]) / 2
         ax = int(min(max(margin // 2, cx - total_w / 2), W - total_w - margin // 2))
         ay = int(min(max(margin // 2, cy - d / 2), H - d - margin // 2))
+        nuove = None
+        if originale is not None:
+            try:
+                nuove = _scritte_nuove(img, originale)
+            except Exception as e:
+                log.debug("Controllo scritte nuove non riuscito: %s", e)
         def free(yy):
             r = (ax - 8, yy - 8, ax + total_w + 8, yy + d + 8)
-            return not any(not (r[2] < b[0] or r[0] > b[2] or r[3] < b[1] or r[1] > b[3]) for b in (avoid or []))
+            if any(not (r[2] < b[0] or r[0] > b[2] or r[3] < b[1] or r[1] > b[3]) for b in (avoid or [])):
+                return False
+            if nuove is not None:
+                # 27/11 (Gabriele, post 189: "il logo è sovrapposto"): OpenAI aveva alzato il titolo italiano
+                # fin dove c'era il watermark e il nostro marchio finiva sopra le lettere
+                z = nuove[max(0, r[1]):min(H, r[3]), max(0, r[0]):min(W, r[2])]
+                if z.size and (z.mean() > 0.012 or (z.sum(axis=1) >= max(3, z.shape[1] // 40)).sum() >= max(2, d // 6)):
+                    return False
+            return True
         # al posto del watermark; se il testo italiano (più lungo) arriva fin lì, ci si sposta restando dalla
         # STESSA parte del testo: intestazione sopra il testo (stile tweet) → il nostro marchio resta sopra
         sopra = bool(avoid) and cy < (min(b_[1] for b_ in avoid) + max(b_[3] for b_ in avoid)) / 2
@@ -991,7 +1020,9 @@ def render_slide(original_bytes: bytes, slide: dict, brand: dict, mode: str) -> 
                 log.info("Slide %s scartata al controllo (tentativo %s): %s", slide.get("numero"), attempt + 1, problems)
                 feedback, best = problems, img
                 continue
-        img = add_brand_mark(img, brand, _avoid_boxes(slide, *img.size), textslide.wm_box(slide, *img.size), slide.get('_wm_alto')) if needs_logo(slide, brand) else img
+        img = (add_brand_mark(img, brand, _avoid_boxes(slide, *img.size), textslide.wm_box(slide, *img.size),
+                              slide.get('_wm_alto'), originale=orig_fit if gmode == "openai-testo" else None)
+               if needs_logo(slide, brand) else img)
         return img, True, ""
     if rifiutata and blocks0:
         # 11/11 (Gabriele): foto rifiutata -> una foto di riserva della pagina; il testo italiano lo scrive il codice negli stessi riquadri dell'originale
